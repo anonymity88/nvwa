@@ -1,0 +1,855 @@
+-pass-pipeline="builtin.module(func.func(canonicalize))"
+-mlir-debug-counter=unique-tag-for-my-action-skip=-1
+-mlir-print-debug-counter
+-mlir-disable-threading
+-pass-pipeline="builtin.module(func.func(canonicalize))"
+-mlir-debug-counter=pass-execution-skip=1
+-mlir-print-debug-counter
+-mlir-disable-threading
+-pass-pipeline="builtin.module(async-to-async-runtime,func.func(async-runtime-ref-counting,async-runtime-ref-counting-opt),convert-async-to-llvm,func.func(convert-linalg-to-loops,convert-scf-to-cf),finalize-memref-to-llvm,func.func(convert-arith-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-show-dialects
+-help-hidden
+-split-input-file
+-verify-diagnostics
+-test-func-erase-result
+-slice-analysis-test
+-allow-unregistered-dialect
+-mlir-print-debuginfo
+-mlir-pretty-debuginfo
+-mlir-print-local-scope
+-test-func-set-type
+-pass-pipeline="builtin.module(func.func(test-diagnostic-filter{filters=mysource1}))"
+-mlir-print-op-generic
+-pass-pipeline="builtin.module(func.func(test-matchers))"
+-mlir-disable-threading=true
+-test-take-body
+-test-print-defuse
+-test-func-erase-arg
+-test-generic-ir-block-visitors-interrupt
+-test-patterns
+-test-opaque-loc
+-no-implicit-module
+-test-elements-attr-interface
+-mlir-print-op-on-diagnostic
+-test-func-insert-result
+-test-recursive-types
+-test-patterns="max-iterations=1"
+-pass-pipeline="builtin.module(func.func(test-clone))"
+-test-generic-ir-region-visitors-interrupt
+-test-generic-ir-visitors
+-test-generic-ir-visitors-interrupt
+-test-operations-equality
+-print-op-stats
+-o=/dev/null
+-test-symbol-uses
+-mlir-elide-elementsattrs-if-larger=2
+-mlir-elide-elementsattrs-if-larger=2
+-test-print-nesting
+-print-op-stats=json
+-test-symbol-rauw
+-mlir-print-elementsattrs-with-hex-if-larger=1
+-mlir-print-op-generic
+-mlir-print-debuginfo
+-test-side-effects
+-test-func-insert-arg
+-mlir-print-value-users
+-test-ir-visitors
+-pass-pipeline="builtin.module(slice-analysis-test{omit-block-arguments=true})"
+-test-distinct-attrs
+-convert-openacc-to-scf
+-convert-gpu-to-spirv
+-convert-gpu-to-spirv="use-64bit-index=false"
+-convert-gpu-to-spirv="use-64bit-index=true"
+-test-spirv-entry-point-abi
+-test-spirv-entry-point-abi="workgroup-size=32"
+-convert-gpu-to-spirv="use-coop-matrix-nv=true"
+-convert-gpu-to-spirv="use-coop-matrix-nv=false"
+-cse
+-convert-tensor-to-linalg
+-pass-pipeline="builtin.module(func.func(tosa-to-linalg))"
+-pass-pipeline="builtin.module(func.func(tosa-to-linalg-named))"
+-convert-memref-to-spirv
+-map-memref-spirv-storage-class='client-api=vulkan'
+-map-memref-spirv-storage-class='client-api=opencl'
+-convert-memref-to-spirv="bool-num-bits=8"
+-convert-memref-to-spirv="bool-num-bits=8 use-64bit-index"
+-convert-complex-to-llvm
+-convert-to-llvm="filter-dialects=complex"
+-convert-vector-to-llvm='use-opaque-pointers=0'
+-convert-vector-to-llvm='use-opaque-pointers=1'
+-convert-func-to-spirv
+-convert-func-to-spirv="emulate-lt-32-bit-scalar-types=false"
+-convert-gpu-to-rocdl="runtime=HIP use-opaque-pointers=0"
+-convert-gpu-to-rocdl="runtime=OpenCL use-opaque-pointers=0"
+-convert-gpu-to-rocdl='use-opaque-pointers=1'
+-convert-spirv-to-llvm='use-opaque-pointers=0'
+-convert-spirv-to-llvm='use-opaque-pointers=1'
+-lower-host-to-llvm='use-opaque-pointers=1'
+-convert-spirv-to-llvm='client-api=Metal'
+-convert-spirv-to-llvm='client-api=Vulkan'
+-convert-spirv-to-llvm='client-api=WebGPU'
+-convert-bufferization-to-memref
+-pass-pipeline="builtin.module(gpu.module(lower-affine))"
+-convert-complex-to-libm
+-convert-math-to-libm
+-convert-index-to-llvm
+-convert-index-to-llvm=index-bitwidth=32
+-convert-index-to-llvm=index-bitwidth=64
+-convert-to-llvm="filter-dialects=index"
+-convert-nvgpu-to-nvvm='use-opaque-pointers=0'
+-convert-nvgpu-to-nvvm='use-opaque-pointers=1'
+-test-transform-dialect-interpreter
+-convert-arith-to-spirv=enable-fast-math
+-pass-pipeline="builtin.module(func.func(convert-arith-to-llvm))"
+-convert-to-llvm="filter-dialects=arith"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf{lower-tensors=true}))"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf))"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf{full-unroll=true}))"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf{full-unroll=true lower-tensors=true}))"
+-convert-gpu-to-nvvm='use-opaque-pointers=1'
+-convert-gpu-to-nvvm="index-bitwidth=32 use-opaque-pointers=1"
+-convert-gpu-to-nvvm="use-opaque-pointers=0"
+-convert-gpu-to-nvvm="index-bitwidth=32 use-opaque-pointers=0"
+-convert-gpu-to-nvvm='use-bare-ptr-memref-call-conv=1'
+-pass-pipeline="builtin.module(convert-math-to-funcs{min-width-of-fpowi-exponent=33})"
+-pass-pipeline="builtin.module(convert-math-to-funcs{convert-ctlz})"
+-pass-pipeline="builtin.module(convert-math-to-funcs{convert-ctlz=false})"
+-pass-pipeline="builtin.module(convert-math-to-funcs)"
+-finalize-memref-to-llvm='use-opaque-pointers=0'
+-pass-pipeline="builtin.module(finalize-memref-to-llvm{use-generic-functions=1 use-opaque-pointers=1})"
+-pass-pipeline="builtin.module(finalize-memref-to-llvm{use-generic-functions=1 use-aligned-alloc=1 use-opaque-pointers=1})"
+-finalize-memref-to-llvm='use-opaque-pointers=1'
+-expand-strided-metadata
+-convert-to-llvm="filter-dialects=memref"
+-pass-pipeline="builtin.module(func.func(convert-math-to-llvm))"
+-convert-to-llvm="filter-dialects=math"
+-convert-tensor-to-spirv
+-pass-pipeline="builtin.module(func.func(convert-affine-for-to-gpu{gpu-block-dims=1 gpu-thread-dims=1}))"
+-pass-pipeline="builtin.module(func.func(convert-affine-for-to-gpu{gpu-block-dims=2 gpu-thread-dims=2}))"
+-pass-pipeline="builtin.module(func.func(convert-affine-for-to-gpu{gpu-block-dims=0 gpu-thread-dims=1}))"
+-pass-pipeline="builtin.module(func.func(convert-affine-for-to-gpu{gpu-block-dims=1 gpu-thread-dims=0}))"
+-convert-parallel-loops-to-gpu
+-convert-async-to-llvm='use-opaque-pointers=0'
+-convert-async-to-llvm='use-opaque-pointers=1'
+-convert-vector-to-spirv
+-test-vector-reduction-to-spirv-dot-prod
+-launch-func-to-vulkan='use-opaque-pointers=0'
+-convert-gpu-launch-to-vulkan-launch
+-launch-func-to-vulkan='use-opaque-pointers=1'
+-convert-complex-to-spirv
+-tosa-to-tensor
+-convert-pdl-to-pdl-interp
+-gpu-to-llvm='use-opaque-pointers=0'
+-gpu-to-llvm='use-opaque-pointers=1'
+-convert-gpu-to-rocdl='use-opaque-pointers=0'
+-convert-gpu-to-nvvm='use-opaque-pointers=0'
+-gpu-to-llvm="gpu-binary-annotation=nvvm.cubin use-opaque-pointers=1"
+-gpu-to-llvm="gpu-binary-annotation=rocdl.hsaco use-opaque-pointers=1"
+-convert-gpu-to-rocdl='use-opaque-pointers=1'
+-gpu-to-llvm="use-bare-pointers-for-kernels=1"
+-convert-scf-to-spirv
+-convert-shape-to-std
+-pass-pipeline="builtin.module(func.func(convert-shape-constraints))"
+-convert-math-to-spirv
+-convert-cf-to-spirv
+-pass-pipeline="builtin.module(func.func(convert-complex-to-standard),convert-complex-to-llvm,func.func(convert-math-to-llvm,convert-arith-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-convert-complex-to-standard
+-test-one-to-n-type-conversion="convert-tuple-ops"
+-test-one-to-n-type-conversion="convert-func-ops"
+-test-one-to-n-type-conversion="convert-func-ops convert-tuple-ops"
+-test-one-to-n-type-conversion="convert-func-ops convert-scf-ops"
+-convert-cf-to-llvm='use-opaque-pointers=1'
+-convert-to-llvm="filter-dialects=cf"
+-convert-amdgpu-to-rocdl=chipset=gfx908
+-convert-amdgpu-to-rocdl=chipset=gfx1030
+-convert-amdgpu-to-rocdl=chipset=gfx1100
+-convert-amdgpu-to-rocdl=chipset=gfx940
+-allow-unregistered-dialect
+-pass-pipeline="builtin.module(func.func(convert-vector-to-gpu),canonicalize)"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-gpu{use-nvgpu=true}))"
+-pass-pipeline="builtin.module(func.func(test-fold-arith-extf-into-vector-contract-patterns,convert-vector-to-gpu{use-nvgpu=true},cse))"
+-convert-func-to-llvm='use-opaque-pointers=0'
+-convert-func-to-llvm='use-opaque-pointers=1'
+-llvm-request-c-wrappers
+-set-llvm-module-datalayout
+-set-llvm-module-datalayout='data-layout=p:32:32:32'
+-pass-pipeline="builtin.module(func.func(convert-math-to-llvm,convert-arith-to-llvm),convert-func-to-llvm{use-opaque-pointers=1},reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-math-to-llvm,convert-arith-to-llvm{index-bitwidth=32}),convert-func-to-llvm{index-bitwidth=32 use-opaque-pointers=1},reconcile-unrealized-casts)"
+-convert-to-llvm="filter-dialects=arith,cf,func,math"
+-test-convert-call-op
+-pass-pipeline="builtin.module(func.func(convert-arith-to-llvm),convert-func-to-llvm{use-opaque-pointers=1},reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-arith-to-llvm),convert-func-to-llvm{use-bare-ptr-memref-call-conv=1 use-opaque-pointers=1},reconcile-unrealized-casts)"
+-convert-openmp-to-llvm
+-tosa-to-scf
+-tosa-to-arith="include-apply-rescale=true use-32-bit=true"
+-tosa-to-arith="include-apply-rescale=false"
+-convert-scf-to-openmp='use-opaque-pointers=0'
+-convert-scf-to-openmp='use-opaque-pointers=1'
+-mlir-print-ir-after-failure
+-convert-scf-to-emitc
+-lift-cf-to-scf
+-convert-ub-to-spirv
+-convert-arith-to-amdgpu
+-pass-pipeline="builtin.module(func.func(convert-ub-to-llvm))"
+-convert-to-llvm="filter-dialects=ub"
+-convert-arm-sme-to-scf
+-convert-nvvm-to-llvm
+-convert-arith-to-llvm
+-test-mlir-reducer
+-test-transform-dialect-interpreter
+-test-transform-dialect-erase-schedule
+-math-uplift-to-fma
+-convert-bufferization-to-memref
+-test-lower-to-llvm
+-test-pdll-pass
+-pass-pipeline="builtin.module(func.func(test-print-topological-sort))"
+-pass-pipeline="builtin.module(func.func(test-print-dominance))"
+-pass-pipeline='builtin.module(func.func(test-alias-analysis-extending))'
+-pass-pipeline='builtin.module(func.func(test-alias-analysis-modref))'
+-pass-pipeline="builtin.module(any(test-cfg-loop-info))"
+-test-print-callgraph
+-pass-pipeline="builtin.module(func.func(test-match-reduction))"
+-pass-pipeline='builtin.module(func.func(test-alias-analysis))'
+-pass-pipeline='builtin.module(func.func(test-foo-analysis))'
+-pass-pipeline="builtin.module(func.func(test-print-liveness))"
+-test-shape-function-report
+-test-written-to
+-test-dead-code-analysis
+-test-last-modified
+-test-next-access
+-test-liveness-analysis
+-pass-pipeline="builtin.module(func.func(arm-neon-2d-to-intr))"
+-pass-pipeline="builtin.module(convert-vector-to-llvm,func.func(convert-arith-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-test-bytecode-callback="callback-test=3"
+-test-bytecode-callback="callback-test=4"
+-pass-pipeline="builtin.module(test-lazy-loading)"
+-pass-pipeline="builtin.module(test-lazy-loading{bytecode-version=1})"
+-test-verify-uselistorder
+-test-bytecode-callback="callback-test=1"
+-test-bytecode-callback="callback-test=2"
+-test-bytecode-callback="callback-test=5"
+-gpu-kernel-outlining
+-pass-pipeline='builtin.module(gpu.module(strip-debuginfo,convert-gpu-to-nvvm),nvvm-attach-target)'
+-gpu-module-to-binary="format=%gpu_compilation_format"
+-gpu-async-region
+-nvvm-attach-target="module=main_kernel features=+ptx80 chip=sm_90 O=3"
+-pass-pipeline='builtin.module(gpu.module(strip-debuginfo,convert-gpu-to-nvvm,convert-index-to-llvm{index-bitwidth=32},canonicalize,cse))'
+-gpu-module-to-binary=format=%gpu_compilation_format
+-debug-only=serialize-to-isa
+-pass-pipeline='builtin.module(gpu.module(strip-debuginfo,convert-gpu-to-rocdl),rocdl-attach-target{chip=%chip})'
+-pass-pipeline='builtin.module(gpu.module(strip-debuginfo,convert-gpu-to-rocdl{use-bare-ptr-memref-call-conv=true}),rocdl-attach-target{chip=%chip})'
+-gpu-to-llvm=use-bare-pointers-for-kernels=true
+-generate-runtime-verification
+-test-cf-assert
+-test-pdl-bytecode-pass
+-finalize-memref-to-llvm
+-async-parallel-for
+-arith-expand
+-memref-expand
+-async-parallel-for
+-async-runtime-policy-based-ref-counting
+-arith-expand
+-memref-expand
+-arith-expand
+-memref-expand
+-async-parallel-for=async-dispatch=false
+-convert-linalg-to-parallel-loops
+-linalg-bufferize
+-arith-bufferize
+-tensor-bufferize
+-func-bufferize
+-finalizing-bufferize
+-buffer-deallocation-pipeline
+-pass-pipeline="builtin.module(func.func(canonicalize,cse),one-shot-bufferize{bufferize-function-boundaries})"
+-pass-pipeline="builtin.module(buffer-deallocation-pipeline,convert-bufferization-to-memref,func.func(convert-vector-to-scf,lower-affine,convert-linalg-to-loops))"
+-pass-pipeline="builtin.module(func.func(canonicalize,convert-scf-to-cf),convert-vector-to-llvm,expand-strided-metadata,lower-affine,convert-arith-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-scf-bufferize
+-convert-elementwise-to-linalg
+-test-linalg-transform-patterns=test-linalg-to-vector-patterns
+-empty-tensor-to-alloc-tensor
+-bufferization-bufferize
+-lower-vector-mask
+-one-shot-bufferize="bufferize-function-boundaries"
+-enable-arm-streaming="mode=locally enable-za"
+-convert-vector-to-arm-sme
+-convert-vector-to-llvm="enable-arm-sme"
+-allocate-arm-sme-tiles
+-test-vector-warp-distribute="hoist-uniform distribute-transfer-write propagate-distribution"
+-test-vector-warp-distribute=rewrite-warp-ops-to-scf-if
+-test-vector-warp-distribute="hoist-uniform distribute-transfer-write"
+-enable-matrix
+-matrix-allow-contract
+-matrix-default-layout=row-major
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf,lower-affine,convert-scf-to-cf),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf{full-unroll=true},lower-affine,convert-scf-to-cf),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-test-vector-scan-lowering
+-convert-vector-to-llvm='reassociate-fp-reductions'
+-expand-realloc
+-expand-realloc
+-finalize-memref-to-llvm='use-aligned-alloc=1'
+-matrix-default-layout=column-major
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf,expand-strided-metadata,lower-affine,convert-arith-to-llvm,convert-scf-to-cf),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf{full-unroll=true},expand-strided-metadata,lower-affine,convert-arith-to-llvm,convert-scf-to-cf),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-convert-vector-to-llvm="enable-amx"
+-convert-vector-to-llvm="enable-arm-sve"
+-convert-vector-to-llvm="enable-x86vector"
+-convert-vector-to-scf='full-unroll=true'
+-convert-func-to-llvm='use-bare-ptr-memref-call-conv=1'
+-pass-pipeline="builtin.module(gpu.module(strip-debuginfo,convert-gpu-to-nvvm,convert-nvgpu-to-nvvm,affine-expand-index-ops,lower-affine,convert-arith-to-llvm),convert-vector-to-llvm,canonicalize,cse)"
+-sparse-compiler="enable-runtime-library=false parallelization-strategy=dense-outer-loop gpu-triple=nvptx64-nvidia-cuda gpu-chip=sm_80 gpu-features=+ptx71 gpu-format=%gpu_compilation_format"
+-sparse-compiler="enable-runtime-library=true enable-gpu-libgen gpu-triple=nvptx64-nvidia-cuda gpu-chip=sm_80 gpu-features=+ptx71 gpu-format=%gpu_compilation_format"
+-sparse-compiler="enable-runtime-library=false enable-gpu-libgen gpu-triple=nvptx64-nvidia-cuda gpu-chip=sm_80 gpu-features=+ptx71 gpu-format=%gpu_compilation_format"
+-sparse-compiler="enable-runtime-library=false enable-gpu-libgen=true gpu-triple=nvptx64-nvidia-cuda gpu-chip=sm_80 gpu-features=+ptx71 gpu-format=%gpu_compilation_format"
+-sparse-compiler="gpu-data-transfer-strategy=pinned-dma"
+-sparse-compiler="gpu-data-transfer-strategy=zero-copy"
+-pass-pipeline="builtin.module(func.func(convert-vector-to-scf,lower-affine,convert-scf-to-cf,memref-expand,arith-expand),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-convert-scf-to-cf
+-convert-cf-to-llvm
+-convert-func-to-llvm
+-test-arith-emulate-wide-int="widest-int-supported=8"
+-convert-scf-to-cf
+-convert-cf-to-llvm
+-convert-func-to-llvm
+-convert-vector-to-scf
+-reconcile-unrealized-casts
+-test-arith-emulate-wide-int="widest-int-supported=16"
+-canonicalize
+-mlir-pass-pipeline-crash-reproducer=%t
+-mlir-pass-pipeline-local-reproducer
+-pass-pipeline='builtin.module(func.func(cse,canonicalize))'
+-mlir-print-ir-before=cse
+-pass-pipeline='builtin.module(func.func(cse,canonicalize))'
+-mlir-print-ir-before-all
+-pass-pipeline='builtin.module(func.func(cse,canonicalize))'
+-mlir-print-ir-after=cse
+-pass-pipeline='builtin.module(func.func(cse,canonicalize))'
+-mlir-print-ir-after-all
+-pass-pipeline='builtin.module(func.func(cse,canonicalize))'
+-mlir-print-ir-before=cse
+-mlir-print-ir-module-scope
+-pass-pipeline='builtin.module(func.func(cse,cse))'
+-mlir-print-ir-after-all
+-mlir-print-ir-after-change
+-pass-pipeline='builtin.module(func.func(cse,test-pass-failure))'
+-run-reproducer
+-dump-pass-pipeline
+-run-reproducer
+-verify-each=true
+-pass-pipeline='builtin.module(func.func(cse,canonicalize,cse))'
+-mlir-timing-display=list
+-verify-each=true
+-pass-pipeline='builtin.module(func.func(cse,canonicalize,cse))'
+-mlir-timing-display=tree
+-mlir-disable-threading=false
+-verify-each=true
+-pass-pipeline='builtin.module(func.func(cse,canonicalize,cse))'
+-mlir-timing-display=list
+-mlir-disable-threading=false
+-verify-each=true
+-pass-pipeline='builtin.module(func.func(cse,canonicalize,cse))'
+-mlir-timing-display=tree
+-verify-each=false
+-test-pm-nested-pipeline
+-mlir-timing-display=tree
+-pass-pipeline='builtin.module(builtin.module(test-module-pass,func.func(test-function-pass)),func.func(test-function-pass),func.func(cse,canonicalize))'
+-test-textual-pm-nested-pipeline
+-pass-pipeline='builtin.module(builtin.module(test-module-pass),any(test-interface-pass),any(test-interface-pass),func.func(test-function-pass),any(canonicalize),func.func(cse))'
+-pass-pipeline='func.func(test-module-pass)'
+-pass-pipeline=''
+-pass-pipeline='wrong-op()'
+-pass-pipeline='any(cse)'
+-pass-pipeline='builtin.module(func.func(test-interface-pass))'
+-pass-pipeline="builtin.module(func.func(test-stats-pass))"
+-log-actions-to=-
+-pass-pipeline="builtin.module(func.func(test-stats-pass))"
+-log-mlir-actions-filter=%s
+-log-actions-to=-
+-pass-pipeline="builtin.module(func.func(test-stats-pass))"
+-log-actions-to=-
+-pass-pipeline="builtin.module(func.func(test-stats-pass))"
+-log-mlir-actions-filter=%s:1
+-log-actions-to=-
+-pass-pipeline="builtin.module(func.func(test-stats-pass))"
+-log-mlir-actions-filter=%s:8
+-log-actions-to=-
+-pass-pipeline="builtin.module(func.func(test-stats-pass))"
+-log-mlir-actions-filter=%s:4,%s:12
+-log-actions-to=-
+-pass-pipeline='builtin.module(builtin.module(test-dynamic-pipeline{dynamic-pipeline=func.func(cse,canonicalize)}))'
+-pass-pipeline='builtin.module(func.func(test-stats-pass,test-stats-pass))'
+-mlir-pass-statistics
+-mlir-pass-statistics-display=list
+-pass-pipeline='builtin.module(func.func(test-stats-pass,test-stats-pass))'
+-mlir-pass-statistics
+-mlir-pass-statistics-display=pipeline
+-pass-pipeline='builtin.module(builtin.module(func.func(test-stats-pass,test-stats-pass)))'
+-pass-pipeline='builtin.module(builtin.module(func.func(test-stats-pass,test-stats-pass)))'
+-pass-pipeline='builtin.module(builtin.module(func.func(test-stats-pass,test-stats-pass)))'
+-pass-pipeline='builtin.module(builtin.module(func.func(test-stats-pass,test-stats-pass)))'
+-pass-pipeline='builtin.module(test-interface-pass)'
+-pass-pipeline='builtin.module(test-options-pass{enum=invalid})'
+-pass-pipeline='builtin.module(func.func(test-pass-invalid-parent))'
+-mlir-print-assume-verified
+-mlir-print-assume-verified
+-pass-pipeline='any(buffer-deallocation)'
+-profile-actions-to=-
+-test-return-type
+-test-trait-folder
+-test-type-interfaces
+-test-derived-attr
+-canonicalize="test-convergence"
+-inline
+-test-side-effects
+-one-shot-bufferize="bufferize-function-boundaries=1"
+-test-tensor-copy-insertion
+-test-tensor-copy-insertion="bufferize-function-boundaries"
+-one-shot-bufferize="bufferize-function-boundaries test-analysis-only"
+-one-shot-bufferize="bufferize-function-boundaries test-analysis-only analysis-fuzzer-seed=23"
+-one-shot-bufferize="bufferize-function-boundaries test-analysis-only analysis-fuzzer-seed=59"
+-one-shot-bufferize="bufferize-function-boundaries test-analysis-only analysis-fuzzer-seed=91"
+-test-tensor-copy-insertion="must-infer-memory-space"
+-one-shot-bufferize="bufferize-function-boundaries=1 "
+-drop-equivalent-buffer-results
+-one-shot-bufferize="bufferize-function-boundaries=1 "
+-one-shot-bufferize="bufferize-function-boundaries=1 test-analysis-only analysis-fuzzer-seed=23"
+-one-shot-bufferize="bufferize-function-boundaries=1 test-analysis-only analysis-fuzzer-seed=59"
+-one-shot-bufferize="bufferize-function-boundaries=1 test-analysis-only analysis-fuzzer-seed=91"
+-one-shot-bufferize="bufferize-function-boundaries=1 unknown-type-conversion=identity-layout-map function-boundary-type-conversion=identity-layout-map"
+-one-shot-bufferize="allow-unknown-ops"
+-one-shot-bufferize="allow-unknown-ops unknown-type-conversion=identity-layout-map"
+-one-shot-bufferize="test-analysis-only analysis-fuzzer-seed=23"
+-one-shot-bufferize="test-analysis-only analysis-fuzzer-seed=59"
+-one-shot-bufferize="test-analysis-only analysis-fuzzer-seed=91"
+-one-shot-bufferize="dialect-filter=tensor,bufferization allow-unknown-ops"
+-one-shot-bufferize="dialect-filter=scf,bufferization allow-unknown-ops"
+-one-shot-bufferize="test-analysis-only"
+-one-shot-bufferize="test-analysis-only dump-alias-sets"
+-one-shot-bufferize="must-infer-memory-space"
+-buffer-loop-hoisting
+-one-shot-bufferize="allow-unknown-ops analysis-heuristic=top-down"
+-one-shot-bufferize="allow-unknown-ops copy-before-write"
+-one-shot-bufferize="bufferize-function-boundaries function-boundary-type-conversion=fully-dynamic-layout-map"
+-buffer-results-to-out-params
+-one-shot-bufferize="bufferize-function-boundaries function-boundary-type-conversion=identity-layout-map"
+-buffer-results-to-out-params
+-one-shot-bufferize="bufferize-function-boundaries function-boundary-type-conversion=infer-layout-map"
+-buffer-hoisting
+-eliminate-empty-tensors
+-one-shot-bufferize="bufferize-function-boundaries=1 no-analysis-func-filter=contains_to_memref_op"
+-one-shot-bufferize="bufferize-function-boundaries=1 copy-before-write=1"
+-one-shot-bufferize="bufferize-function-boundaries=1 function-boundary-type-conversion=fully-dynamic-layout-map"
+-bufferization-lower-deallocations
+-pass-pipeline="builtin.module(func.func(bufferization-lower-deallocations))"
+-buffer-deallocation-simplification
+-ownership-based-buffer-deallocation=private-function-dynamic-ownership=false
+-ownership-based-buffer-deallocation=private-function-dynamic-ownership=true
+-buffer-deallocation-pipeline=private-function-dynamic-ownership
+-expand-realloc=emit-deallocs=false
+-pass-pipeline="builtin.module(buffer-deallocation-pipeline)"
+-pass-pipeline="builtin.module(func.func(buffer-deallocation-pipeline))"
+-pass-pipeline="builtin.module(mlprogram-pipeline-globals)"
+-pass-pipeline="builtin.module(llvm.func(ensure-debug-info-scope-on-llvm-func))"
+-test-data-layout-query
+-pass-pipeline='builtin.module(llvm.func(mem2reg{region-simplify=false}))'
+-pass-pipeline="builtin.module(llvm.func(mem2reg{region-simplify=false}))"
+-pass-pipeline='builtin.module(llvm.func(canonicalize{test-convergence}))'
+-pass-pipeline='builtin.module(func.func(canonicalize))'
+-llvm-optimize-for-nvvm-target
+-llvm-legalize-for-export
+-test-print-callgraph
+-pass-pipeline="builtin.module(llvm.func(sroa))"
+-pass-pipeline="builtin.module(llvm.func(llvm-type-consistency))"
+-pass-pipeline="builtin.module(llvm.func(canonicalize))"
+-llvm-add-comdats
+-mlir-pass-statistics
+-amdgpu-emulate-atomics=chipset=gfx90a
+-amdgpu-emulate-atomics=chipset=gfx1030
+-tosa-layerwise-constant-fold
+-tosa-optional-decompositions
+-tosa-test-quant-utils
+-test-constant-fold
+-tosa-validate=strict-op-spec-alignment
+-tosa-make-broadcastable
+-tosa-infer-shapes
+-test-spirv-op-availability
+-test-spirv-target-env
+-test-spirv-module-combiner
+-decorate-spirv-composite-type-layout
+-pass-pipeline='builtin.module(func.func(canonicalize{test-convergence}))'
+-spirv-update-vce
+-pass-pipeline='builtin.module(spirv.module(inline{default-pipeline=''}))'
+-spirv-lower-abi-attrs
+-spirv-rewrite-inserts
+-spirv-lower-abi-attrs
+-spirv-canonicalize-gl
+-spirv-unify-aliased-resource
+-pass-pipeline='builtin.module(func.func(nvgpu-optimize-shared-memory))'
+-test-nvgpu-mmasync-f32-to-tf32-patterns="precision=tf32x3"
+-test-nvgpu-mmasync-f32-to-tf32-patterns="precision=tf32"
+-pass-pipeline='builtin.module(func.func(mem2reg{region-simplify=false}))'
+-test-multi-buffering=multiplier=5
+-expand-strided-metadata
+-memref-emulate-wide-int="widest-int-supported=32"
+-test-affine-reify-value-bounds
+-fold-memref-alias-ops
+-expand-realloc
+-expand-realloc=emit-deallocs=false
+-test-emulate-narrow-int="memref-load-bitwidth=8"
+-test-emulate-narrow-int="memref-load-bitwidth=32"
+-normalize-memrefs
+-pass-pipeline="builtin.module(func.func(sroa))"
+-pass-pipeline='builtin.module(func.func(mem2reg))'
+-test-transform-dialect-interpreter=debug-transform-root-tag=all
+-test-transform-dialect-interpreter=debug-transform-root-tag=small
+-async-parallel-for=num-workers=-1
+-async-parallel-for=async-dispatch=true
+-async-func-to-async-runtime
+-test-linalg-transform-patterns="test-generalize-tensor-unpack"
+-test-linalg-greedy-fusion
+-test-linalg-decompose-ops
+-test-linalg-decompose-ops=remove-dead-args-and-results
+-pass-pipeline="builtin.module(func.func(linalg-detensorize))"
+-test-linalg-data-layout-propagation
+-pass-pipeline="builtin.module(test-transform-dialect-interpreter{debug-payload-root-tag=start_here})"
+-test-linalg-transform-patterns=test-erase-unused-operands-and-results
+-test-linalg-transform-patterns=test-erase-unnecessary-inputs
+-scf-for-loop-canonicalization
+-arith-int-narrowing="int-bitwidths-supported=1,8,16,32"
+-test-linalg-elementwise-fusion-patterns=fuse-with-reshape-by-collapsing
+-test-linalg-elementwise-fusion-patterns=fuse-with-reshape-by-collapsing-control
+-convert-linalg-to-affine-loops
+-convert-linalg-to-affine-loops
+-mlir-print-local-scope
+-test-linalg-transform-patterns="test-generalize-tensor-pack"
+-pass-pipeline="builtin.module(func.func(linalg-detensorize{aggressive-mode}))"
+-convert-linalg-to-std
+-test-linalg-elementwise-fusion-patterns=control-fusion-by-expansion
+-test-linalg-elementwise-fusion-patterns=fuse-generic-ops-control
+-one-shot-bufferize="test-analysis-only analysis-fuzzer-seed=23 bufferize-function-boundaries"
+-one-shot-bufferize="test-analysis-only analysis-fuzzer-seed=59 bufferize-function-boundaries"
+-one-shot-bufferize="test-analysis-only analysis-fuzzer-seed=91 bufferize-function-boundaries"
+-one-shot-bufferize="unknown-type-conversion=identity-layout-map function-boundary-type-conversion=identity-layout-map bufferize-function-boundaries"
+-test-linalg-elementwise-fusion-patterns=collapse-dimensions-control=2,3
+-pass-pipeline="builtin.module(func.func(convert-elementwise-to-linalg))"
+-linalg-generalize-named-ops
+-resolve-shaped-type-result-dims
+-linalg-fuse-elementwise-ops
+-test-linalg-elementwise-fusion-patterns=fuse-multiuse-producer
+-one-shot-bufferize="test-analysis-only bufferize-function-boundaries"
+-linalg-inline-scalar-operands
+-test-linalg-transform-patterns=test-vector-transfer-forwarding-patterns
+-linalg-named-op-conversion
+-test-linalg-elementwise-fusion-patterns=fuse-with-reshape-by-expansion
+-linalg-fold-unit-extent-dims
+-linalg-fold-unit-extent-dims="use-rank-reducing-slices"
+-test-linalg-transform-patterns=test-patterns
+-test-linalg-transform-patterns="test-generalize-pad-tensor"
+-test-linalg-transform-patterns=test-swap-subtensor-padtensor
+-test-linalg-pad-fusion
+-test-transform-dialect-interpreter="enable-expensive-checks=1"
+-test-linalg-drop-unit-dims
+-pass-pipeline='builtin.module(func.func(scf-parallel-loop-fusion))'
+-one-shot-bufferize="allow-unknown-ops allow-return-allocs-from-loops"
+-test-tensor-copy-insertion=allow-return-allocs-from-loops
+-test-tensor-copy-insertion="allow-return-allocs-from-loops bufferize-function-boundaries"
+-scf-for-loop-specialization
+-test-scf-pipelining
+-test-scf-pipelining=annotate
+-test-scf-pipelining=no-epilogue-peeling
+-test-scf-while-op-builder
+-pass-pipeline='builtin.module(func.func(scf-for-to-while))'
+-pass-pipeline='builtin.module(func.func(scf-for-loop-range-folding))'
+-pass-pipeline='builtin.module(func.func(scf-parallel-loop-tiling{parallel-loop-tile-sizes=1,4}))'
+-one-shot-bufferize="allow-return-allocs-from-loops bufferize-function-boundaries test-analysis-only"
+-one-shot-bufferize="allow-return-allocs-from-loops bufferize-function-boundaries test-analysis-only analysis-fuzzer-seed=23"
+-one-shot-bufferize="allow-return-allocs-from-loops bufferize-function-boundaries test-analysis-only analysis-fuzzer-seed=59"
+-one-shot-bufferize="allow-return-allocs-from-loops bufferize-function-boundaries test-analysis-only analysis-fuzzer-seed=91"
+-control-flow-sink
+-one-shot-bufferize="allow-return-allocs-from-loops bufferize-function-boundaries"
+-one-shot-bufferize="allow-return-allocs-from-loops test-analysis-only analysis-fuzzer-seed=23 bufferize-function-boundaries"
+-one-shot-bufferize="allow-return-allocs-from-loops test-analysis-only analysis-fuzzer-seed=59 bufferize-function-boundaries"
+-one-shot-bufferize="allow-return-allocs-from-loops test-analysis-only analysis-fuzzer-seed=91 bufferize-function-boundaries"
+-one-shot-bufferize="allow-return-allocs-from-loops unknown-type-conversion=identity-layout-map function-boundary-type-conversion=identity-layout-map bufferize-function-boundaries"
+-scf-parallel-loop-specialization
+-scf-for-loop-peeling
+-scf-for-loop-peeling=skip-partial=false
+-test-loop-unrolling='unroll-factor=2'
+-test-loop-unrolling='unroll-factor=3'
+-affine-loop-unroll
+-one-shot-bufferize=allow-return-allocs-from-loops
+-test-vector-reduction-to-contract-patterns
+-test-vector-to-vector-lowering="unroll"
+-test-vector-warp-distribute="hoist-uniform"
+-test-vector-warp-distribute=propagate-distribution
+-test-vector-transfer-collapse-inner-most-dims
+-test-vector-contraction-prepare-for-mmt-lowering
+-test-vector-transferop-opt
+-test-vector-transfer-unrolling-patterns
+-test-vector-transfer-unrolling-patterns=reverse-unroll-order
+-test-vector-transfer-flatten-patterns
+-test-vector-scan-lowering
+-test-vector-unrolling-patterns=unroll-based-on-type
+-test-vector-unrolling-patterns="unroll-based-on-type unroll-order=2,0,1"
+-test-vector-unrolling-patterns="unroll-based-on-type unroll-order=0,3,1,2"
+-vector-bufferize
+-test-vector-gather-lowering
+-test-vector-gather-lowering
+-test-vector-break-down-bitcast
+-test-create-vector-broadcast
+-test-scalar-vector-transfer-lowering
+-test-scalar-vector-transfer-lowering=allow-multiple-uses
+-test-vector-extract-strided-slice-lowering
+-test-sink-vector-broadcast
+-sparsification
+-sparse-vectorization="vl=16"
+-sparse-vectorization="vl=16 enable-simd-index32=true"
+-sparse-vectorization="vl=4 enable-vla-vectorization=true"
+-sparse-tensor-codegen
+-post-sparsification-rewrite="enable-runtime-library=false enable-convert=false"
+-post-sparsification-rewrite="enable-runtime-library=false enable-foreach=true"
+-linalg-generalize-named-ops
+-sparse-tensor-conversion
+-sparse-tensor-conversion
+-func-bufferize
+-arith-bufferize
+-tensor-bufferize
+-finalizing-bufferize
+-linalg-fuse-elementwise-ops
+-post-sparsification-rewrite="enable-runtime-library=false enable-convert=false"
+-post-sparsification-rewrite="enable-runtime-library=true enable-convert=false"
+-pre-sparsification-rewrite
+-sparse-storage-specifier-to-llvm
+-sparse-storage-specifier-to-llvm
+-sparse-tensor-codegen=enable-buffer-initialization=true
+-sparse-compiler="enable-runtime-library=false vl=2 reassociate-fp-reductions=true enable-index-optimizations=true"
+-post-sparsification-rewrite="enable-runtime-library=false"
+-sparse-tensor-codegen=create-sparse-deallocs=false
+-post-sparsification-rewrite="enable-runtime-library=false"
+-sparse-tensor-codegen=create-sparse-deallocs=true
+-sparse-vectorization="vl=8"
+-test-tensor-copy-insertion
+-sparse-buffer-rewrite
+-sparsification="parallelization-strategy=none"
+-sparsification="parallelization-strategy=dense-outer-loop"
+-sparsification="parallelization-strategy=any-storage-outer-loop"
+-sparsification="parallelization-strategy=dense-any-loop"
+-sparsification="parallelization-strategy=any-storage-any-loop"
+-sparse-compiler="vl=8"
+-sparsification="enable-index-reduction=true"
+-sparsification-and-bufferization
+-sparsification="parallelization-strategy=dense-outer-loop"
+-sparse-gpu-codegen
+-sparsification="enable-gpu-libgen"
+-test-gpu-rewrite
+-gpu-launch-sink-index-computations
+-gpu-map-parallel-loops
+-gpu-kernel-outlining=data-layout-str='#dlti.dl_spec<#dlti.dl_entry<index,32:i32>>'
+-gpu-kernel-outlining
+-test-int-range-inference
+-pass-pipeline='builtin.module(gpu.module(gpu.func(test-gpu-memory-promotion)))'
+-gpu-module-to-binary="format=llvm"
+-gpu-module-to-binary="format=isa"
+-test-gpu-rewrite
+-gpu-decompose-memrefs
+-transform-dialect-check-uses
+-pass-pipeline="builtin.module(test-transform-dialect-interpreter{debug-payload-root-tag=payload debug-transform-root-tag=transform})"
+-transform-infer-effects
+-test-transform-dialect-interpreter='enable-expensive-checks=1'
+-pass-pipeline="builtin.module(test-transform-dialect-interpreter{enable-expensive-checks=1 bind-first-extra-to-ops=scf.for})"
+-test-transform-dialect-interpreter=test-module-generation=1
+-debug-only=transform-dialect-dump-repro
+-pass-pipeline="builtin.module(test-transform-dialect-interpreter{transform-library-paths=%p%{fs-sep}test-interpreter-library})"
+-pass-pipeline="builtin.module(test-transform-dialect-interpreter{transform-library-paths=%p%{fs-sep}test-interpreter-library}, test-transform-dialect-interpreter)"
+-outline-shape-computation
+-test-print-shape-mapping
+-shape-bufferize
+-remove-shape-constraints
+-remove-shape-constraints
+-shape-to-shape-lowering
+-one-shot-bufferize="test-analysis-only dump-alias-sets bufferize-function-boundaries"
+-duplicate-function-elimination
+-test-tensor-transform-patterns=test-fold-consecutive-insert-extract-slice
+-test-tensor-transform-patterns="test-simplify-pack-patterns"
+-test-tensor-transform-patterns=test-fold-into-pack-and-unpack
+-fold-tensor-subset-ops
+-test-tensor-transform-patterns=test-fold-constant-extract-slice
+-one-shot-bufferize="unknown-type-conversion=identity-layout-map bufferize-function-boundaries"
+-test-tensor-transform-patterns=test-reassociative-reshape-folding
+-test-tensor-transform-patterns=test-rewrite-extract-slice-from-collapse-shape
+-test-tensor-transform-patterns="test-rewrite-extract-slice-from-collapse-shape use-foreach"
+-test-tensor-transform-patterns=test-tracking-listener
+-test-tensor-transform-patterns=test-drop-redundant-insert-slice-rank-expansion
+-affine-simplify-structures
+-pass-pipeline="builtin.module(func.func(test-affine-loop-unswitch))"
+-affine-data-copy-generate="generate-dma fast-mem-space=2 skip-non-unit-stride-loops"
+-affine-data-copy-generate="generate-dma fast-mem-capacity=16 fast-mem-space=2"
+-affine-data-copy-generate="generate-dma=false fast-mem-space=0 skip-non-unit-stride-loops"
+-affine-data-copy-generate="generate-dma=false fast-mem-space=0 fast-mem-capacity=1"
+-test-affine-data-copy='memref-filter'
+-test-affine-data-copy='for-memref-region'
+-test-loop-permutation="permutation-map=1,2,0"
+-test-loop-permutation="permutation-map=1,0,2"
+-test-loop-permutation="permutation-map=0,1,2"
+-test-loop-permutation="permutation-map=0,2,1"
+-test-loop-permutation="permutation-map=2,0,1"
+-test-loop-permutation="permutation-map=2,1,0"
+-affine-loop-unroll="unroll-full"
+-affine-loop-unroll="unroll-full unroll-full-threshold=2"
+-affine-loop-unroll="unroll-factor=4"
+-affine-loop-unroll="unroll-factor=1"
+-affine-loop-unroll="unroll-factor=5 cleanup-unroll=true"
+-canonicalize="test-convergence top-down=0"
+-affine-loop-tile="tile-size=32"
+-affine-loop-tile="cache-size=512"
+-affine-loop-tile="tile-size=32 separate"
+-affine-scalrep
+-affine-loop-invariant-code-motion
+-pass-pipeline="builtin.module(func.func(test-memref-stride-calculation))"
+-affine-super-vectorizer-test
+-forward-slicing=true
+-affine-super-vectorizer-test
+-backward-slicing=true
+-affine-super-vectorizer-test
+-slicing=true
+-test-affine-parametric-tile
+-affine-parallelize
+-affine-parallelize='max-nested=1'
+-affine-parallelize='parallel-reductions=1'
+-affine-loop-unroll-jam="unroll-jam-factor=2"
+-affine-loop-unroll-jam="unroll-jam-factor=4"
+-affine-loop-coalescing
+-test-decompose-affine-ops
+-test-affine-reify-value-bounds="reify-to-func-args"
+-test-affine-reify-value-bounds="reify-to-func-args use-arith-ops"
+-affine-loop-normalize
+-affine-loop-normalize='promote-single-iter=1'
+-test-memref-bound-check
+-pass-pipeline='builtin.module(func.func(affine-loop-fusion))'
+-pass-pipeline='builtin.module(func.func(affine-loop-fusion{fusion-maximal}))'
+-affine-pipeline-data-transfer
+-test-memref-dependence-check
+-test-loop-fusion
+-test-loop-fusion-slice-computation
+-pass-pipeline='builtin.module(func.func(affine-loop-fusion{mode=producer}))'
+-test-loop-fusion-transformation
+-test-loop-fusion-dependence-check
+-affine-super-vectorize="virtual-vector-size=4,8"
+-affine-super-vectorize="virtual-vector-size=32,256 test-fastest-varying=1,0"
+-affine-super-vectorize="virtual-vector-size=32,256 test-fastest-varying=1,0 vectorize-reductions=true"
+-vectorize-affine-loop-nest
+-affine-super-vectorize="virtual-vector-size=128 test-fastest-varying=0"
+-compose-maps
+-affine-super-vectorize="virtual-vector-size=32,256 test-fastest-varying=0,1"
+-affine-super-vectorize="virtual-vector-size=32,64,256 test-fastest-varying=2,1,0"
+-affine-super-vectorize="virtual-vector-size=128"
+-affine-super-vectorize="virtual-vector-size=128 test-fastest-varying=0 vectorize-reductions=true"
+-vector-shape-ratio
+-vector-shape-ratio
+-vector-shape-ratio
+-vector-shape-ratio
+-vector-shape-ratio
+-affine-super-vectorize="virtual-vector-size=32,256 test-fastest-varying=2,0"
+-affine-super-vectorize="virtual-vector-size=32,256 test-fastest-varying=0,2"
+-affine-super-vectorize=virtual-vector-size=0
+-arith-emulate-wide-int="widest-int-supported=32"
+-arith-unsigned-when-equivalent
+-arith-int-narrowing="int-bitwidths-supported=1,8,16,24,32"
+-arith-emulate-wide-int="widest-int-supported=512"
+-int-range-optimizations
+-arith-expand="include-bf16=true"
+-arith-bufferize=alignment=64
+-test-affine-reify-value-bounds="use-arith-ops"
+-test-arith-emulate-wide-int="function-prefix=emulate_me_"
+-test-emulate-narrow-int="arith-compute-bitwidth=8"
+-mlir-print-ir-after-failure
+-arith-int-narrowing="int-bitwidths-supported=0"
+-mlir-print-ir-after-failure
+-arith-emulate-unsupported-floats="source-types=bf16,f8E4M3FNUZ target-type=f32"
+-test-expand-math
+-test-math-polynomial-approximation
+-test-math-polynomial-approximation=enable-avx2
+-test-math-algebraic-simplification
+-enable-arm-streaming=mode=locally
+-enable-arm-streaming=enable-za
+-pass-pipeline='builtin.module(func.func(cse))'
+-pass-pipeline="builtin.module(func.func(test-math-polynomial-approximation,convert-arith-to-llvm),convert-vector-to-scf,convert-scf-to-cf,convert-cf-to-llvm,convert-vector-to-llvm,func.func(convert-math-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-scf-to-cf),finalize-memref-to-llvm,func.func(convert-arith-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-scf-to-cf,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm{use-bare-ptr-memref-call-conv=1},reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(async-to-async-runtime,func.func(async-runtime-ref-counting,async-runtime-ref-counting-opt),convert-async-to-llvm,func.func(convert-arith-to-llvm),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-debug-only=jit-runner
+-debug-only=jit-runner
+-pass-pipeline="builtin.module(async-to-async-runtime,func.func(async-runtime-ref-counting,async-runtime-ref-counting-opt),convert-async-to-llvm,func.func(convert-arith-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-linalg-to-loops,convert-scf-to-cf,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-linalg-to-loops,convert-scf-to-cf,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-linalg-to-loops,convert-scf-to-cf,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-linalg-to-loops,convert-scf-to-cf,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-linalg-to-loops,lower-affine,convert-scf-to-cf,convert-arith-to-llvm),convert-vector-to-llvm,finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(arith-expand{include-bf16=true},convert-arith-to-llvm),convert-vector-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-scf-to-cf,memref-expand,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(test-expand-math,convert-arith-to-llvm),convert-vector-to-scf,convert-scf-to-cf,convert-cf-to-llvm,convert-vector-to-llvm,func.func(convert-math-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(async-to-async-runtime,func.func(async-runtime-ref-counting,async-runtime-ref-counting-opt),convert-async-to-llvm,func.func(convert-linalg-to-loops,convert-scf-to-cf),convert-vector-to-llvm,func.func(convert-arith-to-llvm),convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(func.func(convert-scf-to-cf,convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-pass-pipeline="builtin.module(async-func-to-async-runtime,async-to-async-runtime,func.func(async-runtime-ref-counting,async-runtime-ref-counting-opt),convert-async-to-llvm,test-lower-to-llvm)"
+-pass-pipeline="builtin.module(func.func(convert-arith-to-llvm),finalize-memref-to-llvm,convert-func-to-llvm,reconcile-unrealized-casts)"
+-test-math-polynomial-approximation="enable-avx2"
+-test-scf-for-utils=test-replace-with-new-yields
+-test-legalize-patterns
+-test-scf-if-utils
+-test-legalize-mode=full
+-pass-pipeline='builtin.module(func.func(canonicalize{enable-patterns=TestRemoveOpWithInnerOps}))'
+-pass-pipeline='builtin.module(func.func(canonicalize{disable-patterns=TestRemoveOpWithInnerOps}))'
+-test-dialect-conversion-pdll
+-inline='default-pipeline='''
+-inline='default-pipeline='''
+-pass-pipeline="builtin.module(func.func(sccp))"
+-test-patterns='top-down=false'
+-test-patterns='top-down=true'
+-pass-pipeline="builtin.module(test-patterns)"
+-view-op-graph
+-test-inline
+-pass-pipeline="builtin.module(func.func(test-mapping-to-processing-elements))"
+-pass-pipeline='builtin.module(func.func(test-scf-parallel-loop-collapsing))'
+-pass-pipeline='builtin.module(func.func(test-scf-parallel-loop-collapsing{collapsed-indices-1=1}))'
+-pass-pipeline='builtin.module(func.func(test-scf-parallel-loop-collapsing{collapsed-indices-0=0,1}))'
+-inline='op-pipelines=func.func(canonicalize,cse)'
+-pass-pipeline='builtin.module(func.func(canonicalize{region-simplify=false}))'
+-test-commutativity-utils
+-test-make-isolated-from-above=simple
+-test-make-isolated-from-above=clone-ops-with-no-operands
+-test-make-isolated-from-above=clone-ops-with-operands
+-test-legalize-type-conversion
+-test-pattern-selective-replacement
+-pass-pipeline="builtin.module(inline)"
+-test-strict-pattern-driver="strictness=AnyOp"
+-test-strict-pattern-driver="strictness=ExistingAndNewOps"
+-test-strict-pattern-driver="strictness=ExistingOps"
+-test-loop-unrolling="unroll-factor=3"
+-test-loop-unrolling="unroll-factor=1"
+-test-extract-fixed-outer-loops='test-outer-loop-sizes=7'
+-test-extract-fixed-outer-loops='test-outer-loop-sizes=7,4'
+-test-legalize-mode=analysis
+-test-topological-sort-analysis
+-test-rewrite-dynamic-op
+-test-merge-blocks
+-promote-buffers-to-stack
+-promote-buffers-to-stack="max-alloc-size-in-bytes=64"
+-promote-buffers-to-stack="max-rank-of-allocated-memref=2"
+-test-legalize-unknown-root-patterns
+-test-remapped-value
+-test-target-materialization-with-no-uses
+-symbol-privatize=exclude="aap"
+-test-control-flow-sink
+-pass-pipeline="builtin.module(builtin.module(sccp))"
+-pass-pipeline='builtin.module(func.func(canonicalize{top-down=true}))'
+-test-compose-subview
+-pass-pipeline="builtin.module(builtin.module(symbol-dce))"
+-test-decompose-call-graph-types
+-remove-dead-values
+-test-tiling-interface=tile-consumer-and-fuse-producer-using-scf-for
+-test-tiling-interface=tile-consumer-fuse-and-yield-producer-using-scf-for
+-test-tiling-interface=lower-to-scalar-using-scf-for
+-test-tiling-interface=tile-using-scf-for
+-test-block-is-in-loop
+-load-pass-plugin=%standalone_libs/StandalonePlugin%shlibext
+-load-dialect-plugin=%standalone_libs/StandalonePlugin%shlibext

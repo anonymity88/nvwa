@@ -1,0 +1,292 @@
+{
+    "dialects": [
+        {
+            "name": "affine",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":5,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "amdgpu",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "amx",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":2,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "arith",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "arm_neon",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":1,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "arm_sve",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "async",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "bufferization",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":2,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "cf",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o",
+            "gen_weight":2,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "complex",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "emitc",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "func",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":2,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "gpu",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "index",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "irdl",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "linalg",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":6,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "math",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "memref",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "mesh",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":2,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "ml_program",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o",
+            "gen_weight":1,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "mpi",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o",
+            "gen_weight":1,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "nvgpu",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o",
+            "gen_weight":1,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "pdl",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o",
+            "gen_weight":1,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "pdl_interp",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "quant",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":1,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "scf",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "shape",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "spirv",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":7,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "tensor",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":3,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "tosa",
+            "OPscount": 6,
+            "requiredOPscount": 4,
+            "model":"gpt-4o-mini",
+            "gen_weight":7,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "vector",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":4,
+            "max_retries":3,
+            "mut_attempts":2
+        },
+        {
+            "name": "x86vector",
+            "OPscount": 3,
+            "requiredOPscount": 2,
+            "model":"gpt-4o-mini",
+            "gen_weight":2,
+            "max_retries":3,
+            "mut_attempts":2
+        }
+    ]
+}

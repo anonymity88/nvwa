@@ -1,0 +1,4 @@
+{
+    "single_mut_dialects": ["ptr", "ml_program", "amdgpu", "xegpu", "mpi", "nvvm", "irdl", "polynomial"],
+    "double_mut_dialects": ["builtin", "mesh", "x86vector", "ub"]
+}
