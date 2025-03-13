@@ -1,0 +1,3 @@
+In the previous text, although the IRs you modified based on my request do not contain syntax errors, they did not merge a sufficient number of the required operators into one `module{}` or one "func". Please use the context of our previous conversations and your responses to help me revise the earlier IRs, ensuring that all functions are fully merged into one, or creating data flow or calling relationships between the functions that comply with the syntax.
+
+Note: The order of the operators can be adjusted as needed. Required operators: $$.

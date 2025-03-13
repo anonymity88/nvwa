@@ -1,0 +1,1 @@
+In the previous text, although the IR you modified based on my request does not contain syntax errors, it no longer includes the required operator AAA. Please use the context of our previous conversations and your responses to help me revise the earlier IR, ensuring that the generated IR must include the required AAA operator.

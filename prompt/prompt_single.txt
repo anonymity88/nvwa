@@ -1,0 +1,35 @@
+Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Based on the description and definition of the AAA operator provided in the official documentation, please identify its syntactical rules, input-output attributes, tensor shapes, and so on. Generate a piece of IR code containing the AAA operator that is syntactically correct and free of undefined behavior. Below, I will first provide a sample of my expected output format, followed by several examples of the generation process, and finally present the definition segment of the target IR that I expect to generate from the official documentation. 
+Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+```mlir
+module {
+  func.func @main -> {
+
+  }
+}
+```
+DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
+
+Here are some examples of the process for generating IRs:
+Example 1- 
+Please generate a piece of IR code based on the description and definition of the $OP1$ operator provided in the following official documentation:
+$OPdefine1$
+The generated code is as follows:
+$result1$
+
+Example 2- 
+Please generate a piece of IR code based on the description and definition of the $OP2$ operator provided in the following official documentation:
+$OPdefine2$
+The generated code is as follows:
+$result2$
+
+Example 3- 
+Please generate a piece of IR code based on the description and definition of the $OP3$ operator provided in the following official documentation:
+$OPdefine3$
+The generated code is as follows:
+$result3$
+
+Target -
+Please generate a piece of IR code based on the description and definition of the AAA operator provided in the following official documentation:
+@@@@
+
+Note: Please follow the previous steps and examples to generate a piece of IR code based on the description and definition of the AAA operator provided in the official documentation above.

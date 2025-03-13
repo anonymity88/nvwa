@@ -1,0 +1,1 @@
+In the previous text, although the IRs you modified based on my request do not contain syntax errors, they no longer include all the required operators: $$. Please use the context of our previous conversations and your responses to help me revise the previous IRs, ensuring that they include as many of the required operators as possible. required operators: $$
