@@ -1,0 +1,35 @@
+Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Please generate an MLIR IR containing multiple operators based on my request, and I will provide you with the single operator IR for all target operators. You do not need to include all the operators that appear in the merged result, but aim to merge as many operators as possible from different IR fragments into a single `module{}` or a single "func," following the syntax rules and data flow dependencies. The goal is to create a longer result while ensuring that there are no syntax errors. The order of operators, functions, and calling relationships can be arranged as needed. First, I will provide a sample of the expected output format, followed by several examples of the generation process, and finally present the operator specifications for all the target operators in this process.
+The requirements are as follows: the generated IR must merge as many operators as possible from the provided IR fragments into one `module{}` or one "func." If the operators are not within the same `func`, there must be data flow dependencies between the `func`s, or they must be called by other functions. If it is not possible to merge all operators, prioritize the correctness of the syntax in the result, then consider adding more operators or functions.Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+```mlir
+module {
+  func.func @main -> {
+
+  }
+}
+```
+DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
+
+Here are some examples of the process for generating IRs:
+Example 1- 
+All the individual IRs required to be combined are as follows:
+$IRs1$
+The combined IRs: 
+$combined1$
+
+Example 2- 
+All the individual IRs required to be combined are as follows:
+$IRs2$
+The combined IRs: 
+$combined2$
+
+Example 3- 
+All the individual IRs required to be combined are as follows:
+$IRs3$
+The combined IRs: 
+$combined3$
+
+Target -
+All the individual IRs required to be combined are as follows:
+@@@@
+
+Note: Please combine all the above IRs into a single IR based on the previous steps and examples, and establish correct data flow dependencies or calling relationships between them.

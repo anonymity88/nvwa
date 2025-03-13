@@ -1,0 +1,326 @@
+Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Please synthesize the following IR fragments into a single IR based on my request. You do not need to include all the operators that appear in the merged result, but aim to merge as many operators as possible from the various IR fragments into one `module{}` or one "func" according to syntax rules and data flow dependencies. The goal is to create a longer result while ensuring that it is free of syntax errors. The order of operators, functions, and calling relationships can be arranged as needed. I will first provide a sample of my expected output format, followed by several examples of the generation process, and finally present all the target IRs generated in this process.
+The requirements are as follows: the generated IR must merge as many operators as possible from the provided IR fragments into one `module{}` or one "func." If the operators are not within the same `func`, there must be data flow dependencies between the `func`s, or they must be called by other functions. If it is not possible to merge all operators, prioritize the correctness of the syntax in the result, then consider adding more operators or functions.
+
+Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+```mlir
+module {
+  func.func @main -> {
+
+  }
+}
+```
+DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
+
+Here are some examples of the process for generating IRs:
+Example 1- 
+All the individual IRs required to be combined are as follows:
+ module {
+   memref.global "private" constant @__constant_64xf32 : memref<64xf32> = dense<0.000000e+00> {alignment = 64 : i64}
+   func.func @main(%arg0: memref<4x4xf32>, %arg1: memref<1x32x32x8xf32>, %arg2: memref<2x2x8x8xf32>, %arg3: memref<64xf32>, %arg4: index) -> (f32, memref<1x32x32x64xf32>, memref<64xf32>) {
+     %0 = bufferization.to_tensor %arg3 : memref<64xf32>
+     %1 = bufferization.to_tensor %arg2 : memref<2x2x8x8xf32>
+     %2 = bufferization.to_tensor %arg1 : memref<1x32x32x8xf32>
+     %3 = bufferization.to_tensor %arg0 : memref<4x4xf32>
+     %4 = memref.get_global @__constant_64xf32 : memref<64xf32>
+     %5 = tosa.log %3 : (tensor<4x4xf32>) -> tensor<?x?xf32>
+     %extracted = tensor.extract %5[%arg4, %arg4] : tensor<?x?xf32>
+     %6 = tosa.depthwise_conv2d %2, %1, %0 {dilation = array<i64: 1, 1>, pad = array<i64: 0, 8193, 0, 1>, stride = array<i64: 1, 1>} : (tensor<1x32x32x8xf32>, tensor<2x2x8x8xf32>, tensor<64xf32>) -> tensor<1x32x32x64xf32>
+     %7 = bufferization.to_memref %6 : memref<1x32x32x64xf32>
+     return %extracted, %7, %4 : f32, memref<1x32x32x64xf32>, memref<64xf32>
+   }
+ }
+ 
+ func.func @test_dynamic_batch_fft2d(%arg0: tensor<?x4x8xf32>, %arg1: tensor<?x4x8xf32>) -> (tensor<?x4x8xf32>, tensor<?x4x8xf32>) {
+   %output_real, %output_imag = tosa.fft2d %arg0, %arg1 {inverse = false} : (tensor<?x4x8xf32>, tensor<?x4x8xf32>) -> (tensor<?x4x8xf32>, tensor<?x4x8xf32>)
+   return %output_real, %output_imag : tensor<?x4x8xf32>, tensor<?x4x8xf32>
+ }
+
+The combined IRs: 
+module {
+  memref.global "private" constant @__constant_64xf32 : memref<64xf32> = dense<0.000000e+00> {alignment = 64 : i64}
+  func.func @main(%arg0: memref<4x4xf32>, %arg1: memref<1x32x32x8xf32>, %arg2: memref<2x2x8x8xf32>, %arg3: memref<64xf32>, %arg4: index, %arg5: tensor<?x4x8xf32>) -> (f32, memref<1x32x32x64xf32>, memref<64xf32>, tensor<?x4x8xf32>, tensor<?x4x8xf32>) {
+    %0 = bufferization.to_tensor %arg3 : memref<64xf32>
+    %1 = bufferization.to_tensor %arg2 : memref<2x2x8x8xf32>
+    %2 = bufferization.to_tensor %arg1 : memref<1x32x32x8xf32>
+    %3 = bufferization.to_tensor %arg0 : memref<4x4xf32>
+    %4 = memref.get_global @__constant_64xf32 : memref<64xf32>
+    // Calling a function to compute logarithm
+    %5 = tosa.log %3 : (tensor<4x4xf32>) -> tensor<?x?xf32>
+    %extracted = tensor.extract %5[%arg4, %arg4] : tensor<?x?xf32>
+    // Calling depthwise convolution
+    %6 = tosa.depthwise_conv2d %2, %1, %0 {dilation = array<i64: 1, 1>, pad = array<i64: 0, 8193, 0, 1>, stride = array<i64: 1, 1>} : (tensor<1x32x32x8xf32>, tensor<2x2x8x8xf32>, tensor<64xf32>) -> tensor<1x32x32x64xf32>
+    %7 = bufferization.to_memref %6 : memref<1x32x32x64xf32>
+    // Calling FFT function
+    %fft_output_real, %fft_output_imag = call @test_dynamic_batch_fft2d(%arg5, %arg5) : (tensor<?x4x8xf32>, tensor<?x4x8xf32>) -> (tensor<?x4x8xf32>, tensor<?x4x8xf32>)
+    return %extracted, %7, %4, %fft_output_real, %fft_output_imag : f32, memref<1x32x32x64xf32>, memref<64xf32>, tensor<?x4x8xf32>, tensor<?x4x8xf32>
+  }
+  func.func @test_dynamic_batch_fft2d(%arg0: tensor<?x4x8xf32>, %arg1: tensor<?x4x8xf32>) -> (tensor<?x4x8xf32>, tensor<?x4x8xf32>) {
+    %output_real, %output_imag = tosa.fft2d %arg0, %arg1 {inverse = false} : (tensor<?x4x8xf32>, tensor<?x4x8xf32>) -> (tensor<?x4x8xf32>, tensor<?x4x8xf32>)
+    return %output_real, %output_imag : tensor<?x4x8xf32>, tensor<?x4x8xf32>
+  }
+}
+
+Example 2- 
+All the individual IRs required to be combined are as follows:
+ #map = affine_map<(d0, d1, d2, d3) -> (d0, d1, d2, d3)>
+ module {
+   func.func @main(%arg0: tensor<i32> {bufferization.access = "read"}, %arg1: tensor<1x32x32x8xf32> {bufferization.access = "read"}, %arg2: tensor<1x12x12xf32> {bufferization.access = "read"}, %arg3: tensor<1x12x12xf32> {bufferization.access = "read"}) -> (tensor<i32>, tensor<1x32x32x8xf32>, tensor<1x12x12xf32>, tensor<1x12x12xf32>) attributes {pattern_driver_all_erased = true, pattern_driver_changed = false} {
+     %cst = arith.constant 0.000000e+00 : f32
+     %c1 = arith.constant 1 : index
+     %c0 = arith.constant 0 : index
+     %c4 = arith.constant 4 : index
+     %c8193 = arith.constant 8193 : index
+     %c31 = arith.constant 31 : index
+     %padded = tensor.pad %arg1 low[0, 4, 8193, 0] high[0, 4, 4, 0] {
+     ^bb0(%arg4: index, %arg5: index, %arg6: index, %arg7: index):
+       tensor.yield %cst : f32
+     } {__inplace_operands_attr__ = ["true"]} : tensor<1x32x32x8xf32> to tensor<1x40x8229x8xf32>
+     %0 = tensor.empty() : tensor<1x32x32x8xf32>
+     %1 = linalg.fill {__inplace_operands_attr__ = ["none", "true"]} ins(%cst : f32) outs(%0 : tensor<1x32x32x8xf32>) -> tensor<1x32x32x8xf32>
+     %2 = tensor.empty() : tensor<1x1xf32>
+     %3 = linalg.pooling_nhwc_sum {__inplace_operands_attr__ = ["true", "true", "true"], dilations = dense<1> : vector<2xi64>, strides = dense<1> : vector<2xi64>} ins(%padded, %2 : tensor<1x40x8229x8xf32>, tensor<1x1xf32>) outs(%1 : tensor<1x32x32x8xf32>) -> tensor<1x32x32x8xf32>
+     %4 = tensor.empty() : tensor<1x32x32x8xf32>
+     %5 = linalg.generic {indexing_maps = [#map, #map], iterator_types = ["parallel", "parallel", "parallel", "parallel"]} ins(%3 : tensor<1x32x32x8xf32>) outs(%4 : tensor<1x32x32x8xf32>) attrs =  {__inplace_operands_attr__ = ["true", "true"]} {
+     ^bb0(%in: f32, %out: f32):
+       %9 = linalg.index 1 : index
+       %10 = arith.subi %c31, %9 : index
+       %11 = arith.subi %9, %c4 : index
+       %12 = arith.minsi %11, %c0 : index
+       %13 = arith.addi %12, %c1 : index
+       %14 = arith.subi %10, %c4 : index
+       %15 = arith.minsi %14, %c0 : index
+       %16 = arith.addi %13, %15 : index
+       %17 = arith.maxsi %16, %c1 : index
+       %18 = linalg.index 2 : index
+       %19 = arith.subi %c31, %18 : index
+       %20 = arith.subi %18, %c8193 : index
+       %21 = arith.minsi %20, %c0 : index
+       %22 = arith.addi %21, %c1 : index
+       %23 = arith.subi %19, %c4 : index
+       %24 = arith.minsi %23, %c0 : index
+       %25 = arith.addi %22, %24 : index
+       %26 = arith.maxsi %25, %c1 : index
+       %27 = arith.muli %17, %26 : index
+       %28 = arith.index_cast %27 : index to i32
+       %29 = arith.sitofp %28 : i32 to f32
+       %30 = arith.divf %in, %29 : f32
+       linalg.yield %30 : f32
+     } -> tensor<1x32x32x8xf32>
+     %6 = tosa.concat %arg2, %arg3 {__inplace_operands_attr__ = ["false", "false"], axis = 1 : i32} : (tensor<1x12x12xf32>, tensor<1x12x12xf32>) -> tensor<1x24x12xf32>
+     %7 = tosa.slice %6 {__inplace_operands_attr__ = ["false"], size = array<i64: 1, 12, 12>, start = array<i64: 0, 0, 0>} : (tensor<1x24x12xf32>) -> tensor<1x12x12xf32>
+     %8 = tosa.slice %6 {__inplace_operands_attr__ = ["false"], size = array<i64: 1, 12, 12>, start = array<i64: 0, 12, 0>} : (tensor<1x24x12xf32>) -> tensor<1x12x12xf32>
+     return {__equivalent_func_args__ = [0, -1, -1, -1], __inplace_operands_attr__ = ["true", "true", "true", "true"]} %arg0, %5, %7, %8 : tensor<i32>, tensor<1x32x32x8xf32>, tensor<1x12x12xf32>, tensor<1x12x12xf32>
+   }
+ }
+ 
+ func.func @fold_mul_splat_i8() -> tensor<10xi32> {
+   %one = "tosa.const"() {value = dense<17> : tensor<10xi8>} : () -> tensor<10xi8>
+   %two = "tosa.const"() {value = dense<32> : tensor<10xi8>} : () -> tensor<10xi8>
+   %mul = tosa.mul %one, %two {shift = 3 : i8} : (tensor<10xi8>, tensor<10xi8>) -> tensor<10xi32>
+   return %mul : tensor<10xi32>
+ }
+
+The combined IRs: 
+#map = affine_map<(d0, d1, d2, d3) -> (d0, d1, d2, d3)>
+module {
+  func.func @main(%arg0: tensor<i32> {bufferization.access = "read"}, 
+                  %arg1: tensor<1x32x32x8xf32> {bufferization.access = "read"}, 
+                  %arg2: tensor<1x12x12xf32> {bufferization.access = "read"}, 
+                  %arg3: tensor<1x12x12xf32> {bufferization.access = "read"}) -> (tensor<i32>, tensor<1x32x32x8xf32>, tensor<1x12x12xf32>, tensor<1x12x12xf32>, tensor<10xi32>) attributes {pattern_driver_all_erased = true, pattern_driver_changed = false} {
+    %cst = arith.constant 0.000000e+00 : f32
+    %c1 = arith.constant 1 : index
+    %c0 = arith.constant 0 : index
+    %c4 = arith.constant 4 : index
+    %c8193 = arith.constant 8193 : index
+    %c31 = arith.constant 31 : index
+    // Padding operation
+    %padded = tensor.pad %arg1 low[0, 4, 8193, 0] high[0, 4, 4, 0] {
+      ^bb0(%arg4: index, %arg5: index, %arg6: index, %arg7: index):
+      tensor.yield %cst : f32
+    } {__inplace_operands_attr__ = ["true"]} : tensor<1x32x32x8xf32> to tensor<1x40x8229x8xf32>
+    %0 = tensor.empty() : tensor<1x32x32x8xf32>
+    %1 = linalg.fill {__inplace_operands_attr__ = ["none", "true"]} ins(%cst : f32) outs(%0 : tensor<1x32x32x8xf32>) -> tensor<1x32x32x8xf32>
+    %2 = tensor.empty() : tensor<1x1xf32>
+    // Pooling operation
+    %3 = linalg.pooling_nhwc_sum {__inplace_operands_attr__ = ["true", "true", "true"], dilations = dense<1> : vector<2xi64>, strides = dense<1> : vector<2xi64>} ins(%padded, %2 : tensor<1x40x8229x8xf32>, tensor<1x1xf32>) outs(%1 : tensor<1x32x32x8xf32>) -> tensor<1x32x32x8xf32>
+    %4 = tensor.empty() : tensor<1x32x32x8xf32>
+    %5 = linalg.generic {indexing_maps = [#map, #map], iterator_types = ["parallel", "parallel", "parallel", "parallel"]} ins(%3 : tensor<1x32x32x8xf32>) outs(%4 : tensor<1x32x32x8xf32>) attrs =  {__inplace_operands_attr__ = ["true", "true"]} {
+      ^bb0(%in: f32, %out: f32):
+      %9 = linalg.index 1 : index
+      %10 = arith.subi %c31, %9 : index
+      %11 = arith.subi %9, %c4 : index
+      %12 = arith.minsi %11, %c0 : index
+      %13 = arith.addi %12, %c1 : index
+      %14 = arith.subi %10, %c4 : index
+      %15 = arith.minsi %14, %c0 : index
+      %16 = arith.addi %13, %15 : index
+      %17 = arith.maxsi %16, %c1 : index
+      %18 = linalg.index 2 : index
+      %19 = arith.subi %c31, %18 : index
+      %20 = arith.subi %18, %c8193 : index
+      %21 = arith.minsi %20, %c0 : index
+      %22 = arith.addi %21, %c1 : index
+      %23 = arith.subi %19, %c4 : index
+      %24 = arith.minsi %23, %c0 : index
+      %25 = arith.addi %22, %24 : index
+      %26 = arith.maxsi %25, %c1 : index
+      %27 = arith.muli %17, %26 : index
+      %28 = arith.index_cast %27 : index to i32
+      %29 = arith.sitofp %28 : i32 to f32
+      %30 = arith.divf %in, %29 : f32
+      linalg.yield %30 : f32
+    } -> tensor<1x32x32x8xf32>
+    // Concatenation and slices
+    %6 = tosa.concat %arg2, %arg3 {__inplace_operands_attr__ = ["false", "false"], axis = 1 : i32} : (tensor<1x12x12xf32>, tensor<1x12x12xf32>) -> tensor<1x24x12xf32>
+    %7 = tosa.slice %6 {__inplace_operands_attr__ = ["false"], size = array<i64: 1, 12, 12>, start = array<i64: 0, 0, 0>} : (tensor<1x24x12xf32>) -> tensor<1x12x12xf32>
+    %8 = tosa.slice %6 {__inplace_operands_attr__ = ["false"], size = array<i64: 1, 12, 12>, start = array<i64: 0, 12, 0>} : (tensor<1x24x12xf32>) -> tensor<1x12x12xf32>
+    // Call to fold_mul_splat_i8
+    %fold_result = call @fold_mul_splat_i8() : () -> tensor<10xi32>
+    return {__equivalent_func_args__ = [0, -1, -1, -1], __inplace_operands_attr__ = ["true", "true", "true", "true"]} %arg0, %5, %7, %8, %fold_result: tensor<i32>, tensor<1x32x32x8xf32>, tensor<1x12x12xf32>, tensor<1x12x12xf32>, tensor<10xi32>
+  }
+  func.func @fold_mul_splat_i8() -> tensor<10xi32> {
+    %one = "tosa.const"() {value = dense<17> : tensor<10xi8>} : () -> tensor<10xi8>
+    %two = "tosa.const"() {value = dense<32> : tensor<10xi8>} : () -> tensor<10xi8>
+    %mul = tosa.mul %one, %two {shift = 3 : i8} : (tensor<10xi8>, tensor<10xi8>) -> tensor<10xi32>
+    return %mul : tensor<10xi32>
+  }
+}
+
+Example 3- 
+All the individual IRs required to be combined are as follows:
+ module {
+   func.func @combined_example(%input1_and: tensor<4xi32>, 
+                               %input2_and: tensor<4xi32>, 
+                               %input_reciprocal: tensor<4xf32>, 
+                               %arg0_max: tensor<4xf32>, 
+                               %arg1_max: tensor<4xf32>, 
+                               %cond: i1, 
+                               %arg0_scale: vector<4xi32>, 
+                               %arg1_scale: vector<4xi32>, 
+                               %arg2_scale: vector<4xi8>, 
+                               %arg0_reverse: tensor<2x4xf32>, 
+                               %arg1_reverse: tensor<4xf32>, 
+                               %axis: i32, 
+                               %input_equal1: tensor<4xi32>, 
+                               %input_equal2: tensor<4xi32>, 
+                               %input_negate: tensor<?x?xf32>) -> (tensor<4xi32>, 
+                                                                   tensor<4xf32>, 
+                                                                   tensor<4xf32>, 
+                                                                   tensor<4xf32>, 
+                                                                   vector<4xi32>, 
+                                                                   tensor<2x4xf32>, 
+                                                                   tensor<4xi1>, 
+                                                                   tensor<?x?xf32>) {
+     %and_output = "tosa.bitwise_and"(%input1_and, %input2_and) : (tensor<4xi32>, tensor<4xi32>) -> tensor<4xi32>
+     
+     %reciprocal_result = "tosa.reciprocal"(%input_reciprocal) : (tensor<4xf32>) -> tensor<4xf32>
+     
+     %max_result = "tosa.maximum"(%arg0_max, %arg1_max) : (tensor<4xf32>, tensor<4xf32>) -> tensor<4xf32>
+     
+     %c0 = arith.constant dense<0> : tensor<4xi1>
+     %select_result = "tosa.select"(%c0, %arg0_max, %max_result) : (tensor<4xi1>, tensor<4xf32>, tensor<4xf32>) -> tensor<4xf32>
+     
+     %true_branch = scf.if %cond -> tensor<4xf32> {
+       %true_value = arith.constant dense<[1.0, 2.0, 3.0, 4.0]> : tensor<4xf32>
+       scf.yield %true_value : tensor<4xf32>
+     } else {
+       %false_value = arith.constant dense<[5.0, 6.0, 7.0, 8.0]> : tensor<4xf32>
+       scf.yield %false_value : tensor<4xf32>
+     }
+ 
+     %scaled_result = tosa.apply_scale %arg0_scale, %arg1_scale, %arg2_scale {double_round = true} : (vector<4xi32>, vector<4xi32>, vector<4xi8>) -> vector<4xi32>
+     
+     %reverse_result = "tosa.reverse"(%arg0_reverse) {axis = 1 : i32} : (tensor<2x4xf32>) -> tensor<2x4xf32>
+     
+     %max_reverse_result = "tosa.maximum"(%arg0_reverse, %arg0_reverse) : (tensor<2x4xf32>, tensor<2x4xf32>) -> tensor<2x4xf32>
+     
+     %equal_result = "tosa.equal"(%input_equal1, %input_equal2) : (tensor<4xi32>, tensor<4xi32>) -> tensor<4xi1>
+     
+     %negate_result = "tosa.negate"(%input_negate) : (tensor<?x?xf32>) -> tensor<?x?xf32>
+ 
+     return %and_output, %reciprocal_result, %select_result, %true_branch, %scaled_result, %reverse_result, %equal_result, %negate_result: 
+            tensor<4xi32>, tensor<4xf32>, tensor<4xf32>, tensor<4xf32>, vector<4xi32>, tensor<2x4xf32>, tensor<4xi1>, tensor<?x?xf32>
+   }
+ }func.func @fold_mul_one_lhs_i32(%arg0: tensor<i32>) -> tensor<i32> {
+   %one = "tosa.const"() {value = dense<64> : tensor<i32>} : () -> tensor<i32>
+   %mul = tosa.mul %one, %arg0 {shift = 6 : i8} : (tensor<i32>, tensor<i32>) -> tensor<i32>
+   return %mul : tensor<i32>
+ }
+The combined IRs: 
+module {
+  func.func @main(%input1_and: tensor<4xi32>, 
+                  %input2_and: tensor<4xi32>, 
+                  %input_reciprocal: tensor<4xf32>, 
+                  %arg0_max: tensor<4xf32>, 
+                  %arg1_max: tensor<4xf32>, 
+                  %cond: i1, 
+                  %arg0_scale: vector<4xi32>, 
+                  %arg1_scale: vector<4xi32>, 
+                  %arg2_scale: vector<4xi8>, 
+                  %arg0_reverse: tensor<2x4xf32>, 
+                  %arg1_reverse: tensor<4xf32>, 
+                  %axis: i32, 
+                  %input_equal1: tensor<4xi32>, 
+                  %input_equal2: tensor<4xi32>, 
+                  %input_negate: tensor<?x?xf32>,
+                  %arg0_mul: tensor<i32>) -> (tensor<4xi32>, 
+                                              tensor<4xf32>, 
+                                              tensor<4xf32>, 
+                                              tensor<4xf32>, 
+                                              vector<4xi32>, 
+                                              tensor<2x4xf32>, 
+                                              tensor<4xi1>, 
+                                              tensor<?x?xf32>, 
+                                              tensor<i32>) {
+    // Execute tosa.bitwise_and
+    %and_output = "tosa.bitwise_and"(%input1_and, %input2_and) : (tensor<4xi32>, tensor<4xi32>) -> tensor<4xi32>
+    // Execute tosa.reciprocal
+    %reciprocal_result = "tosa.reciprocal"(%input_reciprocal) : (tensor<4xf32>) -> tensor<4xf32>
+    // Execute tosa.maximum
+    %max_result = "tosa.maximum"(%arg0_max, %arg1_max) : (tensor<4xf32>, tensor<4xf32>) -> tensor<4xf32>
+    // Execute tosa.select
+    %c0 = arith.constant dense<0> : tensor<4xi1>
+    %select_result = "tosa.select"(%c0, %arg0_max, %max_result) : (tensor<4xi1>, tensor<4xf32>, tensor<4xf32>) -> tensor<4xf32>
+    // Execute conditional logic
+    %true_branch = scf.if %cond -> tensor<4xf32> {
+      %true_value = arith.constant dense<[1.0, 2.0, 3.0, 4.0]> : tensor<4xf32>
+      scf.yield %true_value : tensor<4xf32>
+    } else {
+      %false_value = arith.constant dense<[5.0, 6.0, 7.0, 8.0]> : tensor<4xf32>
+      scf.yield %false_value : tensor<4xf32>
+    }
+    // Execute tosa.apply_scale
+    %scaled_result = tosa.apply_scale %arg0_scale, %arg1_scale, %arg2_scale {double_round = true} : (vector<4xi32>, vector<4xi32>, vector<4xi8>) -> vector<4xi32>
+    // Execute tosa.reverse
+    %reverse_result = "tosa.reverse"(%arg0_reverse) {axis = 1 : i32} : (tensor<2x4xf32>) -> tensor<2x4xf32>
+    // Execute tosa.maximum on reversed tensor
+    %max_reverse_result = "tosa.maximum"(%arg0_reverse, %arg0_reverse) : (tensor<2x4xf32>, tensor<2x4xf32>) -> tensor<2x4xf32>
+    // Execute tosa.equal
+    %equal_result = "tosa.equal"(%input_equal1, %input_equal2) : (tensor<4xi32>, tensor<4xi32>) -> tensor<4xi1>
+    // Execute tosa.negate
+    %negate_result = "tosa.negate"(%input_negate) : (tensor<?x?xf32>) -> tensor<?x?xf32>
+    // Call fold_mul_one_lhs_i32 function
+    %mul_result = call @fold_mul_one_lhs_i32(%arg0_mul) : (tensor<i32>) -> tensor<i32>
+    return %and_output, %reciprocal_result, %select_result, %true_branch, %scaled_result, %reverse_result, %equal_result, %negate_result, %mul_result: 
+           tensor<4xi32>, tensor<4xf32>, tensor<4xf32>, tensor<4xf32>, vector<4xi32>, tensor<2x4xf32>, tensor<4xi1>, tensor<?x?xf32>, tensor<i32>
+  }
+  func.func @fold_mul_one_lhs_i32(%arg0: tensor<i32>) -> tensor<i32> {
+    %one = "tosa.const"() {value = dense<64> : tensor<i32>} : () -> tensor<i32>
+    %mul = tosa.mul %one, %arg0 {shift = 6 : i8} : (tensor<i32>, tensor<i32>) -> tensor<i32>
+    return %mul : tensor<i32>
+  }
+}
+
+
+Target -
+All the individual IRs required to be combined are as follows::
+func.func @test_dynamic_rhs_matmul(%arg0 : tensor<2x3x4xi32>, %arg1 : tensor<?x?x?xi32>) -> () {
+  %0 = tosa.matmul %arg0, %arg1 : (tensor<2x3x4xi32>, tensor<?x?x?xi32>) -> tensor<?x?x?xi32>
+  return
+}
+func.func @test_simple_ui8(%arg0: tensor<1xui8>) -> () {
+  %0 = tosa.cast %arg0 : (tensor<1xui8>) -> tensor<1xf32>
+  return
+}
+
+Note: Please combine all the above IRs into a single IR based on the previous steps and examples, and establish correct data flow dependencies or calling relationships between them.

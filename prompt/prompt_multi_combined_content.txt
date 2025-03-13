@@ -1,0 +1,18 @@
+module {
+  func.func @main(%a: vector<16xi32>, %b: vector<16xi32>) -> (vector<16xi1>, vector<16xi1>) {
+    %k1, %k2 = x86vector.avx512.vp2intersect %a, %b : vector<16xi32>
+    return %k1, %k2 : vector<16xi1>, vector<16xi1>
+  }
+}
+module {
+  func.func @main(%a: vector<8xf32>, %b: vector<8xf32>) -> vector<8xf32> {
+    %dot_result = x86vector.avx.intr.dot %a, %b : vector<8xf32>
+    return %dot_result : vector<8xf32>
+  }
+}
+module {
+  func.func @main(%a: vector<8xi64>, %b: vector<8xi64>) -> vector<8xi1> {
+    %res = "x86vector.avx512.intr.vp2intersect.q.512"(%a, %b) : (vector<8xi64>, vector<8xi64>) -> vector<8xi1>
+    return %res : vector<8xi1>
+  }
+}
