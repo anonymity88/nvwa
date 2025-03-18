@@ -1,0 +1,51 @@
+omp.teams (omp::TeamsOp) ¶
+Teams construct
+
+Syntax:
+
+operation ::= `omp.teams` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              |
+              `if` `(` $if_expr `)`
+              |
+              `num_teams` `(` ( $num_teams_lower^ `:` type($num_teams_lower) )? `to`
+              $num_teams_upper `:` type($num_teams_upper) `)`
+              |
+              `thread_limit` `(` $thread_limit `:` type($thread_limit) `)`
+              )
+              custom<PrivateReductionRegion>($region, $private_vars, type($private_vars),
+              $private_syms, $reduction_vars, type($reduction_vars), $reduction_byref,
+              $reduction_syms) attr-dict
+The teams construct defines a region of code that triggers the creation of a league of teams. Once created, the number of teams remains constant for the duration of its code region.
+
+If the if_expr is present and it evaluates to false, the number of teams created is one.
+
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+The optional num_teams_upper and num_teams_lower arguments specify the limit on the number of teams to be created. If only the upper bound is specified, it acts as if the lower bound was set to the same value. It is not allowed to set num_teams_lower if num_teams_upper is not specified. They define a closed range, where both the lower and upper bounds are included.
+
+Reductions can be performed by specifying reduction accumulator variables in reduction_vars, symbols referring to reduction declarations in the reduction_syms attribute, and whether the reduction variable should be passed into the reduction region by value or by reference in reduction_byref. Each reduction is identified by the accumulator it uses and accumulators must not be repeated in the same reduction. A private variable corresponding to the accumulator is used in place of the accumulator inside the body of the operation. The reduction declaration specifies how to combine the values from each iteration, section, team, thread or simd lane defined by the operation’s region into the final value, which is available in the accumulator after they all complete.
+
+The optional thread_limit specifies the limit on the number of threads.
+
+Traits: AttrSizedOperandSegments, RecursiveMemoryEffects
+
+Interfaces: BlockArgOpenMPOpInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+if_expr	1-bit signless integer
+num_teams_lower	integer
+num_teams_upper	integer
+private_vars	variadic of any type
+reduction_vars	variadic of OpenMP-compatible variable type
+thread_limit	integer

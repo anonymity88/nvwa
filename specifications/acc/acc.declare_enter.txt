@@ -1,0 +1,25 @@
+acc.declare_enter (acc::DeclareEnterOp) ¶
+Declare directive - entry to implicit data region
+
+Syntax:
+
+operation ::= `acc.declare_enter` oilist(
+              `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              )
+              attr-dict-with-keyword
+The “acc.declare_enter” operation represents the OpenACC declare directive and captures the entry semantics to the implicit data region. This operation is modeled similarly to “acc.enter_data”.
+
+Example showing acc declare create(a):
+
+%0 = acc.create varPtr(%a : !llvm.ptr) -> !llvm.ptr
+acc.declare_enter dataOperands(%0 : !llvm.ptr)
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Operands: ¶
+Operand	Description
+dataClauseOperands	variadic of PointerLikeType instance
+Results: ¶
+Result	Description
+token	declare token type

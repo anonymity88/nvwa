@@ -1,0 +1,15 @@
+transform.type_conversion.tensor.cast_shape_dynamic_dims (transform::TypeConversionCastShapeDynamicDimsOp) ¶
+Syntax:
+
+operation ::= `transform.type_conversion.tensor.cast_shape_dynamic_dims` (`ignore_dynamic_info` $ignore_dynamic_info^)? attr-dict
+Populates a type converter with conversion materialization functions that cast a tensor value between two cast-compatible tensors. See tensor.cast for more information on cast compatibility between tensors.
+
+If ignore_dynamic_info is not set, this will set an additional constraint that source materializations do not cast dynamic dimensions to static ones.
+
+Interfaces: TypeConverterBuilderOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+ignore_dynamic_info	::mlir::UnitAttr	unit attribute
+Vector Transform Operations ¶
+source

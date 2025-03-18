@@ -1,0 +1,9 @@
+llvm.intr.vastart (LLVM::VaStartOp) ¶
+Initializes arg_list for subsequent variadic argument extractions.
+
+Syntax:
+
+operation ::= `llvm.intr.vastart` $arg_list attr-dict `:` qualified(type($arg_list))
+Operands: ¶
+Operand	Description
+arg_list	LLVM pointer type

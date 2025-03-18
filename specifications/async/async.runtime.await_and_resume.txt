@@ -1,0 +1,12 @@
+async.runtime.await_and_resume (async::RuntimeAwaitAndResumeOp) ¶
+Awaits the async operand and resumes the coroutine
+
+Syntax:
+
+operation ::= `async.runtime.await_and_resume` $operand `,` $handle attr-dict `:` type($operand)
+The async.runtime.await_and_resume operation awaits for the operand to become available or error and resumes the coroutine on a thread managed by the runtime.
+
+Operands: ¶
+Operand	Description
+operand	async value type or async token type or async group type
+handle	coroutine handle

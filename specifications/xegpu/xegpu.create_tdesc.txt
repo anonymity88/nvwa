@@ -1,0 +1,42 @@
+xegpu.create_tdesc (xegpu::CreateDescOp) ¶
+Create scattered tensor descriptors (TensorDesc).
+
+Syntax:
+
+operation ::= `xegpu.create_tdesc` $source `,` $offsets attr-dict `:`  type($source) `,` type($offsets) `->` qualified(type($TensorDesc))
+“create_tdesc” is similar to “create_nd_tdesc” in terms that it creates a Tensor Descriptor (TensorDescType) for a memory region. While “create_nd_tdesc” is for creating continuous subviews, “create_tdesc” is for creating non-continuous (scattered) subviews, allowing each work-item in a subgroup specifying their own offset. It accepts the following parameters:
+
+source: a 1D memref or pointer (uint64_t) represents the flattened memory object.
+offsets: a vector containing offsets of each access point. Its size is fixed to the hardware supportted subgroup size, e.g., 16 on PVC, implying each element in the vector corresponds to a work-item (SIMT lane) in the subgroup.
+The first dimension of the result TensorDesc corresponds to work-items, so it should match the dimension of offsets. It may also has a second dimension corresponding to the chunk_size if the chunk size is larger than 1.
+
+Example 1. It assumes subgroup size is 4, and accesses a[0], a[16], a[32], a[64]
+
+%a = memref.alloc() : memref<1024xf32>
+%0 = arith.constant dense<[0, 16, 32, 64]> : vector<4xindex>
+%1 = xegpu.create_tdesc %a, %0: memref<1024xf32>, vector<4xindex> -> TensorDesc<4xf32>
+Example 2. It assumes subgroup size is 4, and each workitem access 8 elements. It will access totally 32 data elements: a[0:7], a[16:23], a[32:39], a[64:71]
+
+%0 = memref.alloc() : memref<1024xf32>
+%off = arith.constant dense<[0, 16, 32, 64]> : vector<4xindex>
+%1 = xegpu.create_tdesc %0, %off : memref<1024xf32>, vector<4xindex>
+      -> TensorDesc<4x8xf32, #xegpu.scattered_tdesc_attr<chunk_size = 8>>
+Example 3. It is similar to Example 2, but there is some overlaps among workitems. It accesses: a[0:7], a[4:11], a[8:15], a[12:19]
+
+%0 = memref.alloc() : memref<1024xf32>
+%off = arith.constant dense<[0, 4, 8, 12]> : vector<4xindex>
+%1 = xegpu.create_tdesc %0, %off : memref<1024xf32>, vector<4xindex>
+      -> TensorDesc<4x8xf32, #xegpu.scattered_tdesc_attr<chunk_size = 8>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	non-0-ranked.memref of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values or 64-bit unsigned integer or 32-bit unsigned integer or 64-bit signless integer or 32-bit signless integer
+offsets	vector of index values of ranks 1
+Results: ¶
+Result	Description
+TensorDesc	TensorDesc describing regions of interested data.

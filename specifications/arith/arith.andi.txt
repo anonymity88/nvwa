@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// AndIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_AndIOp : Arith_TotalIntBinaryOp<"andi", [Commutative, Idempotent]> {
+  let summary = "integer binary and";
+  let description = [{
+    The `andi` operation takes two operands and returns one result, each of
+    these is required to be the same type. This type may be an integer scalar
+    type, a vector whose element type is integer, or a tensor of integers. It
+    has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar integer bitwise and.
+    %a = arith.andi %b, %c : i64
+
+    // SIMD vector element-wise bitwise integer and.
+    %f = arith.andi %g, %h : vector<4xi32>
+
+    // Tensor element-wise bitwise integer and.
+    %x = arith.andi %y, %z : tensor<4x?xi8>
+    ```
+  }];
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

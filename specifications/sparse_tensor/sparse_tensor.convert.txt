@@ -1,0 +1,34 @@
+sparse_tensor.convert (sparse_tensor::ConvertOp) ¶
+Converts between different tensor types
+
+Syntax:
+
+operation ::= `sparse_tensor.convert` $source attr-dict `:` type($source) `to` type($dest)
+Converts one sparse or dense tensor type to another tensor type. The rank of the source and destination types must match exactly, and the dimension sizes must either match exactly or relax from a static to a dynamic size. The sparse encoding of the two types can obviously be completely different. The name convert was preferred over cast, since the operation may incur a non-trivial cost.
+
+When converting between two different sparse tensor types, only explicitly stored values are moved from one underlying sparse storage format to the other. When converting from an unannotated dense tensor type to a sparse tensor type, an explicit test for nonzero values is used. When converting to an unannotated dense tensor type, implicit zeroes in the sparse storage format are made explicit. Note that the conversions can have non-trivial costs associated with them, since they may involve elaborate data structure transformations. Also, conversions from sparse tensor types into dense tensor types may be infeasible in terms of storage requirements.
+
+Trivial dense-to-dense convert will be removed by canonicalization while trivial sparse-to-sparse convert will be removed by the sparse codegen. This is because we use trivial sparse-to-sparse convert to tell bufferization that the sparse codegen will expand the tensor buffer into sparse tensor storage.
+
+Examples:
+
+%0 = sparse_tensor.convert %a : tensor<32x32xf32> to tensor<32x32xf32, #CSR>
+%1 = sparse_tensor.convert %a : tensor<32x32xf32> to tensor<?x?xf32, #CSR>
+%2 = sparse_tensor.convert %b : tensor<8x8xi32, #CSC> to tensor<8x8xi32, #CSR>
+%3 = sparse_tensor.convert %c : tensor<4x8xf64, #CSR> to tensor<4x?xf64, #CSC>
+
+// The following conversion is not allowed (since it would require a
+// runtime assertion that the source's dimension size is actually 100).
+%4 = sparse_tensor.convert %d : tensor<?xf64> to tensor<100xf64, #SV>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), StageWithSortSparseOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	ranked tensor of any type values
+Results: ¶
+Result	Description
+dest	ranked tensor of any type values

@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// Operator: exp
+//===----------------------------------------------------------------------===//
+def Tosa_ExpOp : Tosa_ElementwiseOp<"exp", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise exp op";
+
+  let description = [{
+    Elementwise e to the x operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+

@@ -1,0 +1,4 @@
+arm_sme.intr.zero (arm_sme::aarch64_sme_zero) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+tile_mask	::mlir::IntegerAttr	32-bit signless integer attribute

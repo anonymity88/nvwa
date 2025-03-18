@@ -1,0 +1,17 @@
+ml_program.output (ml_program::OutputOp) ¶
+Outputs values from a subgraph function
+
+Syntax:
+
+operation ::= `ml_program.output` attr-dict ($operands^ `:` type($operands))?
+The output operation terminates a subgraph by yielding values to the caller. The operation takes variable number of operands and produces no results. The operand number and types must match the signature of the function that contains the operation.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<SubgraphOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

@@ -1,0 +1,47 @@
+//===----------------------------------------------------------------------===//
+// GlobalLoadConstOp
+//===----------------------------------------------------------------------===//
+
+def MLProgram_GlobalLoadConstOp : MLProgram_Op<"global_load_const", [
+    Pure,
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    DeclareOpInterfaceMethods<SymbolUserOpInterface>
+  ]> {
+  let summary = "Direct load a constant value from a global";
+  let description = [{
+    Loads a constant (immutable) value from a global directly by symbol.
+
+    This op is only legal for globals that are not mutable and exists because
+    such a load can be considered to have no side effects.
+
+    Example:
+
+    ```mlir
+    %0 = ml_program.global_load_const @foobar : tensor<?xi32>
+    ```
+  }];
+
+  let arguments = (ins
+    SymbolRefAttr:$global
+  );
+  let results = (outs
+    AnyType:$result
+  );
+
+  let assemblyFormat = [{
+    $global `:` type($result) attr-dict
+  }];
+
+  let extraClassDeclaration = [{
+    /// Gets the corresponding GlobalOp (or nullptr).
+    GlobalOp getGlobalOp(SymbolTableCollection &symbolTable);
+  }];
+
+  let extraClassDefinition = [{
+    void $cppClass::getAsmResultNames(
+      function_ref<void(::mlir::Value, ::llvm::StringRef)> setNameFn) {
+        setNameFn(getResult(), getGlobal().getLeafReference());
+    }
+  }];
+}
+

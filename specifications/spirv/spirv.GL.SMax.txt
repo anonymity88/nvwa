@@ -1,0 +1,26 @@
+spirv.GL.SMax (spirv::GLSMaxOp) ¶
+Return maximum of two signed integer operands
+
+Syntax:
+
+operation ::= `spirv.GL.SMax` operands attr-dict `:` type($result)
+Result is y if x < y; otherwise result is x, where x and y are interpreted as signed integers.
+
+Result Type and the type of x and y must both be integer scalar or integer vector types. Result Type and operand types must have the same number of components with the same component width. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.SMax %0, %1 : i32
+%3 = spirv.GL.SMax %0, %1 : vector<3xi16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+rhs	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

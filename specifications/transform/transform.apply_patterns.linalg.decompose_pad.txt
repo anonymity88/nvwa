@@ -1,0 +1,7 @@
+transform.apply_patterns.linalg.decompose_pad (transform::ApplyDecomposeTensorPadPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.linalg.decompose_pad` attr-dict
+Collect patterns to decompose tensor.pad into e.g. tensor::EmptyOp, linalg::FillOp and tensor::InsertSliceOp.
+
+Interfaces: PatternDescriptorOpInterface

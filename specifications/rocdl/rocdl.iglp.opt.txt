@@ -1,0 +1,7 @@
+rocdl.iglp.opt (ROCDL::IglpOpt) ¶
+Syntax:
+
+operation ::= `rocdl.iglp.opt` $variant attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+variant	::mlir::IntegerAttr	32-bit signless integer attribute

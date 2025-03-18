@@ -1,0 +1,31 @@
+//===----------------------------------------------------------------------===//
+// RecvOp
+//===----------------------------------------------------------------------===//
+
+def MPI_RecvOp : MPI_Op<"recv", []> {
+  let summary = "Equivalent to `MPI_Recv(ptr, size, dtype, dest, tag, "
+                "MPI_COMM_WORLD, MPI_STATUS_IGNORE)`";
+  let description = [{
+    MPI_Recv performs a blocking receive of `size` elements of type `dtype` 
+    from rank `dest`. The `tag` value and communicator enables the library to 
+    determine the matching of multiple sends and receives between the same 
+    ranks.
+
+    Communicators other than `MPI_COMM_WORLD` are not supprted for now.
+    The MPI_Status is set to `MPI_STATUS_IGNORE`, as the status object 
+    is not yet ported to MLIR.
+
+    This operation can optionally return an `!mpi.retval` value that can be used
+    to check for errors.
+  }];
+
+  let arguments = (ins AnyMemRef : $ref, I32 : $tag, I32 : $rank);
+
+  let results = (outs Optional<MPI_Retval>:$retval);
+
+  let assemblyFormat = "`(` $ref `,` $tag `,` $rank `)` attr-dict `:` "
+                       "type($ref) `,` type($tag) `,` type($rank)"
+                       "(`->` type($retval)^)?";
+}
+
+

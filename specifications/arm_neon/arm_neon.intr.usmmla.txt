@@ -1,0 +1,26 @@
+arm_neon.intr.usmmla (arm_neon::UsmmlaOp) ¶
+Unsignged and signed matrix-matrix multiply and accumulate op
+
+Syntax:
+
+operation ::= `arm_neon.intr.usmmla` $acc `,` $src1 `,` $src2 attr-dict `:` type($src1) `to` type($res)
+USMMLA: Signed integer matrix multiply-accumulate.
+
+Unsigned and signed 8-bit integer matrix multiply-accumulate. This instruction multiplies the 2x8 matrix of unsigned 8-bit integer values in the first source vector by the 8x2 matrix of signed 8-bit integer values in the second source vector. The resulting 2x2 32-bit integer matrix product is destructively added to the 32-bit integer matrix accumulator in the destination vector. This is equivalent to performing an 8-way dot product per destination element.
+
+Source: https://developer.arm.com/architectures/instruction-sets/intrinsics/#f:@navigationhierarchiessimdisa=[Neon]&q=usmmla
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+acc	a vector with length 4 of 32-bit signless integer values
+src1	a vector with length 16 of 8-bit signless integer values
+src2	a vector with length 16 of 8-bit signless integer values
+Results: ¶
+Result	Description
+res	a vector with length 4 of 32-bit signless integer values

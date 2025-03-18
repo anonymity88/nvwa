@@ -1,0 +1,31 @@
+polynomial.mul (polynomial::MulOp) ¶
+Multiplication operation between polynomials.
+
+Syntax:
+
+operation ::= `polynomial.mul` operands attr-dict `:` type($result)
+Performs polynomial multiplication on the operands. The operands may be single polynomials or containers of identically-typed polynomials, i.e., polynomials from the same underlying ring with the same coefficient types.
+
+Multiplication is defined to occur in the ring defined by the ring attribute of the two operands, meaning the multiplication is taken modulo the coefficientModulus and the polynomialModulus of the ring.
+
+Example:
+
+// multiply two polynomials modulo x^1024 - 1
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%0 = polynomial.constant int<1 + x**2> : !polynomial.polynomial<#ring>
+%1 = polynomial.constant int<x**5 - x + 1> : !polynomial.polynomial<#ring>
+%2 = polynomial.mul %0, %1 : !polynomial.polynomial<#ring>
+Traits: AlwaysSpeculatableImplTrait, Commutative, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	polynomial-like
+rhs	polynomial-like
+Results: ¶
+Result	Description
+result	polynomial-like

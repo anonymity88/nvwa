@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: arithmetic_right_shift
+//===----------------------------------------------------------------------===//
+def Tosa_ArithmeticRightShiftOp : Tosa_ElementwiseOp<"arithmetic_right_shift",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise Arithmetic Right Shift";
+
+  let description = [{
+    Elementwise arithmetic right shift of input1 by the amount specified in
+    input2. Axis of size 1 will be broadcast, as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2,
+    BoolAttr:$round
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

@@ -1,0 +1,10 @@
+llvm.intr.coro.save (LLVM::CoroSaveOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.save` $handle attr-dict `:` functional-type(operands, results)
+Operands: ¶
+Operand	Description
+handle	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

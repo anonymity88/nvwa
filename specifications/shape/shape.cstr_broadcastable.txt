@@ -1,0 +1,24 @@
+shape.cstr_broadcastable (shape::CstrBroadcastableOp) ¶
+Determines if 2+ shapes can be successfully broadcasted
+
+Syntax:
+
+operation ::= `shape.cstr_broadcastable` $shapes attr-dict `:` type($shapes)
+Given input shapes or extent tensors, return a witness specifying if they are broadcastable. This broadcastable follows the same logic as what shape.broadcast documents.
+
+“cstr” operations represent runtime assertions.
+
+Example:
+
+%w0 = shape.cstr_broadcastable [2,2], [3,1,2] // Passing
+%w1 = shape.cstr_broadcastable [2,2], [3,2] // Failure
+Traits: Commutative
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+shapes	variadic of shape or extent tensor
+Results: ¶
+Result	Description
+result

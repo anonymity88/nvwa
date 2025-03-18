@@ -1,0 +1,33 @@
+//===----------------------------------------------------------------------===//
+// Operator: transpose
+//===----------------------------------------------------------------------===//
+def Tosa_TransposeOp : Tosa_InferShapedTypeOp<"transpose"> {
+  let summary = "Transpose operator";
+
+  let description = [{
+    Permutes the dimensions based on perm.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Int32Or64Tensor:$perms
+  );
+
+  let results = (
+    outs Tosa_Tensor:$output
+  );
+
+  let extraClassDeclaration = [{
+    LogicalResult getConstantPerms(llvm::SmallVector<int64_t> &perms);
+  }];
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.10
+// Operator Class: Scatter/gather Operations.
+//===----------------------------------------------------------------------===//
+

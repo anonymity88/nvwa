@@ -1,0 +1,49 @@
+amdgpu.mfma (amdgpu::MFMAOp) ¶
+MLIR wrapper for CDNA mfma instructions
+
+Syntax:
+
+operation ::= `amdgpu.mfma` $sourceA `*` $sourceB `+` $destC
+              attr-dict
+              `blgp` `=` $blgp
+              `:` type($sourceA) `,` type($sourceB) `,` type($destC)
+The amdgpu.mfma op is an MLIR wrapper around intrinsics for various mfma instructions in the CDNA architecture, which perform multiple outer products in order to allow fast matrix multiplication.
+
+The wrapper will select an appropriate mfma instruction, if one is available, based on the provided m, k, n, and nBlks attributes, along with the types of the source and destination arguments.
+
+For information on the layouts of the input and output matrces (which are stored in sourceA, sourceB, destC, and destD), see the CDNA ISA documentation.
+
+The cbsz, abid, and blgp parameters control how the lanes of the wave are permuted when matrix data is being loaded: blgp can be any number of fixed permutations, cbsz specifies the log_2 of the number of chunks the lanes holding sourceA are split into, and abid selects one of those chunks.
+
+Note, this wrapper allows specifying vector<4Kxi8> arguments to MFMA intrinsics that take an integer type of width 4K. For example, one can provide a vector<4xi8> as an argument to an MFMA instruction that logically takes 4 i8s but whose intrinsics are specified to take an i32. In these cases, the bytes in the vector will be concatenated in little-endian order (that is, v[0] will go to arg[7:0], v[1] to arg[15:8] and so on).
+
+The negateA, negateB, and negateC flags are only supported for double-precision operations on gfx940+.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+m	::mlir::IntegerAttr	32-bit signless integer attribute
+n	::mlir::IntegerAttr	32-bit signless integer attribute
+k	::mlir::IntegerAttr	32-bit signless integer attribute
+blocks	::mlir::IntegerAttr	32-bit signless integer attribute
+cbsz	::mlir::IntegerAttr	32-bit signless integer attribute
+abid	::mlir::IntegerAttr	32-bit signless integer attribute
+blgp	::mlir::amdgpu::MFMAPermBAttr	
+The possible permutations of the lanes storing B available in an MFMA
+reducePrecision	::mlir::UnitAttr	unit attribute
+negateA	::mlir::UnitAttr	unit attribute
+negateB	::mlir::UnitAttr	unit attribute
+negateC	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+sourceA	32-bit float or 64-bit float or 32-bit signless integer or 64-bit signless integer or vector of 32-bit float values of length 2 or vector of 16-bit float values of length 4 or vector of bfloat16 type values of length 2/4 or vector of 8-bit signless integer values of length 4/8 or vector of f8E5M2FNUZ type or f8E4M3FNUZ type values of length 8
+sourceB	32-bit float or 64-bit float or 32-bit signless integer or 64-bit signless integer or vector of 32-bit float values of length 2 or vector of 16-bit float values of length 4 or vector of bfloat16 type values of length 2/4 or vector of 8-bit signless integer values of length 4/8 or vector of f8E5M2FNUZ type or f8E4M3FNUZ type values of length 8
+destC	64-bit float or vector of 32-bit float values of length 4/16/32 or vector of 32-bit signless integer values of length 4/16/32 or vector of 64-bit float values of length 4
+Results: ¶
+Result	Description
+destD	64-bit float or vector of 32-bit float values of length 4/16/32 or vector of 32-bit signless integer values of length 4/16/32 or vector of 64-bit float values of length 4

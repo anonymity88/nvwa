@@ -1,0 +1,31 @@
+amdgpu.packed_stoch_round_fp8 (amdgpu::PackedStochRoundFp8Op) ¶
+Round float stochiastically into a packed vector of 8-bit floats
+
+Syntax:
+
+operation ::= `amdgpu.packed_stoch_round_fp8` attr-dict $source `+` $stochiasticParam
+              `into` ($existing^):(`undef`)? `[` $storeIndex `]`
+              `:` type($source) `to` type($res) (`into` type($existing)^)?
+Round the input source, adding in stochiasticParam, and place it into the storeIndexth element of res.
+
+If existing is passed in, elements of res other than the one at storeIndex are copied from existing.
+
+The reason for this odd signature is that AMD GPUs cannot easily work with sub-registers, and so the conversion intrinsics (which are currently the only way to work with 8-bit float types) take packed vectors of 4 8-bit values.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+storeIndex	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative whose maximum value is 3
+Operands: ¶
+Operand	Description
+source	32-bit float
+stochiasticParam	32-bit signless integer
+existing	fixed-length vector of f8E4M3FNUZ type or f8E5M2FNUZ type values of length 4
+Results: ¶
+Result	Description
+res	fixed-length vector of f8E4M3FNUZ type or f8E5M2FNUZ type values of length 4

@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// ConditionOp
+//===----------------------------------------------------------------------===//
+
+def ConditionOp : SCF_Op<"condition", [
+  HasParent<"WhileOp">,
+  DeclareOpInterfaceMethods<RegionBranchTerminatorOpInterface,
+    ["getSuccessorRegions"]>,
+  Pure,
+  Terminator
+]> {
+  let summary = "loop continuation condition";
+  let description = [{
+    This operation accepts the continuation (i.e., inverse of exit) condition
+    of the `scf.while` construct. If its first argument is true, the "after"
+    region of `scf.while` is executed, with the remaining arguments forwarded
+    to the entry block of the region. Otherwise, the loop terminates.
+  }];
+
+  let arguments = (ins I1:$condition, Variadic<AnyType>:$args);
+
+  let assemblyFormat =
+      [{ `(` $condition `)` attr-dict ($args^ `:` type($args))? }];
+}
+

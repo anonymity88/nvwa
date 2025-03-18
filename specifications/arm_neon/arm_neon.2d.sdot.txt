@@ -1,0 +1,23 @@
+arm_neon.2d.sdot (arm_neon::Sdot2dOp) ¶
+Sdot op
+
+Syntax:
+
+operation ::= `arm_neon.2d.sdot` $a `,` $b `,` $c attr-dict `:` type($b) `,` type($c) `to` type($res)
+The two input vectors b and c have a 2D shape, consisting of either 2 or 4 rows, each row having length 4. This operation computes the pair-wise dot-products of the rows of b and c and accumulates them with the corresponding entry of a:
+
+res[i] := a[i] + dot_product(b[i, ...], c[i, ...])
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit signless integer values of length 4/2
+b	vector of 8-bit signless integer values of length 16/8
+c	vector of 8-bit signless integer values of length 16/8
+Results: ¶
+Result	Description
+res	vector of 32-bit signless integer values of length 4/2

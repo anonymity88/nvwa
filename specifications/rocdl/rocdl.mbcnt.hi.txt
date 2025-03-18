@@ -1,0 +1,17 @@
+rocdl.mbcnt.hi (ROCDL::MbcntHiOp) ¶
+Syntax:
+
+operation ::= `rocdl.mbcnt.hi` $in0 `,` $in1  attr-dict `:` `(` type($in0) `,` type($in1) `)` `->` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+in0	32-bit signless integer
+in1	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

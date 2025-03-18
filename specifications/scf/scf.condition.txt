@@ -1,0 +1,18 @@
+scf.condition (scf::ConditionOp) ¶
+Loop continuation condition
+
+Syntax:
+
+operation ::= `scf.condition` `(` $condition `)` attr-dict ($args^ `:` type($args))?
+This operation accepts the continuation (i.e., inverse of exit) condition of the scf.while construct. If its first argument is true, the “after” region of scf.while is executed, with the remaining arguments forwarded to the entry block of the region. Otherwise, the loop terminates.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<WhileOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+condition	1-bit signless integer
+args	variadic of any type

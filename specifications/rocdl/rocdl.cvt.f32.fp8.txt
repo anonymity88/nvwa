@@ -1,0 +1,21 @@
+rocdl.cvt.f32.fp8 (ROCDL::CvtF32Fp8Op) ¶
+Convert fp8 to f32
+
+Syntax:
+
+operation ::= `rocdl.cvt.f32.fp8` attr-dict $srcA `[` $byteSel `]` `:` type($res)
+Convert 8-bit fp8 value from the byteSelth bit of srcA to fp32.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+srcA	32-bit signless integer
+byteSel	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

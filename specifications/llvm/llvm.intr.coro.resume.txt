@@ -1,0 +1,7 @@
+llvm.intr.coro.resume (LLVM::CoroResumeOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.resume` $handle attr-dict `:` qualified(type($handle))
+Operands: ¶
+Operand	Description
+handle	LLVM pointer type

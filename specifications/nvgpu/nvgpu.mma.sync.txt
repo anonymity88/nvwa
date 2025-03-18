@@ -1,0 +1,33 @@
+nvgpu.mma.sync (nvgpu::MmaSyncOp) ¶
+Syntax:
+
+operation ::= `nvgpu.mma.sync` `(` $matrixA`,` $matrixB`,` $matrixC `)` attr-dict
+              `:` `(` type($matrixA) `,` type($matrixB) `,` type($matrixC) `)` `->` type($res)
+The nvgpu.mma.sync op represents the warp-level matrix-multiply-and- accumulate (mma) operation that is compatible with nvvm.mma.sync. The operands and results vector sizes are thread-level onwership to the warp-level mma operation shape. mmaShape attribute holds the warp-level matrix-multiply shape.
+
+The nvgpu.mma.sync op serves as an intermediate point between lowering from vector.contract to nvvm.mma.sync.
+
+This operation is meant to follow the semantic of described here: https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-instructions-mma
+
+Example:
+
+%res = nvgpu.mma.sync (%matrixA, %matrixB, %matrixC) {mmaShape = [16, 8, 16]} :
+    (vector<4x2xf16>, vector<2x2xf16>, vector<2x2xf32>) -> vector<2x2xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mmaShape	::mlir::ArrayAttr	64-bit integer array attribute
+tf32Enabled	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+matrixA	vector of any type values
+matrixB	vector of any type values
+matrixC	vector of any type values
+Results: ¶
+Result	Description
+res	vector of any type values

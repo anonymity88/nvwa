@@ -1,0 +1,27 @@
+gpu.create_dn_tensor (gpu::CreateDnTensorOp) ¶
+Create dense tensor operation
+
+Syntax:
+
+operation ::= `gpu.create_dn_tensor` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $memref `,` $dims attr-dict `:` type($dims) `into` type($memref)
+The gpu.create_dn_tensor operation initializes a dense tensor from the given values buffer and sizes. The buffer must already be copied from the host to the device prior to using this operation. The operation returns a handle to the dense tensor descriptor.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%dmat, %token = gpu.create_dn_tensor async [%dep] %mem, %dims : index, index into memref<?xf64>
+Traits: AttrSizedOperandSegments
+
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+memref	memref of any type values
+dims	variadic of index
+Results: ¶
+Result	Description
+dnTensor	dense tensor handle type
+asyncToken	async token type

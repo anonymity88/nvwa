@@ -1,0 +1,7 @@
+transform.apply_patterns.vector.fold_arith_extension (transform::ApplyFoldArithExtensionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.fold_arith_extension` attr-dict
+Collect a set of patterns that fold arithmetic extension on floating point into vector contract for the backends with native support.
+
+Interfaces: PatternDescriptorOpInterface

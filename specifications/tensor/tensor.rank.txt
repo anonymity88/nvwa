@@ -1,0 +1,24 @@
+tensor.rank (tensor::RankOp) ¶
+Rank operation
+
+Syntax:
+
+operation ::= `tensor.rank` $tensor attr-dict `:` type($tensor)
+The tensor.rank operation takes a tensor operand and returns its rank.
+
+Example:
+
+%0 = tensor.rank %arg0 : tensor<*xf32>
+%1 = tensor.rank %arg1 : tensor<?x?xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+tensor	tensor of any type values
+Results: ¶
+Result	Description
+«unnamed»	index

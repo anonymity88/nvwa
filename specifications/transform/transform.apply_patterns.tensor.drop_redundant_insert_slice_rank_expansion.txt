@@ -1,0 +1,7 @@
+transform.apply_patterns.tensor.drop_redundant_insert_slice_rank_expansion (transform::ApplyDropRedundantInsertSliceRankExpansionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.drop_redundant_insert_slice_rank_expansion` attr-dict
+Indicates that redundant tensor.insert_slice rank reductions should be dropped. E.g., cases where a tensor.extract_slice rank reduction immediately follows an inverse tensor.insert_slice rank expansion.
+
+Interfaces: PatternDescriptorOpInterface

@@ -1,0 +1,7 @@
+rocdl.waitcnt (ROCDL::WaitcntOp) ¶
+Syntax:
+
+operation ::= `rocdl.waitcnt` attr-dict $bitfield
+Attributes: ¶
+Attribute	MLIR Type	Description
+bitfield	::mlir::IntegerAttr	32-bit signless integer attribute

@@ -1,0 +1,28 @@
+spirv.GL.FMin (spirv::GLFMinOp) ¶
+Return minimum of two floating-point operands
+
+Syntax:
+
+operation ::= `spirv.GL.FMin` operands attr-dict `:` type($result)
+Result is y if y < x; otherwise result is x. Which operand is the result is undefined if one of the operands is a NaN.
+
+The operands must all be a scalar or vector whose component type is floating-point.
+
+Result Type and the type of all operands must be the same type. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.FMin %0, %1 : f32
+%3 = spirv.GL.FMin %0, %1 : vector<3xf16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16
+rhs	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16

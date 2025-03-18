@@ -1,0 +1,32 @@
+pdl_interp.create_range (pdl_interp::CreateRangeOp) ¶
+Construct a range of PDL entities
+
+Syntax:
+
+operation ::= `pdl_interp.create_range` ($arguments^ `:` type($arguments))?
+              custom<RangeType>(ref(type($arguments)), type($result))
+              attr-dict
+pdl_interp.create_range operations construct a range from a given set of PDL entities, which all share the same underlying element type. For example, a !pdl.range<value> may be constructed from a list of !pdl.value or !pdl.range<value> entities.
+
+Example:
+
+// Construct a range of values.
+%valueRange = pdl_interp.create_range %inputValue, %inputRange : !pdl.value, !pdl.range<value>
+
+// Construct a range of types.
+%typeRange = pdl_interp.create_range %inputType, %inputRange : !pdl.type, !pdl.range<type>
+
+// Construct an empty range of types.
+%valueRange = pdl_interp.create_range : !pdl.range<type>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arguments	variadic of pdl type
+Results: ¶
+Result	Description
+result	range of PDL handle to an mlir::Type or PDL handle for an mlir::Value values

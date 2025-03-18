@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// ExtractValueOp
+//===----------------------------------------------------------------------===//
+
+def LLVM_ExtractValueOp : LLVM_Op<"extractvalue", [Pure]> {
+  let summary = "Extract a value from an LLVM struct.";
+
+  let arguments = (ins LLVM_AnyAggregate:$container, DenseI64ArrayAttr:$position);
+  let results = (outs LLVM_Type:$res);
+
+  let builders = [
+    OpBuilder<(ins "Value":$container, "ArrayRef<int64_t>":$position)>
+  ];
+
+  let assemblyFormat = [{
+    $container `` $position attr-dict `:` type($container)
+    custom<InsertExtractValueElementType>(type($res), ref(type($container)),
+                                          ref($position))
+  }];
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+
+  string llvmInstName = "ExtractValue";
+  string llvmBuilder = [{
+    $res = builder.CreateExtractValue($container, extractPosition($position));
+  }];
+  string mlirBuilder = [{
+    auto *evInst = cast<llvm::ExtractValueInst>(inst);
+    $res = $_builder.create<LLVM::ExtractValueOp>($_location,
+      $container, getPositionFromIndices(evInst->getIndices()));
+  }];
+}
+

@@ -1,0 +1,28 @@
+spirv.FDiv (spirv::FDivOp) ¶
+Floating-point division of Operand 1 divided by Operand 2.
+
+Syntax:
+
+operation ::= `spirv.FDiv` operands attr-dict `:` type($result)
+Result Type must be a scalar or vector of floating-point type.
+
+The types of Operand 1 and Operand 2 both must be the same as Result Type.
+
+Results are computed per component. The resulting value is undefined if Operand 2 is 0.
+
+Example: ¶
+%4 = spirv.FDiv %0, %1 : f32
+%5 = spirv.FDiv %2, %3 : vector<4xf32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values
+operand2	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values

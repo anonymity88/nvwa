@@ -1,0 +1,25 @@
+spirv.Dot (spirv::DotOp) ¶
+Dot product of Vector 1 and Vector 2
+
+Syntax:
+
+operation ::= `spirv.Dot` operands attr-dict `:` type($vector1) `->` type($result)
+Result Type must be a floating point scalar.
+
+Vector 1 and Vector 2 must be vectors of the same type, and their component type must be Result Type.
+
+Example: ¶
+%0 = spirv.Dot %v1, %v2 : vector<4xf32> -> f32
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+vector1	vector of 16/32/64-bit float values of length 2/3/4/8/16
+vector2	vector of 16/32/64-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	16/32/64-bit float

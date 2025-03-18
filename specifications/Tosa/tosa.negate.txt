@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// Operator: negate
+//===----------------------------------------------------------------------===//
+def Tosa_NegateOp : Tosa_ElementwiseOp<"negate",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise negate op";
+
+  let description = [{
+    Elementwise negation operation
+  }];
+
+  let arguments = (ins
+      Tosa_Tensor:$input1,
+      OptionalAttr<Tosa_UnaryOpQuantizationAttr>:$quantization_info
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let builders = [Tosa_UnaryOpQuantInfoBuilder];
+
+  let hasFolder = 1;
+}
+

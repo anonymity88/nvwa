@@ -1,0 +1,61 @@
+async.yield (async::YieldOp) ¶
+Terminator for Async execute operation
+
+Syntax:
+
+operation ::= `async.yield` ($operands^ `:` type($operands))? attr-dict
+The async.yield is a special terminator operation for the block inside async.execute operation.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<ExecuteOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type
+Types ¶
+CoroHandleType ¶
+coroutine handle
+
+Syntax: !async.coro.handle
+
+async.coro.handle is a handle to the coroutine (pointer to the coroutine frame) that can be passed around to resume or destroy the coroutine.
+
+CoroIdType ¶
+switched-resume coroutine identifier
+
+Syntax: !async.coro.id
+
+async.coro.id is a type identifying a switched-resume coroutine.
+
+CoroStateType ¶
+saved coroutine state
+
+Syntax: !async.coro.state
+
+async.coro.state is a saved coroutine state that should be passed to the coroutine suspension operation.
+
+GroupType ¶
+async group type
+
+Syntax: !async.group
+
+async.group represent a set of async tokens or values and allows to execute async operations on all of them together (e.g. wait for the completion of all/any of them).
+
+TokenType ¶
+async token type
+
+Syntax: !async.token
+
+async.token is a type returned by asynchronous operations, and it becomes available when the asynchronous operations that created it is completed.
+
+ValueType ¶
+async value type
+
+async.value represents a value returned by asynchronous operations, which may or may not be available currently, but will be available at some point in the future.
+
+Parameters: ¶
+Parameter	C++ type	Description
+valueType	Type

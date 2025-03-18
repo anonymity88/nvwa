@@ -1,0 +1,18 @@
+transform.irdl.collect_matching (transform::IRDLCollectMatchingOp) ¶
+Finds ops that match the IRDL definition without registering them.
+
+Syntax:
+
+operation ::= `transform.irdl.collect_matching` `in` $root `:` functional-type(operands, results) attr-dict-with-keyword regions
+Traits: NoTerminator, SymbolTable
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+root	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+matched	TransformHandleTypeInterface instance
+Func Transform Operations ¶
+source

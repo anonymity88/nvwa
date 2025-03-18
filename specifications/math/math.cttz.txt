@@ -1,0 +1,24 @@
+math.cttz (math::CountTrailingZerosOp) ¶
+Counts the trailing zeros an integer value
+
+Syntax:
+
+operation ::= `math.cttz` $operand attr-dict `:` type($result)
+The cttz operation computes the number of trailing zeros of an integer value. It operates on scalar, tensor or vector.
+
+Example:
+
+// Scalar cttz function value.
+%a = math.cttz %b : i32
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	signless-integer-like
+Results: ¶
+Result	Description
+result	signless-integer-like

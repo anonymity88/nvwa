@@ -1,0 +1,17 @@
+rocdl.update.dpp (ROCDL::DPPUpdateOp) ¶
+Syntax:
+
+operation ::= `rocdl.update.dpp` attr-dict $old `,` $src `with` $dppCtrl `,` $rowMask `,` $bankMask `,` $boundCtrl `:` type($src)
+Attributes: ¶
+Attribute	MLIR Type	Description
+dppCtrl	::mlir::IntegerAttr	32-bit signless integer attribute
+rowMask	::mlir::IntegerAttr	32-bit signless integer attribute
+bankMask	::mlir::IntegerAttr	32-bit signless integer attribute
+boundCtrl	::mlir::IntegerAttr	1-bit signless integer attribute
+Operands: ¶
+Operand	Description
+old	LLVM dialect-compatible type
+src	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

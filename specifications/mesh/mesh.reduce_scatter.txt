@@ -1,0 +1,61 @@
+mesh.reduce_scatter (mesh::ReduceScatterOp) ¶
+Reduce-scatter over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.reduce_scatter` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              (`reduction` `=` $reduction^)?
+              `scatter_axis` `=` $scatter_axis
+              attr-dict `:` type($input) `->` type($result)
+After the reduction, the result is scattered within each device group. The tensor is split along scatter_axis and the pieces distributed across the device group. Example:
+
+mesh.mesh @mesh0(shape = 2x2)
+...
+%1 = mesh.reduce_scatter %0 on @mesh0 mesh_axes = [1]
+  reduction = <max> scatter_axis = 0
+  : tensor<3x4xf32> -> tensor<1x4xf64>
+Input:
+
+                          device
+                          (0, 1)
+                             ↓
+                 +-------+-------+  | scatter tensor
+device (0, 0) -> |  1  2 |  5  6 |  | axis 0
+                 |  3  4 |  7  8 |  ↓
+                 +-------+-------+
+device (1, 0) -> |  9 10 | 13 14 |
+                 | 11 12 | 15 16 |
+                 +-------+-------+
+                            ↑
+                          device
+                          (1, 1)
+Result:
+
++-------+
+|  6  8 | <- devices (0, 0)
++-------+
+| 10 12 | <- devices (0, 1)
++-------+
+| 22 24 | <- devices (1, 0)
++-------+
+| 26 28 | <- devices (1, 1)
++-------+
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultRank
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+reduction	::mlir::mesh::ReductionKindAttr	
+Reduction of an iterator/mesh dimension.
+scatter_axis	::mlir::IntegerAttr	index attribute
+Operands: ¶
+Operand	Description
+input	non-0-ranked.tensor of any type values
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

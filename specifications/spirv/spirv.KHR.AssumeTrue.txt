@@ -1,0 +1,14 @@
+spirv.KHR.AssumeTrue (spirv::KHRAssumeTrueOp) ¶
+TBD
+
+Syntax:
+
+operation ::= `spirv.KHR.AssumeTrue` $condition attr-dict
+assumetruekhr-op ::= `spirv.KHR.AssumeTrue` ssa-use
+Example: ¶
+spirv.KHR.AssumeTrue %arg
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Operands: ¶
+Operand	Description
+condition	bool

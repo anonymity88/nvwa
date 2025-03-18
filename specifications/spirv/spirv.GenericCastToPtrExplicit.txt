@@ -1,0 +1,27 @@
+spirv.GenericCastToPtrExplicit (spirv::GenericCastToPtrExplicitOp) ¶
+Attempts to explicitly convert Pointer to Storage storage-class pointer value.
+
+Syntax:
+
+operation ::= `spirv.GenericCastToPtrExplicit` $pointer attr-dict `:` type($pointer) `to` type($result)
+Result Type must be an OpTypePointer. Its Storage Class must be Storage.
+
+Pointer must have a type of OpTypePointer whose Type is the same as the Type of Result Type.Pointer must point to the Generic Storage Class. If the cast fails, the instruction result is an OpConstantNull pointer in the Storage Storage Class.
+
+Storage must be one of the following literal values from Storage Class: Workgroup, CrossWorkgroup, or Function.
+
+Example: ¶
+   %1 = spirv.GenericCastToPtrExplicitOp %0 : !spirv.ptr<f32, Generic> to
+   !spirv.ptr<f32, CrossWorkGroup>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+pointer	any SPIR-V pointer type
+Results: ¶
+Result	Description
+result	any SPIR-V pointer type

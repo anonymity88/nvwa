@@ -1,0 +1,21 @@
+complex.bitcast (complex::BitcastOp) ¶
+Computes bitcast between complex and equal arith types
+
+Syntax:
+
+operation ::= `complex.bitcast` $operand attr-dict `:` type($operand) `to` type($result)
+Example:
+
+     %a = complex.bitcast %b : complex<f32> -> i64
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	any type
+Results: ¶
+Result	Description
+result	any type

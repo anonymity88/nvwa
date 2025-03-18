@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// IndexCastOp
+//===----------------------------------------------------------------------===//
+
+// Index cast can convert between memrefs of signless integers and indices too.
+def IndexCastTypeConstraint : TypeConstraint<Or<[
+        SignlessIntegerLike.predicate,
+        MemRefOf<[AnySignlessInteger, Index]>.predicate]>,
+    "signless-integer-like or memref of signless-integer">;
+
+def Arith_IndexCastOp
+  : Arith_CastOp<"index_cast", IndexCastTypeConstraint, IndexCastTypeConstraint,
+                 [DeclareOpInterfaceMethods<InferIntRangeInterface, ["inferResultRanges"]>]> {
+  let summary = "cast between index and integer types";
+  let description = [{
+    Casts between scalar or vector integers and corresponding 'index' scalar or
+    vectors. Index is an integer of platform-specific bit width. If casting to
+    a wider integer, the value is sign-extended. If casting to a narrower
+    integer, the value is truncated.
+  }];
+
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

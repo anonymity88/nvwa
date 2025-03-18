@@ -1,0 +1,7 @@
+transform.apply_patterns.linalg.fold_unit_extent_dims_via_slices (transform::ApplyFoldUnitExtentDimsViaSlicesPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.linalg.fold_unit_extent_dims_via_slices` attr-dict
+Collects patterns to fold unit-extent dimensions in operands/results of linalg ops on tensors via rank-reducing slices.
+
+Interfaces: PatternDescriptorOpInterface

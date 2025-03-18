@@ -1,0 +1,40 @@
+omp.target_data (omp::TargetDataOp) ¶
+Target data construct
+
+Syntax:
+
+operation ::= `omp.target_data` oilist(
+              `device` `(` $device `:` type($device) `)`
+              |
+              `if` `(` $if_expr `)`
+              |
+              `map_entries` `(` $map_vars `:` type($map_vars) `)`
+              )
+              custom<UseDeviceAddrUseDevicePtrRegion>(
+              $region, $use_device_addr_vars, type($use_device_addr_vars),
+              $use_device_ptr_vars, type($use_device_ptr_vars)) attr-dict
+Map variables to a device data environment for the extent of the region.
+
+The omp target data directive maps variables to a device data environment, and defines the lexical scope of the data environment that is created. The omp target data directive can reduce data copies to and from the offloading device when multiple target regions are using the same data.
+
+The optional if_expr parameter specifies a boolean result of a conditional check. If this value is 1 or is not provided then the target region runs on a device, if it is 0 then the target region is executed on the host device.
+
+The optional device parameter specifies the device number for the target region.
+
+The optional map_vars maps data from the current task’s data environment to the device data environment.
+
+The optional use_device_addr_vars specifies the address of the objects in the device data environment.
+
+The optional use_device_ptr_vars specifies the device pointers to the corresponding list items in the device data environment.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: BlockArgOpenMPOpInterface, MapClauseOwningOpInterface
+
+Operands: ¶
+Operand	Description
+device	integer
+if_expr	1-bit signless integer
+map_vars	variadic of OpenMP-compatible variable type
+use_device_addr_vars	variadic of OpenMP-compatible variable type
+use_device_ptr_vars	variadic of OpenMP-compatible variable type

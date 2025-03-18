@@ -1,0 +1,48 @@
+tensor.unpack (tensor::UnPackOp) ¶
+Tensor unpack operation
+
+Syntax:
+
+operation ::= `tensor.unpack` $source
+              (`outer_dims_perm` `=` $outer_dims_perm^)?
+              `inner_dims_pos` `=` $inner_dims_pos
+              `inner_tiles` `=`
+              custom<DynamicIndexList>($inner_tiles, $static_inner_tiles)
+              `into` $dest attr-dict `:` type($source) `->` type($dest)
+The “unpack” operation converts a source tensor of rank n with a tiled and packed layout to a result tensor of rank n - k.
+
+inner_dims_pos (mandatory) specifies k source tensor dimensions with which the last k source tensor dimensions are combined, where 0 < k <= n/2. Each inner_dims_pos element must be >= 0 and < n - k. The order of the dimensions in inner_dims_pos matters: dimension inner_dims_pos[i] is combined with dimension n - k + i (assuming that outer_dims_perm is not specified).
+
+inner_tiles (mandatory) specifies k tile sizes. These tile sizes correspond to the least significant (“inner”) source tensor dimension sizes. The behavior of this op is undefined if:
+
+inner_tiles do not exactly match with the corresponding source tensor dimension sizes.
+Or, inner_tiles[i] does not divide the size of dimension inner_dims_pos[i] (assuming that outer_dims_perm is not specified) evenly.
+outer_dims_perm (optional) specifies a permutation for the outer dimensions. If specified, it must have n - k elements. If specified, this permutation is applied before combining any dimensions.
+
+Example:
+
+// NCnc to NC:
+%0 = tensor.unpack %source inner_dims_pos = [0, 1] inner_tiles = [8, 32]
+    into %dest : tensor<16x8x8x32xf32> -> tensor<128x256xf32>
+
+// CK to KCck:
+%0 = tensor.unpack %source outer_dims_perm = [1, 0] inner_dims_pos = [0, 1]
+    inner_tiles = [8, 32] into %dest
+    : tensor<8x16x8x32xf32> -> tensor<128x256xf32>
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+outer_dims_perm	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+inner_dims_pos	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+static_inner_tiles	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+source	ranked tensor of any type values
+dest	ranked tensor of any type values
+inner_tiles	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

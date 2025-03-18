@@ -1,0 +1,22 @@
+pdl_interp.func (pdl_interp::FuncOp) ¶
+PDL Interpreter Function Operation
+
+pdl_interp.func operations act as interpreter functions. These are callable SSA-region operations that contain other interpreter operations. Interpreter functions are used for both the matching and the rewriting portion of the interpreter.
+
+Example:
+
+pdl_interp.func @rewriter(%root: !pdl.operation) {
+  %op = pdl_interp.create_operation "foo.new_operation"
+  pdl_interp.erase %root
+  pdl_interp.finalize
+}
+Traits: IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	type attribute of function type
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes

@@ -1,0 +1,16 @@
+async.runtime.is_error (async::RuntimeIsErrorOp) ¶
+Returns true if token, value or group is in error state
+
+Syntax:
+
+operation ::= `async.runtime.is_error` $operand attr-dict `:` type($operand)
+The async.runtime.is_error operation returns true if the token, value or group (any of the async runtime values) is in the error state. It is the caller responsibility to check error state after the call to await or resuming after await_and_resume.
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+operand	async value type or async token type or async group type
+Results: ¶
+Result	Description
+is_error	1-bit signless integer

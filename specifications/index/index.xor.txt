@@ -1,0 +1,65 @@
+index.xor (index::XOrOp) ¶
+Index bitwise xor
+
+Syntax:
+
+operation ::= `index.xor` $lhs `,` $rhs attr-dict
+The index.xor operation takes two index values and computes their bitwise xor.
+
+Example:
+
+// c = a ^ b
+%c = index.xor %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index
+Attributes ¶
+IndexCmpPredicateAttr ¶
+index comparison predicate kind
+
+Syntax:
+
+#index.cmp_predicate<
+  ::mlir::index::IndexCmpPredicate   # value
+>
+Enum cases:
+
+eq (EQ)
+ne (NE)
+slt (SLT)
+sle (SLE)
+sgt (SGT)
+sge (SGE)
+ult (ULT)
+ule (ULE)
+ugt (UGT)
+uge (UGE)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::index::IndexCmpPredicate	an enum of type IndexCmpPredicate
+Enums ¶
+IndexCmpPredicate ¶
+index comparison predicate kind
+
+Cases: ¶
+Symbol	Value	String
+EQ	0	eq
+NE	1	ne
+SLT	2	slt
+SLE	3	sle
+SGT	4	sgt
+SGE	5	sge
+ULT	6	ult
+ULE	7	ule
+UGT	8	ugt
+UGE	9	uge

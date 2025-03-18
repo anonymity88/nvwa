@@ -1,0 +1,45 @@
+//===----------------------------------------------------------------------===//
+// Operator: table
+//===----------------------------------------------------------------------===//
+def Tosa_TableOp : Tosa_InferShapedTypeOp<"table"> {
+  let summary = "Table lookup op";
+
+  let description = [{
+    Interpolated table lookup operation. Input values are scaled to create a
+    fixed-point 9.7 value.    The high 9 bits are used to index into the table.
+    The fractional bits are used to interpolate based on the looked up value and
+    the index+1 value in the table. The TABLE operator then returns a 16.7
+    interpolated value. Note that there must be 513 values to handle the full
+    range of inputs.
+
+    The TABLE operator is expected to be used as follows:
+    * A RESCALE node is expected before the TABLE operator to scale the input
+      to a full int16_t range for the table lookup
+    * If an int16_t result is required then follow the TABLE operator with a
+      RESCALE with a right shift of 7
+    * If an int8_t result is required then follow the TABLE operator with a
+      RESCALE with a right shift of 15
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor: $input1,
+    Tosa_Tensor1D: $table
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let assemblyFormat = [{
+    $input1 `,` $table attr-dict `:` `(` type($input1) `,` type($table) `)` `->` type($output)
+  }];
+
+  let hasVerifier = 1;
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.5
+// Operator Class: Elementwise unary/binary/ternary operators.
+// Operator Subclass: Elementwise unary ops.
+//===----------------------------------------------------------------------===//
+

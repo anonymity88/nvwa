@@ -1,0 +1,7 @@
+rocdl.s.wait.dscnt (ROCDL::WaitDscntOp) ¶
+Syntax:
+
+operation ::= `rocdl.s.wait.dscnt` $id attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+id	::mlir::IntegerAttr	16-bit signless integer attribute

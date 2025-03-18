@@ -1,0 +1,39 @@
+pdl.rewrite (pdl::RewriteOp) ¶
+Specify the rewrite of a matched pattern
+
+Syntax:
+
+operation ::= `pdl.rewrite` ($root^)? (`with` $name^ (`(` $externalArgs^ `:` type($externalArgs) `)`)?)?
+              ($bodyRegion^)?
+              attr-dict-with-keyword
+pdl.rewrite operations terminate the region of a pdl.pattern and specify the main rewrite of a pdl.pattern, on the optional root operation. The rewrite is specified either via a string name (name) to a native rewrite function, or via the region body. The rewrite region, if specified, must contain a single block. If the rewrite is external it functions similarly to pdl.apply_native_rewrite, and takes a set of additional positional values defined within the matcher as arguments. If the rewrite is external, the root operation is passed to the native function as the leading arguments. The root operation, if provided, specifies the starting point in the pattern for the subgraph isomorphism search. Pattern matching will proceed from this node downward (towards the defining operation) or upward (towards the users) until all the operations in the pattern have been matched. If the root is omitted, the pdl_interp lowering will automatically select the best root of the pdl.rewrite among all the operations in the pattern.
+
+Example:
+
+// Specify an external rewrite function:
+pdl.rewrite %root with "myExternalRewriter"(%value : !pdl.value)
+
+// Specify a rewrite inline using PDL with the given root:
+pdl.rewrite %root {
+  %op = pdl.operation "foo.op"(%arg0, %arg1)
+  pdl.replace %root with %op
+}
+
+// Specify a rewrite inline using PDL, automatically selecting root:
+pdl.rewrite {
+  %op1 = pdl.operation "foo.op"(%arg0, %arg1)
+  %op2 = pdl.operation "bar.op"(%arg0, %arg1)
+  pdl.replace %root1 with %op1
+  pdl.replace %root2 with %op2
+}
+Traits: AttrSizedOperandSegments, HasParent<pdl::PatternOp>, NoRegionArguments, NoTerminator, SingleBlock, Terminator
+
+Interfaces: OpAsmOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+root	PDL handle to an mlir::Operation *
+externalArgs	variadic of pdl type

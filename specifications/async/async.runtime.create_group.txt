@@ -1,0 +1,16 @@
+async.runtime.create_group (async::RuntimeCreateGroupOp) ¶
+Creates an async runtime group
+
+Syntax:
+
+operation ::= `async.runtime.create_group` $size `:` type($result) attr-dict
+The async.runtime.create_group operation creates an async dialect group of the given size. Group created in the empty state.
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+size	index
+Results: ¶
+Result	Description
+result	async group type

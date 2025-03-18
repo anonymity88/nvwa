@@ -1,0 +1,32 @@
+transform.get_result (transform::GetResultOp) ¶
+Get a handle to the result(s) of the targeted op
+
+Syntax:
+
+operation ::= `transform.get_result` $target `[`custom<TransformMatchDims>($raw_position_list, $is_inverted, $is_all)`]` attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op correspond to the OpResults of the given target operation. Optionally result_number can be specified to select a specific result.
+
+This transform fails silently if the targeted operation does not have enough results. It reads the target handle and produces the result handle.
+
+The handle defined by this Transform op corresponds to the results of the given target operation specified by the given set of positions. There are three possible modes:
+
+Position list directly, i.e. %target[0, 1, 2]. This will return the results at the specified positions.
+Inverted position list, i.e. %target[except(0, 1, 2)]. This will return all results except those at the given positions.
+All, i.e. %target[all]. This will return all results of the operation.
+This transform produces a silenceable failure if any of the result indices exceeds the number of results returned by the target. It reads the target handle and produces the result handle.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+raw_position_list	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+is_inverted	::mlir::UnitAttr	unit attribute
+is_all	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformValueHandleTypeInterface instance

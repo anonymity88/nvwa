@@ -1,0 +1,31 @@
+polynomial.mul_scalar (polynomial::MulScalarOp) ¶
+Multiplication by a scalar of the field.
+
+Syntax:
+
+operation ::= `polynomial.mul_scalar` operands attr-dict `:` type($polynomial) `,` type($scalar)
+Multiplies the polynomial operand’s coefficients by a given scalar value. The operation is defined to occur in the ring defined by the ring attribute of the two operands, meaning the multiplication is taken modulo the coefficientModulus of the ring.
+
+The scalar input must have the same type as the polynomial ring’s coefficientType.
+
+Example:
+
+// multiply two polynomials modulo x^1024 - 1
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%0 = polynomial.constant int<1 + x**2> : !polynomial.polynomial<#ring>
+%1 = arith.constant 3 : i32
+%2 = polynomial.mul_scalar %0, %1 : !polynomial.polynomial<#ring>, i32
+Traits: AlwaysSpeculatableImplTrait, Elementwise, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+polynomial	polynomial-like
+scalar	integer
+Results: ¶
+Result	Description
+output	polynomial-like

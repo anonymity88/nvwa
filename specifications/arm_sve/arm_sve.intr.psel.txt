@@ -1,0 +1,15 @@
+arm_sve.intr.psel (arm_sve::PselIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+p1	vector<[16]xi1>
+p2	vector<[1]xi1>, vector<[2]xi1>, vector<[4]xi1>, vector<[8]xi1>, or vector<[16]xi1>
+index	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

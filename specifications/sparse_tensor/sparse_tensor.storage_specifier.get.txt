@@ -1,0 +1,27 @@
+sparse_tensor.storage_specifier.get (sparse_tensor::GetStorageSpecifierOp) ¶
+Syntax:
+
+operation ::= `sparse_tensor.storage_specifier.get` $specifier $specifierKind (`at` $level^)? attr-dict`:` qualified(type($specifier))
+Returns the requested field of the given storage_specifier.
+
+Example of querying the size of the coordinates array for level 0:
+
+%0 = sparse_tensor.storage_specifier.get %arg0 crd_mem_sz at 0
+     : !sparse_tensor.storage_specifier<#COO>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+specifierKind	::mlir::sparse_tensor::StorageSpecifierKindAttr	
+sparse tensor storage specifier kind
+level	::mlir::IntegerAttr	level attribute
+Operands: ¶
+Operand	Description
+specifier	metadata
+Results: ¶
+Result	Description
+result	index

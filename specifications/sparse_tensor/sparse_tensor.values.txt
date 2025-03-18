@@ -1,0 +1,25 @@
+sparse_tensor.values (sparse_tensor::ToValuesOp) ¶
+Extracts numerical values array from a tensor
+
+Syntax:
+
+operation ::= `sparse_tensor.values` $tensor attr-dict `:` type($tensor) `to` type($result)
+Returns the values array of the sparse storage format for the given sparse tensor, independent of the actual dimension. This is similar to the bufferization.to_memref operation in the sense that it provides a bridge between a tensor world view and a bufferized world view. Unlike the bufferization.to_memref operation, however, this sparse operation actually lowers into code that extracts the values array from the sparse storage scheme (either by calling a support library or through direct code).
+
+Writing into the result of this operation is undefined behavior.
+
+Example:
+
+%1 = sparse_tensor.values %0 : tensor<64x64xf64, #CSR> to memref<?xf64>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+tensor	sparse tensor of any type values
+Results: ¶
+Result	Description
+result	non-0-ranked.memref of any type values

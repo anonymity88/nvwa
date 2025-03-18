@@ -1,0 +1,33 @@
+vector.shape_cast (vector::ShapeCastOp) ¶
+Shape_cast casts between vector shapes
+
+Syntax:
+
+operation ::= `vector.shape_cast` $source attr-dict `:` type($source) `to` type($result)
+The shape_cast operation casts between an n-D source vector shape and a k-D result vector shape (the element type remains the same).
+
+If reducing rank (n > k), result dimension sizes must be a product of contiguous source dimension sizes. If expanding rank (n < k), source dimensions must factor into a contiguous sequence of destination dimension sizes. Each source dim is expanded (or contiguous sequence of source dims combined) in source dimension list order (i.e. 0 <= i < n), to produce a contiguous sequence of result dims (or a single result dim), in result dimension list order (i.e. 0 <= j < k). The product of all source dimension sizes and all result dimension sizes must match.
+
+It is currently assumed that this operation does not require moving data, and that it will be folded away before lowering vector operations.
+
+There is an exception to the folding expectation when targeting llvm.intr.matrix operations. We need a type conversion back and forth from a 2-D MLIR vector to a 1-D flattened LLVM vector.shape_cast lowering to LLVM is supported in that particular case, for now.
+
+Example:
+
+// Example casting to a lower vector rank.
+%1 = vector.shape_cast %0 : vector<5x1x4x3xf32> to vector<20x3xf32>
+
+// Example casting to a higher vector rank.
+%3 = vector.shape_cast %2 : vector<10x12x8xf32> to vector<5x2x3x4x8xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	vector of any type values
+Results: ¶
+Result	Description
+result	vector of any type values

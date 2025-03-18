@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// FloorOp
+//===----------------------------------------------------------------------===//
+
+def Math_FloorOp : Math_FloatUnaryOp<"floor"> {
+  let summary = "floor of the specified value";
+  let description = [{
+    The `floor` operation computes the floor of a given value. It takes one
+    operand of floating point type (i.e., scalar, tensor or vector) and returns one
+    result of the same type.  It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar floor value.
+    %a = math.floor %b : f64
+    ```
+  }];
+
+  let hasFolder = 1;
+}
+

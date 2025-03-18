@@ -1,0 +1,12 @@
+scf.forall.in_parallel (scf::InParallelOp) ¶
+Terminates a forall block
+
+The scf.forall.in_parallel is a designated terminator for the scf.forall operation.
+
+It has a single region with a single block that contains a flat list of ops. Each such op participates in the aggregate formation of a single result of the enclosing scf.forall. The result number corresponds to the position of the op in the terminator.
+
+Traits: AlwaysSpeculatableImplTrait, HasOnlyGraphRegion, HasParent<ForallOp>, NoTerminator, SingleBlock, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), ParallelCombiningOpInterface, RegionKindInterface
+
+Effects: MemoryEffects::Effect{}

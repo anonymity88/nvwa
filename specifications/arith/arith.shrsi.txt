@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// ShRSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_ShRSIOp : Arith_TotalIntBinaryOp<"shrsi"> {
+  let summary = "signed integer right-shift";
+  let description = [{
+    The `shrsi` operation shifts an integer value of the first operand to the right 
+    by the value of the second operand. The first operand is interpreted as signed, 
+    and the second operand is interpreter as unsigned. The high order bits in the 
+    output are filled with copies of the most-significant bit of the shifted value 
+    (which means that the sign of the value is preserved). If the value of the second 
+    operand is greater or equal than bitwidth of the first operand, then the operation
+    returns poison.
+
+    Example:
+
+    ```mlir
+    %1 = arith.constant 160 : i8               // %1 is 0b10100000
+    %2 = arith.constant 3 : i8
+    %3 = arith.shrsi %1, %2 : (i8, i8) -> i8   // %3 is 0b11110100
+    %4 = arith.constant 96 : i8                   // %4 is 0b01100000
+    %5 = arith.shrsi %4, %2 : (i8, i8) -> i8   // %5 is 0b00001100
+    ```
+  }];
+  let hasFolder = 1;
+}
+

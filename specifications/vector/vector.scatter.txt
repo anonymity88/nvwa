@@ -1,0 +1,31 @@
+vector.scatter (vector::ScatterOp) ¶
+Scatters elements from a vector into memory as defined by an index vector and a mask vector
+
+Syntax:
+
+operation ::= `vector.scatter` $base `[` $indices `]` `[` $index_vec `]` `,` $mask `,` $valueToStore attr-dict `:` type($base) `,` type($index_vec)  `,` type($mask) `,` type($valueToStore)
+The scatter operation stores elements from a 1-D vector into memory as defined by a base with indices and an additional 1-D index vector, but only if the corresponding bit in a 1-D mask vector is set. Otherwise, no action is taken for that element. Informally the semantics are:
+
+if (mask[0]) base[index[0]] = value[0]
+if (mask[1]) base[index[1]] = value[1]
+etc.
+If a mask bit is set and the corresponding index is out-of-bounds for the given base, the behavior is undefined. If a mask bit is not set, no value is stored regardless of the index, and the index is allowed to be out-of-bounds.
+
+If the index vector contains two or more duplicate indices, the behavior is undefined. Underlying implementation may enforce strict sequential semantics. TODO: always enforce strict sequential semantics?
+
+The scatter operation can be used directly where applicable, or can be used during progressively lowering to bring other memory operations closer to hardware ISA support for a scatter. The semantics of the operation closely correspond to those of the llvm.masked.scatter intrinsic.
+
+Examples:
+
+vector.scatter %base[%c0][%v], %mask, %value
+    : memref<?xf32>, vector<16xi32>, vector<16xi1>, vector<16xf32>
+
+vector.scatter %base[%i, %j][%v], %mask, %value
+    : memref<16x16xf32>, vector<16xi32>, vector<16xi1>, vector<16xf32>
+Operands: ¶
+Operand	Description
+base	memref of any type values
+indices	variadic of index
+index_vec	vector of integer or index values of ranks 1
+mask	vector of 1-bit signless integer values of ranks 1
+valueToStore	of ranks 1

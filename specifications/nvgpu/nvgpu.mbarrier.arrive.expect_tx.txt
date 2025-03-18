@@ -1,0 +1,20 @@
+nvgpu.mbarrier.arrive.expect_tx (nvgpu::MBarrierArriveExpectTxOp) ¶
+Performs expect_tx operation on the nvgpu.mbarrier.arrive
+
+Syntax:
+
+operation ::= `nvgpu.mbarrier.arrive.expect_tx` $barriers `[` $mbarId `]` `,` $txcount  (`,` `predicate` `=` $predicate^)? attr-dict `:` type($barriers)
+A thread executing the Op performs an expect-tx operation on the mbarrier object at the location specified by the address operand barrier.Theexpect−txoperation,withan
+txcount argument, increases the tx-count of an mbarrier object by the value specified by $txcount. This makes the current phase of the mbarrier object to expect and track the completion of additional asynchronous transactions.
+
+The $txCount specifies the number of element to the expect-tx operation.
+
+Example:
+
+  nvgpu.mbarrier.arrive.expect_tx %barrier, %ic0 : !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>>
+Operands: ¶
+Operand	Description
+barriers	mbarrier barrier type
+txcount	index
+mbarId	index
+predicate	1-bit signless integer

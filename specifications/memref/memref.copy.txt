@@ -1,0 +1,19 @@
+memref.copy (memref::CopyOp) ¶
+Syntax:
+
+operation ::= `memref.copy` $source `,` $target attr-dict `:` type($source) `to` type($target)
+Copies the data from the source to the destination memref.
+
+Usage:
+
+memref.copy %arg0, %arg1 : memref<?xf32> to memref<?xf32>
+Source and destination are expected to have the same element type and shape. Otherwise, the result is undefined. They may have different layouts.
+
+Traits: SameOperandsElementType, SameOperandsShape
+
+Interfaces: CopyOpInterface
+
+Operands: ¶
+Operand	Description
+source	ranked or unranked memref of any type values
+target	ranked or unranked memref of any type values

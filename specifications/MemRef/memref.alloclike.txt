@@ -1,0 +1,87 @@
+//===----------------------------------------------------------------------===//
+// AllocLikeOp
+//===----------------------------------------------------------------------===//
+
+// Base class for memref allocating ops: alloca and alloc.
+//
+//   %0 = alloclike(%m)[%s] : memref<8x?xf32, affine_map<(d0, d1)[s0] -> (d0 + s0, d1)>>
+//
+class AllocLikeOp<string mnemonic,
+                  Resource resource,
+                  list<Trait> traits = []> :
+    MemRef_Op<mnemonic,
+    !listconcat([
+      AttrSizedOperandSegments
+    ], traits)> {
+
+  let arguments = (ins Variadic<Index>:$dynamicSizes,
+                       // The symbolic operands (the ones in square brackets)
+                       // bind to the symbols of the memref's layout map.
+                       Variadic<Index>:$symbolOperands,
+                       ConfinedAttr<OptionalAttr<I64Attr>,
+                                [IntMinValue<0>]>:$alignment);
+  let results = (outs Res<AnyMemRef, "",
+                          [MemAlloc<resource, 0, FullEffect>]>:$memref);
+
+  let builders = [
+    OpBuilder<(ins "MemRefType":$memrefType,
+                  CArg<"IntegerAttr", "IntegerAttr()">:$alignment), [{
+      return build($_builder, $_state, memrefType, {}, alignment);
+    }]>,
+    OpBuilder<(ins "MemRefType":$memrefType, "ValueRange":$dynamicSizes,
+                  CArg<"IntegerAttr", "IntegerAttr()">:$alignment), [{
+      return build($_builder, $_state, memrefType, dynamicSizes, {}, alignment);
+    }]>,
+    OpBuilder<(ins "MemRefType":$memrefType, "ValueRange":$dynamicSizes,
+                  "ValueRange":$symbolOperands,
+                  CArg<"IntegerAttr", "{}">:$alignment), [{
+      $_state.types.push_back(memrefType);
+      $_state.addOperands(dynamicSizes);
+      $_state.addOperands(symbolOperands);
+      $_state.addAttribute(getOperandSegmentSizeAttr(),
+          $_builder.getDenseI32ArrayAttr({
+              static_cast<int32_t>(dynamicSizes.size()),
+              static_cast<int32_t>(symbolOperands.size())}));
+      if (alignment)
+        $_state.addAttribute(getAlignmentAttrStrName(), alignment);
+    }]>,
+    OpBuilder<(ins "ArrayRef<OpFoldResult>":$sizes, "Type":$elementType,
+                   CArg<"Attribute", "{}">:$memorySpace), [{
+      SmallVector<int64_t> staticShape;
+      SmallVector<Value> dynamicSizes;
+      dispatchIndexOpFoldResults(sizes, dynamicSizes, staticShape);
+      MemRefLayoutAttrInterface layout;
+      MemRefType memrefType = MemRefType::get(staticShape, elementType, layout,
+                                              memorySpace);
+      return build($_builder, $_state, memrefType, dynamicSizes);
+    }]>
+  ];
+
+  let extraClassDeclaration = [{
+    static StringRef getAlignmentAttrStrName() { return "alignment"; }
+
+    MemRefType getType() { return ::llvm::cast<MemRefType>(getResult().getType()); }
+
+    SmallVector<OpFoldResult> getMixedSizes() {
+      SmallVector<OpFoldResult> result;
+      unsigned ctr = 0;
+      OpBuilder b(getContext());
+      for (int64_t i = 0, e = getType().getRank(); i < e; ++i) {
+        if (getType().isDynamicDim(i)) {
+          result.push_back(getDynamicSizes()[ctr++]);
+        } else {
+          result.push_back(b.getIndexAttr(getType().getShape()[i]));
+        }
+      }
+      return result;
+    }
+  }];
+
+  let assemblyFormat = [{
+    `(`$dynamicSizes`)` (`` `[` $symbolOperands^ `]`)? attr-dict `:` type($memref)
+  }];
+
+  let hasCanonicalizer = 1;
+  let hasVerifier = 1;
+}
+

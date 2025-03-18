@@ -1,0 +1,20 @@
+shape.shape_eq (shape::ShapeEqOp) ¶
+Returns whether the input shapes or extent tensors are equal
+
+Syntax:
+
+operation ::= `shape.shape_eq` $shapes attr-dict `:` type($shapes)
+Takes one or more shape or extent tensor operands and determines whether they are equal. When extent tensors are compared to shapes they are regarded as their equivalent non-error shapes. Error shapes can be tested for equality like any other shape value, meaning that the error value is equal to itself.
+
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+shapes	variadic of shape or extent tensor
+Results: ¶
+Result	Description
+result	1-bit signless integer

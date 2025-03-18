@@ -1,0 +1,4 @@
+llvm.intr.ubsantrap (LLVM::UBSanTrap) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+failureKind	::mlir::IntegerAttr	8-bit signless integer attribute

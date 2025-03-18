@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// CountLeadingZerosOp
+//===----------------------------------------------------------------------===//
+
+def Math_CountLeadingZerosOp : Math_IntegerUnaryOp<"ctlz"> {
+  let summary = "counts the leading zeros an integer value";
+  let description = [{
+    The `ctlz` operation computes the number of leading zeros of an integer value.
+    It operates on scalar, tensor or vector.
+
+    Example:
+
+    ```mlir
+    // Scalar ctlz function value.
+    %a = math.ctlz %b : i32
+    ```
+  }];
+  let hasFolder = 1;
+}
+

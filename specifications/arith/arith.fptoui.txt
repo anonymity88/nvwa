@@ -1,0 +1,14 @@
+//===----------------------------------------------------------------------===//
+// FPToUIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_FPToUIOp : Arith_FToICastOp<"fptoui"> {
+  let summary = "cast from floating-point type to integer type";
+  let description = [{
+    Cast from a value interpreted as floating-point to the nearest (rounding
+    towards zero) unsigned integer value. When operating on vectors, casts
+    elementwise.
+  }];
+  let hasFolder = 1;
+}
+

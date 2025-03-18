@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// DivUOp
+//===----------------------------------------------------------------------===//
+
+def Index_DivUOp : IndexBinaryOp<"divu", [NoMemoryEffect]> {
+  let summary = "index unsigned division";
+  let description = [{
+    The `index.divu` operation takes two index values and computes their
+    unsigned quotient. Treats the leading bit as the most significant and rounds
+    towards zero, i.e. `6 / -2 = 0`.
+
+    Note: division by zero is undefined behaviour.
+
+    Example:
+
+    ```mlir
+    // c = a / b
+    %c = index.divu %a, %b
+    ```
+  }];
+}
+

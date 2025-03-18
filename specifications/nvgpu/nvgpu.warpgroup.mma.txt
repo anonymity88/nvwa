@@ -1,0 +1,34 @@
+nvgpu.warpgroup.mma (nvgpu::WarpgroupMmaOp) ¶
+Syntax:
+
+operation ::= `nvgpu.warpgroup.mma` $descriptorA`,` $descriptorB`,` $matrixC attr-dict
+              `:` type($descriptorA) `,` type($descriptorB) `,` type($matrixC) `->` type($matrixD)
+The nvgpu.warpgroup.mma op performs the warpgroup-level (4 warps) matrix-multiply-and-accumulate (mma) operation that results in nvvm.wgmma.mma_async.
+
+The operands are descriptorA and descriptorB that are wgmma matrix descriptors that shows the properties of the matrix in shared memory. The results are thread-level ownership to the warpgroup-level mma operation shape. The shape is deduced from the descriptor types and output vector.
+
+The Op encapsulates multiple nvvm.wgmma.mma_async operations to complete the given shape. As nvvm.wgmma.async Op, or its corresponding PTX instruction, is asynchronous, this Op groups the nvvm.wgmma.async and surrounds them between wgmma.fence.aligned and wgmma.commit.group.sync.aligned, wgmma.wait.group.sync.aligned Ops.
+
+Example:
+
+  %r1,%r2 = nvgpu.warpgroup.mma %descA, %descB, %acc1, %acc2: 
+             !nvgpu.warpgroup.descriptor<tensor = memref<128x64xf16, 3>>, 
+             !nvgpu.warpgroup.descriptor<tensor = memref<64x128xf16, 3>>, 
+             !nvgpu.warpgroup.accumulator<fragmented = vector<64x128xf32>>,
+             !nvgpu.warpgroup.accumulator<fragmented = vector<64x128xf32>>
+             -> 
+             !nvgpu.warpgroup.accumulator<fragmented = vector<64x128xf32>>,
+             !nvgpu.warpgroup.accumulator<fragmented = vector<64x128xf32>>
+Attributes: ¶
+Attribute	MLIR Type	Description
+waitGroup	::mlir::IntegerAttr	32-bit signless integer attribute
+transposeA	::mlir::UnitAttr	unit attribute
+transposeB	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+descriptorA	Warpgroup matrix descriptor type
+descriptorB	Warpgroup matrix descriptor type
+matrixC	
+Results: ¶
+Result	Description
+matrixD

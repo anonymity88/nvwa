@@ -1,0 +1,27 @@
+spirv.EntryPoint (spirv::EntryPointOp) ¶
+Declare an entry point, its execution model, and its interface.
+
+Execution Model is the execution model for the entry point and its static call tree. See Execution Model.
+
+Entry Point must be the Result of an OpFunction instruction.
+
+Name is a name string for the entry point. A module cannot have two OpEntryPoint instructions with the same Execution Model and the same Name string.
+
+Interface is a list of symbol references to spirv.GlobalVariable operations. These declare the set of global variables from a module that form the interface of this entry point. The set of Interface symbols must be equal to or a superset of the spirv.GlobalVariables referenced by the entry point’s static call tree, within the interface’s storage classes. Before version 1.4, the interface’s storage classes are limited to the Input and Output storage classes. Starting with version 1.4, the interface’s storage classes are all storage classes used in declaring all global variables referenced by the entry point’s call tree.
+
+execution-model ::= "Vertex" | "TesellationControl" |
+                    <and other SPIR-V execution models...>
+
+entry-point-op ::= ssa-id `=` `spirv.EntryPoint` execution-model
+                   symbol-reference (`, ` symbol-reference)*
+Example: ¶
+spirv.EntryPoint "GLCompute" @foo
+spirv.EntryPoint "Kernel" @foo, @var1, @var2
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_model	::mlir::spirv::ExecutionModelAttr	
+valid SPIR-V ExecutionModel
+fn	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+interface	::mlir::ArrayAttr	symbol ref array attribute

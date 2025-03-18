@@ -1,0 +1,23 @@
+gpu.subgroup_size (gpu::SubgroupSizeOp) ¶
+Syntax:
+
+operation ::= `gpu.subgroup_size` (`upper_bound` $upper_bound^)? attr-dict `:` type($result)
+Returns the number of threads within a subgroup.
+
+Example:
+
+%sgSz = gpu.subgroup_size : index
+Executions where the number of threads per subgroup exceed upper_bound cause undefined behavior. When no upper_bound is specified, range analyses and similar machinery assume the default bound of kMaxSubgroupSize, currently 128.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+result	index

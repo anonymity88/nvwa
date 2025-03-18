@@ -1,0 +1,24 @@
+shape.function_library (shape::FunctionLibraryOp) ¶
+Represents shape functions and corresponding ops
+
+Represents a list of shape functions and the ops whose shape transfer functions they represent.
+
+Example:
+
+shape.function_library {
+  func @same_result_shape(%arg: !shape.value_shape) -> !shape.shape {
+    %0 = shape_of %arg : !shape.value_shape -> !shape.shape
+    return %0 : !shape.shape
+  }
+} mapping {
+  std.atan = @same_result_shape
+}
+Traits: AffineScope, IsolatedFromAbove, NoRegionArguments, NoTerminator, SingleBlock, SymbolTable
+
+Interfaces: OpAsmOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+sym_visibility	::mlir::StringAttr	string attribute
+mapping	::mlir::DictionaryAttr	dictionary of named attribute values

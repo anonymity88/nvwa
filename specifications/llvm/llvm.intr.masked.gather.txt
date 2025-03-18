@@ -1,0 +1,15 @@
+llvm.intr.masked.gather (LLVM::masked_gather) ¶
+Syntax:
+
+operation ::= `llvm.intr.masked.gather` operands attr-dict `:` functional-type(operands, results)
+Attributes: ¶
+Attribute	MLIR Type	Description
+alignment	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+ptrs	LLVM dialect-compatible vector of LLVM pointer type
+mask	LLVM dialect-compatible vector of 1-bit signless integer
+pass_thru	variadic of LLVM dialect-compatible vector type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

@@ -1,0 +1,33 @@
+shape.split_at (shape::SplitAtOp) ¶
+Splits a shape at a given index
+
+Splits a shape at a given dimension index, returning two shapes. If index is negative, it is treated as indexing from the back of the shape. This negative-handling behavior is important when handling unranked shapes, where the positive index is not necessarily knowable due to a dynamic number of leading dimensions. If the result is in extent tensor form out of bounds indices result in undefined behavior.
+
+Examples:
+
+split_at([4,5,6], index=0) -> [], [4,5,6]
+split_at([4,5,6], index=1) -> [4], [5,6]
+split_at([4,5,6], index=2) -> [4,5], [6]
+split_at([4,5,6], index=3) -> [4,5,6], []
+split_at([4,5,6], index=4) -> error
+split_at([4,5,6], index=-1) -> [4,5], [6]
+split_at([4,5,6], index=-2) -> [4], [5,6]
+split_at([4,5,6], index=-3) -> [], [4,5,6]
+split_at([4,5,6], index=-4) -> error
+Requires:
+
+index is in the range [-rank(operand),rank(operand)]
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	shape or extent tensor
+index	size or index
+Results: ¶
+Result	Description
+head	shape or extent tensor
+tail	shape or extent tensor

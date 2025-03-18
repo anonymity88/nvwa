@@ -1,0 +1,27 @@
+complex.sign (complex::SignOp) ¶
+Computes sign of a complex number
+
+Syntax:
+
+operation ::= `complex.sign` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The sign op takes a single complex number and computes the sign of it, i.e. y = sign(x) = x / |x| if x != 0, otherwise y = 0.
+
+Example:
+
+%a = complex.sign %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

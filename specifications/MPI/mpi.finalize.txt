@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// FinalizeOp
+//===----------------------------------------------------------------------===//
+
+def MPI_FinalizeOp : MPI_Op<"finalize", []> {
+  let summary = "Finalize the MPI library, equivalent to `MPI_Finalize()`";
+  let description = [{
+    This function cleans up the MPI state. Afterwards, no MPI methods may 
+    be invoked (excpet for MPI_Get_version, MPI_Initialized, and MPI_Finalized).
+    Notably, MPI_Init cannot be called again in the same program.
+
+    This operation can optionally return an `!mpi.retval` value that can be used
+    to check for errors.
+  }];
+
+  let results = (outs Optional<MPI_Retval>:$retval);
+
+  let assemblyFormat = "attr-dict (`:` type($retval)^)?";
+}
+
+

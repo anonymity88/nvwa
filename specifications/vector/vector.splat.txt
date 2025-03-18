@@ -1,0 +1,24 @@
+vector.splat (vector::SplatOp) ¶
+Vector splat or broadcast operation
+
+Syntax:
+
+operation ::= `vector.splat` $input attr-dict `:` type($aggregate)
+Broadcast the operand to all elements of the result vector. The operand is required to be of integer/index/float type.
+
+Example:
+
+%s = arith.constant 10.1 : f32
+%t = vector.splat %s : vector<8x16xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	integer/index/float type
+Results: ¶
+Result	Description
+aggregate	vector of any type values

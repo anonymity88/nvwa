@@ -1,0 +1,31 @@
+transform.structured.hoist_pad.build_packing_loop_nest (transform::HoistPadBuildPackingLoopNestOp) ¶
+Syntax:
+
+operation ::= `transform.structured.hoist_pad.build_packing_loop_nest` $target
+              `above` $loop
+              (`,` `transpose` `by` $transpose^)?
+              attr-dict
+              `:` functional-type(operands, results)
+Helper transform used to hoist a tensor.pad target operation. This operation creates the packing loop nest required by the hoist_pad operation and makes that functionality available independently.
+
+TODO: In the future, we should consider rewriting as a tensor.pack after hoisting since this abstraction is now available.
+
+Return modes ¶
+This operation ignores non-tensor.pad ops and drops them in the result. If any non-tensor.pad is passed, the transform emits a silenceable failure.
+
+The return handle points to only the subset of successfully created packing loop nests, which can be empty.
+
+Traits: ReportTrackingListenerFailuresOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+transpose	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+loop	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+packing_loop	TransformHandleTypeInterface instance

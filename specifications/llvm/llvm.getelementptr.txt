@@ -1,0 +1,41 @@
+llvm.getelementptr (LLVM::GEPOp) ¶
+Syntax:
+
+operation ::= `llvm.getelementptr` (`inbounds` $inbounds^)?
+              $base `[` custom<GEPIndices>($dynamicIndices, $rawConstantIndices) `]` attr-dict
+              `:` functional-type(operands, results) `,` $elem_type
+This operation mirrors LLVM IRs ‘getelementptr’ operation that is used to perform pointer arithmetic.
+
+Like in LLVM IR, it is possible to use both constants as well as SSA values as indices. In the case of indexing within a structure, it is required to either use constant indices directly, or supply a constant SSA value.
+
+An optional ‘inbounds’ attribute specifies the low-level pointer arithmetic overflow behavior that LLVM uses after lowering the operation to LLVM IR.
+
+Examples:
+
+// GEP with an SSA value offset
+%0 = llvm.getelementptr %1[%2] : (!llvm.ptr, i64) -> !llvm.ptr, f32
+
+// GEP with a constant offset and the inbounds attribute set
+%0 = llvm.getelementptr inbounds %1[3] : (!llvm.ptr) -> !llvm.ptr, f32
+
+// GEP with constant offsets into a structure
+%0 = llvm.getelementptr %1[0, 1]
+   : (!llvm.ptr) -> !llvm.ptr, !llvm.struct<(i32, f32)>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, DestructurableAccessorOpInterface, NoMemoryEffect (MemoryEffectOpInterface), PromotableOpInterface, SafeMemorySlotAccessOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+rawConstantIndices	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+elem_type	::mlir::TypeAttr	any type attribute
+inbounds	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+base	LLVM pointer type or LLVM dialect-compatible vector of LLVM pointer type
+dynamicIndices	variadic of signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	LLVM pointer type or LLVM dialect-compatible vector of LLVM pointer type

@@ -1,0 +1,101 @@
+sparse_tensor.binary (sparse_tensor::BinaryOp) ¶
+Binary set operation utilized within linalg.generic
+
+Syntax:
+
+operation ::= `sparse_tensor.binary` $x `,` $y `:` attr-dict type($x) `,` type($y) `to` type($output) `\n`
+              `overlap` `=` $overlapRegion `\n`
+              `left` `=` (`identity` $left_identity^):($leftRegion)? `\n`
+              `right` `=` (`identity` $right_identity^):($rightRegion)?
+Defines a computation within a linalg.generic operation that takes two operands and executes one of the regions depending on whether both operands or either operand is nonzero (i.e. stored explicitly in the sparse storage format).
+
+Three regions are defined for the operation and must appear in this order:
+
+overlap (elements present in both sparse tensors)
+left (elements only present in the left sparse tensor)
+right (element only present in the right sparse tensor)
+Each region contains a single block describing the computation and result. Every non-empty block must end with a sparse_tensor.yield and the return type must match the type of output. The primary region’s block has two arguments, while the left and right region’s block has only one argument.
+
+A region may also be declared empty (i.e. left={}), indicating that the region does not contribute to the output. For example, setting both left={} and right={} is equivalent to the intersection of the two inputs as only the overlap region will contribute values to the output.
+
+As a convenience, there is also a special token identity which can be used in place of the left or right region. This token indicates that the return value is the input value (i.e. func(%x) => return %x). As a practical example, setting left=identity and right=identity would be equivalent to a union operation where non-overlapping values in the inputs are copied to the output unchanged.
+
+Due to the possibility of empty regions, i.e. lack of a value for certain cases, the result of this operation may only feed directly into the output of the linalg.generic operation or into into a custom reduction sparse_tensor.reduce operation that follows in the same region.
+
+Example of isEqual applied to intersecting elements only:
+
+%C = tensor.empty(...)
+%0 = linalg.generic #trait
+  ins(%A: tensor<?xf64, #SparseVector>,
+      %B: tensor<?xf64, #SparseVector>)
+  outs(%C: tensor<?xi8, #SparseVector>) {
+  ^bb0(%a: f64, %b: f64, %c: i8) :
+    %result = sparse_tensor.binary %a, %b : f64, f64 to i8
+      overlap={
+        ^bb0(%arg0: f64, %arg1: f64):
+          %cmp = arith.cmpf "oeq", %arg0, %arg1 : f64
+          %ret_i8 = arith.extui %cmp : i1 to i8
+          sparse_tensor.yield %ret_i8 : i8
+      }
+      left={}
+      right={}
+    linalg.yield %result : i8
+} -> tensor<?xi8, #SparseVector>
+Example of A+B in upper triangle, A-B in lower triangle:
+
+%C = tensor.empty(...)
+%1 = linalg.generic #trait
+  ins(%A: tensor<?x?xf64, #CSR>, %B: tensor<?x?xf64, #CSR>
+  outs(%C: tensor<?x?xf64, #CSR> {
+  ^bb0(%a: f64, %b: f64, %c: f64) :
+    %row = linalg.index 0 : index
+    %col = linalg.index 1 : index
+    %result = sparse_tensor.binary %a, %b : f64, f64 to f64
+      overlap={
+        ^bb0(%x: f64, %y: f64):
+          %cmp = arith.cmpi "uge", %col, %row : index
+          %upperTriangleResult = arith.addf %x, %y : f64
+          %lowerTriangleResult = arith.subf %x, %y : f64
+          %ret = arith.select %cmp, %upperTriangleResult, %lowerTriangleResult : f64
+          sparse_tensor.yield %ret : f64
+      }
+      left=identity
+      right={
+        ^bb0(%y: f64):
+          %cmp = arith.cmpi "uge", %col, %row : index
+          %lowerTriangleResult = arith.negf %y : f64
+          %ret = arith.select %cmp, %y, %lowerTriangleResult : f64
+          sparse_tensor.yield %ret : f64
+      }
+    linalg.yield %result : f64
+} -> tensor<?x?xf64, #CSR>
+Example of set difference. Returns a copy of A where its sparse structure is not overlapped by B. The element type of B can be different than A because we never use its values, only its sparse structure:
+
+%C = tensor.empty(...)
+%2 = linalg.generic #trait
+  ins(%A: tensor<?x?xf64, #CSR>, %B: tensor<?x?xi32, #CSR>
+  outs(%C: tensor<?x?xf64, #CSR> {
+  ^bb0(%a: f64, %b: i32, %c: f64) :
+    %result = sparse_tensor.binary %a, %b : f64, i32 to f64
+      overlap={}
+      left=identity
+      right={}
+    linalg.yield %result : f64
+} -> tensor<?x?xf64, #CSR>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+left_identity	::mlir::UnitAttr	unit attribute
+right_identity	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+x	any type
+y	any type
+Results: ¶
+Result	Description
+output	any type

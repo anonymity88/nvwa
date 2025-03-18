@@ -1,0 +1,8 @@
+amx.tilestored64 (amx::x86_amx_tilestored64) ¶
+Operands: ¶
+Operand	Description
+«unnamed»	integer
+«unnamed»	integer
+«unnamed»	LLVM pointer type
+«unnamed»	integer
+«unnamed»	LLVM dialect-compatible type

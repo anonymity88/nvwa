@@ -1,0 +1,4 @@
+rocdl.barrier (ROCDL::BarrierOp) ¶
+Syntax:
+
+operation ::= `rocdl.barrier` attr-dict

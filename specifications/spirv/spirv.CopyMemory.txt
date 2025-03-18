@@ -1,0 +1,27 @@
+spirv.CopyMemory (spirv::CopyMemoryOp) ¶
+Copy from the memory pointed to by Source to the memory pointed to by Target. Both operands must be non-void pointers and having the same Type operand in their OpTypePointer type declaration. Matching Storage Class is not required. The amount of memory copied is the size of the type pointed to. The copied type must have a fixed size; i.e., it must not be, nor include, any OpTypeRuntimeArray types.
+
+If present, any Memory Operands must begin with a memory operand literal. If not present, it is the same as specifying the memory operand None. Before version 1.4, at most one memory operands mask can be provided. Starting with version 1.4 two masks can be provided, as described in Memory Operands. If no masks or only one mask is present, it applies to both Source and Target. If two masks are present, the first applies to Target and cannot include MakePointerVisible, and the second applies to Source and cannot include MakePointerAvailable.
+
+copy-memory-op ::= `spirv.CopyMemory ` storage-class ssa-use
+                   storage-class ssa-use
+                   (`[` memory-access `]` (`, [` memory-access `]`)?)?
+                   ` : ` spirv-element-type
+Example: ¶
+%0 = spirv.Variable : !spirv.ptr<f32, Function>
+%1 = spirv.Variable : !spirv.ptr<f32, Function>
+spirv.CopyMemory "Function" %0, "Function" %1 : f32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+memory_access	::mlir::spirv::MemoryAccessAttr	
+valid SPIR-V MemoryAccess
+alignment	::mlir::IntegerAttr	32-bit signless integer attribute
+source_memory_access	::mlir::spirv::MemoryAccessAttr	
+valid SPIR-V MemoryAccess
+source_alignment	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	any SPIR-V pointer type
+source	any SPIR-V pointer type

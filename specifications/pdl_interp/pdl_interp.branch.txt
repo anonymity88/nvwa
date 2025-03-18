@@ -1,0 +1,20 @@
+pdl_interp.branch (pdl_interp::BranchOp) ¶
+General branch operation
+
+Syntax:
+
+operation ::= `pdl_interp.branch` $dest attr-dict
+pdl_interp.branch operations expose general branch functionality to the interpreter, and are generally used to branch from one pattern match sequence to another.
+
+Example:
+
+pdl_interp.branch ^dest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Successors: ¶
+Successor	Description
+dest	any successor

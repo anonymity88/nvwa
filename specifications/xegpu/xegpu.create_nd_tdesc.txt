@@ -1,0 +1,58 @@
+xegpu.create_nd_tdesc (xegpu::CreateNdDescOp) ¶
+Create nd-tensor descriptor operation
+
+Syntax:
+
+operation ::= `xegpu.create_nd_tdesc` $source ``
+              custom<DynamicIndexList>($offsets, $const_offsets)
+              (`,` custom<DynamicIndexList>($shape, $const_shape)^
+              `,` custom<DynamicIndexList>($strides, $const_strides))?
+              attr-dict `:` type($source) `->` qualified(type($TensorDesc))
+The “create_nd_tdesc” operation creates a TensorDescType which represents a sub-view of a 1D/2D memory region inside the one or two innermost dimensions of the source. (It can be extended to support n-D memory region if needed in future). Elements in the subview continuous in each dimension. It encodes the following important information for supporting Intel hardware features:
+
+source: an object representing (starting address/pointer of) a memory region. It can be either a memref object, or simply a pointer represented by uint64_t type. For the case of dynamic memrefs or pointer, the shape and layout information of the memory region should be explicitly passed via shape and strides parameters.
+
+offsets: index values represents offsets from the “source” at the each dimension at which the subview of the target memory will be created. It is encoded via “offsets” and “const_offsets”, such that it can accept various forms, such as, operands (e.g., [%c0, %c]) and attributes (e.g., [2, 4]).
+
+shape: the shape information of the memory region pointed by the “source”. It is typically encoded via the MemRefType of the source, e.g., memref<4096x4096xf16>. But if “source” is simply a pointer represented as uint64_t type, or a memref type without shape information e.g., memref<?x?xf16>, the shape information has to be explicitly passed via the “shape” and “const_shape” arguments.
+
+strides: the strides of the memory region pointed by the “source”. Similar to shape, it is typically encoded via the MemRefType of the source too. But if “source” is simply a pointer represented as uint64_t type, or a memref type without shape information e.g., memref<?x?xf16>, the strides information has to be explicitly passed via the “strides” and “const_strides” argument.
+
+Example 1 (suppose the tensor shape inferred by the compiler is 8x16):
+
+%0 = memref.alloc() : memref<1024x1024xf32>
+%c0 = arith.constant 0 : index
+%c1 = arith.constant 1 : index
+%1 = xegpu.create_nd_tdesc %0[%c0, %c0]: memref<1024x1024xf32> -> TensorDesc<8x16xf32>
+Example 2 (suppose the tensor shape inferred by the compiler is 8x16):
+
+%0 = memref.alloc(%h, %w) : memref<?x?xf32>
+%c0 = arith.constant 0 : index
+%c1 = arith.constant 1 : index
+%1 = xegpu.create_nd_tdesc %0[%c0, %c0], [%h, %w], [%w, %c1]: memref<?x?xf32> -> TensorDesc<8x16xf32>
+Example 3 (suppose the tensor shape inferred by the compiler is 8x16):
+
+%0 = ... : ui64
+%c0 = arith.constant 0 : index
+%c1 = arith.constant 1 : index
+%1 = xegpu.create_nd_tdesc %0[%c0, %c0], [%h, %w], [%w, %c1]: ui64 -> TensorDesc<8x16xf32>
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OffsetSizeAndStrideOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+const_offsets	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+const_shape	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+const_strides	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+source	non-0-ranked.memref of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values or 64-bit unsigned integer or 32-bit unsigned integer or 64-bit signless integer or 32-bit signless integer
+offsets	variadic of index
+shape	variadic of index
+strides	variadic of index
+Results: ¶
+Result	Description
+TensorDesc	TensorDesc describing regions of interested data.

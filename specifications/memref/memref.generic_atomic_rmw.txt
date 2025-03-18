@@ -1,0 +1,24 @@
+memref.generic_atomic_rmw (memref::GenericAtomicRMWOp) ¶
+Atomic read-modify-write operation with a region
+
+The memref.generic_atomic_rmw operation provides a way to perform a read-modify-write sequence that is free from data races. The memref operand represents the buffer that the read and write will be performed against, as accessed by the specified indices. The arity of the indices is the rank of the memref. The result represents the latest value that was stored. The region contains the code for the modification itself. The entry block has a single argument that represents the value stored in memref[indices] before the write is performed. No side-effecting ops are allowed in the body of GenericAtomicRMWOp.
+
+Example:
+
+%x = memref.generic_atomic_rmw %I[%i] : memref<10xf32> {
+  ^bb0(%current_value : f32):
+    %c1 = arith.constant 1.0 : f32
+    %inc = arith.addf %c1, %current_value : f32
+    memref.atomic_yield %inc : f32
+}
+Traits: SingleBlockImplicitTerminator<AtomicYieldOp>, SingleBlock
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+memref	memref of signless integer or floating-point values
+indices	variadic of index
+Results: ¶
+Result	Description
+result	signless integer or floating-point

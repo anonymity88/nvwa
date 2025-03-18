@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// TruncIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_TruncIOp : Arith_IToICastOp<"trunci"> {
+  let summary = "integer truncation operation";
+  let description = [{
+    The integer truncation operation takes an integer input of
+    width M and an integer destination type of width N. The destination
+    bit-width must be smaller than the input bit-width (N < M).
+    The top-most (N - M) bits of the input are discarded.
+
+    Example:
+
+    ```mlir
+      %1 = arith.constant 21 : i5     // %1 is 0b10101
+      %2 = arith.trunci %1 : i5 to i4 // %2 is 0b0101
+      %3 = arith.trunci %1 : i5 to i3 // %3 is 0b101
+
+      %5 = arith.trunci %0 : vector<2 x i32> to vector<2 x i16>
+    ```
+  }];
+
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+  let hasVerifier = 1;
+}
+

@@ -1,0 +1,30 @@
+arm_sme.get_tile (arm_sme::GetTileOp) ¶
+Creates an undefined value of SME virtual tile type
+
+Syntax:
+
+operation ::= `arm_sme.get_tile` attr-dict `:` type($tile)
+Creates a new SME “virtual tile” value within a function. The contents of the tile returned from this operation are undefined.
+
+Example 1:
+
+// Create an 8-bit element "virtual tile" value:
+%za0_b = arm_sme.get_tile: vector<[16]x[16]xi8>
+Example 2:
+
+// Create two 16-bit element "virtual tiles" values:
+%za0_h = arm_sme.get_tile : vector<[8]x[8]xi16>
+%za1_h = arm_sme.get_tile : vector<[8]x[8]xi16>
+Example 3:
+
+// Create an 128-bit element "virtual tile" value:
+%za0_q = arm_sme.get_tile : vector<[1]x[1]xi128>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+tile	a vector type that fits into a SME tile

@@ -1,0 +1,32 @@
+vector.multi_reduction (vector::MultiDimReductionOp) ¶
+Multi-dimensional reduction operation
+
+Syntax:
+
+operation ::= `vector.multi_reduction` $kind `,` $source `,` $acc attr-dict $reduction_dims `:` type($source) `to` type($dest)
+Reduces an n-D vector into an (n-k)-D vector (or a scalar when k == n) using the given operation: add/mul/minsi/minui/maxsi/maxui /and/or/xor for integers, and add/mul/minnumf/maxnumf/minimumf /maximumf for floats. Takes an initial accumulator operand.
+
+Example:
+
+%1 = vector.multi_reduction <add>, %0, %acc0 [1, 3] :
+  vector<4x8x16x32xf32> to vector<4x16xf32>
+%2 = vector.multi_reduction <add>, %1, %acc1 [0, 1] :
+  vector<4x16xf32> to f32
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, MaskableOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::vector::CombiningKindAttr	
+Kind of combining function for contractions and reductions
+reduction_dims	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+source	vector of any type values
+acc	any type
+Results: ¶
+Result	Description
+dest	any type

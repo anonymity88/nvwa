@@ -1,0 +1,34 @@
+shape.meet (shape::MeetOp) ¶
+Returns the least general shape or size of its operands
+
+Syntax:
+
+operation ::= `shape.meet` $arg0 `,` $arg1 (`,` `error` `=` $error^)? attr-dict `:`
+              type($arg0) `,` type($arg1) `->` type($result)
+An operation that computes the least general shape or dim of input operands. This effectively asserts that corresponding static dimensions are equal. The behavior is to match each element of the shape/size and propagate the most restrictive information, returning an invalid shape if there are contradictory requirements. E.g., using pseudo code
+
+shape.meet([*], [*]) -> [*]
+shape.meet([*], [1, ?]) -> [1, ?]
+shape.meet([1, 2], [1, ?]) -> [1, 2]
+shape.meet([*], [1, 2]) -> [1, 2]
+shape.meet([], []) -> []
+shape.meet([], [*]) -> []
+shape.meet([], [?, ?]) -> [invalid]
+shape.meet([1, ?], [2, ?, ?]) -> [invalid]
+shape.meet also allows specifying an optional error string, that may be used to return an error to the user upon mismatch of dimensions.
+
+%c = shape.meet %a, %b, error="<reason>" : !shape.shape, !shape.shape -> !shape.shape
+Traits: Commutative, InferTypeOpAdaptor
+
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+error	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+arg0	any shape or size
+arg1	any shape or size
+Results: ¶
+Result	Description
+result	any shape or size

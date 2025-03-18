@@ -1,0 +1,23 @@
+gpu.num_subgroups (gpu::NumSubgroupsOp) ¶
+Syntax:
+
+operation ::= `gpu.num_subgroups` (`upper_bound` $upper_bound^)? attr-dict `:` type($result)
+Returns the number of subgroups within a workgroup.
+
+Example:
+
+%numSg = gpu.num_subgroups : index
+If upper_bound is set, executions with more than upper_bound subgroups per workgroup cause undefined behavior. There is a default upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+result	index

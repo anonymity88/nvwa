@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// FmaOp
+//===----------------------------------------------------------------------===//
+
+def Math_FmaOp : Math_FloatTernaryOp<"fma"> {
+  let summary = "floating point fused multipy-add operation";
+  let description = [{
+    The `fma` operation takes three operands and returns one result, each of
+    these is required to be the same type. Operands must be of floating point type
+    (i.e., scalar, tensor or vector).
+
+    Example:
+
+    ```mlir
+    // Scalar fused multiply-add: d = a*b + c
+    %d = math.fma %a, %b, %c : f64
+    ```
+
+    The semantics of the operation correspond to those of the `llvm.fma`
+    [intrinsic](https://llvm.org/docs/LangRef.html#llvm-fma-intrinsic). In the
+    particular case of lowering to LLVM, this is guaranteed to lower
+    to the `llvm.fma.*` intrinsic.
+  }];
+}
+

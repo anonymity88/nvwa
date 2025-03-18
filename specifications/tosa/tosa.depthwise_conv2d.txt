@@ -1,0 +1,31 @@
+//===----------------------------------------------------------------------===//
+// Operator: depthwise_conv2d
+//===----------------------------------------------------------------------===//
+def Tosa_DepthwiseConv2DOp : Tosa_InferShapedTypeOp<"depthwise_conv2d"> {
+  let summary = "Depthwise 2D Convolution operator";
+
+  let description = [{
+    Performs 2D convolutions separately over each channel of the given tensor
+    input, using the weight tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor4D:$input,
+    4DTensorOf<[Tosa_Weight]>:$weight,
+    Tosa_Tensor1D:$bias,
+
+    Tosa_IntArrayAttr4:$pad,
+    Tosa_IntArrayAttr2:$stride,
+    Tosa_IntArrayAttr2:$dilation,
+    OptionalAttr<Tosa_ConvOpQuantizationAttr>:$quantization_info,
+    DefaultValuedOptionalAttr<BoolAttr, "false">:$local_bound
+  );
+
+  let results = (outs
+    Tosa_Tensor4D:$output
+  );
+
+  let builders = [Tosa_ConvOpQuantInfoBuilder];
+  let hasVerifier = 1;
+}
+

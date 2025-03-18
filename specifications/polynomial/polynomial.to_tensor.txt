@@ -1,0 +1,167 @@
+polynomial.to_tensor (polynomial::ToTensorOp) ¶
+Creates a tensor containing the coefficients of a polynomial.
+
+Syntax:
+
+operation ::= `polynomial.to_tensor` $input attr-dict `:` type($input) `->` type($output)
+polynomial.to_tensor creates a dense tensor value containing the coefficients of the input polynomial. The output tensor contains the coefficients in degree-increasing order.
+
+Operations that act on the coefficients of a polynomial, such as extracting a specific coefficient or extracting a range of coefficients, should be implemented by composing to_tensor with the relevant tensor dialect ops.
+
+The output tensor has shape equal to the degree of the polynomial ring attribute’s polynomialModulus, including zeroes.
+
+Example:
+
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%two = arith.constant 2 : i32
+%five = arith.constant 5 : i32
+%coeffs = tensor.from_elements %two, %two, %five : tensor<3xi32>
+%poly = polynomial.from_tensor %coeffs : tensor<3xi32> -> !polynomial.polynomial<#ring>
+%tensor = polynomial.to_tensor %poly : !polynomial.polynomial<#ring> -> tensor<1024xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	An element of a polynomial ring.
+Results: ¶
+Result	Description
+output	ranked tensor of integer values
+Attributes ¶
+FloatPolynomialAttr ¶
+an attribute containing a single-variable polynomial with double precision floating point coefficients
+
+A polynomial attribute represents a single-variable polynomial with double precision floating point coefficients.
+
+The polynomial must be expressed as a list of monomial terms, with addition or subtraction between them. The choice of variable name is arbitrary, but must be consistent across all the monomials used to define a single attribute. The order of monomial terms is arbitrary, each monomial degree must occur at most once.
+
+Example:
+
+#poly = #polynomial.float_polynomial<0.5 x**7 + 1.5>
+Parameters: ¶
+Parameter	C++ type	Description
+polynomial	FloatPolynomial	
+IntPolynomialAttr ¶
+an attribute containing a single-variable polynomial with integer coefficients
+
+A polynomial attribute represents a single-variable polynomial with integer coefficients, which is used to define the modulus of a RingAttr, as well as to define constants and perform constant folding for polynomial ops.
+
+The polynomial must be expressed as a list of monomial terms, with addition or subtraction between them. The choice of variable name is arbitrary, but must be consistent across all the monomials used to define a single attribute. The order of monomial terms is arbitrary, each monomial degree must occur at most once.
+
+Example:
+
+#poly = #polynomial.int_polynomial<x**1024 + 1>
+Parameters: ¶
+Parameter	C++ type	Description
+polynomial	::mlir::polynomial::IntPolynomial	
+PrimitiveRootAttr ¶
+an attribute containing an integer and its degree as a root of unity
+
+Syntax:
+
+#polynomial.primitive_root<
+  ::mlir::IntegerAttr,   # value
+  ::mlir::IntegerAttr   # degree
+>
+A primitive root attribute stores an integer root value and an integer degree, corresponding to a primitive root of unity of the given degree in an unspecified ring.
+
+This is used as an attribute on polynomial.ntt and polynomial.intt ops to specify the root of unity used in lowering the transform.
+
+Example:
+
+#poly = #polynomial.primitive_root<value=123 : i32, degree : 7 index>
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::IntegerAttr	
+degree	::mlir::IntegerAttr	
+RingAttr ¶
+an attribute specifying a polynomial ring
+
+Syntax:
+
+#polynomial.ring<
+  Type,   # coefficientType
+  ::mlir::IntegerAttr,   # coefficientModulus
+  ::mlir::polynomial::IntPolynomialAttr   # polynomialModulus
+>
+A ring describes the domain in which polynomial arithmetic occurs. The ring attribute in polynomial represents the more specific case of polynomials with a single indeterminate; whose coefficients can be represented by another MLIR type (coefficientType); and, if the coefficient type is integral, whose coefficients are taken modulo some statically known modulus (coefficientModulus).
+
+Additionally, a polynomial ring can specify a polynomialModulus, which converts polynomial arithmetic to the analogue of modular integer arithmetic, where each polynomial is represented as its remainder when dividing by the modulus. For single-variable polynomials, an “polynomialModulus” is always specificed via a single polynomial, which we call polynomialModulus.
+
+An expressive example is polynomials with i32 coefficients, whose coefficients are taken modulo 2**32 - 5, with a polynomial modulus of x**1024 - 1.
+
+#poly_mod = #polynomial.int_polynomial<-1 + x**1024>
+#ring = #polynomial.ring<coefficientType=i32,
+                         coefficientModulus=4294967291:i32,
+                         polynomialModulus=#poly_mod>
+
+%0 = ... : polynomial.polynomial<#ring>
+In this case, the value of a polynomial is always “converted” to a canonical form by applying repeated reductions by setting x**1024 = 1 and simplifying.
+
+The coefficient and polynomial modulus parameters are optional, and the coefficient modulus is only allowed if the coefficient type is integral.
+
+The coefficient modulus, if specified, should be positive and not larger than 2 ** width(coefficientType).
+
+If the coefficient modulus is not specified, the handling of coefficients overflows is determined by subsequent lowering passes, which may choose to wrap around or widen the overflow at their discretion.
+
+Note that coefficient modulus is contained in i64 by default, which is signed. To specify a 64 bit number without intepreting it as a negative number, its container type should be manually specified like coefficientModulus=18446744073709551615:i128.
+
+Parameters: ¶
+Parameter	C++ type	Description
+coefficientType	Type	
+coefficientModulus	::mlir::IntegerAttr	
+polynomialModulus	::mlir::polynomial::IntPolynomialAttr	
+TypedFloatPolynomialAttr ¶
+a typed float_polynomial
+
+Syntax:
+
+#polynomial.typed_float_polynomial<
+  ::mlir::Type,   # type
+  ::mlir::polynomial::FloatPolynomialAttr   # value
+>
+Example:
+
+!poly_ty = !polynomial.polynomial<ring=<coefficientType=f32>>
+#poly = float<1.4 x**7 + 4.5> : !poly_ty
+#poly_verbose = #polynomial.typed_float_polynomial<1.4 x**7 + 4.5> : !poly_ty
+Parameters: ¶
+Parameter	C++ type	Description
+type	::mlir::Type	
+value	::mlir::polynomial::FloatPolynomialAttr	
+TypedIntPolynomialAttr ¶
+a typed int_polynomial
+
+Syntax:
+
+#polynomial.typed_int_polynomial<
+  ::mlir::Type,   # type
+  ::mlir::polynomial::IntPolynomialAttr   # value
+>
+Example:
+
+!poly_ty = !polynomial.polynomial<ring=<coefficientType=i32>>
+#poly = int<1 x**7 + 4> : !poly_ty
+#poly_verbose = #polynomial.typed_int_polynomial<1 x**7 + 4> : !poly_ty
+Parameters: ¶
+Parameter	C++ type	Description
+type	::mlir::Type	
+value	::mlir::polynomial::IntPolynomialAttr	
+Types ¶
+PolynomialType ¶
+An element of a polynomial ring.
+
+Syntax:
+
+!polynomial.polynomial<
+  ::mlir::polynomial::RingAttr   # ring
+>
+A type for polynomials in a polynomial quotient ring.
+
+Parameters: ¶
+Parameter	C++ type	Description
+ring	::mlir::polynomial::RingAttr	an attribute specifying a polynomial ring

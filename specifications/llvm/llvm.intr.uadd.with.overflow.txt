@@ -1,0 +1,14 @@
+llvm.intr.uadd.with.overflow (LLVM::UAddWithOverflowOp) ¶
+Traits: AlwaysSpeculatableImplTrait, SameOperandsElementType
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+«unnamed»	signless integer or LLVM dialect-compatible vector of signless integer
+«unnamed»	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

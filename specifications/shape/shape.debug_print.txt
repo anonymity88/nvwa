@@ -1,0 +1,13 @@
+shape.debug_print (shape::DebugPrintOp) ¶
+Prints the input shape or size
+
+Prints the input dim or shape and passes through input.
+
+Note: This is intended for testing and debugging only.
+
+Operands: ¶
+Operand	Description
+input	shape or size
+Results: ¶
+Result	Description
+output	shape or size

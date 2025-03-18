@@ -1,0 +1,14 @@
+linalg.batch_vecmat (linalg::BatchVecmatOp)
+Performs a batched matrix-vector multiplication.
+
+Numeric casting is performed on the operands to the inner multiply, promoting them to the same data type as the accumulator/output. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgContractionOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

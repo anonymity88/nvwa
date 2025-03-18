@@ -1,0 +1,27 @@
+x86vector.avx.intr.dot (x86vector::DotOp) ¶
+Dot
+
+Syntax:
+
+operation ::= `x86vector.avx.intr.dot` $a `,` $b attr-dict `:` type($res)
+Computes the 4-way dot products of the lower and higher parts of the source vectors and broadcasts the two results to the lower and higher elements of the destination vector, respectively. Adding one element of the lower part to one element of the higher part in the destination vector yields the full dot product of the two source vectors.
+
+Example:
+
+%0 = x86vector.avx.intr.dot %a, %b : vector<8xf32>
+%1 = vector.extractelement %0[%i0 : i32]: vector<8xf32>
+%2 = vector.extractelement %0[%i4 : i32]: vector<8xf32>
+%d = arith.addf %1, %2 : f32
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit float values of length 8
+b	vector of 32-bit float values of length 8
+Results: ¶
+Result	Description
+res	vector of 32-bit float values of length 8

@@ -1,0 +1,25 @@
+sparse_tensor.new (sparse_tensor::NewOp) ¶
+Materializes a new sparse tensor from given source
+
+Syntax:
+
+operation ::= `sparse_tensor.new` $source attr-dict `:` type($source) `to` type($result)
+Materializes a sparse tensor with contents taken from an opaque pointer provided by source. For targets that have access to a file system, for example, this pointer may be a filename (or file) of a sparse tensor in a particular external storage format. The form of the operation is kept deliberately very general to allow for alternative implementations in the future, such as pointers to buffers or runnable initialization code. The operation is provided as an anchor that materializes a properly typed sparse tensor with inital contents into a computation.
+
+Reading in a symmetric matrix will result in just the lower/upper triangular part of the matrix (so that only relevant information is stored). Proper symmetry support for operating on symmetric matrices is still TBD.
+
+Example:
+
+sparse_tensor.new %source : !Source to tensor<1024x1024xf64, #CSR>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	any type
+Results: ¶
+Result	Description
+result	sparse tensor of any type values

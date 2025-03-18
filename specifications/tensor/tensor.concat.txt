@@ -1,0 +1,34 @@
+tensor.concat (tensor::ConcatOp) ¶
+Tensor concatenation operation
+
+Syntax:
+
+operation ::= `tensor.concat` `dim` `(` $dim `)` $inputs attr-dict
+              `:` functional-type(operands, results)
+The “concat” operation constructs a tensor out of a variadic list of input tensors, concatenated along a static dimension number. All inputs and the result type must share the same rank.
+
+dim specifies the dimension along which to concatenate. The size of the concatenated dimension in the result must be equal to the sum of the sizes of the inputs along that dimension. All other dimensions in both the inputs and result must be the same size.
+
+Example:
+
+%0 = tensor.concat dim(0) %0, %1, %2 :
+    (tensor<3x6xf32>, tensor<3x6xf32>, tensor<1x6xf32) -> tensor<7x6xf32>
+
+// Dynamic + dynamic -> static
+%0 = tensor.concat dim(1) %0, %1, %2 :
+    (tensor<3x?xf32>, tensor<3x2xf32>, tensor<3x?xf32) -> tensor<3x10xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dim	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+inputs	variadic of ranked tensor of any type values
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// Operator: scatter
+//===----------------------------------------------------------------------===//
+def Tosa_ScatterOp : Tosa_InferShapedTypeOp<"scatter"> {
+  let summary = "Scatter operation,";
+
+  let description = [{
+    The values_out tensor is set to the values_in tensor with data modified as follows:
+    data from the input tensor is inserted at the positions specified by the indices tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor3D:$values_in,
+    2DTensorOf<[Tosa_Int32]>:$indices,
+    Tosa_Tensor3D:$input
+  );
+
+  let results = (outs
+    Tosa_Tensor3D:$values_out
+  );
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.11
+// Operator Class: Image Frontend Functions.
+//===----------------------------------------------------------------------===//
+

@@ -1,0 +1,79 @@
+llvm.func (LLVM::LLVMFuncOp) ¶
+LLVM dialect function.
+
+MLIR functions are defined by an operation that is not built into the IR itself. The LLVM dialect provides an llvm.func operation to define functions compatible with LLVM IR. These functions have LLVM dialect function type but use MLIR syntax to express it. They are required to have exactly one result type. LLVM function operation is intended to capture additional properties of LLVM functions, such as linkage and calling convention, that may be modeled differently by the built-in MLIR function.
+
+// The type of @bar is !llvm<"i64 (i64)">
+llvm.func @bar(%arg0: i64) -> i64 {
+  llvm.return %arg0 : i64
+}
+
+// Type type of @foo is !llvm<"void (i64)">
+// !llvm.void type is omitted
+llvm.func @foo(%arg0: i64) {
+  llvm.return
+}
+
+// A function with `internal` linkage.
+llvm.func internal @internal_func() {
+  llvm.return
+}
+Traits: AutomaticAllocationScope, IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+sym_visibility	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	type attribute of LLVM function type
+linkage	::mlir::LLVM::LinkageAttr	LLVM Linkage specification
+dso_local	::mlir::UnitAttr	unit attribute
+CConv	::mlir::LLVM::CConvAttr	LLVM Calling Convention specification
+comdat	::mlir::SymbolRefAttr	symbol reference attribute
+convergent	::mlir::UnitAttr	unit attribute
+personality	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+garbageCollector	::mlir::StringAttr	string attribute
+passthrough	::mlir::ArrayAttr	array attribute
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+function_entry_count	::mlir::IntegerAttr	64-bit signless integer attribute
+memory_effects	::mlir::LLVM::MemoryEffectsAttr	
+visibility_	::mlir::LLVM::VisibilityAttr	
+LLVM GlobalValue Visibility
+arm_streaming	::mlir::UnitAttr	unit attribute
+arm_locally_streaming	::mlir::UnitAttr	unit attribute
+arm_streaming_compatible	::mlir::UnitAttr	unit attribute
+arm_new_za	::mlir::UnitAttr	unit attribute
+arm_in_za	::mlir::UnitAttr	unit attribute
+arm_out_za	::mlir::UnitAttr	unit attribute
+arm_inout_za	::mlir::UnitAttr	unit attribute
+arm_preserves_za	::mlir::UnitAttr	unit attribute
+section	::mlir::StringAttr	string attribute
+unnamed_addr	::mlir::LLVM::UnnamedAddrAttr	
+LLVM GlobalValue UnnamedAddr
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+vscale_range	::mlir::LLVM::VScaleRangeAttr	
+frame_pointer	::mlir::LLVM::FramePointerKindAttr	
+target_cpu	::mlir::StringAttr	string attribute
+tune_cpu	::mlir::StringAttr	string attribute
+target_features	::mlir::LLVM::TargetFeaturesAttr	
+LLVM target features attribute
+unsafe_fp_math	::mlir::BoolAttr	bool attribute
+no_infs_fp_math	::mlir::BoolAttr	bool attribute
+no_nans_fp_math	::mlir::BoolAttr	bool attribute
+approx_func_fp_math	::mlir::BoolAttr	bool attribute
+no_signed_zeros_fp_math	::mlir::BoolAttr	bool attribute
+denormal_fp_math	::mlir::StringAttr	string attribute
+denormal_fp_math_f32	::mlir::StringAttr	string attribute
+fp_contract	::mlir::StringAttr	string attribute
+no_inline	::mlir::UnitAttr	unit attribute
+always_inline	::mlir::UnitAttr	unit attribute
+no_unwind	::mlir::UnitAttr	unit attribute
+will_return	::mlir::UnitAttr	unit attribute
+optimize_none	::mlir::UnitAttr	unit attribute
+vec_type_hint	::mlir::LLVM::VecTypeHintAttr	
+Explicit vectorization compiler hint
+work_group_size_hint	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+reqd_work_group_size	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+intel_reqd_sub_group_size	::mlir::IntegerAttr	32-bit signless integer attribute

@@ -1,0 +1,30 @@
+gpu.create_coo_aos (gpu::CreateCooAoSOp) ¶
+Create sparse matrix in COO format operation (AoS)
+
+Syntax:
+
+operation ::= `gpu.create_coo_aos` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $rows `,` $cols `,` $nnz `,` $idxs `,` $values attr-dict
+              `:` type($idxs) `,` type($values)
+The gpu.create_coo_aos operation initializes a sparse matrix in COO format with the given sizes from the given index and values buffers. The buffers must already be copied from the host to the device prior to using this operation. The operation returns a handle to the sparse matrix descriptor. Unlike the default gpu.create_coo operation, this operation builds the COO format from a single index buffer in AoS format (note that this feature has been deprecated in cuSparse 11.2).
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%spmat, %token = gpu.create_coo_aos async [%dep] %rows, %cols, %nnz, %idxs,
+    %values : memref<?xindex>, memref<?xf64>
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+rows	index
+cols	index
+nnz	index
+idxs	memref of any type values
+values	memref of any type values
+Results: ¶
+Result	Description
+spmat	sparse matrix handle type
+asyncToken	async token type

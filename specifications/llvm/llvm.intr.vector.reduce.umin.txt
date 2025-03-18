@@ -1,0 +1,13 @@
+llvm.intr.vector.reduce.umin (LLVM::vector_reduce_umin) ¶
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultElementType
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+in	LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

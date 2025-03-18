@@ -1,0 +1,34 @@
+arm_sme.extract_tile_slice (arm_sme::ExtractTileSliceOp) ¶
+Extract 1-D scalable vector from slice of 2-D tile
+
+Syntax:
+
+operation ::= `arm_sme.extract_tile_slice` $tile `[` $tile_slice_index `]` (`layout` `` $layout^)? attr-dict
+              `:` type($result) `from` type($tile)
+Extracts a 1-D scalable slice from a 2-D scalable tile at the given index. A tile slice is a 1-D vector of horizontally or vertically contiguous elements within a ZA tile.
+
+An optional tile slice layout attribute specifies whether the tile slice is horizontal (default) or vertical.
+
+Example 1: Extract vector<[16]xi8> from tile horizontally at the given index.
+
+%slice = arm_sme.extract_tile_slice %tile[%tile_slice_index] : vector<[16]xi8> from vector<[16]x[16]xi8>
+Example 2: Extract vector<[2]xf64> from tile vertically at the given index.
+
+%slice = arm_sme.extract_tile_slice %tile[%tile_slice_index] layout<vertical> : vector<[2]xf64> from vector<[2]x[2]xf64>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+layout	::mlir::arm_sme::TileSliceLayoutAttr	
+Layout of a tile slice
+Operands: ¶
+Operand	Description
+tile	a vector type that fits into a SME tile
+tile_slice_index	index
+Results: ¶
+Result	Description
+result	a vector type that matches the size of a SVE vector

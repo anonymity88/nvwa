@@ -1,0 +1,51 @@
+acc.bounds (acc::DataBoundsOp) ¶
+Represents normalized bounds information for acc data clause.
+
+Syntax:
+
+operation ::= `acc.bounds` oilist(
+              `lowerbound` `(` $lowerbound `:` type($lowerbound) `)`
+              | `upperbound` `(` $upperbound `:` type($upperbound) `)`
+              | `extent` `(` $extent `:` type($extent) `)`
+              | `stride` `(` $stride `:` type($stride) `)`
+              | `startIdx` `(` $startIdx `:` type($startIdx) `)`
+              ) attr-dict
+This operation is used to record bounds used in acc data clause in a normalized fashion (zero-based). This works well with the PointerLikeType requirement in data clauses - since a lowerbound of 0 means looking at data at the zero offset from pointer.
+
+The operation must have an upperbound or extent (or both are allowed - but not checked for consistency). When the source language’s arrays are not zero-based, the startIdx must specify the zero-position index.
+
+Examples below show copying a slice of 10-element array except first element. Note that the examples use extent in data clause for C++ and upperbound for Fortran (as per 2.7.1). To simplify examples, the constants are used directly in the acc.bounds operands - this is not the syntax of operation.
+
+C++:
+
+int array[10];
+#pragma acc copy(array[1:9])
+=>
+
+acc.bounds lb(1) ub(9) extent(9) startIdx(0)
+Fortran:
+
+integer :: array(1:10)
+!$acc copy(array(2:10))
+=>
+
+acc.bounds lb(1) ub(9) extent(9) startIdx(1)
+Traits: AttrSizedOperandSegments
+
+Interfaces: NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+strideInBytes	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+lowerbound	integer or index
+upperbound	integer or index
+extent	integer or index
+stride	integer or index
+startIdx	integer or index
+Results: ¶
+Result	Description
+result	Type for representing acc data clause bounds information

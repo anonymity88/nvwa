@@ -1,0 +1,35 @@
+spirv.GroupNonUniformShuffleXor (spirv::GroupNonUniformShuffleXorOp) ¶
+Result is the Value of the invocation identified by the current invocation’s id within the group xor’ed with Mask.
+
+Syntax:
+
+operation ::= `spirv.GroupNonUniformShuffleXor` $execution_scope operands attr-dict `:` type($value) `,` type($mask)
+Result Type must be a scalar or vector of floating-point type, integer type, or Boolean type.
+
+Execution is a Scope. It must be either Workgroup or Subgroup.
+
+The type of Value must be the same as Result Type.
+
+Mask must be a scalar of integer type, whose Signedness operand is 0.
+
+The resulting value is undefined if current invocation’s id within the group xor’ed with Mask is an inactive invocation, or is greater than or equal to the size of the group.
+
+Example: ¶
+%0 = spirv.GroupNonUniformShuffleXor <Subgroup> %val, %mask : f32, i32
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+Operands: ¶
+Operand	Description
+value	8/16/32/64-bit integer or 16/32/64-bit float or bool or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16
+mask	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

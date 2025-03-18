@@ -1,0 +1,11 @@
+transform.apply_patterns.vector.rank_reducing_subview_patterns (transform::ApplyRankReducingSubviewPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.rank_reducing_subview_patterns` attr-dict
+Apply opt-in vector transfer permutation patterns that include:
+
+TransferReadDropUnitDimsPattern
+TransferWriteDropUnitDimsPattern
+These patterns have the effect of rewriting a vector.transfer with unit dimensions into a rank-reduced version thanks to subview operations. This is complemented by shape_cast folding patterns.
+
+Interfaces: PatternDescriptorOpInterface

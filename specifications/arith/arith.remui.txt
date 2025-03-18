@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// RemUIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_RemUIOp : Arith_TotalIntBinaryOp<"remui"> {
+  let summary = "unsigned integer division remainder operation";
+  let description = [{
+    Unsigned integer division remainder. Treats the leading bit as the most
+    significant, i.e. for `i16`, `6 % -2 = 6 % (2^16 - 2) = 6`.
+
+    Division by zero is undefined behavior. When applied to `vector` and 
+    `tensor` values, the behavior is undefined if _any_ elements are divided by 
+    zero.
+
+    Example:
+
+    ```mlir
+    // Scalar unsigned integer division remainder.
+    %a = arith.remui %b, %c : i64
+
+    // SIMD vector element-wise division remainder.
+    %f = arith.remui %g, %h : vector<4xi32>
+
+    // Tensor element-wise integer division remainder.
+    %x = arith.remui %y, %z : tensor<4x?xi8>
+    ```
+  }];
+  let hasFolder = 1;
+}
+

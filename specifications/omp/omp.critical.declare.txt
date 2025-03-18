@@ -1,0 +1,20 @@
+omp.critical.declare (omp::CriticalDeclareOp) ¶
+Declares a named critical section.
+
+Syntax:
+
+operation ::= `omp.critical.declare` $sym_name oilist(
+              `hint` `(` custom<SynchronizationHint>($hint) `)`
+              ) attr-dict
+Declares a named critical section.
+
+The sym_name can be used in omp.critical constructs in the dialect.
+
+hint is the value of hint (as specified in the hint clause). It is a compile time constant. As the name suggests, this is just a hint for optimization.
+
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+hint	::mlir::IntegerAttr	64-bit signless integer attribute

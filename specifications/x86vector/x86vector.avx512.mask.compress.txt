@@ -1,0 +1,28 @@
+x86vector.avx512.mask.compress (x86vector::MaskCompressOp) ¶
+Masked compress op
+
+Syntax:
+
+operation ::= `x86vector.avx512.mask.compress` $k `,` $a (`,` $src^)? attr-dict `:` type($dst) (`,` type($src)^)?
+The mask.compress op is an AVX512 specific op that can lower to the llvm.mask.compress instruction. Instead of src, a constant vector vector attribute constant_src may be specified. If neither src nor constant_src is specified, the remaining elements in the result vector are set to zero.
+
+From the Intel Intrinsics Guide: ¶
+Contiguously store the active integer/floating-point elements in a (those with their respective bit set in writemask k) to dst, and pass through the remaining elements from src.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+constant_src	::mlir::ElementsAttr	constant vector/tensor attribute
+Operands: ¶
+Operand	Description
+k	vector of 1-bit signless integer values of length 16/8
+a	vector of 32-bit float or 32-bit signless integer or 64-bit float or 64-bit signless integer values of length 16/8
+src	vector of 32-bit float or 32-bit signless integer or 64-bit float or 64-bit signless integer values of length 16/8
+Results: ¶
+Result	Description
+dst	vector of 32-bit float or 32-bit signless integer or 64-bit float or 64-bit signless integer values of length 16/8

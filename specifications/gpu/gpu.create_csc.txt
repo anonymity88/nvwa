@@ -1,0 +1,33 @@
+gpu.create_csc (gpu::CreateCscOp) ¶
+Create sparse matrix in CSC format operation
+
+Syntax:
+
+operation ::= `gpu.create_csc` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $rows `,` $cols `,` $nnz `,` $colPos `,` $rowIdxs `,` $values attr-dict
+              `:` type($colPos) `,` type($rowIdxs) `,` type($values)
+The gpu.create_csc operation initializes a sparse matrix in CSC format with the given sizes from the given position, index, and values buffers. The buffers must already be copied from the host to the device prior to using this operation. The operation returns a handle to the sparse matrix descriptor.
+
+The CSC format has exactly the same memory layout as its transpose in CSR format (and vice versa).
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%spmat, %token = gpu.create_csc async [%dep] %rows, %cols, %nnz, %colPos,
+    %rowIdx, %values : memref<?xindex>, memref<?xindex>, memref<?xf64>
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+rows	index
+cols	index
+nnz	index
+colPos	memref of any type values
+rowIdxs	memref of any type values
+values	memref of any type values
+Results: ¶
+Result	Description
+spmat	sparse matrix handle type
+asyncToken	async token type

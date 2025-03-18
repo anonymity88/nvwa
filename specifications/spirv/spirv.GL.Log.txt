@@ -1,0 +1,27 @@
+spirv.GL.Log (spirv::GLLogOp) ¶
+Natural logarithm of the operand
+
+Syntax:
+
+operation ::= `spirv.GL.Log` $operand `:` type($operand) attr-dict
+Result is the natural logarithm of x, i.e., the value y which satisfies the equation x = ey. Result is undefined if x <= 0.
+
+The operand x must be a scalar or vector whose component type is 16-bit or 32-bit floating-point.
+
+Result Type and the type of x must be the same type. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.Log %0 : f32
+%3 = spirv.GL.Log %1 : vector<3xf16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	16/32-bit float or vector of 16/32-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	16/32-bit float or vector of 16/32-bit float values of length 2/3/4/8/16

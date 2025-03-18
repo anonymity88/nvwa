@@ -1,0 +1,43 @@
+linalg.index (linalg::IndexOp)
+Linalg index operation
+
+Syntax:
+
+operation ::= `linalg.index` $dim attr-dict `:` type($result)
+The linalg.index operation returns the iteration index of the immediately enclosing linalg structured operation for the iteration dimension dim. The dim attribute specifies the position of the accessed dimension in the indexing map domain.
+
+Example:
+
+#map = affine_map<(i, j) -> (i, j)>
+linalg.generic {indexing_maps = [#map, #map],
+                iterator_types = ["parallel", "parallel"]}
+  outs(%I, %J : memref<?x?xindex>, memref<?x?xindex>) {
+  ^bb0(%arg0 : index, %arg1 : index):
+  // Access the outer iteration dimension i
+  %i = linalg.index 0 : index
+  // Access the inner iteration dimension j
+  %j = linalg.index 1 : index
+  linalg.yield %i, %j : index, index
+}
+This may lower to IR resembling:
+
+%0 = dim %I, %c0 : memref<?x?xindex>
+%1 = dim %I, %c1 : memref<?x?xindex>
+scf.for %i = %c0 to %0 step %c1 {
+  scf.for %j = %c0 to %1 step %c1 {
+    store %i, %I[%i, %j] : memref<?x?xindex>
+    store %j, %J[%i, %j] : memref<?x?xindex>
+  }
+}
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes:
+Attribute	MLIR Type	Description
+dim	::mlir::IntegerAttr	64-bit signless integer attribute whose minimum value is 0
+Results:
+Result	Description
+result	index

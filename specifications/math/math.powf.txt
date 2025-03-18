@@ -1,0 +1,30 @@
+math.powf (math::PowFOp) ¶
+Floating point raised to the power of operation
+
+Syntax:
+
+operation ::= `math.powf` $lhs `,` $rhs (`fastmath` `` $fastmath^)?
+              attr-dict `:` type($result)
+The powf operation takes two operands of floating point type (i.e., scalar, tensor or vector) and returns one result of the same type. Operands must have the same type.
+
+Example:
+
+// Scalar exponentiation.
+%a = math.powf %b, %c : f64
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	floating-point-like
+rhs	floating-point-like
+Results: ¶
+Result	Description
+result	floating-point-like

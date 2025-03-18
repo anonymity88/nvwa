@@ -1,0 +1,14 @@
+linalg.batch_mmt4d (linalg::BatchMmt4DOp)
+Performs a batched matrix-matrix-transpose multiplication of two batched-4D (5D) inputs.
+
+Besides the outermost batch dimension has the same semantic as linalg.batch_matmul, the differences from linalg.batch_matmul in the non-batch dimensions are the same as linalg.mmt4d vs. linalg.matmul. See the description of lingalg.mmt4d. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgContractionOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

@@ -1,0 +1,7 @@
+arm_sve.intr.convert.from.svbool (arm_sve::ConvertFromSvboolIntrOp) ¶
+Operands: ¶
+Operand	Description
+svbool	vector<[16]xi1>
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,24 @@
+//===----------------------------------------------------------------------===//
+// RetvalCheckOp
+//===----------------------------------------------------------------------===//
+
+def MPI_ErrorClassOp : MPI_Op<"error_class", []> {
+  let summary = "Get the error class from an error code, equivalent to "
+                "the `MPI_Error_class` function";
+  let description = [{
+    `MPI_Error_class` maps return values from MPI calls to a set of well-known
+    MPI error classes.
+  }];
+
+  let arguments = (
+    ins MPI_Retval:$val
+  );
+
+  let results = (
+    outs MPI_Retval:$errclass
+  );
+
+  let assemblyFormat = "$val attr-dict `:` type($val)";
+}
+
+#endif // MPI_MLIR_IR_MPIOPS_TD

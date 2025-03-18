@@ -1,0 +1,17 @@
+vector.yield (vector::YieldOp) ¶
+Terminates and yields values from vector regions.
+
+Syntax:
+
+operation ::= `vector.yield` attr-dict ($operands^ `:` type($operands))?
+“vector.yield” yields an SSA value from the Vector dialect op region and terminates the regions. The semantics of how the values are yielded is defined by the parent operation. If “vector.yield” has any operands, the operands must correspond to the parent operation’s results. If the parent operation defines no value the vector.yield may be omitted when printing the region.
+
+Traits: AlwaysSpeculatableImplTrait, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

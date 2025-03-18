@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// Operator: conv3d
+//===----------------------------------------------------------------------===//
+def Tosa_Conv3DOp : Tosa_InferShapedTypeOp<"conv3d"> {
+  let summary = "3D Convolution operator";
+
+  let description = [{
+    Performs a 3D convolution over the given input tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor5D:$input,
+    TosaTensorRankOf<[Tosa_Weight], [5]>:$weight,
+    Tosa_Tensor1D:$bias,
+    Tosa_IntArrayAttr6:$pad,
+    Tosa_IntArrayAttr3:$stride,
+    Tosa_IntArrayAttr3:$dilation,
+    OptionalAttr<Tosa_ConvOpQuantizationAttr>:$quantization_info,
+    DefaultValuedOptionalAttr<BoolAttr, "false">:$local_bound
+  );
+
+  let results = (outs
+    Tosa_Tensor5D:$output
+  );
+
+  let builders = [Tosa_ConvOpQuantInfoBuilder];
+  let hasVerifier = 1;
+}
+

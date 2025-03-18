@@ -1,0 +1,25 @@
+index.and (index::AndOp) ¶
+Index bitwise and
+
+Syntax:
+
+operation ::= `index.and` $lhs `,` $rhs attr-dict
+The index.and operation takes two index values and computes their bitwise and.
+
+Example:
+
+// c = a & b
+%c = index.and %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

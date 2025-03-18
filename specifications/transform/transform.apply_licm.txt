@@ -1,0 +1,19 @@
+transform.apply_licm (transform::ApplyLoopInvariantCodeMotionOp) ¶
+Move loop-invariant code out of a loop-like op
+
+Syntax:
+
+operation ::= `transform.apply_licm` `to` $target attr-dict `:` type($target)
+This transform moves side-effect free, loop invariant code out of the targeted loop-like op. The targeted op must implement the LoopLikeOpInterface.
+
+Note: To move invariant ops from a loop nest, this transform must be applied to each loop of the loop nest, starting with the inner-most loop.
+
+This transform reads the target handle and modifies the payload.
+
+Traits: ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

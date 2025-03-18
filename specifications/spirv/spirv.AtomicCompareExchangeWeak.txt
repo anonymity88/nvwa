@@ -1,0 +1,33 @@
+spirv.AtomicCompareExchangeWeak (spirv::AtomicCompareExchangeWeakOp) ¶
+Deprecated (use OpAtomicCompareExchange).
+
+Syntax:
+
+operation ::= `spirv.AtomicCompareExchangeWeak` $memory_scope $equal_semantics $unequal_semantics operands attr-dict `:`
+              type($pointer)
+Has the same semantics as OpAtomicCompareExchange.
+
+Memory must be a valid memory Scope.
+
+Example: ¶
+%0 = spirv.AtomicCompareExchangeWeak <Workgroup> <Acquire> <None>
+                                   %pointer, %value, %comparator
+                                   : !spirv.ptr<i32, WorkGroup>
+Interfaces: InferTypeOpInterface, QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+memory_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+equal_semantics	::mlir::spirv::MemorySemanticsAttr	
+valid SPIR-V MemorySemantics
+unequal_semantics	::mlir::spirv::MemorySemanticsAttr	
+valid SPIR-V MemorySemantics
+Operands: ¶
+Operand	Description
+pointer	any SPIR-V pointer type
+value	8/16/32/64-bit integer
+comparator	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer

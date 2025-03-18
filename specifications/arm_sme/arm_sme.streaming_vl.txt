@@ -1,0 +1,32 @@
+arm_sme.streaming_vl (arm_sme::StreamingVLOp) ¶
+Query the streaming vector length
+
+Syntax:
+
+operation ::= `arm_sme.streaming_vl` $type_size attr-dict
+This operation returns the streaming vector length (SVL) for a given type size. Unlike vector.vscale the value returned is invariant to the streaming mode.
+
+Example:
+
+// Streaming vector length in:
+// - bytes (8-bit, SVL.B)
+%svl_b = arm_sme.streaming_vl <byte>
+// - half words (16-bit, SVL.H)
+%svl_h = arm_sme.streaming_vl <half>
+// - words (32-bit, SVL.W)
+%svl_w = arm_sme.streaming_vl <word>
+// - double words (64-bit, SVL.D)
+%svl_d = arm_sme.streaming_vl <double>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+type_size	::mlir::arm_sme::TypeSizeAttr	
+Size of a vector element type
+Results: ¶
+Result	Description
+«unnamed»	index

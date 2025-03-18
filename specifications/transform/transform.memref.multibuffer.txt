@@ -1,0 +1,25 @@
+transform.memref.multibuffer (transform::MemRefMultiBufferOp) ¶
+Multibuffers an allocation
+
+Syntax:
+
+operation ::= `transform.memref.multibuffer` $target attr-dict `:` functional-type(operands, results)
+Transformation to do multi-buffering/array expansion to remove dependencies on the temporary allocation between consecutive loop iterations. This transform expands the size of an allocation by a given multiplicative factor and fixes up any users of the multibuffered allocation. If skip analysis is not set the transformation will only apply if it can prove that there is no data being carried across loop iterations.
+
+Return modes ¶
+This operation returns the new allocation if multi-buffering succeeds, and failure otherwise.
+
+Traits: FunctionalStyleTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+factor	::mlir::IntegerAttr	64-bit signless integer attribute whose value is positive
+skip_analysis	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	Transform IR handle to memref.alloc operations
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

@@ -1,0 +1,13 @@
+gpu.terminator (gpu::TerminatorOp) ¶
+Terminator for GPU launch regions.
+
+Syntax:
+
+operation ::= `gpu.terminator` attr-dict
+A terminator operation for regions that appear in the body of gpu.launch operation. These regions are not expected to return any value so the terminator takes no operands.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<LaunchOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}

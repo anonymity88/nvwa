@@ -1,0 +1,27 @@
+tensor.from_elements (tensor::FromElementsOp) ¶
+Tensor from elements operation.
+
+Syntax:
+
+operation ::= `tensor.from_elements` $elements attr-dict `:` type($result)
+Create a N-D tensor from a range of same-type arguments. The number of provided elements should equal to the number of the elements in the result type. The elements correspond to a flattened tensor.
+
+Example:
+
+tensor.from_elements %a, %b, %c, %d, %e, %f :  tensor<2x3xindex>
+will result in a tensor
+
+[[%a, %b, %c] [%d, %e, %f]]
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+elements	variadic of any type
+Results: ¶
+Result	Description
+result	statically shaped tensor of any type values

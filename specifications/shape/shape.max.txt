@@ -1,0 +1,21 @@
+shape.max (shape::MaxOp) ¶
+Elementwise maximum
+
+Syntax:
+
+operation ::= `shape.max` $lhs `,` $rhs attr-dict `:` type($lhs) `,` type($rhs) `->` type($result)
+Computes the elementwise maximum of two sizes or shapes with equal ranks. If either operand is an error, then an error will be propagated to the result. If the input types mismatch or the ranks do not match, then the result is an error.
+
+Traits: AlwaysSpeculatableImplTrait, Commutative, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	shape or size
+rhs	shape or size
+Results: ¶
+Result	Description
+result	shape or size

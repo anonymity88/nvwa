@@ -1,0 +1,28 @@
+nvgpu.tma.async.load (nvgpu::TmaAsyncLoadOp) ¶
+TMA asynchronous load
+
+Syntax:
+
+operation ::= `nvgpu.tma.async.load` $tensorMapDescriptor `[` $coordinates `]` `,` $barriers `[` $mbarId `]`
+              `to` $dst
+              (`multicast_mask` `=` $multicastMask^ )?
+              (`,` `predicate` `=` $predicate^)?
+              attr-dict `:` type($tensorMapDescriptor) `,` type($barriers)
+              `->` type($dst)
+The Op loads a tile memory region from global memory to shared memory by Tensor Memory Access (TMA).
+
+$tensorMapDescriptor is tensor map descriptor which has information about tile shape. The descriptor is created by nvgpu.tma.create.descriptor
+
+The Op uses $barrier mbarrier based completion mechanism.
+
+Traits: AttrSizedOperandSegments
+
+Operands: ¶
+Operand	Description
+dst	memref of any type values
+barriers	mbarrier barrier type
+tensorMapDescriptor	TensorMap descriptor
+coordinates	variadic of index
+mbarId	index
+multicastMask	16-bit signless integer
+predicate	1-bit signless integer

@@ -1,0 +1,27 @@
+complex.re (complex::ReOp) ¶
+Extracts the real part of a complex number
+
+Syntax:
+
+operation ::= `complex.re` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The re op takes a single complex number and extracts the real part.
+
+Example:
+
+%a = complex.re %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+real	floating-point

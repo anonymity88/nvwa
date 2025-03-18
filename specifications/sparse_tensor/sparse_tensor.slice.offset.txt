@@ -1,0 +1,34 @@
+sparse_tensor.slice.offset (sparse_tensor::ToSliceOffsetOp) ¶
+Extracts the offset of the sparse tensor slice at the given dimension
+
+Syntax:
+
+operation ::= `sparse_tensor.slice.offset` $slice `at` $dim attr-dict `:` type($slice)
+Extracts the offset of the sparse tensor slice at the given dimension.
+
+Currently, sparse tensor slices are still a work in progress, and only works when runtime library is disabled (i.e., running the sparsifier with enable-runtime-library=false).
+
+Example:
+
+%0 = tensor.extract_slice %s[%v1, %v2][64, 64][1, 1] : tensor<128x128xf64, #DCSR>
+                                                    to tensor<64x64xf64, #Slice>
+
+%1 = sparse_tensor.slice.offset %0 at 0 : tensor<64x64xf64, #Slice>
+%2 = sparse_tensor.slice.offset %0 at 1 : tensor<64x64xf64, #Slice>
+// %1 = %v1
+// %2 = %v2
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dim	::mlir::IntegerAttr	index attribute
+Operands: ¶
+Operand	Description
+slice	sparse tensor slice of any type values
+Results: ¶
+Result	Description
+offset	index

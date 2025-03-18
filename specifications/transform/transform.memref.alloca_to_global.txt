@@ -1,0 +1,42 @@
+transform.memref.alloca_to_global (transform::MemRefAllocaToGlobalOp) ¶
+Syntax:
+
+operation ::= `transform.memref.alloca_to_global` $alloca attr-dict `:` functional-type(operands, results)
+Inserts a new memref.global for each provided memref.alloca into the nearest symbol table (e.g., a builtin.module) and replaces it with a memref.get_global. This is useful, for example, for allocations that should reside in the shared memory of a GPU, which have to be declared as globals.
+
+Example ¶
+Consider the following transform op:
+
+%get_global, %global =
+    transform.memref.alloca_to_global %alloca
+      : (!transform.op<"memref.alloca">)
+        -> (!transform.any_op, !transform.any_op)
+and the following input payload:
+
+module {
+  func.func @func() {
+    %alloca = memref.alloca() : memref<2x32xf32>
+    // usages of %alloca...
+  }
+}
+then applying the transform op to the payload would result in the following output IR:
+
+module {
+  memref.global "private" @alloc : memref<2x32xf32>
+  func.func @func() {
+    %alloca = memref.get_global @alloc : memref<2x32xf32>
+    // usages of %alloca...
+  }
+}
+Return modes ¶
+Succeeds always. The returned handles refer to the memref.get_global and memref.global ops that were inserted by the transformation.
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+alloca	Transform IR handle to memref.alloca operations
+Results: ¶
+Result	Description
+getGlobal	TransformHandleTypeInterface instance
+global	TransformHandleTypeInterface instance

@@ -1,0 +1,24 @@
+complex.create (complex::CreateOp) ¶
+Complex number creation operation
+
+Syntax:
+
+operation ::= `complex.create` $real `,` $imaginary attr-dict `:` type($complex)
+The complex.create operation creates a complex number from two floating-point operands, the real and the imaginary part.
+
+Example:
+
+%a = complex.create %b, %c : complex<f32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+real	floating-point
+imaginary	floating-point
+Results: ¶
+Result	Description
+complex	complex type with floating-point elements

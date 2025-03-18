@@ -1,0 +1,15 @@
+llvm.intr.dbg.declare (LLVM::DbgDeclareOp) ¶
+Describes how the address relates to a source language variable.
+
+Syntax:
+
+operation ::= `llvm.intr.dbg.declare` qualified($varInfo) (qualified($locationExpr)^)? `=` $addr `:` qualified(type($addr)) attr-dict
+Interfaces: PromotableOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+varInfo	::mlir::LLVM::DILocalVariableAttr	
+locationExpr	::mlir::LLVM::DIExpressionAttr	
+Operands: ¶
+Operand	Description
+addr	LLVM pointer type

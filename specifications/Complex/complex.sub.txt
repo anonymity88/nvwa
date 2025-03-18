@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// SubOp
+//===----------------------------------------------------------------------===//
+
+def SubOp : ComplexArithmeticOp<"sub"> {
+  let summary = "complex subtraction";
+  let description = [{
+    The `sub` operation takes two complex numbers and returns their difference.
+
+    Example:
+
+    ```mlir
+    %a = complex.sub %b, %c : complex<f32>
+    ```
+  }];
+
+  let hasFolder = 1;
+}
+

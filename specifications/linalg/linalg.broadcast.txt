@@ -1,0 +1,25 @@
+linalg.broadcast (linalg::BroadcastOp)
+Static broadcast operator
+
+Broadcast the input into the given shape by adding dimensions.
+
+Example:
+
+  %bcast = linalg.broadcast
+      ins(%input:tensor<16xf32>)
+      inits(%init:tensor<16x64xf32>)
+      dimensions = [1]
+Traits: SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+dimensions	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands:
+Operand	Description
+input	memref of any type values or ranked tensor of any type values
+init	memref of any type values or ranked tensor of any type values
+Results:
+Result	Description
+result	variadic of tensor of any type values

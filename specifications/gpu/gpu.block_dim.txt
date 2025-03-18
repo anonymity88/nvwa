@@ -1,0 +1,29 @@
+gpu.block_dim (gpu::BlockDimOp) ¶
+Syntax:
+
+operation ::= `gpu.block_dim` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the number of threads in the thread block (aka the block size) along the x, y, or z dimension.
+
+Example:
+
+%bDimX = gpu.block_dim x
+If known_block_size is set on an this operation’s enclosing gpu.func, or gpu.known_block_size is set on an enclosing FunctionOpInterface implementor, or if the enclosing gpu.launch specifies a constant size for dimension’s blocks, these contextual facts may be used to infer that this operation has a constant value, though such a transformation will not be performed by canonicalization or the default constant folder. Executions which cause that constant-value assumption to be false incur undefined behavior.
+
+If upper_bound is set, executions where the bblock size along dimension exceeds upper_bound cause undefined behavior.
+
+There is an implicit upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

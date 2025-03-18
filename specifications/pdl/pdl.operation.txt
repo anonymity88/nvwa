@@ -1,0 +1,70 @@
+pdl.operation (pdl::OperationOp) ¶
+Define an operation within a pattern
+
+Syntax:
+
+operation ::= `pdl.operation` ($opName^)? (`(` $operandValues^ `:` type($operandValues) `)`)?
+              custom<OperationOpAttributes>($attributeValues, $attributeValueNames)
+              (`->` `(` $typeValues^ `:` type($typeValues) `)`)? attr-dict
+pdl.operation operations define operation nodes within a pattern. Within a match sequence, i.e. when directly nested within a pdl.pattern, these operations correspond to input operations, or those that already existing within the MLIR module. Inside of a pdl.rewrite, these operations correspond to operations that should be created as part of the replacement sequence.
+
+pdl.operations are composed of a name, and a set of attribute, operand, and result type values, that map to what those that would be on a constructed instance of that operation. The results of a pdl.operation are a handle to the operation itself. Handles to the results of the operation can be extracted via pdl.result.
+
+Example:
+
+// Define an instance of a `foo.op` operation.
+%op = pdl.operation "foo.op"(%arg0, %arg1 : !pdl.value, !pdl.value)
+  {"attrA" = %attr0} -> (%type, %type : !pdl.type, !pdl.type)
+When used within a matching context, the name of the operation may be omitted.
+
+When used within a rewriting context, i.e. when defined within a pdl.rewrite, all of the result types must be “inferable”. This means that the type must be attributable to either a constant type value or the result type of another entity, such as an attribute, the result of a apply_native_rewrite, or the result type of another operation. If the result type value does not meet any of these criteria, the operation must override the InferTypeOpInterface to ensure that the result types can be inferred.
+
+The operands of the operation are interpreted in the following ways:
+
+A single !pdl.range:
+In this case, the single range is treated as all of the operands of the operation.
+
+// Define an instance with single range of operands.
+%op = pdl.operation "func.return"(%allArgs : !pdl.range<value>)
+A variadic number of either !pdl.value or !pdl.range:
+In this case, the inputs are expected to correspond with the operand groups defined on the operation in ODS.
+
+// Given the following operation definition in ODS:
+def MyIndirectCallOp {
+  let results = (outs FunctionType:$call, Variadic<AnyType>:$args);
+}
+// We can match the operands as so:
+%op = pdl.operation "my.indirect_call"(%call, %args : !pdl.value, !pdl.range<value>)
+The results of the operation are interpreted in the following ways:
+
+A single !pdl.range:
+In this case, the single range is treated as all of the result types of the operation.
+
+// Define an instance with single range of types.
+%allResultTypes = pdl.types
+%op = pdl.operation "builtin.unrealized_conversion_cast" -> (%allResultTypes : !pdl.types)
+A variadic number of either !pdl.type or !pdl.range:
+In this case, the inputs are expected to correspond with the result groups defined on the operation in ODS.
+
+// Given the following operation definition in ODS:
+def MyOp {
+  let results = (outs SomeType:$result, Variadic<SomeType>:$otherResults);
+}
+// We can match the results as so:
+%result = pdl.type
+%otherResults = pdl.types
+%op = pdl.operation "foo.op" -> (%result, %otherResults : !pdl.type, !pdl.range<type>)
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+opName	::mlir::StringAttr	string attribute
+attributeValueNames	::mlir::ArrayAttr	string array attribute
+Operands: ¶
+Operand	Description
+operandValues	variadic of single element or range of PDL handle for an mlir::Value
+attributeValues	variadic of PDL handle to an mlir::Attribute
+typeValues	variadic of single element or range of PDL handle to an mlir::Type
+Results: ¶
+Result	Description
+op	PDL handle to an mlir::Operation *

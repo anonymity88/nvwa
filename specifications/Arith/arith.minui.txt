@@ -1,0 +1,10 @@
+//===----------------------------------------------------------------------===//
+// MinUIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MinUIOp : Arith_TotalIntBinaryOp<"minui", [Commutative]> {
+  let summary = "unsigned integer minimum operation";
+  let hasFolder = 1;
+}
+
+

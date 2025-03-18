@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// LogOp
+//===----------------------------------------------------------------------===//
+
+def Math_LogOp : Math_FloatUnaryOp<"log"> {
+  let summary = "base-e logarithm of the specified value";
+
+  let description = [{
+    Computes the base-e logarithm of the given value. It takes one operand of
+    floating point type (i.e., scalar, tensor or vector) and returns one result of
+    the same type.
+
+    Example:
+
+    ```mlir
+    // Scalar log operation.
+    %y = math.log %x : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

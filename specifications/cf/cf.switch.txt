@@ -1,0 +1,43 @@
+cf.switch (cf::SwitchOp) ¶
+Switch operation
+
+Syntax:
+
+operation ::= `cf.switch` $flag `:` type($flag) `,` `[` `\n`
+              custom<SwitchOpCases>(ref(type($flag)),$defaultDestination,
+              $defaultOperands,
+              type($defaultOperands),
+              $case_values,
+              $caseDestinations,
+              $caseOperands,
+              type($caseOperands))
+              `]`
+              attr-dict
+The cf.switch terminator operation represents a switch on a signless integer value. If the flag matches one of the specified cases, then the corresponding destination is jumped to. If the flag does not match any of the cases, the default destination is jumped to. The count and types of operands must align with the arguments in the corresponding target blocks.
+
+Example:
+
+cf.switch %flag : i32, [
+  default: ^bb1(%a : i32),
+  42: ^bb1(%b : i32),
+  43: ^bb3(%c : i32)
+]
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, Terminator
+
+Interfaces: BranchOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+case_values	::mlir::DenseIntElementsAttr	integer elements attribute
+case_operand_segments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+Operands: ¶
+Operand	Description
+flag	integer
+defaultOperands	variadic of any type
+caseOperands	variadic of any type
+Successors: ¶
+Successor	Description
+defaultDestination	any successor
+caseDestinations	any successor

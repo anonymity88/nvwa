@@ -1,0 +1,7 @@
+transform.apply_conversion_patterns.scf.structural_conversions (transform::ApplySCFStructuralConversionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.scf.structural_conversions` attr-dict
+Collects patterns for performing structural conversions of SCF operations.
+
+Interfaces: ConversionPatternDescriptorOpInterface

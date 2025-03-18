@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// Operator: reverse
+//===----------------------------------------------------------------------===//
+def Tosa_ReverseOp: Tosa_Op<"reverse", [
+    DeclareOpInterfaceMethods<InferShapedTypeOpInterface,
+                              ["inferReturnTypeComponents"]>, Pure]> {
+  let summary = "Reverse operator";
+
+  let description = [{
+    Returns a tensor with the same type/values as the input, with the data
+    reversed along the given axis. No data conversion happens during a reverse
+    operation.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    I32Attr:$axis
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+
+  let assemblyFormat = "operands attr-dict `:` functional-type(operands, results)";
+}
+

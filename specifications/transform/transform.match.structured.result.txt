@@ -1,0 +1,32 @@
+transform.match.structured.result (transform::MatchStructuredResultOp) ¶
+Captures the result of a structured payload operation in an op or value handle
+
+Syntax:
+
+operation ::= `transform.match.structured.result` $operand_handle `[` $position `]` (`any` $any^)? (`single` $single^)?attr-dict `:` functional-type(operands, results)
+Produces a transform dialect value handle associated with the payload value defined as a result of the payload operation associated with the operand handle, or an operation handle to an operation using the produced result with additional constraints specified by the attributes as follows.
+
+If any is specified, binds the resulting handle to any operation using the result and succeeds.
+If single is specified, binds the resulting handle to the only operation using the result or fails if there is more than one (or no) such operation.
+The number of the result is specified as position attribute. It may take positive and negative values. Negative values are interpreted as counting results from backwards, e.g., -1 means the last result and -2 means the second-to-last result. In any case, the position must be in bounds for the given payload operation. A silenceable failure is produced for out-of-bounds positions.
+
+This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the position is in bounds and if the user operation could be found when requested. Produces a silenceable failure otherwise.
+
+Traits: SingleOpMatcher, StructuredPredicate
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+position	::mlir::IntegerAttr	64-bit signless integer attribute
+any	::mlir::UnitAttr	unit attribute
+single	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	transform operation or value handle

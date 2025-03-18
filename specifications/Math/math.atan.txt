@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// AtanOp
+//===----------------------------------------------------------------------===//
+
+def Math_AtanOp : Math_FloatUnaryOp<"atan">{
+  let summary = "arcus tangent of the given value";
+  let description = [{
+    The `atan` operation computes the arcus tangent of a given value.  It takes
+    one operand of floating point type (i.e., scalar, tensor or vector) and returns
+    one result of the same type. It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Arcus tangent of scalar value.
+    %a = math.atan %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

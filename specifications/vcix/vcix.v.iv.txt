@@ -1,0 +1,20 @@
+vcix.v.iv (vcix::BinaryImmOp) ¶
+Binary VCIX operation with an immediate second operand
+
+Binary VCIX operation with an immediate second operand.
+
+Correponds to:
+
+Mnemonic	funct6	vm	rs2	rs1	funct3	rd	Destination	Sources
+sf.vc.v.iv	0010–	0	vs2	simm	011	vd	vector vd	simm[4:0] vector vs2
+Attributes: ¶
+Attribute	MLIR Type	Description
+opcode	::mlir::Attribute	32-bit signless integer attribute or 64-bit signless integer attribute
+imm	::mlir::Attribute	32-bit signless integer attribute or 64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+vs2	LLVM dialect-compatible vector type
+vl	64-bit signless integer or 32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

@@ -1,0 +1,22 @@
+transform.debug.emit_remark_at (transform::DebugEmitRemarkAtOp) ¶
+Print a message as diagnostic remark attached to payload
+
+Syntax:
+
+operation ::= `transform.debug.emit_remark_at` $at `,` $message attr-dict `:` type($at)
+This operation emits a diagnostic remark with the given message at the location of each payload object associated with the argument. The argument may be an operation or a value handle.
+
+This operation always succeeds.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+message	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+at	any transform handle
+IRDL (extension) Transform Operations ¶
+source

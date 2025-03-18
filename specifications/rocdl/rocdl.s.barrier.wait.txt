@@ -1,0 +1,7 @@
+rocdl.s.barrier.wait (ROCDL::BarrierWaitOp) ¶
+Syntax:
+
+operation ::= `rocdl.s.barrier.wait` $id attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+id	::mlir::IntegerAttr	16-bit signless integer attribute

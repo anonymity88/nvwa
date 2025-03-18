@@ -1,0 +1,79 @@
+tensor.pad (tensor::PadOp) ¶
+Tensor pad operation
+
+Syntax:
+
+operation ::= `tensor.pad` $source
+              (`nofold` $nofold^)?
+              `low` `` custom<DynamicIndexList>($low, $static_low)
+              `high` `` custom<DynamicIndexList>($high, $static_high)
+              $region attr-dict `:` type($source) `to` type($result)
+tensor.pad is an operation that pads the source tensor with given low and high padding config.
+
+The PadOp operation supports the following arguments:
+
+source: the “base” tensor on which to pad.
+low: A list contains the padding along the start of each dimension, i.e., how many padded values are prepended to the beginning of the tensor in each dimension.
+high: A list contains the padding along the end of each dimension, i.e., how many padded values are appended to the end of the tensor in each dimension.
+nofold: indicates that the operation should not be folded when source and result types are equal.
+The result tensor dimensions are low[i] + dim[i] + high[i] for each dimension i. The number of elements of low and high must match the rank of the input tensor. They can be either a constant or a dynamic value.
+
+The region of the tensor.pad operation returns the value to use for the padding. The arguments of the region represent the index of the source being accessed. There should be as many arguments as the rank of the source tensor. The value yield-ed by the region is used as the value of the view at the given position.
+
+If nofold is set, the padding operation will not be folded away even if the source type and the padded type have the same static shape. This can be used, e.g., for packing or promotion to faster memory.
+
+Example 1: add 3 zeros to the beginning and 5 zeros to the end of a 1D tensor.
+
+  %arg0 = ... : tensor<10xi32>
+  %c0_i32 = arith.constant 0 : i32
+  %padded = tensor.pad %arg0 low[3] high[5] {
+  ^bb0(%arg1: index):
+    tensor.yield %c0_i32 : i32
+  } : tensor<10xi32> to tensor<18xi32>
+Example 2: add 1 value to the beginning of dimension 0, 2 values to the end of dimension 0, 2 values to the start of dimension 1, and 3 values to the end of dimension 1.
+
+  %pad_value = ... : f32
+  %0 = tensor.pad %0 low[1, 2] high[2, 3] {
+  ^bb0(%arg0 : index, %arg1 : index):
+    tensor.yield %pad_value : f32
+  } : tensor<?x?xf32> to tensor<?x?xf32>
+Example 3:
+
+  %pad_value = ... : f32
+  %0 = tensor.pad %arg0 low[2, %arg1, 3, 3] high[3, 3, %arg1, 2] {
+  ^bb0(%arg2: index, %arg3: index, %arg4: index, %arg5: index):
+      tensor.yield %pad_value : f32
+  } : tensor<1x2x2x?xf32> to tensor<6x?x?x?xf32>
+Example 4:
+
+  %pad_value = ... : f32
+  %0 = tensor.pad %arg0 low[0, 0] high[%ub0, %ub1] {
+  ^bb0(%arg1: index, %arg2: index):
+    tensor.yield %pad_value : f32
+  } : tensor<2x3xf32> to tensor<?x?xf32>
+Example 5: Force a padded value to be always exist with nofold, even though the padding config specifies that no new elements will be added to the tensor.
+
+  %pad_value = ... : f32
+  %0 = tensor.pad %arg0 nofold low[0, 0] high[0, 0] {
+  ^bb0(%arg1: index, %arg2: index):
+    tensor.yield %pad_value : f32
+  } : tensor<2x3xf32> to tensor<2x3xf32>
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, SingleBlockImplicitTerminator<mlir::tensor::YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+static_low	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+static_high	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+nofold	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+source	ranked tensor of any type values
+low	variadic of index
+high	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

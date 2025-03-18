@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// CeilOp
+//===----------------------------------------------------------------------===//
+
+def Math_CeilOp : Math_FloatUnaryOp<"ceil"> {
+  let summary = "ceiling of the specified value";
+  let description = [{
+    The `ceil` operation computes the ceiling of a given value. It takes one
+    operand of floating point type (i.e., scalar, tensor or vector) and returns one
+    result of the same type.  It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar ceiling value.
+    %a = math.ceil %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

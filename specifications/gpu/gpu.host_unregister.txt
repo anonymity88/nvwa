@@ -1,0 +1,13 @@
+gpu.host_unregister (gpu::HostUnregisterOp) ¶
+Unregisters a memref for access from device.
+
+Syntax:
+
+operation ::= `gpu.host_unregister` $value attr-dict `:` type($value)
+This op unmaps the provided host buffer from the device address space.
+
+This operation may not be supported in every environment, there is not yet a way to check at runtime whether this feature is supported.
+
+Operands: ¶
+Operand	Description
+value	unranked.memref of any type values

@@ -1,0 +1,43 @@
+vector.load (vector::LoadOp) ¶
+Reads an n-D slice of memory into an n-D vector
+
+Syntax:
+
+operation ::= `vector.load` $base `[` $indices `]` attr-dict `:` type($base) `,` type($result)
+The ‘vector.load’ operation reads an n-D slice of memory into an n-D vector. It takes a ‘base’ memref, an index for each memref dimension and a result vector type as arguments. It returns a value of the result vector type. The ‘base’ memref and indices determine the start memory address from which to read. Each index provides an offset for each memref dimension based on the element type of the memref. The shape of the result vector type determines the shape of the slice read from the start memory address. The elements along each dimension of the slice are strided by the memref strides. When loading more than 1 element, only unit strides are allowed along the most minor memref dimension. These constraints guarantee that elements read along the first dimension of the slice are contiguous in memory.
+
+The memref element type can be a scalar or a vector type. If the memref element type is a scalar, it should match the element type of the result vector. If the memref element type is vector, it should match the result vector type.
+
+Example: 0-D vector load on a scalar memref.
+
+%result = vector.load %base[%i, %j] : memref<100x100xf32>, vector<f32>
+Example: 1-D vector load on a scalar memref.
+
+%result = vector.load %base[%i, %j] : memref<100x100xf32>, vector<8xf32>
+Example: 1-D vector load on a vector memref.
+
+%result = vector.load %memref[%i, %j] : memref<200x100xvector<8xf32>>, vector<8xf32>
+Example: 2-D vector load on a scalar memref.
+
+%result = vector.load %memref[%i, %j] : memref<200x100xf32>, vector<4x8xf32>
+Example: 2-D vector load on a vector memref.
+
+%result = vector.load %memref[%i, %j] : memref<200x100xvector<4x8xf32>>, vector<4x8xf32>
+Representation-wise, the ‘vector.load’ operation permits out-of-bounds reads. Support and implementation of out-of-bounds vector loads is target-specific. No assumptions should be made on the value of elements loaded out of bounds. Not all targets may support out-of-bounds vector loads.
+
+Example: Potential out-of-bound vector load.
+
+%result = vector.load %memref[%index] : memref<?xf32>, vector<8xf32>
+Example: Explicit out-of-bound vector load.
+
+%result = vector.load %memref[%c0] : memref<7xf32>, vector<8xf32>
+Attributes: ¶
+Attribute	MLIR Type	Description
+nontemporal	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+base	memref of any type values
+indices	variadic of index
+Results: ¶
+Result	Description
+result	vector of any type values

@@ -1,0 +1,23 @@
+emitc.return (emitc::ReturnOp) ¶
+Function return operation
+
+Syntax:
+
+operation ::= `emitc.return` attr-dict ($operand^ `:` type($operand))?
+The emitc.return operation represents a return operation within a function. The operation takes zero or exactly one operand and produces no results. The operand number and type must match the signature of the function that contains the operation.
+
+Example:
+
+emitc.func @foo() : (i32) {
+  ...
+  emitc.return %0 : i32
+}
+Traits: AlwaysSpeculatableImplTrait, HasParent<FuncOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	type supported by EmitC

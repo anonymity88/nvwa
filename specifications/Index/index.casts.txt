@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// CastSOp
+//===----------------------------------------------------------------------===//
+
+def Index_CastSOp : IndexOp<"casts", [Pure,
+    DeclareOpInterfaceMethods<CastOpInterface>]> {
+  let summary = "index signed cast";
+  let description = [{
+    The `index.casts` operation enables conversions between values of index type
+    and concrete fixed-width integer types. If casting to a wider integer, the
+    value is sign-extended. If casting to a narrower integer, the value is
+    truncated.
+
+    Example:
+
+    ```mlir
+    // Cast to i32
+    %0 = index.casts %a : index to i32
+
+    // Cast from i64
+    %1 = index.casts %b : i64 to index
+    ```
+  }];
+
+  let arguments = (ins AnyTypeOf<[AnyInteger, Index]>:$input);
+  let results = (outs AnyTypeOf<[AnyInteger, Index]>:$output);
+  let assemblyFormat = "$input attr-dict `:` type($input) `to` type($output)";
+  let hasFolder = 1;
+}
+

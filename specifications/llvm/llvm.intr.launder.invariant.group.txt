@@ -1,0 +1,14 @@
+llvm.intr.launder.invariant.group (LLVM::LaunderInvariantGroupOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.launder.invariant.group` $ptr attr-dict `:` qualified(type($ptr))
+Traits: SameOperandsAndResultType
+
+Interfaces: InferTypeOpInterface, PromotableOpInterface
+
+Operands: ¶
+Operand	Description
+ptr	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM pointer type

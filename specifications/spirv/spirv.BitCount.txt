@@ -1,0 +1,29 @@
+spirv.BitCount (spirv::BitCountOp) ¶
+Count the number of set bits in an object.
+
+Syntax:
+
+operation ::= `spirv.BitCount` $operand `:` type($operand) attr-dict
+Results are computed per component.
+
+Result Type must be a scalar or vector of integer type. The components must be wide enough to hold the unsigned Width of Base as an unsigned value. That is, no sign bit is needed or counted when checking for a wide enough result width.
+
+Base must be a scalar or vector of integer type. It must have the same number of components as Result Type.
+
+The result is the unsigned value that is the number of bits in Base that are 1.
+
+Example: ¶
+%2 = spirv.BitCount %0: i32
+%3 = spirv.BitCount %1: vector<4xi32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

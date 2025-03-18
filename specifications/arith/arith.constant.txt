@@ -1,0 +1,51 @@
+//===----------------------------------------------------------------------===//
+// ConstantOp
+//===----------------------------------------------------------------------===//
+
+def Arith_ConstantOp : Op<Arith_Dialect, "constant",
+    [ConstantLike, Pure,
+     DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+     AllTypesMatch<["value", "result"]>,
+     DeclareOpInterfaceMethods<InferIntRangeInterface>]> {
+  let summary = "integer or floating point constant";
+  let description = [{
+    The `constant` operation produces an SSA value equal to some integer or
+    floating-point constant specified by an attribute. This is the way MLIR
+    forms simple integer and floating point constants.
+
+    Example:
+
+    ```
+    // Integer constant
+    %1 = arith.constant 42 : i32
+
+    // Equivalent generic form
+    %1 = "arith.constant"() {value = 42 : i32} : () -> i32
+    ```
+  }];
+
+  let arguments = (ins TypedAttrInterface:$value);
+  // TODO: Disallow arith.constant to return anything other than a signless
+  // integer or float like. Downstream users of Arith should only be
+  // working with signless integers, floats, or vectors/tensors thereof.
+  // However, it is necessary to allow arith.constant to return vectors/tensors
+  // of strings and signed/unsigned integers (for now) as an artefact of
+  // splitting the Standard dialect.
+  let results = (outs /*SignlessIntegerOrFloatLike*/AnyType:$result);
+
+  let extraClassDeclaration = [{
+    /// Whether the constant op can be constructed with a particular value and
+    /// type.
+    static bool isBuildableWith(Attribute value, Type type);
+
+    /// Build the constant op with `value` and `type` if possible, otherwise
+    /// returns null.
+    static ConstantOp materialize(OpBuilder &builder, Attribute value,
+                                  Type type, Location loc);
+  }];
+
+  let hasFolder = 1;
+  let assemblyFormat = "attr-dict $value";
+  let hasVerifier = 1;
+}
+

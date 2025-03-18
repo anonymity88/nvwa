@@ -1,0 +1,13 @@
+async.runtime.num_worker_threads (async::RuntimeNumWorkerThreadsOp) ¶
+Gets the number of threads in the threadpool from the runtime
+
+Syntax:
+
+operation ::= `async.runtime.num_worker_threads` attr-dict `:` type($result)
+The async.runtime.num_worker_threads operation gets the number of threads in the threadpool from the runtime.
+
+Interfaces: InferTypeOpInterface
+
+Results: ¶
+Result	Description
+result	index

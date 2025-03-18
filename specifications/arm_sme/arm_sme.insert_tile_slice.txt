@@ -1,0 +1,35 @@
+arm_sme.insert_tile_slice (arm_sme::InsertTileSliceOp) ¶
+Insert 1-D scalable vector into slice of 2-D tile
+
+Syntax:
+
+operation ::= `arm_sme.insert_tile_slice` $vector `,` $tile `[` $tile_slice_index `]` (`layout` `` $layout^)?
+              attr-dict `:` type($vector) `into` type($result)
+Inserts a 1-D scalable vector into a slice of a 2-D scalable vector tile at the given index. The type of the 1-D scalable vector to be inserted must match the type of the tile slice. A tile slice is a 1-D vector of horizontally or vertically contiguous elements within a ZA tile. The updated tile is returned as the result.
+
+An optional tile slice layout attribute specifies whether the tile slice is horizontal (default) or vertical.
+
+Example 1: Insert vector<[16]xi8> into tile horizontally at the given index.
+
+%tile_update = arm_sme.insert_tile_slice %vector, %tile[%tile_slice_index] : vector<[16]xi8> into vector<[16]x[16]xi8>
+Example 2: Insert vector<[2]xf64> into tile vertically at the given index.
+
+%tile_update = arm_sme.insert_tile_slice %vector, %tile[%tile_slice_index] layout<vertical> : vector<[2]xf64> into vector<[2]x[2]xf64>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+layout	::mlir::arm_sme::TileSliceLayoutAttr	
+Layout of a tile slice
+Operands: ¶
+Operand	Description
+vector	a vector type that matches the size of a SVE vector
+tile	a vector type that fits into a SME tile
+tile_slice_index	index
+Results: ¶
+Result	Description
+result	a vector type that fits into a SME tile

@@ -1,0 +1,39 @@
+memref.reshape (memref::ReshapeOp) ¶
+Memref reshape operation
+
+Syntax:
+
+operation ::= `memref.reshape` $source `(` $shape `)` attr-dict `:` functional-type(operands, results)
+The reshape operation converts a memref from one type to an equivalent type with a provided shape. The data is never copied or modified. The source and destination types are compatible if both have the same element type, same number of elements, address space and identity layout map. The following combinations are possible:
+
+a. Source type is ranked or unranked. Shape argument has static size. Result type is ranked.
+
+// Reshape statically-shaped memref.
+%dst = memref.reshape %src(%shape)
+         : (memref<4x1xf32>, memref<1xi32>) to memref<4xf32>
+%dst0 = memref.reshape %src(%shape0)
+         : (memref<4x1xf32>, memref<2xi32>) to memref<2x2xf32>
+// Flatten unranked memref.
+%dst = memref.reshape %src(%shape)
+         : (memref<*xf32>, memref<1xi32>) to memref<?xf32>
+b. Source type is ranked or unranked. Shape argument has dynamic size. Result type is unranked.
+
+// Reshape dynamically-shaped 1D memref.
+%dst = memref.reshape %src(%shape)
+         : (memref<?xf32>, memref<?xi32>) to memref<*xf32>
+// Reshape unranked memref.
+%dst = memref.reshape %src(%shape)
+         : (memref<*xf32>, memref<?xi32>) to memref<*xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	ranked or unranked memref of any type values
+shape	1D memref of signless integer or index values
+Results: ¶
+Result	Description
+result	ranked or unranked memref of any type values

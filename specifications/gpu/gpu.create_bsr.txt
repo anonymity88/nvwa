@@ -1,0 +1,37 @@
+gpu.create_bsr (gpu::CreateBsrOp) ¶
+Create sparse matrix in BSR format operation
+
+Syntax:
+
+operation ::= `gpu.create_bsr` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $brows `,` $bcols `,` $bnnz `,` $rBlockSize `,` $cBlockSize `,`
+              $bRowPos `,` $bColIdxs `,` $values attr-dict
+              `:` type($bRowPos) `,` type($bColIdxs) `,` type($values)
+The gpu.create_bsr operation initializes a sparse matrix in BSR format with the given sizes for the matrix and blocks from the given position, index, and values buffers. The buffers must already be copied from the host to the device prior to using this operation. The operation returns a handle to the sparse matrix descriptor.
+
+The BSR format is similar to CSR, where the column indices represent two-dimensional blocks instead of a single matrix entry. Note that this operation (currently) only supports storage with square blocks, i.e., rBlockSize == cBlockSize.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%spmat, %token = gpu.create_bsr async [%dep]
+   %brows, %bcols, %bnnz, %rBlockSize, %cBlockSize,
+   %bRowPos, %bColIdxs, %values : memref<?xindex>, memref<?xindex>, memref<?xf64>
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+brows	index
+bcols	index
+bnnz	index
+rBlockSize	index
+cBlockSize	index
+bRowPos	memref of any type values
+bColIdxs	memref of any type values
+values	memref of any type values
+Results: ¶
+Result	Description
+spmat	sparse matrix handle type
+asyncToken	async token type

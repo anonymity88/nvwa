@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// Operator: clz
+//===----------------------------------------------------------------------===//
+def Tosa_ClzOp : Tosa_ElementwiseOp<"clz", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise count leading zero op";
+
+  let description = [{
+    Elementwise count leading zeros operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

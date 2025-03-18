@@ -1,0 +1,22 @@
+async.add_to_group (async::AddToGroupOp) ¶
+Adds and async token or value to the group
+
+Syntax:
+
+operation ::= `async.add_to_group` $operand `,` $group `:` type($operand) attr-dict
+The async.add_to_group adds an async token or value to the async group. Returns the rank of the added element in the group. This rank is fixed for the group lifetime.
+
+Example:
+
+%0 = async.create_group %size : !async.group
+%1 = ... : !async.token
+%2 = async.add_to_group %1, %0 : !async.token
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+operand	async value type or async token type
+group	async group type
+Results: ¶
+Result	Description
+rank	index

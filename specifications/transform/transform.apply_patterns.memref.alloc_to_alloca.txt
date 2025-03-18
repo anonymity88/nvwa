@@ -1,0 +1,13 @@
+transform.apply_patterns.memref.alloc_to_alloca (transform::ApplyAllocToAllocaOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.memref.alloc_to_alloca` (`size_limit` `(` $size_limit^ `)`)? attr-dict
+Collects patterns to rewrite scoped dynamic allocation (alloc/dealloc pairs) into automatic allocation (alloca) in the same scope, for memrefs of static shape.
+
+The size_limit attribute controls the maximum allocated memory (in bytes, subject to data layout) for which the pattern applies.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+size_limit	::mlir::IntegerAttr	64-bit signless integer attribute

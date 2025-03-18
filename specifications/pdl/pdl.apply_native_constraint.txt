@@ -1,0 +1,26 @@
+pdl.apply_native_constraint (pdl::ApplyNativeConstraintOp) ¶
+Apply a native constraint to a set of provided entities
+
+Syntax:
+
+operation ::= `pdl.apply_native_constraint` $name `(` $args `:` type($args) `)` (`:`  type($results)^ )? attr-dict
+pdl.apply_native_constraint operations apply a native C++ constraint, that has been registered externally with the consumer of PDL, to a given set of entities and optionally return a number of values.
+
+Example:
+
+// Apply `myConstraint` to the entities defined by `input`, `attr`, and `op`.
+pdl.apply_native_constraint "myConstraint"(%input, %attr, %op : !pdl.value, !pdl.attribute, !pdl.operation)
+// Apply constraint `with_result` to `root`. This constraint returns an attribute.
+%attr = pdl.apply_native_constraint "with_result"(%root : !pdl.operation) : !pdl.attribute
+Traits: HasParent<pdl::PatternOp>
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+isNegated	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+args	variadic of pdl type
+Results: ¶
+Result	Description
+results	variadic of pdl type

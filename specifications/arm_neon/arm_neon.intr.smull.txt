@@ -1,0 +1,23 @@
+arm_neon.intr.smull (arm_neon::SMullOp) ¶
+Smull roundscale op
+
+Syntax:
+
+operation ::= `arm_neon.intr.smull` $a `,` $b attr-dict `:` type($a) `to` type($res)
+Signed Multiply Long (vector). This instruction multiplies corresponding signed integer values in the lower or upper half of the vectors of the two source SIMD&FP registers, places the results in a vector, and writes the vector to the destination SIMD&FP register.
+
+Source: https://developer.arm.com/architectures/instruction-sets/simd-isas/neon/intrinsics
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 8-bit signless integer or 16-bit signless integer or 32-bit signless integer values of length 8/4/2
+b	vector of 8-bit signless integer or 16-bit signless integer or 32-bit signless integer values of length 8/4/2
+Results: ¶
+Result	Description
+res	vector of 16-bit signless integer or 32-bit signless integer or 64-bit signless integer values of length 8/4/2

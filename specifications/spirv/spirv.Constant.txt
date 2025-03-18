@@ -1,0 +1,32 @@
+spirv.Constant (spirv::ConstantOp) ¶
+Declare a new integer-type or floating-point-type scalar constant.
+
+This op declares a SPIR-V normal constant. SPIR-V has multiple constant instructions covering different constant types:
+
+OpConstantTrue and OpConstantFalse for boolean constants
+OpConstant for scalar constants
+OpConstantComposite for composite constants
+OpConstantNull for null constants
+…
+Having such a plethora of constant instructions renders IR transformations more tedious. Therefore, we use a single spirv.Constant op to represent them all. Note that conversion between those SPIR-V constant instructions and this op is purely mechanical; so it can be scoped to the binary (de)serialization process.
+
+spirv.Constant-op ::= ssa-id `=` `spirv.Constant` attribute-value
+                    (`:` spirv-type)?
+Example: ¶
+%0 = spirv.Constant true
+%1 = spirv.Constant dense<[2, 3]> : vector<2xf32>
+%2 = spirv.Constant [dense<3.0> : vector<2xf32>] : !spirv.array<1xvector<2xf32>>
+TODO: support constant structs
+
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	any attribute
+Results: ¶
+Result	Description
+constant	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

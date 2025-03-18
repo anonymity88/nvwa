@@ -1,0 +1,27 @@
+pdl_interp.extract (pdl_interp::ExtractOp) ¶
+Extract the item at the specified index in a range
+
+Syntax:
+
+operation ::= `pdl_interp.extract` $index `of` $range `:` type($result) attr-dict
+pdl_interp.extract operations are used to extract an item from a range at the specified index. If the index is out of range, returns null.
+
+Example:
+
+// Extract the value at index 1 from a range of values.
+%ops = pdl_interp.extract 1 of %values : !pdl.value
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+index	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative
+Operands: ¶
+Operand	Description
+range	range of pdl type values
+Results: ¶
+Result	Description
+result	pdl type

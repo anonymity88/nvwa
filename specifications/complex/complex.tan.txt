@@ -1,0 +1,27 @@
+complex.tan (complex::TanOp) ¶
+Computes tangent of a complex number
+
+Syntax:
+
+operation ::= `complex.tan` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The tan op takes a single complex number and computes the tangent of it, i.e. tan(x), where x is the input value.
+
+Example:
+
+%a = complex.tan %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

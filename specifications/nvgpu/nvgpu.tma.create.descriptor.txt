@@ -1,0 +1,21 @@
+nvgpu.tma.create.descriptor (nvgpu::TmaCreateDescriptorOp) ¶
+TMA create descriptor
+
+Syntax:
+
+operation ::= `nvgpu.tma.create.descriptor` $tensor `box` `[` $boxDimensions `]` attr-dict `:` type($tensor) `->` type($tensorMap)
+The Op creates a tensor map descriptor object representing tiled memory region. To do that it calls CUDA Driver’s cuTensorMapEncodeTiled. The descriptor is used by Tensor Memory Access (TMA).
+
+The tensor is the source tensor to be tiled.
+
+The boxDimensions is the size of the tiled memory region in each dimension.
+
+For more information see below: https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__TENSOR__MEMORY.html
+
+Operands: ¶
+Operand	Description
+tensor	unranked.memref of any type values
+boxDimensions	variadic of index
+Results: ¶
+Result	Description
+tensorMap	TensorMap descriptor

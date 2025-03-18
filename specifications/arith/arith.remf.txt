@@ -1,0 +1,9 @@
+//===----------------------------------------------------------------------===//
+// RemFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_RemFOp : Arith_FloatBinaryOp<"remf"> {
+  let summary = "floating point division remainder operation";
+  let hasFolder = 1;
+}
+

@@ -1,0 +1,28 @@
+sparse_tensor.storage_specifier.set (sparse_tensor::SetStorageSpecifierOp) ¶
+Syntax:
+
+operation ::= `sparse_tensor.storage_specifier.set` $specifier $specifierKind (`at` $level^)? `with` $value attr-dict `:` qualified(type($result))
+Set the field of the storage specifier to the given input value. Returns the updated storage_specifier as a new SSA value.
+
+Example of updating the sizes of the coordinates array for level 0:
+
+%0 = sparse_tensor.storage_specifier.set %arg0 crd_mem_sz at 0 with %new_sz
+   : !sparse_tensor.storage_specifier<#COO>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+specifierKind	::mlir::sparse_tensor::StorageSpecifierKindAttr	
+sparse tensor storage specifier kind
+level	::mlir::IntegerAttr	level attribute
+Operands: ¶
+Operand	Description
+specifier	metadata
+value	index
+Results: ¶
+Result	Description
+result	metadata

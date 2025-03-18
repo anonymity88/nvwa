@@ -1,0 +1,23 @@
+gpu.subgroup_id (gpu::SubgroupIdOp) ¶
+Syntax:
+
+operation ::= `gpu.subgroup_id` (`upper_bound` $upper_bound^)? attr-dict `:` type($result)
+Returns the subgroup id, i.e., the index of the current subgroup within the workgroup.
+
+Example:
+
+%sgId = gpu.subgroup_id : index
+Executions where there are more than upper_bound subgroups per workgroup cause undefined behavior. There is an implicit upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+result	index

@@ -1,0 +1,22 @@
+spirv.Undef (spirv::UndefOp) ¶
+Make an intermediate object whose value is undefined.
+
+Syntax:
+
+operation ::= `spirv.Undef` attr-dict `:` type($result)
+Result Type is the type of object to make.
+
+Each consumption of Result yields an arbitrary, possibly different bit pattern or abstract value resulting in possibly different concrete, abstract, or opaque values.
+
+Example: ¶
+%0 = spirv.Undef : f32
+%1 = spirv.Undef : !spirv.struct<!spirv.array<4 x vector<4xi32>>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+result	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

@@ -1,0 +1,20 @@
+llvm.intr.expect.with.probability (LLVM::ExpectWithProbabilityOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.expect.with.probability` $val `,` $expected `,` $prob attr-dict `:` type($val)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+prob	::mlir::FloatAttr	64-bit float attribute
+Operands: ¶
+Operand	Description
+val	signless integer
+expected	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

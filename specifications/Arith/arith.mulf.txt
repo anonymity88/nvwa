@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+// MulFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MulFOp : Arith_FloatBinaryOp<"mulf", [Commutative]> {
+  let summary = "floating point multiplication operation";
+  let description = [{
+    The `mulf` operation takes two operands and returns one result, each of
+    these is required to be the same type. This type may be a floating point
+    scalar type, a vector whose element type is a floating point type, or a
+    floating point tensor.
+
+    Example:
+
+    ```mlir
+    // Scalar multiplication.
+    %a = arith.mulf %b, %c : f64
+
+    // SIMD pointwise vector multiplication, e.g. for Intel SSE.
+    %f = arith.mulf %g, %h : vector<4xf32>
+
+    // Tensor pointwise multiplication.
+    %x = arith.mulf %y, %z : tensor<4x?xbf16>
+    ```
+
+    TODO: In the distant future, this will accept optional attributes for fast
+    math, contraction, rounding mode, and other controls.
+  }];
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

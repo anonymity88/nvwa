@@ -1,0 +1,13 @@
+spirv.mlir.merge (spirv::MergeOp) ¶
+A special terminator for merging a structured selection/loop.
+
+Syntax:
+
+operation ::= `spirv.mlir.merge` attr-dict
+We use spirv.mlir.selection/spirv.mlir.loop for modelling structured selection/loop. This op is a terminator used inside their regions to mean jumping to the merge point, which is the next op following the spirv.mlir.selection or spirv.mlir.loop op. This op does not have a corresponding instruction in the SPIR-V binary format; it’s solely for structural purpose.
+
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}

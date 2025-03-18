@@ -1,0 +1,15 @@
+omp.critical (omp::CriticalOp) ¶
+Critical construct
+
+Syntax:
+
+operation ::= `omp.critical` (`(` $name^ `)`)? $region attr-dict
+The critical construct imposes a restriction on the associated structured block (region) to be executed by only a single thread at a time.
+
+The optional name argument of critical constructs is used to identify them. Unnamed critical constructs behave as though an identical name was specified.
+
+Interfaces: SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::FlatSymbolRefAttr	flat symbol reference attribute

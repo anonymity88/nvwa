@@ -1,0 +1,14 @@
+linalg.fill (linalg::FillOp)
+Fills the output tensor with the given value.
+
+Works for arbitrary ranked output tensors since the operation performs scalar accesses only and is thus rank polymorphic. Numeric casting is performed on the value operand, promoting it to the same data type as the output. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgFillOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

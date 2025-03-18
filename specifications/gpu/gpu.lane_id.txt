@@ -1,0 +1,23 @@
+gpu.lane_id (gpu::LaneIdOp) ¶
+Syntax:
+
+operation ::= `gpu.lane_id` (`upper_bound` $upper_bound^)? attr-dict
+Returns the lane id within the subgroup (warp/wave).
+
+Example:
+
+%laneId = gpu.lane_id
+If upper_bound is set, executions with more than upper_bound lanes per subgroup cause undefined behavior. In the abscence of upper_bound, the lane id is still assumed to be non-negative and less than the target-independent kMaxSubgroupSize (currently 128).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+result	index

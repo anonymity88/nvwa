@@ -1,0 +1,26 @@
+spirv.BitwiseAnd (spirv::BitwiseAndOp) ¶
+Result is 1 if both Operand 1 and Operand 2 are 1. Result is 0 if either Operand 1 or Operand 2 are 0.
+
+Syntax:
+
+operation ::= `spirv.BitwiseAnd` operands attr-dict `:` type($result)
+Results are computed per component, and within each component, per bit.
+
+Result Type must be a scalar or vector of integer type. The type of Operand 1 and Operand 2 must be a scalar or vector of integer type. They must have the same number of components as Result Type. They must have the same component width as Result Type.
+
+Example: ¶
+%2 = spirv.BitwiseAnd %0, %1 : i32
+%2 = spirv.BitwiseAnd %0, %1 : vector<4xi32>
+Traits: AlwaysSpeculatableImplTrait, Commutative, SameOperandsAndResultType, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+operand2	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

@@ -1,0 +1,27 @@
+pdl_interp.switch_operation_name (pdl_interp::SwitchOperationNameOp) ¶
+Switch on the OperationName of an Operation
+
+Syntax:
+
+operation ::= `pdl_interp.switch_operation_name` `of` $inputOp `to` $caseValues `(` $cases `)` attr-dict `->` $defaultDest
+pdl_interp.switch_operation_name operations compare the name of a given operation with a set of known names. If the value matches one of the provided case values the destination for that case value is taken, otherwise the default destination is taken.
+
+Example:
+
+pdl_interp.switch_operation_name of %op to ["foo.op", "bar.op"](^fooDest, ^barDest) -> ^defaultDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+caseValues	::mlir::ArrayAttr	string array attribute
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *
+Successors: ¶
+Successor	Description
+defaultDest	any successor
+cases	any successor

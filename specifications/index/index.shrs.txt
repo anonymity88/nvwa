@@ -1,0 +1,25 @@
+index.shrs (index::ShrSOp) ¶
+Signed index shift right
+
+Syntax:
+
+operation ::= `index.shrs` $lhs `,` $rhs attr-dict
+The index.shrs operation shifts an index value to the right by a variable amount. The LHS operand is treated as signed. The high order bits are filled with copies of the most significant bit. If the RHS operand is equal to or greater than the index bitwidth, the result is a poison value.
+
+Example:
+
+// c = a >> b
+%c = index.shrs %a, %b
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

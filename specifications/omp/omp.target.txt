@@ -1,0 +1,78 @@
+omp.target (omp::TargetOp) ¶
+Target construct
+
+Syntax:
+
+operation ::= `omp.target` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              |
+              `depend` `(`
+              custom<DependVarList>($depend_vars, type($depend_vars), $depend_kinds) `)`
+              |
+              `device` `(` $device `:` type($device) `)`
+              |
+              `has_device_addr` `(` $has_device_addr_vars `:` type($has_device_addr_vars)
+              `)`
+              |
+              `if` `(` $if_expr `)`
+              |
+              `is_device_ptr` `(` $is_device_ptr_vars `:` type($is_device_ptr_vars) `)`
+              |
+              `nowait` $nowait
+              |
+              `thread_limit` `(` $thread_limit `:` type($thread_limit) `)`
+              )
+              custom<InReductionMapPrivateRegion>(
+              $region, $in_reduction_vars, type($in_reduction_vars),
+              $in_reduction_byref, $in_reduction_syms, $map_vars, type($map_vars),
+              $private_vars, type($private_vars), $private_syms, $private_maps)
+              attr-dict
+The target construct includes a region of code which is to be executed on a device.
+
+The optional if_expr parameter specifies a boolean result of a conditional check. If this value is 1 or is not provided then the target region runs on a device, if it is 0 then the target region is executed on the host device.
+
+The private_maps attribute connects private operands to their corresponding map operands. For private operands that require a map, the value of the corresponding element in the attribute is the index of the map operand (relative to other map operands not the whole operands of the operation). For private opernads that do not require a map, this value is -1 (which is omitted from the assembly foramt printing).
+
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+The depend_kinds and depend_vars arguments are variadic lists of values that specify the dependencies of this particular task in relation to other tasks.
+
+The optional device parameter specifies the device number for the target region.
+
+The optional has_device_addr_vars indicates that list items already have device addresses, so they may be directly accessed from the target device. This includes array sections.
+
+The optional is_device_ptr_vars indicates list items are device pointers.
+
+The optional map_vars maps data from the current task’s data environment to the device data environment.
+
+The optional nowait attribute, when present, eliminates the implicit barrier at the end of the construct, so the parent operation can make progress even if the child operation has not completed yet.
+
+The optional thread_limit specifies the limit on the number of threads.
+
+Traits: AttrSizedOperandSegments, IsolatedFromAbove
+
+Interfaces: BlockArgOpenMPOpInterface, MapClauseOwningOpInterface, OutlineableOpenMPOpInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+depend_kinds	::mlir::ArrayAttr	depend clause in a target or task construct array
+in_reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+in_reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+nowait	::mlir::UnitAttr	unit attribute
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+private_maps	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+depend_vars	variadic of OpenMP-compatible variable type
+device	integer
+has_device_addr_vars	variadic of OpenMP-compatible variable type
+if_expr	1-bit signless integer
+in_reduction_vars	variadic of OpenMP-compatible variable type
+is_device_ptr_vars	variadic of OpenMP-compatible variable type
+map_vars	variadic of OpenMP-compatible variable type
+private_vars	variadic of any type
+thread_limit	integer

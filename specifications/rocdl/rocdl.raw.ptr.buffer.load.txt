@@ -1,0 +1,20 @@
+rocdl.raw.ptr.buffer.load (ROCDL::RawPtrBufferLoadOp) ¶
+Syntax:
+
+operation ::= `rocdl.raw.ptr.buffer.load` operands attr-dict `:` type($res)
+Interfaces: AliasAnalysisOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+alias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+noalias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+tbaa	::mlir::ArrayAttr	LLVM dialect TBAA tag metadata array
+Operands: ¶
+Operand	Description
+rsrc	LLVM pointer in address space 8
+offset	32-bit signless integer
+soffset	32-bit signless integer
+aux	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

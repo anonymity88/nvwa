@@ -1,0 +1,30 @@
+pdl.replace (pdl::ReplaceOp) ¶
+Mark an input operation as replaced
+
+Syntax:
+
+operation ::= `pdl.replace` $opValue `with` (`(` $replValues^ `:` type($replValues) `)`)?
+              ($replOperation^)? attr-dict
+pdl.replace operations are used within pdl.rewrite regions to specify that an input operation should be marked as replaced. The semantics of this operation correspond with the replaceOp method on a PatternRewriter. The set of replacement values can be either:
+
+a single Operation (replOperation should be populated)
+The operation will be replaced with the results of this operation.
+a set of Values (replValues should be populated)
+The operation will be replaced with these values.
+Example:
+
+// Replace root node with 2 values:
+pdl.replace %root with (%val0, %val1 : !pdl.value, !pdl.value)
+
+// Replace root node with a range of values:
+pdl.replace %root with (%vals : !pdl.range<value>)
+
+// Replace root with another operation:
+pdl.replace %root with %otherOp
+Traits: AttrSizedOperandSegments, HasParent<pdl::RewriteOp>
+
+Operands: ¶
+Operand	Description
+opValue	PDL handle to an mlir::Operation *
+replOperation	PDL handle to an mlir::Operation *
+replValues	variadic of single element or range of PDL handle for an mlir::Value

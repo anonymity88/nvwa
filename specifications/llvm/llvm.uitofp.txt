@@ -1,0 +1,19 @@
+llvm.uitofp (LLVM::UIToFPOp) ¶
+Syntax:
+
+operation ::= `llvm.uitofp` (`nneg` $nonNeg^)? $arg attr-dict `:` type($arg) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), NonNegFlagInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+nonNeg	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+arg	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	floating point LLVM type or LLVM dialect-compatible vector of floating point LLVM type

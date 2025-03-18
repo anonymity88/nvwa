@@ -1,0 +1,51 @@
+rocdl.workitem.id.z (ROCDL::ThreadIdZOp) ¶
+Syntax:
+
+operation ::= `rocdl.workitem.id.z` (`range` $range^)? attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+range	::mlir::LLVM::ConstantRangeAttr	
+A range of two integers, corresponding to LLVM's ConstantRange
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type
+Attributes ¶
+ROCDLTargetAttr ¶
+Syntax:
+
+#rocdl.target<
+  int,   # O
+  ::llvm::StringRef,   # triple
+  ::llvm::StringRef,   # chip
+  ::llvm::StringRef,   # features
+  ::llvm::StringRef,   # abi
+  DictionaryAttr,   # flags
+  ArrayAttr   # link
+>
+ROCDL target attribute for controlling compilation of AMDGPU targets. All parameters decay into default values if not present.
+
+Examples:
+
+Target with default values.
+  gpu.module @mymodule [#rocdl.target] attributes {...} {
+    ...
+  }
+Target with gfx90a chip and fast math.
+  gpu.module @mymodule [#rocdl.target<chip = "gfx90a", flags = {fast, no_wave64}>] {
+    ...
+  }
+Parameters: ¶
+Parameter	C++ type	Description
+O	int	Optimization level to apply.
+triple	::llvm::StringRef	Target triple.
+chip	::llvm::StringRef	Target chip.
+features	::llvm::StringRef	Target chip features.
+abi	::llvm::StringRef	ABI version.
+flags	DictionaryAttr	Target specific flags.
+link	ArrayAttr	Files to link to the LLVM module.

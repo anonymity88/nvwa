@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// RemUOp
+//===----------------------------------------------------------------------===//
+
+def Index_RemUOp : IndexBinaryOp<"remu", [NoMemoryEffect]> {
+  let summary = "index unsigned remainder";
+  let description = [{
+    The `index.remu` operation takes two index values and computes their
+    unsigned remainder. Treats the leading bit as the most significant, i.e.
+    `6 % -2 = 6`.
+
+    Example:
+
+    ```mlir
+    // c = a % b
+    %c = index.remu %a, %b
+    ```
+  }];
+}
+

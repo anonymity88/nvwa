@@ -1,0 +1,7 @@
+transform.apply_patterns.tensor.fold_tensor_subset_ops_into_vector_transfers (transform::ApplyFoldTensorSubsetOpsIntoVectorTransfersPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.fold_tensor_subset_ops_into_vector_transfers` attr-dict
+Indicates that tensor.extract_slice -> vector.transfer_read and vector.transfer_write -> tensor.insert_slice op chains should be folded into vector tranfer read and write ops
+
+Interfaces: PatternDescriptorOpInterface

@@ -1,0 +1,13 @@
+llvm.intr.ptr.annotation (LLVM::PtrAnnotation) ¶
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+ptr	LLVM pointer type
+annotation	LLVM pointer type
+fileName	LLVM pointer type
+line	32-bit signless integer
+attr	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM pointer type

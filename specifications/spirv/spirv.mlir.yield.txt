@@ -1,0 +1,20 @@
+spirv.mlir.yield (spirv::YieldOp) ¶
+Yields the result computed in spirv.SpecConstantOperation’s region back to the parent op.
+
+Syntax:
+
+operation ::= `spirv.mlir.yield` attr-dict $operand `:` type($operand)
+This op is a special terminator whose only purpose is to terminate an spirv.SpecConstantOperation’s enclosed region. It accepts a single operand produced by the preceeding (and only other) instruction in its parent block (see SPIRV_SpecConstantOperation for further details). This op has no corresponding SPIR-V instruction.
+
+Example: ¶
+%0 = ... (some op supported by SPIR-V OpSpecConstantOp)
+spirv.mlir.yield %0
+Traits: AlwaysSpeculatableImplTrait, HasParent<SpecConstantOperationOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	any type

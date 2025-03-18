@@ -1,0 +1,21 @@
+spirv.ReturnValue (spirv::ReturnValueOp) ¶
+Return a value from a function.
+
+Syntax:
+
+operation ::= `spirv.ReturnValue` $value attr-dict `:` type($value)
+Value is the value returned, by copy, and must match the Return Type operand of the OpTypeFunction type of the OpFunction body this return instruction is in.
+
+This instruction must be the last instruction in a block.
+
+Example: ¶
+spirv.ReturnValue %0 : f32
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

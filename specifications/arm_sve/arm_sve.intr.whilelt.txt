@@ -1,0 +1,14 @@
+arm_sve.intr.whilelt (arm_sve::WhileLTIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+base	64-bit signless integer
+n	64-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

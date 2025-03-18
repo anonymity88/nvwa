@@ -1,0 +1,26 @@
+affine.min (affine::AffineMinOp) ¶
+Min operation
+
+Syntax:
+
+operation ::= ssa-id `=` `affine.min` affine-map-attribute dim-and-symbol-use-list
+The affine.min operation applies an affine mapping to a list of SSA values, and returns the minimum value of all result expressions. The number of dimension and symbol arguments to affine.min must be equal to the respective number of dimensional and symbolic inputs to the affine mapping; the affine.min operation always returns one value. The input operands and result must all have ‘index’ type.
+
+Example:
+
+%0 = affine.min affine_map<(d0)[s0] -> (1000, d0 + 512, s0)> (%arg0)[%arg1]
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+map	::mlir::AffineMapAttr	AffineMap attribute
+Operands: ¶
+Operand	Description
+operands	variadic of index
+Results: ¶
+Result	Description
+«unnamed»	index

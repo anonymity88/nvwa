@@ -1,0 +1,18 @@
+amx.tilezero (amx::x86_amx_tilezero) ¶
+Operands: ¶
+Operand	Description
+«unnamed»	integer
+«unnamed»	integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type
+Types ¶
+TileType ¶
+AMX 2D tile to be used by AMX opertaions.
+
+This type is used to represent values in AMX tile registers. All AMX operations work on AMX tiles and these tiles cannot be used in other operations directly. LLVM IR type for AMX tile is a primitive type, but in MLIR we provide shape and element type for IR verification and lowering to LLVMIR dialect.
+
+Parameters: ¶
+Parameter	C++ type	Description
+shape	::llvm::ArrayRef<int64_t>	
+elementType	::mlir::Type	32-bit float or 16-bit float or bfloat16 type or 32-bit signless integer or 8-bit signless integer

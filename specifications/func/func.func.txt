@@ -1,0 +1,38 @@
+func.func (func::FuncOp) ¶
+An operation with a name containing a single SSACFG region
+
+Operations within the function cannot implicitly capture values defined outside of the function, i.e. Functions are IsolatedFromAbove. All external references must use function arguments or attributes that establish a symbolic connection (e.g. symbols referenced by name via a string attribute like SymbolRefAttr). An external function declaration (used when referring to a function declared in some other module) has no body. While the MLIR textual form provides a nice inline syntax for function arguments, they are internally represented as “block arguments” to the first block in the region.
+
+Only dialect attribute names may be specified in the attribute dictionaries for function arguments, results, or the function itself.
+
+Example:
+
+// External function definitions.
+func.func private @abort()
+func.func private @scribble(i32, i64, memref<? x 128 x f32, #layout_map0>) -> f64
+
+// A function that returns its argument twice:
+func.func @count(%x: i64) -> (i64, i64)
+  attributes {fruit = "banana"} {
+  return %x, %x: i64, i64
+}
+
+// A function with an argument attribute
+func.func private @example_fn_arg(%x: i32 {swift.self = unit})
+
+// A function with a result attribute
+func.func private @example_fn_result() -> (f64 {dialectName.attrName = 0 : i64})
+
+// A function with an attribute
+func.func private @example_fn_attr() attributes {dialectName.attrName = false}
+Traits: AffineScope, AutomaticAllocationScope, IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, OpAsmOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	type attribute of function type
+sym_visibility	::mlir::StringAttr	string attribute
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes

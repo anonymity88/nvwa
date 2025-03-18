@@ -1,0 +1,10 @@
+llvm.landingpad (LLVM::LandingpadOp) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+cleanup	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+«unnamed»	variadic of LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,34 @@
+vector.scalable.insert (vector::ScalableInsertOp) ¶
+Insert subvector into scalable vector operation
+
+Syntax:
+
+operation ::= `vector.scalable.insert` $source `,` $dest `[` $pos `]` attr-dict `:` type($source) `into` type($dest)
+This operations takes a rank-1 fixed-length or scalable subvector and inserts it within the destination scalable vector starting from the position specificed by pos. If the source vector is scalable, the insertion position will be scaled by the runtime scaling factor of the source subvector.
+
+The insertion position must be a multiple of the minimum size of the source vector. For the operation to be well defined, the source vector must fit in the destination vector from the specified position. Since the destination vector is scalable and its runtime length is unknown, the validity of the operation can’t be verified nor guaranteed at compile time.
+
+Example:
+
+%2 = vector.scalable.insert %0, %1[8] : vector<4xf32> into vector<[16]xf32>
+%5 = vector.scalable.insert %3, %4[0] : vector<8xf32> into vector<[4]xf32>
+%8 = vector.scalable.insert %6, %7[0] : vector<[4]xf32> into vector<[8]xf32>
+Invalid example:
+
+%2 = vector.scalable.insert %0, %1[5] : vector<4xf32> into vector<[16]xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pos	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+source	of ranks 1
+dest	of ranks 1
+Results: ¶
+Result	Description
+res	of ranks 1

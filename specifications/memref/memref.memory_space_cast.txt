@@ -1,0 +1,33 @@
+memref.memory_space_cast (memref::MemorySpaceCastOp) ¶
+Memref memory space cast operation
+
+Syntax:
+
+operation ::= `memref.memory_space_cast` $source attr-dict `:` type($source) `to` type($dest)
+This operation casts memref values between memory spaces. The input and result will be memrefs of the same types and shape that alias the same underlying memory, though, for some casts on some targets, the underlying values of the pointer stored in the memref may be affected by the cast.
+
+The input and result must have the same shape, element type, rank, and layout.
+
+If the source and target address spaces are the same, this operation is a noop.
+
+Example:
+
+// Cast a GPU private memory attribution into a generic pointer
+%2 = memref.memory_space_cast %1 : memref<?xf32, 5> to memref<?xf32>
+// Cast a generic pointer to workgroup-local memory
+%4 = memref.memory_space_cast %3 : memref<5x4xi32> to memref<5x34xi32, 3>
+// Cast between two non-default memory spaces
+%6 = memref.memory_space_cast %5
+  : memref<*xmemref<?xf32>, 5> to memref<*xmemref<?xf32>, 3>
+Traits: AlwaysSpeculatableImplTrait, MemRefsNormalizable, SameOperandsAndResultElementType, SameOperandsAndResultShape
+
+Interfaces: CastOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	ranked or unranked memref of any type values
+Results: ¶
+Result	Description
+dest	ranked or unranked memref of any type values

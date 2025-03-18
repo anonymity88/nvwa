@@ -1,0 +1,24 @@
+mesh.send (mesh::SendOp) ¶
+Send over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.send` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              `destination` `=` custom<DynamicIndexList>($destination_dynamic, $destination)
+              attr-dict `:` functional-type(operands, results)
+Send from one device to another within a device group.
+
+Interfaces: OpAsmOpInterface, SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+destination	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+input	non-0-ranked.tensor of any type values
+destination_dynamic	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

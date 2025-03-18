@@ -1,0 +1,16 @@
+llvm.intr.ctpop (LLVM::CtPopOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.ctpop` `(` operands `)` attr-dict `:` functional-type(operands, results)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+in	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

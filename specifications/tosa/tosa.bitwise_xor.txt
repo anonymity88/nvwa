@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: bitwise_xor
+//===----------------------------------------------------------------------===//
+def Tosa_BitwiseXorOp : Tosa_ElementwiseOp<"bitwise_xor", [
+    Commutative,
+    SameOperandsAndResultElementType]> {
+  let summary = "Bitwise XOR operator";
+
+  let description = [{
+    Elementwise bitwise XOR of input1 and input2. Axis of size 1 will be
+    broadcast as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

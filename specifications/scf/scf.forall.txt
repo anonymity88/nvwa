@@ -1,0 +1,141 @@
+scf.forall (scf::ForallOp) ¶
+Evaluate a block multiple times in parallel
+
+scf.forall is a target-independent multi-dimensional parallel region application operation. It has exactly one block that represents the parallel body and it takes index operands that specify lower bounds, upper bounds and steps.
+
+The op also takes a variadic number of tensor operands (shared_outs). The future buffers corresponding to these tensors are shared among all threads. Shared tensors should be accessed via their corresponding block arguments. If multiple threads write to a shared buffer in a racy fashion, these writes will execute in some unspecified order. Tensors that are not shared can be used inside the body (i.e., the op is not isolated from above); however, if a use of such a tensor bufferizes to a memory write, the tensor is privatized, i.e., a thread-local copy of the tensor is used. This ensures that memory side effects of a thread are not visible to other threads (or in the parent body), apart from explicitly shared tensors.
+
+The name “thread” conveys the fact that the parallel execution is mapped (i.e. distributed) to a set of virtual threads of execution, one function application per thread. Further lowerings are responsible for specifying how this is materialized on concrete hardware resources.
+
+An optional mapping is an attribute array that specifies processing units with their dimension, how it remaps 1-1 to a set of concrete processing element resources (e.g. a CUDA grid dimension or a level of concrete nested async parallelism). It is expressed via any attribute that implements the device mapping interface. It is the reponsibility of the lowering mechanism to interpret the mapping attributes in the context of the concrete target the op is lowered to, or to ignore it when the specification is ill-formed or unsupported for a particular target.
+
+The only allowed terminator is scf.forall.in_parallel. scf.forall returns one value per shared_out operand. The actions of the scf.forall.in_parallel terminators specify how to combine the partial results of all parallel invocations into a full value, in some unspecified order. The “destination” of each such op must be a shared_out block argument of the scf.forall op.
+
+The actions involved in constructing the return values are further described by tensor.parallel_insert_slice.
+
+scf.forall acts as an implicit synchronization point.
+
+When the parallel function body has side effects, their order is unspecified across threads.
+
+scf.forall can be printed in two different ways depending on whether the loop is normalized or not. The loop is ’normalized’ when all lower bounds are equal to zero and steps are equal to one. In that case, lowerBound and step operands will be omitted during printing.
+
+Normalized loop example:
+
+//
+// Sequential context.
+//
+%matmul_and_pointwise:2 = scf.forall (%thread_id_1, %thread_id_2) in
+    (%num_threads_1, %numthread_id_2) shared_outs(%o1 = %C, %o2 = %pointwise)
+  -> (tensor<?x?xT>, tensor<?xT>) {
+  //
+  // Parallel context, each thread with id = (%thread_id_1, %thread_id_2)
+  // runs its version of the code.
+  //
+  %sA = tensor.extract_slice %A[f((%thread_id_1, %thread_id_2))]:
+    tensor<?x?xT> to tensor<?x?xT>
+  %sB = tensor.extract_slice %B[g((%thread_id_1, %thread_id_2))]:
+    tensor<?x?xT> to tensor<?x?xT>
+  %sC = tensor.extract_slice %o1[h((%thread_id_1, %thread_id_2))]:
+    tensor<?x?xT> to tensor<?x?xT>
+  %sD = linalg.matmul
+    ins(%sA, %sB : tensor<?x?xT>, tensor<?x?xT>)
+    outs(%sC : tensor<?x?xT>)
+
+  %spointwise = subtensor %o2[i((%thread_id_1, %thread_id_2))]:
+    tensor<?xT> to tensor<?xT>
+  %sE = linalg.add ins(%spointwise : tensor<?xT>) outs(%sD : tensor<?xT>)
+
+  scf.forall.in_parallel {
+    tensor.parallel_insert_slice %sD into %o1[h((%thread_id_1, %thread_id_2))]:
+      tensor<?x?xT> into tensor<?x?xT>
+
+    tensor.parallel_insert_slice %spointwise into %o2[i((%thread_id_1, %thread_id_2))]:
+      tensor<?xT> into tensor<?xT>
+  }
+}
+// Implicit synchronization point.
+// Sequential context.
+//
+Loop with loop bounds example:
+
+//
+// Sequential context.
+//
+%pointwise = scf.forall (%i, %j) = (0, 0) to (%dim1, %dim2)
+  step (%tileSize1, %tileSize2) shared_outs(%o1 = %out)
+  -> (tensor<?x?xT>, tensor<?xT>) {
+  //
+  // Parallel context.
+  //
+  %sA = tensor.extract_slice %A[%i, %j][%tileSize1, %tileSize2][1, 1]
+    : tensor<?x?xT> to tensor<?x?xT>
+  %sB = tensor.extract_slice %B[%i, %j][%tileSize1, %tileSize2][1, 1]
+    : tensor<?x?xT> to tensor<?x?xT>
+  %sC = tensor.extract_slice %o[%i, %j][%tileSize1, %tileSize2][1, 1]
+    : tensor<?x?xT> to tensor<?x?xT>
+
+  %add = linalg.map {"arith.addf"}
+    ins(%sA, %sB : tensor<?x?xT>, tensor<?x?xT>)
+    outs(%sC : tensor<?x?xT>)
+
+  scf.forall.in_parallel {
+    tensor.parallel_insert_slice %add into
+      %o[%i, %j][%tileSize1, %tileSize2][1, 1]
+      : tensor<?x?xT> into tensor<?x?xT>
+  }
+}
+// Implicit synchronization point.
+// Sequential context.
+//
+Example with mapping attribute:
+
+//
+// Sequential context. Here `mapping` is expressed as GPU thread mapping
+// attributes
+//
+%matmul_and_pointwise:2 = scf.forall (%thread_id_1, %thread_id_2) in
+    (%num_threads_1, %numthread_id_2) shared_outs(...)
+  -> (tensor<?x?xT>, tensor<?xT>) {
+  //
+  // Parallel context, each thread with id = **(%thread_id_2, %thread_id_1)**
+  // runs its version of the code.
+  //
+   scf.forall.in_parallel {
+     ...
+  }
+} { mapping = [#gpu.thread<y>, #gpu.thread<x>] }
+// Implicit synchronization point.
+// Sequential context.
+//
+Example with privatized tensors:
+
+%t0 = ...
+%t1 = ...
+%r = scf.forall ... shared_outs(%o = t0) -> tensor<?xf32> {
+  // %t0 and %t1 are privatized. %t0 is definitely copied for each thread
+  // because the scf.forall op's %t0 use bufferizes to a memory
+  // write. In the absence of other conflicts, %t1 is copied only if there
+  // are uses of %t1 in the body that bufferize to a memory read and to a
+  // memory write.
+  "some_use"(%t0)
+  "some_use"(%t1)
+}
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, HasParallelRegion, RecursiveMemoryEffects, SingleBlockImplicitTerminator<scf::InParallelOp>, SingleBlock
+
+Interfaces: DestinationStyleOpInterface, LoopLikeOpInterface, RegionBranchOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+staticLowerBound	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+staticUpperBound	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+staticStep	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+mapping	::mlir::ArrayAttr	Device Mapping array attribute
+Operands: ¶
+Operand	Description
+dynamicLowerBound	variadic of index
+dynamicUpperBound	variadic of index
+dynamicStep	variadic of index
+outputs	variadic of ranked tensor of any type values
+Results: ¶
+Result	Description
+results	variadic of any type

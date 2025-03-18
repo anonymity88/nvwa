@@ -1,0 +1,7 @@
+transform.apply_patterns.linalg.tiling_canonicalization (transform::ApplyTilingCanonicalizationPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.linalg.tiling_canonicalization` attr-dict
+Collects canonicalization patterns relevant to apply after tiling patterns.
+
+Interfaces: PatternDescriptorOpInterface

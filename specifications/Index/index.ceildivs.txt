@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// CeilDivSOp
+//===----------------------------------------------------------------------===//
+
+def Index_CeilDivSOp : IndexBinaryOp<"ceildivs", [NoMemoryEffect]> {
+  let summary = "index signed ceil division";
+  let description = [{
+    The `index.ceildivs` operation takes two index values and computes their
+    signed quotient. Treats the leading bit as the sign and rounds towards
+    positive infinity, i.e. `7 / -2 = -3`.
+
+    Note: division by zero and signed division overflow are undefined behaviour.
+
+    Example:
+
+    ```mlir
+    // c = ceil(a / b)
+    %c = index.ceildivs %a, %b
+    ```
+  }];
+}
+

@@ -1,0 +1,158 @@
+amdgpu.wmma (amdgpu::WMMAOp) ¶
+MLIR wrapper for RDNA3 wmma instructions
+
+Syntax:
+
+operation ::= `amdgpu.wmma` $sourceA `*` $sourceB `+` $destC
+              attr-dict
+              `:` type($sourceA) `,` type($sourceB) `,` type($destC)
+The amdgpu.wmma op is an MLIR wrapper around intrinsics for various wmma instructions in the RDNA3 architecture, which perform a 16x16 matrix multiplication for different data types.
+
+When emitting f16->f16 (or bf16->bf16) wmma the output is a 16xf16 (or 16xbf16) vector containing only 8 valid values:
+
+If subwordOffset is 0, then the output is stored at indices 0, 2, 4, …, 14.
+If subwordOffset is 1, then the output is stored at indices 1, 3, 5, …, 15.
+unsignedA and unsignedB flag that the int8 LLVM inputs are unsigned.
+
+The clamp flag is used to saturate the output of type T to numeric_limits::max() in case of overflow.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+subwordOffset	::mlir::IntegerAttr	32-bit signless integer attribute whose minimum value is 0 whose maximum value is 1
+unsignedA	::mlir::UnitAttr	unit attribute
+unsignedB	::mlir::UnitAttr	unit attribute
+clamp	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+sourceA	vector of 16-bit float or bfloat16 type or 8-bit signless integer or 8-bit signed integer or 8-bit unsigned integer or f8E4M3FN type or f8E5M2 type values of length 8/16
+sourceB	vector of 16-bit float or bfloat16 type or 8-bit signless integer or 8-bit signed integer or 8-bit unsigned integer or f8E4M3FN type or f8E5M2 type values of length 8/16
+destC	vector of 32-bit float or 32-bit signless integer values of length 4/8 or vector of 16-bit float or bfloat16 type values of length 8/16
+Results: ¶
+Result	Description
+destD	vector of 32-bit float or 32-bit signless integer values of length 4/8 or vector of 16-bit float or bfloat16 type values of length 8/16
+Attributes ¶
+DPPPermAttr ¶
+The possible permutations for a DPP operation
+
+Syntax:
+
+#amdgpu.dpp_perm<
+  ::mlir::amdgpu::DPPPerm   # value
+>
+Enum cases:
+
+quad_perm (quad_perm)
+row_shl (row_shl)
+row_shr (row_shr)
+row_ror (row_ror)
+wave_shl (wave_shl)
+wave_shr (wave_shr)
+wave_ror (wave_ror)
+wave_rol (wave_rol)
+row_mirror (row_mirror)
+row_half_mirror (row_half_mirror)
+row_bcast_15 (row_bcast_15)
+row_bcast_31 (row_bcast_31)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::amdgpu::DPPPerm	an enum of type DPPPerm
+MFMAPermBAttr ¶
+The possible permutations of the lanes storing B available in an MFMA
+
+Syntax:
+
+#amdgpu.mfma_perm_b<
+  ::mlir::amdgpu::MFMAPermB   # value
+>
+Enum cases:
+
+none (none)
+bcast_first_32 (bcast_first_32)
+bcast_second_32 (bcast_second_32)
+rotate_16_right (rotate_16_right)
+bcast_first_16 (bcast_first_16)
+bcast_second_16 (bcast_second_16)
+bcast_third_16 (bcast_third_16)
+bcast_fourth_16 (bcast_fourth_16)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::amdgpu::MFMAPermB	an enum of type MFMAPermB
+sched_barrier_opt_enumAttr ¶
+The possible options for scheduling barriers
+
+Syntax:
+
+#amdgpu.sched_barrier_opt<
+  ::mlir::amdgpu::sched_barrier_opt_enum   # value
+>
+Enum cases:
+
+none (none)
+non_mem_non_sideffect (non_mem_non_sideffect)
+valu (valu)
+salu (salu)
+mfma_wmma (mfma_wmma)
+all_vmem (all_vmem)
+vmem_read (vmem_read)
+vmem_write (vmem_write)
+all_ds (all_ds)
+ds_read (ds_read)
+ds_write (ds_write)
+transcendental (transcendental)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::amdgpu::sched_barrier_opt_enum	an enum of type sched_barrier_opt_enum
+Enums ¶
+DPPPerm ¶
+The possible permutations for a DPP operation
+
+Cases: ¶
+Symbol	Value	String
+quad_perm	0	quad_perm
+row_shl	1	row_shl
+row_shr	2	row_shr
+row_ror	3	row_ror
+wave_shl	4	wave_shl
+wave_shr	5	wave_shr
+wave_ror	6	wave_ror
+wave_rol	7	wave_rol
+row_mirror	8	row_mirror
+row_half_mirror	9	row_half_mirror
+row_bcast_15	10	row_bcast_15
+row_bcast_31	11	row_bcast_31
+MFMAPermB ¶
+The possible permutations of the lanes storing B available in an MFMA
+
+Cases: ¶
+Symbol	Value	String
+none	0	none
+bcast_first_32	1	bcast_first_32
+bcast_second_32	2	bcast_second_32
+rotate_16_right	3	rotate_16_right
+bcast_first_16	4	bcast_first_16
+bcast_second_16	5	bcast_second_16
+bcast_third_16	6	bcast_third_16
+bcast_fourth_16	7	bcast_fourth_16
+sched_barrier_opt_enum ¶
+The possible options for scheduling barriers
+
+Cases: ¶
+Symbol	Value	String
+none	0	none
+non_mem_non_sideffect	1	non_mem_non_sideffect
+valu	2	valu
+salu	4	salu
+mfma_wmma	8	mfma_wmma
+all_vmem	16	all_vmem
+vmem_read	32	vmem_read
+vmem_write	64	vmem_write
+all_ds	128	all_ds
+ds_read	256	ds_read
+ds_write	512	ds_write
+transcendental	1024	transcendental

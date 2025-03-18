@@ -1,0 +1,22 @@
+shape.index_to_size (shape::IndexToSizeOp) ¶
+Converts a standard index to a shape size
+
+Syntax:
+
+operation ::= `shape.index_to_size` $arg attr-dict
+Converts a standard index to a shape.size. This operation and its inverse, size_to_index, facilitate index conversion between the standard and the shape dialect.
+
+The behavior is undefined for negative indices.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	index
+Results: ¶
+Result	Description
+result

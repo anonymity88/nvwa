@@ -1,0 +1,25 @@
+emitc.add (emitc::AddOp) ¶
+Addition operation
+
+Syntax:
+
+operation ::= `emitc.add` operands attr-dict `:` functional-type(operands, results)
+With the emitc.add operation the arithmetic operator + (addition) can be applied.
+
+Example:
+
+// Custom form of the addition operation.
+%0 = emitc.add %arg0, %arg1 : (i32, i32) -> i32
+%1 = emitc.add %arg2, %arg3 : (!emitc.ptr<f32>, i32) -> !emitc.ptr<f32>
+// Code emitted for the operations above.
+int32_t v5 = v1 + v2;
+float* v6 = v3 + v4;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+lhs	type supported by EmitC
+rhs	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

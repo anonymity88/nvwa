@@ -1,0 +1,17 @@
+llvm.intr.expect (LLVM::ExpectOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.expect` $val `,` $expected attr-dict `:` type($val)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+val	signless integer
+expected	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

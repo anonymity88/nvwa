@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// ShrSOp
+//===----------------------------------------------------------------------===//
+
+def Index_ShrSOp : IndexBinaryOp<"shrs", [Pure]> {
+  let summary = "signed index shift right";
+  let description = [{
+    The `index.shrs` operation shifts an index value to the right by a variable
+    amount. The LHS operand is treated as signed. The high order bits are filled
+    with copies of the most significant bit. If the RHS operand is equal to or
+    greater than the index bitwidth, the result is a poison value.
+
+    Example:
+
+    ```mlir
+    // c = a >> b
+    %c = index.shrs %a, %b
+    ```
+  }];
+}
+

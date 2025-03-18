@@ -1,0 +1,23 @@
+index.rems (index::RemSOp) ¶
+Index signed remainder
+
+Syntax:
+
+operation ::= `index.rems` $lhs `,` $rhs attr-dict
+The index.rems operation takes two index values and computes their signed remainder. Treats the leading bit as the sign, i.e. 6 % -2 = 0.
+
+Example:
+
+// c = a % b
+%c = index.rems %a, %b
+Interfaces: InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

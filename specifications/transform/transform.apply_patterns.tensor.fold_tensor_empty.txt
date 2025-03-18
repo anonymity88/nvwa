@@ -1,0 +1,13 @@
+transform.apply_patterns.tensor.fold_tensor_empty (transform::ApplyFoldTensorEmptyPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.fold_tensor_empty` attr-dict
+Indicates that tensor.extract_slice and reassociative reshapes should be folded into tensor.empty.
+
+If fold_single_use_only is set to “true”, only tensor.empty that have a single use are folded.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fold_single_use_only	::mlir::BoolAttr	bool attribute

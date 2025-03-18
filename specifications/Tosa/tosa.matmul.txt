@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// Operator: matmul
+//===----------------------------------------------------------------------===//
+def Tosa_MatMulOp : Tosa_InferShapedTypeOp<"matmul"> {
+  let summary = "Matrix multiplication with bias";
+
+  let description = [{
+    Performs a two dimensional matrix multiplication. This allows both inputs to
+    be activations, rather than reserving weights as an attribute in the
+    FULLY_CONNECTED operator.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor3D:$a,
+    Tosa_Tensor3D:$b,
+    OptionalAttr<Tosa_MatMulOpQuantizationAttr>:$quantization_info
+  );
+
+  let results = (outs
+    Tosa_Tensor3D:$c
+  );
+
+  let builders = [Tosa_MatMulOpQuantInfoBuilder];
+}
+

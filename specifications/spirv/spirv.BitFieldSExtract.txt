@@ -1,0 +1,37 @@
+spirv.BitFieldSExtract (spirv::BitFieldSExtractOp) ¶
+Extract a bit field from an object, with sign extension.
+
+Syntax:
+
+operation ::= `spirv.BitFieldSExtract` operands attr-dict `:` type($base) `,` type($offset) `,` type($count)
+Results are computed per component.
+
+Result Type must be a scalar or vector of integer type.
+
+The type of Base must be the same as Result Type.
+
+If Count is greater than 0: The bits of Base numbered in [Offset, Offset
+
+Count - 1] (inclusive) become the bits numbered [0, Count - 1] of the result. The remaining bits of the result will all be the same as bit Offset + Count - 1 of Base.
+Count must be an integer type scalar. Count is the number of bits extracted from Base. It will be consumed as an unsigned value. Count can be 0, in which case the result will be 0.
+
+Offset must be an integer type scalar. Offset is the lowest-order bit of the bit field to extract from Base. It will be consumed as an unsigned value.
+
+The resulting value is undefined if Count or Offset or their sum is greater than the number of bits in the result.
+
+Example: ¶
+%0 = spirv.BitFieldSExtract %base, %offset, %count : vector<3xi32>, i8, i8
+Traits: AlwaysSpeculatableImplTrait, SignedOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+base	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+offset	8/16/32/64-bit integer
+count	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

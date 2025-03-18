@@ -1,0 +1,27 @@
+complex.im (complex::ImOp) ¶
+Extracts the imaginary part of a complex number
+
+Syntax:
+
+operation ::= `complex.im` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The im op takes a single complex number and extracts the imaginary part.
+
+Example:
+
+%a = complex.im %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+imaginary	floating-point

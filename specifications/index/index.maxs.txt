@@ -1,0 +1,25 @@
+index.maxs (index::MaxSOp) ¶
+Index signed maximum
+
+Syntax:
+
+operation ::= `index.maxs` $lhs `,` $rhs attr-dict
+The index.maxs operation takes two index values and computes their signed maximum value. Treats the leading bit as the sign, i.e. max(-2, 6) = 6.
+
+Example:
+
+// c = max(a, b)
+%c = index.maxs %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

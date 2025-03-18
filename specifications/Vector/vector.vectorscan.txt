@@ -1,0 +1,57 @@
+//===----------------------------------------------------------------------===//
+// VectorScanOp
+//===----------------------------------------------------------------------===//
+
+def Vector_ScanOp :
+  Vector_Op<"scan", [Pure,
+    AllTypesMatch<["source", "dest"]>,
+    AllTypesMatch<["initial_value", "accumulated_value"]> ]>,
+    Arguments<(ins Vector_CombiningKindAttr:$kind,
+                   AnyVector:$source,
+                   AnyVectorOfAnyRank:$initial_value,
+                   I64Attr:$reduction_dim,
+                   BoolAttr:$inclusive)>,
+    Results<(outs AnyVector:$dest,
+                  AnyVectorOfAnyRank:$accumulated_value)> {
+  let summary = "Scan operation";
+  let description = [{
+    Performs an inclusive/exclusive scan on an n-D vector along a single
+    dimension returning an n-D result vector using the given
+    operation (`add`/`mul`/`minsi`/`minui`/`maxsi`/`maxui`/`and`/`or`/`xor` for
+    integers, and `add`/`mul`/`minnumf`/`maxnumf`/`minimumf`/`maximumf` for
+    floats), and a specified value for the initial value. The operator returns
+    the result of scan as well as the result of the last reduction in the scan.
+
+    Example:
+
+    ```mlir
+    %1:2 = vector.scan <add>, %0, %acc {inclusive = false, reduction_dim = 1 : i64} :
+      vector<4x8x16x32xf32>, vector<4x16x32xf32>
+    ```
+  }];
+  let builders = [
+    OpBuilder<(ins "Value":$source, "Value":$initial_value,
+                   "CombiningKind":$kind,
+                   CArg<"int64_t", "0">:$reduction_dim,
+                   CArg<"bool", "true">:$inclusive)>
+  ];
+  let extraClassDeclaration = [{
+    VectorType getSourceType() {
+      return ::llvm::cast<VectorType>(getSource().getType());
+    }
+    VectorType getDestType() {
+      return ::llvm::cast<VectorType>(getDest().getType());
+    }
+    VectorType getAccumulatorType() {
+      return ::llvm::cast<VectorType>(getAccumulatedValue().getType());
+    }
+    VectorType getInitialValueType() {
+      return ::llvm::cast<VectorType>(getInitialValue().getType());
+    }
+  }];
+  let assemblyFormat =
+    "$kind `,` $source `,` $initial_value attr-dict `:` "
+    "type($source) `,` type($initial_value) ";
+  let hasVerifier = 1;
+}
+

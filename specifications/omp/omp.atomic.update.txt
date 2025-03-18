@@ -1,0 +1,34 @@
+omp.atomic.update (omp::AtomicUpdateOp) ¶
+Performs an atomic update
+
+Syntax:
+
+operation ::= `omp.atomic.update` oilist(
+              `hint` `(` custom<SynchronizationHint>($hint) `)`
+              |
+              `memory_order` `(` custom<ClauseAttr>($memory_order) `)`
+              )$x `:` type($x) $region attr-dict
+This operation performs an atomic update.
+
+The operand x is exactly the same as the operand x in the OpenMP Standard (OpenMP 5.0, section 2.17.7). It is the address of the variable that is being updated. x is atomically read/written.
+
+The region describes how to update the value of x. It takes the value at x as an input and must yield the updated value. Only the update to x is atomic. Generally the region must have only one instruction, but can potentially have more than one instructions too. The update is sematically similar to a compare-exchange loop based atomic update.
+
+The syntax of atomic update operation is different from atomic read and atomic write operations. This is because only the host dialect knows how to appropriately update a value. For example, while generating LLVM IR, if there are no special atomicrmw instructions for the operation-type combination in atomic update, a compare-exchange loop is generated, where the core update operation is directly translated like regular operations by the host dialect. The front-end must handle semantic checks for allowed operations.
+
+hint is the value of hint (as specified in the hint clause). It is a compile time constant. As the name suggests, this is just a hint for optimization.
+
+memory_order indicates the memory ordering behavior of the construct. It can be one of seq_cst, acq_rel, release, acquire or relaxed.
+
+Traits: RecursiveMemoryEffects, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: AtomicUpdateOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+hint	::mlir::IntegerAttr	64-bit signless integer attribute
+memory_order	::mlir::omp::ClauseMemoryOrderKindAttr	
+MemoryOrderKind Clause
+Operands: ¶
+Operand	Description
+x	OpenMP-compatible variable type

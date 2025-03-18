@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// Operator: clamp
+//===----------------------------------------------------------------------===//
+def Tosa_ClampOp : Tosa_ElementwiseOp<"clamp"> {
+  let summary = "Computes clamp(features, min, max).";
+
+  let description = [{
+    Clamp to an arbitrary minimum and maximum value.
+    Maximum and minimum values are specified as values in the range of the
+    input type.
+    No zero point subtraction is done to the values, thus to clamp to the zero
+    point value, the zero point itself should be supplied as the minimum value.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input,
+    I64Attr:$min_int,
+    I64Attr:$max_int,
+    Tosa_FloatAttr:$min_fp,
+    Tosa_FloatAttr:$max_fp
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasCanonicalizer = 1;
+  let hasVerifier = 1;
+}
+

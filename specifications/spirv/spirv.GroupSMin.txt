@@ -1,0 +1,38 @@
+spirv.GroupSMin (spirv::GroupSMinOp) ¶
+A signed integer minimum group operation specified for all values of X specified by invocations in the group.
+
+Syntax:
+
+operation ::= `spirv.GroupSMin` $execution_scope $group_operation operands attr-dict `:` type($x)
+Behavior is undefined if not all invocations of this module within Execution reach this point of execution.
+
+Behavior is undefined unless all invocations within Execution execute the same dynamic instance of this instruction.
+
+Result Type must be a scalar or vector of integer type.
+
+Execution is a Scope. It must be either Workgroup or Subgroup.
+
+The identity I for Operation is INT_MAX when X is 32 bits wide and LONG_MAX when X is 64 bits wide.
+
+The type of X must be the same as Result Type.
+
+Example: ¶
+%0 = spirv.GroupSMin <Workgroup> <Reduce> %value : i32
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+group_operation	::mlir::spirv::GroupOperationAttr	
+valid SPIR-V GroupOperation
+Operands: ¶
+Operand	Description
+x	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

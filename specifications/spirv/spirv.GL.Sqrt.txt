@@ -1,0 +1,27 @@
+spirv.GL.Sqrt (spirv::GLSqrtOp) ¶
+Returns the square root of the operand
+
+Syntax:
+
+operation ::= `spirv.GL.Sqrt` $operand `:` type($operand) attr-dict
+Result is the square root of x. Result is undefined if x < 0.
+
+The operand x must be a scalar or vector whose component type is floating-point.
+
+Result Type and the type of x must be the same type. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.Sqrt %0 : f32
+%3 = spirv.GL.Sqrt %1 : vector<3xf16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16

@@ -1,0 +1,14 @@
+llvm.intr.matrix.transpose (LLVM::MatrixTransposeOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.matrix.transpose` $matrix attr-dict `:` type($matrix) `into` type($res)
+Attributes: ¶
+Attribute	MLIR Type	Description
+rows	::mlir::IntegerAttr	32-bit signless integer attribute
+columns	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+matrix	LLVM dialect-compatible vector type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

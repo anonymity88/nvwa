@@ -1,0 +1,7 @@
+omp.master (omp::MasterOp) ¶
+Master construct
+
+Syntax:
+
+operation ::= `omp.master` $region attr-dict
+The master construct specifies a structured block that is executed by the master thread of the team.

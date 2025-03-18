@@ -1,0 +1,24 @@
+//===----------------------------------------------------------------------===//
+// Log1pOp
+//===----------------------------------------------------------------------===//
+
+def Math_Log1pOp : Math_FloatUnaryOp<"log1p"> {
+  let summary = "Computes the natural logarithm of one plus the given value";
+
+  let description = [{
+    Computes the base-e logarithm of one plus the given value. It takes one
+    operand of floating point type (i.e., scalar, tensor or vector) and returns one
+    result of the same type.
+
+    log1p(x) := log(1 + x)
+
+    Example:
+
+    ```mlir
+    // Scalar log1p operation.
+    %y = math.log1p %x : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

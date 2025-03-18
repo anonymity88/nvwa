@@ -1,0 +1,20 @@
+mpi.recv (mpi::RecvOp) ¶
+Equivalent to MPI_Recv(ptr, size, dtype, dest, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE)
+
+Syntax:
+
+operation ::= `mpi.recv` `(` $ref `,` $tag `,` $rank `)` attr-dict `:` type($ref) `,` type($tag) `,` type($rank)(`->` type($retval)^)?
+MPI_Recv performs a blocking receive of size elements of type dtype from rank dest. The tag value and communicator enables the library to determine the matching of multiple sends and receives between the same ranks.
+
+Communicators other than MPI_COMM_WORLD are not supprted for now. The MPI_Status is set to MPI_STATUS_IGNORE, as the status object is not yet ported to MLIR.
+
+This operation can optionally return an !mpi.retval value that can be used to check for errors.
+
+Operands: ¶
+Operand	Description
+ref	memref of any type values
+tag	32-bit signless integer
+rank	32-bit signless integer
+Results: ¶
+Result	Description
+retval	MPI function call return value

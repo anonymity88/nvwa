@@ -1,0 +1,21 @@
+shape.min (shape::MinOp) ¶
+Elementwise minimum
+
+Syntax:
+
+operation ::= `shape.min` $lhs `,` $rhs attr-dict `:` type($lhs) `,` type($rhs) `->` type($result)
+Computes the elementwise minimum of two sizes or shapes with equal ranks. If either operand is an error, then an error will be propagated to the result. If the input types mismatch or the ranks do not match, then the result is an error.
+
+Traits: AlwaysSpeculatableImplTrait, Commutative, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	shape or size
+rhs	shape or size
+Results: ¶
+Result	Description
+result	shape or size

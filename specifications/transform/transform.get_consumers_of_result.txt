@@ -1,0 +1,21 @@
+transform.get_consumers_of_result (transform::GetConsumersOfResult) ¶
+Get handle to the consumers of this operation’s result number
+
+Syntax:
+
+operation ::= `transform.get_consumers_of_result` $target `[` $result_number `]` attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op corresponds to all operations that consume the SSA value defined by the target and result_number arguments. This operation applies to a single payload operation, otherwise it produces a definite failure. The return handle points to the consuming operations operations, which can be empty.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+result_number	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+consumers	TransformHandleTypeInterface instance

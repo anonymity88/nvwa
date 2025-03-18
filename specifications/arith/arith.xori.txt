@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// XOrIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_XOrIOp : Arith_TotalIntBinaryOp<"xori", [Commutative]> {
+  let summary = "integer binary xor";
+  let description = [{
+    The `xori` operation takes two operands and returns one result, each of
+    these is required to be the same type. This type may be an integer scalar
+    type, a vector whose element type is integer, or a tensor of integers. It
+    has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar integer bitwise xor.
+    %a = arith.xori %b, %c : i64
+
+    // SIMD vector element-wise bitwise integer xor.
+    %f = arith.xori %g, %h : vector<4xi32>
+
+    // Tensor element-wise bitwise integer xor.
+    %x = arith.xori %y, %z : tensor<4x?xi8>
+    ```
+  }];
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

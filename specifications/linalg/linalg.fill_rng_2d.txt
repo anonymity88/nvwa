@@ -1,0 +1,14 @@
+linalg.fill_rng_2d (linalg::FillRng2DOp)
+Fills the output tensor with pseudo random numbers.
+
+The operation generations pseudo random numbers using a linear congruential generator. It provides no guarantees regarding the distribution of the generated random numbers. Instead of generating the random numbers sequentially, it instantiates one random number generator per data element and runs them in parallel. The seed operand and the indices of the data element seed the random number generation. The min and max operands limit the range of the generated random numbers. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

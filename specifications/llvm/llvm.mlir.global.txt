@@ -1,0 +1,91 @@
+llvm.mlir.global (LLVM::GlobalOp) ¶
+LLVM dialect global.
+
+Since MLIR allows for arbitrary operations to be present at the top level, global variables are defined using the llvm.mlir.global operation. Both global constants and variables can be defined, and the value may also be initialized in both cases.
+
+There are two forms of initialization syntax. Simple constants that can be represented as MLIR attributes can be given in-line:
+
+llvm.mlir.global @variable(32.0 : f32) : f32
+This initialization and type syntax is similar to llvm.mlir.constant and may use two types: one for MLIR attribute and another for the LLVM value. These types must be compatible.
+
+More complex constants that cannot be represented as MLIR attributes can be given in an initializer region:
+
+// This global is initialized with the equivalent of:
+//   i32* getelementptr (i32* @g2, i32 2)
+llvm.mlir.global constant @int_gep() : !llvm.ptr {
+  %0 = llvm.mlir.addressof @g2 : !llvm.ptr
+  %1 = llvm.mlir.constant(2 : i32) : i32
+  %2 = llvm.getelementptr %0[%1]
+     : (!llvm.ptr, i32) -> !llvm.ptr, i32
+  // The initializer region must end with `llvm.return`.
+  llvm.return %2 : !llvm.ptr
+}
+Only one of the initializer attribute or initializer region may be provided.
+
+llvm.mlir.global must appear at top-level of the enclosing module. It uses an @-identifier for its value, which will be uniqued by the module with respect to other @-identifiers in it.
+
+Examples:
+
+// Global values use @-identifiers.
+llvm.mlir.global constant @cst(42 : i32) : i32
+
+// Non-constant values must also be initialized.
+llvm.mlir.global @variable(32.0 : f32) : f32
+
+// Strings are expected to be of wrapped LLVM i8 array type and do not
+// automatically include the trailing zero.
+llvm.mlir.global @string("abc") : !llvm.array<3 x i8>
+
+// For strings globals, the trailing type may be omitted.
+llvm.mlir.global constant @no_trailing_type("foo bar")
+
+// A complex initializer is constructed with an initializer region.
+llvm.mlir.global constant @int_gep() : !llvm.ptr {
+  %0 = llvm.mlir.addressof @g2 : !llvm.ptr
+  %1 = llvm.mlir.constant(2 : i32) : i32
+  %2 = llvm.getelementptr %0[%1]
+     : (!llvm.ptr, i32) -> !llvm.ptr, i32
+  llvm.return %2 : !llvm.ptr
+}
+Similarly to functions, globals have a linkage attribute. In the custom syntax, this attribute is placed between llvm.mlir.global and the optional constant keyword. If the attribute is omitted, external linkage is assumed by default.
+
+Examples:
+
+// A constant with internal linkage will not participate in linking.
+llvm.mlir.global internal constant @cst(42 : i32) : i32
+
+// By default, "external" linkage is assumed and the global participates in
+// symbol resolution at link-time.
+llvm.mlir.global @glob(0 : f32) : f32
+
+// Alignment is optional
+llvm.mlir.global private constant @y(dense<1.0> : tensor<8xf32>) : !llvm.array<8 x f32>
+Like global variables in LLVM IR, globals can have an (optional) alignment attribute using keyword alignment. The integer value of the alignment must be a positive integer that is a power of 2.
+
+Examples:
+
+// Alignment is optional
+llvm.mlir.global private constant @y(dense<1.0> : tensor<8xf32>) { alignment = 32 : i64 } : !llvm.array<8 x f32>
+Traits: IsolatedFromAbove, SingleBlockImplicitTerminator<ReturnOp>, SingleBlock
+
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+global_type	::mlir::TypeAttr	any type attribute
+constant	::mlir::UnitAttr	unit attribute
+sym_name	::mlir::StringAttr	string attribute
+linkage	::mlir::LLVM::LinkageAttr	LLVM Linkage specification
+dso_local	::mlir::UnitAttr	unit attribute
+thread_local_	::mlir::UnitAttr	unit attribute
+externally_initialized	::mlir::UnitAttr	unit attribute
+value	::mlir::Attribute	any attribute
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+addr_space	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative
+unnamed_addr	::mlir::LLVM::UnnamedAddrAttr	
+LLVM GlobalValue UnnamedAddr
+section	::mlir::StringAttr	string attribute
+comdat	::mlir::SymbolRefAttr	symbol reference attribute
+dbg_exprs	::mlir::ArrayAttr	an array of variable expressions
+visibility_	::mlir::LLVM::VisibilityAttr	
+LLVM GlobalValue Visibility

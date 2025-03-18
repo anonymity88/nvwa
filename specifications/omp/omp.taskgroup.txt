@@ -1,0 +1,34 @@
+omp.taskgroup (omp::TaskgroupOp) ¶
+Taskgroup construct
+
+Syntax:
+
+operation ::= `omp.taskgroup` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              )
+              custom<TaskReductionRegion>(
+              $region, $task_reduction_vars, type($task_reduction_vars),
+              $task_reduction_byref, $task_reduction_syms) attr-dict
+The taskgroup construct specifies a wait on completion of child tasks of the current task and their descendent tasks.
+
+When a thread encounters a taskgroup construct, it starts executing the region. All child tasks generated in the taskgroup region and all of their descendants that bind to the same parallel region as the taskgroup region are part of the taskgroup set associated with the taskgroup region. There is an implicit task scheduling point at the end of the taskgroup region. The current task is suspended at the task scheduling point until all tasks in the taskgroup set complete execution.
+
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+The task_reduction clause specifies a reduction among tasks. For each list item, the number of copies is unspecified. Any copies associated with the reduction are initialized before they are accessed by the tasks participating in the reduction. After the end of the region, the original list item contains the result of the reduction. Similarly to the reduction clause, accumulator variables must be passed in task_reduction_vars, symbols referring to reduction declarations in the task_reduction_syms attribute, and whether the reduction variable should be passed into the reduction region by value or by reference in task_reduction_byref.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope
+
+Interfaces: BlockArgOpenMPOpInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+task_reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+task_reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+task_reduction_vars	variadic of OpenMP-compatible variable type

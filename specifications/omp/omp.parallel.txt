@@ -1,0 +1,50 @@
+omp.parallel (omp::ParallelOp) ¶
+Parallel construct
+
+Syntax:
+
+operation ::= `omp.parallel` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              |
+              `if` `(` $if_expr `)`
+              |
+              `num_threads` `(` $num_threads `:` type($num_threads) `)`
+              |
+              `proc_bind` `(` custom<ClauseAttr>($proc_bind_kind) `)`
+              )
+              custom<PrivateReductionRegion>($region, $private_vars, type($private_vars),
+              $private_syms, $reduction_vars, type($reduction_vars), $reduction_byref,
+              $reduction_syms) attr-dict
+The parallel construct includes a region of code which is to be executed by a team of threads.
+
+The optional if_expr parameter specifies a boolean result of a conditional check. If this value is 1 or is not provided then the parallel region runs as normal, if it is 0 then the parallel region is executed with one thread.
+
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+The optional num_threads parameter specifies the number of threads which should be used to execute the parallel region.
+
+The optional proc_bind_kind attribute controls the thread affinity for the execution of the parallel region.
+
+Reductions can be performed by specifying reduction accumulator variables in reduction_vars, symbols referring to reduction declarations in the reduction_syms attribute, and whether the reduction variable should be passed into the reduction region by value or by reference in reduction_byref. Each reduction is identified by the accumulator it uses and accumulators must not be repeated in the same reduction. A private variable corresponding to the accumulator is used in place of the accumulator inside the body of the operation. The reduction declaration specifies how to combine the values from each iteration, section, team, thread or simd lane defined by the operation’s region into the final value, which is available in the accumulator after they all complete.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, RecursiveMemoryEffects
+
+Interfaces: BlockArgOpenMPOpInterface, ComposableOpInterface, OutlineableOpenMPOpInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+proc_bind_kind	::mlir::omp::ClauseProcBindKindAttr	
+ProcBindKind Clause
+reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+if_expr	1-bit signless integer
+num_threads	integer or index
+private_vars	variadic of any type
+reduction_vars	variadic of OpenMP-compatible variable type

@@ -1,0 +1,34 @@
+tensor.splat (tensor::SplatOp) ¶
+Tensor splat or broadcast operation
+
+Syntax:
+
+operation ::= `tensor.splat` $input (`[` $dynamicSizes^ `]`)? attr-dict `:` type($aggregate)
+Broadcast the operand to all elements of the result tensor. The operand is required to be of integer/index/float type.
+
+An additional argument of type index must be provided for each dynamic dimension present in the result type.
+
+Example for a statically shaped tensor:
+
+%s = arith.constant 1.0 : f32
+%t = tensor.splat %s : tensor<8x16xf32>
+Example for a tensor containing dynamic dimensions:
+
+// Broadcasts %s to a 3D dynamically shaped tensor, with %m and %n binding
+// to dimensions 0 and 2 of the resulting tensor, respectively.
+%m = arith.constant 10 : index
+%n = arith.constant 30 : index
+%t = tensor.splat %s[%m, %n] : tensor<?x20x?xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	integer/index/float type
+dynamicSizes	variadic of index
+Results: ¶
+Result	Description
+aggregate	ranked tensor of any type values

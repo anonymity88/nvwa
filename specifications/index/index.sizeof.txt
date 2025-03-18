@@ -1,0 +1,20 @@
+index.sizeof (index::SizeOfOp) ¶
+Size in bits of the index type
+
+Syntax:
+
+operation ::= `index.sizeof` attr-dict
+The index.sizeof operation produces an index-typed SSA value equal to the size in bits of the index type. For example, on 32-bit systems, the result is 32 : index, and on 64-bit systems, the result is 64 : index.
+
+Example:
+
+%0 = index.sizeof
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+result	index

@@ -1,0 +1,12 @@
+llvm.intr.masked.scatter (LLVM::masked_scatter) ¶
+Syntax:
+
+operation ::= `llvm.intr.masked.scatter` $value `,` $ptrs `,` $mask attr-dict `:` type($value) `,` type($mask) `into` type($ptrs)
+Attributes: ¶
+Attribute	MLIR Type	Description
+alignment	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+value	LLVM dialect-compatible vector type
+ptrs	LLVM dialect-compatible vector of LLVM pointer type
+mask	LLVM dialect-compatible vector of 1-bit signless integer

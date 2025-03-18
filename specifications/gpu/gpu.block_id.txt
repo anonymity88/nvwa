@@ -1,0 +1,27 @@
+gpu.block_id (gpu::BlockIdOp) ¶
+Syntax:
+
+operation ::= `gpu.block_id` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the block id, i.e. the index of the current block within the grid along the x, y, or z dimension.
+
+Example:
+
+%bIdY = gpu.block_id y
+If upper_bound is set, or if one can be inferred from known_grid_size-type annotations in context, executions where the block index in dimension would be greater than or equal to that bound cause undefined behavior. upper_bound takes priority over bounds inferrable from context.
+
+There is an implicit upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

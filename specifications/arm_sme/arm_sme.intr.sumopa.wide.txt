@@ -1,0 +1,10 @@
+arm_sme.intr.sumopa.wide (arm_sme::aarch64_sme_sumopa_wide) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+tile_id	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+lhs_predicate	a vector type that is a supported predicate for the SME MOP instructions
+rhs_predicate	a vector type that is a supported predicate for the SME MOP instructions
+lhs_vector	a vector type that is a supported input for the SME MOP instructions
+rhs_vector	a vector type that is a supported input for the SME MOP instructions

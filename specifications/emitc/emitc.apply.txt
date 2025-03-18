@@ -1,0 +1,27 @@
+emitc.apply (emitc::ApplyOp) ¶
+Apply operation
+
+Syntax:
+
+operation ::= `emitc.apply` $applicableOperator `(` $operand `)` attr-dict `:` functional-type($operand, results)
+With the emitc.apply operation the operators & (address of) and * (contents of) can be applied to a single operand.
+
+Example:
+
+// Custom form of applying the & operator.
+%0 = emitc.apply "&"(%arg0) : (!emitc.lvalue<i32>) -> !emitc.ptr<i32>
+
+// Generic form of the same operation.
+%0 = "emitc.apply"(%arg0) {applicableOperator = "&"}
+    : (!emitc.lvalue<i32>) -> !emitc.ptr<i32>
+Traits: CExpression
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+applicableOperator	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+operand	type supported by EmitC or EmitC lvalue type
+Results: ¶
+Result	Description
+result	type supported by EmitC

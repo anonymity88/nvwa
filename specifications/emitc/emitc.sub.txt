@@ -1,0 +1,28 @@
+emitc.sub (emitc::SubOp) ¶
+Subtraction operation
+
+Syntax:
+
+operation ::= `emitc.sub` operands attr-dict `:` functional-type(operands, results)
+With the emitc.sub operation the arithmetic operator - (subtraction) can be applied.
+
+Example:
+
+// Custom form of the substraction operation.
+%0 = emitc.sub %arg0, %arg1 : (i32, i32) -> i32
+%1 = emitc.sub %arg2, %arg3 : (!emitc.ptr<f32>, i32) -> !emitc.ptr<f32>
+%2 = emitc.sub %arg4, %arg5 : (!emitc.ptr<i32>, !emitc.ptr<i32>)
+    -> !emitc.ptrdiff_t
+// Code emitted for the operations above.
+int32_t v7 = v1 - v2;
+float* v8 = v3 - v4;
+ptrdiff_t v9 = v5 - v6;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+lhs	type supported by EmitC
+rhs	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

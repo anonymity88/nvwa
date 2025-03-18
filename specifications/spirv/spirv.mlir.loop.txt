@@ -1,0 +1,15 @@
+spirv.mlir.loop (spirv::LoopOp) ¶
+Define a structured loop.
+
+SPIR-V can explicitly declare structured control-flow constructs using merge instructions. These explicitly declare a header block before the control flow diverges and a merge block where control flow subsequently converges. These blocks delimit constructs that must nest, and can only be entered and exited in structured ways. See “2.11. Structured Control Flow” of the SPIR-V spec for more details.
+
+Instead of having a spirv.LoopMerge op to directly model loop merge instruction for indicating the merge and continue target, we use regions to delimit the boundary of the loop: the merge target is the next op following the spirv.mlir.loop op and the continue target is the block that has a back-edge pointing to the entry block inside the spirv.mlir.loop’s region. This way it’s easier to discover all blocks belonging to a construct and it plays nicer with the MLIR system.
+
+The spirv.mlir.loop region should contain at least four blocks: one entry block, one loop header block, one loop continue block, one loop merge block. The entry block should be the first block and it should jump to the loop header block, which is the second block. The loop merge block should be the last block. The merge block should only contain a spirv.mlir.merge op. The continue block should be the second to last block and it should have a branch to the loop header block. The loop continue block should be the only block, except the entry block, branching to the header block.
+
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+loop_control	::mlir::spirv::LoopControlAttr	
+valid SPIR-V LoopControl

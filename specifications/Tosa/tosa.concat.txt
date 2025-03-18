@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// Operator: concat
+//===----------------------------------------------------------------------===//
+def Tosa_ConcatOp : Tosa_InferTensorTypeOp<"concat"> {
+  let summary = "Concatenates tensors along one dimension.";
+
+  let description = [{
+    Concatenate a variadic amount of tensors along a given axis. No data
+    conversion happens during a concat operation.
+  }];
+
+  let arguments = (ins
+    Variadic<Tosa_Tensor>:$input1,
+    I32Attr:$axis
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+
+  let extraClassDeclaration = [{
+    /// Returns true when two result types are compatible for this op;
+    /// Method used by InferTypeOpInterface.
+    static bool isCompatibleReturnTypes(TypeRange l, TypeRange r);
+  }];
+}
+

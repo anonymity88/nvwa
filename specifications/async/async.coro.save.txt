@@ -1,0 +1,16 @@
+async.coro.save (async::CoroSaveOp) ¶
+Saves the coroutine state
+
+Syntax:
+
+operation ::= `async.coro.save` $handle attr-dict
+The async.coro.saves saves the coroutine state.
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+handle	coroutine handle
+Results: ¶
+Result	Description
+state	saved coroutine state

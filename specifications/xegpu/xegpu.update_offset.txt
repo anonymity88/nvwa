@@ -1,0 +1,281 @@
+xegpu.update_offset (xegpu::UpdateOffsetOp) ¶
+It updates the offsets for the given tensor descriptor
+
+Syntax:
+
+operation ::= `xegpu.update_offset` $TensorDesc `,` $offsets attr-dict `:` qualified(type($TensorDesc)) `,` type($offsets)
+It behaves similar to update_nd_offset in terms that it updates offset of a TensorDesc, and the offsets are relative offset to the current position in the number of elements. However, update_nd_offset is to update the start point of a 2D block, so its offset constains two elements representing the shift in each dimension. update_offset is to update the offset per work-item, so its offsets contains values representing shifts for each work-item.
+
+Example:
+```mlir
+  %off = arith.constant dense<[32, 32, 32, 32]> : vector<4xindex>
+  %2 = xegpu.update_offset %1, %off :
+          !xegpu.tensor_desc<4x2xf32, #xegpu.scattered_tdesc_attr<>>, vector<4xindex>
+```
+Operands: ¶
+Operand	Description
+TensorDesc	TensorDesc describing regions of interested data.
+offsets	vector of index values of ranks 1
+Results: ¶
+Result	Description
+result	TensorDesc describing regions of interested data.
+Attributes ¶
+BlockTensorDescAttr ¶
+a composite attribute for TensorDescType
+
+Syntax:
+
+#xegpu.block_tdesc_attr<
+  MemorySpaceAttr,   # memory_space
+  IntegerAttr,   # array_length
+  BoolAttr   # boundary_check
+>
+BlockTensorDesc (or block_tdesc_attr) is a composite attribute defined for TensorDescType for describing following properties of a TensorDesc. 1. memory_space: It describes where the data block described by the TensorDesc is located, Global device memory or Shared local memory. It is default to Global. 2. array_length: It describes how many horizontally consecutive blocks will be loaded by a hardware load instruction. If the TensorDesc shape is 8x16, with array_length = 2. The loaded block shape will be acctually 8x32. Its default value is 1. 3. boundary_check: It is used to indicates the hardware whether to do out-of-boundary check. The default value is true.
+
+Parameters: ¶
+Parameter	C++ type	Description
+memory_space	MemorySpaceAttr	
+array_length	IntegerAttr	1
+boundary_check	BoolAttr	true
+CachePolicyAttr ¶
+Describe the cache settings for prefetch/load/store operators
+
+Syntax:
+
+#xegpu.cache_hint<
+  ::mlir::xegpu::CachePolicy   # value
+>
+Enum cases:
+
+cached (CACHED)
+uncached (UNCACHED)
+streaming (STREAMING)
+read_invalidate (READ_INVALIDATE)
+write_back (WRITE_BACK)
+write_through (WRITE_THROUGH)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::xegpu::CachePolicy	an enum of type CachePolicy
+FenceScopeAttr ¶
+Describes the scope of fence. “workgroup” means that the scope is within each work group. “gpu” means the scope is across work groups within the gpu.
+
+Syntax:
+
+#xegpu.fence_scope<
+  ::mlir::xegpu::FenceScope   # value
+>
+Enum cases:
+
+workgroup (Workgroup)
+gpu (GPU)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::xegpu::FenceScope	an enum of type FenceScope
+MemorySpaceAttr ¶
+Describe the location of data described by a TensorDesc: Global device memory (Global) or Shared local memory (SLM).
+
+Syntax:
+
+#xegpu.memory_space<
+  ::mlir::xegpu::MemorySpace   # value
+>
+Enum cases:
+
+global (Global)
+slm (SLM)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::xegpu::MemorySpace	an enum of type MemorySpace
+SGMapAttr ¶
+Describes the mapping between work item (WI) and the 2D tensor specified by the tensor descriptor.
+To distribute the XeGPU operation to work items, the tensor_desc must be specified with the sg_map attribute at the tensor description creation time. Within the sg_map, wi_layout specifies the layout of work items, describing the mapping of work items to the tensor. wi_layout[0] x wi_layout[1] must be equal to the total number of work items within a subgroup. wi_data specifies the minimum number of data elements assigned to each work item for a single distribution.
+
+E.g., #xegpu.sg_map<wi_layout = [1, 16], wi_data = [1, 1]> In this example, the subgroup has 16 work items in wi_layout=[1, 16], each accessing 1 element as specified by wi_data=[1, 1].
+
+wi_data[0] * wi_data[1] can be greater than 1, meaning that each work item operates on multiple elements, which is eventually lowered to “SIMT-flavor” vector, like SPIR-V vector or llvm vector, or packed to a storage data type. The multiple elements indicated by wi_data can only be from one dimension and must be contiguous in the memory along either dimension.
+
+Parameters: ¶
+Parameter	C++ type	Description
+wi_layout	::llvm::ArrayRef<uint32_t>	
+wi_data	::llvm::ArrayRef<uint32_t>	
+ScatterTensorDescAttr ¶
+a composite attribute for TensorDescType
+
+Syntax:
+
+#xegpu.scatter_tdesc_attr<
+  MemorySpaceAttr,   # memory_space
+  IntegerAttr   # chunk_size
+>
+ScatterTensorDesc (or scatter_tdesc_attr) is a composite attribute defined for TensorDescType for describing following properties of a TensorDesc. 1. memory_space: It describes where the data block described by the TensorDesc is located, Global device memory or Shared local memory. It is default to Global. 2. chunk_size: indicates number of continious elements accessed for each offset, default is 1. It is used with scattered attr only.
+
+Parameters: ¶
+Parameter	C++ type	Description
+memory_space	MemorySpaceAttr	
+chunk_size	IntegerAttr	1
+Types ¶
+NbarrierType ¶
+!xegpu.nbarrier a custom XeGPU type representing a barrier.
+
+Syntax: !xegpu.nbarrier
+
+TensorDescType ¶
+TensorDesc describing regions of interested data.
+
+TensorDesc is a type designed to describe regions of the interested data as well as some features that are unique to Intel hardware. Different with the builtin tensor type in MLIR, it essentially only contains the meta data, and doesn’t hold the data by itself. It is designed to mainly support 2D block load/store and DPAS (matrix multiplication instruction) on Intel GPU. It encodes the following information:
+
+shape: the sizes/shape of the intereted data block, e.g., 8x16 means 8 rows and each row contains 16 contiguous data element. The rows could be either contiguous or not, depends on whether the encoding attribute is set or not.
+element_type: the data type of the data element, e.g., f16, f32.
+Similar to the builtin tensor, it also provides an optinal attribute to encoding the following information via the TensorDescAttr object:
+
+memory_space (xegpu::MemorySpace): [optional] where the data is located, global memory or shared memory. It is default to Global.
+array_length (int): [optional] The number of contiguous blocks with size as shape, that will be loaded by block load at a time. It is default to 1.
+boundary_check (bool): [optional] indicates whether the operation detects the boundary and pads with zero for out-of-boundary access. It is default to do boundary check.
+Syntax:
+
+TensorDesc-type ::= `tensor_desc` `<` dim-list element-type (attr-list)? `>`
+element-type ::= float-type | integer-type | index-type
+dim-list := (static-dim-list `x`)?
+static-dim-list ::= decimal-literal `x` decimal-literal
+attr-list = (, memory_space = value)? (, arr_len = value)? (, boundary_check = value)? (, scattered = value)? (, sg_map `<` wi_layout = value, wi_data = value `>`)?
+Examples:
+
+// A block TensorDesc with 8x16 i32 elements
+xegpu.tensor_desc<8x16xi32>
+
+// A block TensorDesc with 8x16 f32 elements
+xegpu.tensor_desc<8x16xf32>
+
+// A TensorDesc with 8x16 f32 elements for a memory region in shared memory space.
+xegpu.tensor_desc<8x16xf32, #xegpu.tdesc_attr<memory_space = slm>>
+
+// A TensorDesc with a sg_map
+xegpu.tensor_desc<8x16xf32, #xegpu.sg_map<wi_layout = [1, 16], wi_data = [1, 1]>>
+Parameters: ¶
+Parameter	C++ type	Description
+shape	::llvm::ArrayRef<int64_t>	
+elementType	mlir::Type	
+encoding	mlir::Attribute	
+sg_map	mlir::Attribute	
+Enums ¶
+CmpFPredicate ¶
+allowed 64-bit signless integer cases: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+
+Cases: ¶
+Symbol	Value	String
+AlwaysFalse	0	false
+OEQ	1	oeq
+OGT	2	ogt
+OGE	3	oge
+OLT	4	olt
+OLE	5	ole
+ONE	6	one
+ORD	7	ord
+UEQ	8	ueq
+UGT	9	ugt
+UGE	10	uge
+ULT	11	ult
+ULE	12	ule
+UNE	13	une
+UNO	14	uno
+AlwaysTrue	15	true
+CmpIPredicate ¶
+allowed 64-bit signless integer cases: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+Cases: ¶
+Symbol	Value	String
+eq	0	eq
+ne	1	ne
+slt	2	slt
+sle	3	sle
+sgt	4	sgt
+sge	5	sge
+ult	6	ult
+ule	7	ule
+ugt	8	ugt
+uge	9	uge
+DenormalMode ¶
+denormal mode arith
+
+Cases: ¶
+Symbol	Value	String
+ieee	0	ieee
+preserve_sign	1	preserve_sign
+positive_zero	2	positive_zero
+IntegerOverflowFlags ¶
+Integer overflow arith flags
+
+Cases: ¶
+Symbol	Value	String
+none	0	none
+nsw	1	nsw
+nuw	2	nuw
+RoundingMode ¶
+Floating point rounding mode
+
+Cases: ¶
+Symbol	Value	String
+to_nearest_even	0	to_nearest_even
+downward	1	downward
+upward	2	upward
+toward_zero	3	toward_zero
+to_nearest_away	4	to_nearest_away
+AtomicRMWKind ¶
+allowed 64-bit signless integer cases: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+
+Cases: ¶
+Symbol	Value	String
+addf	0	addf
+addi	1	addi
+assign	2	assign
+maximumf	3	maximumf
+maxs	4	maxs
+maxu	5	maxu
+minimumf	6	minimumf
+mins	7	mins
+minu	8	minu
+mulf	9	mulf
+muli	10	muli
+ori	11	ori
+andi	12	andi
+maxnumf	13	maxnumf
+minnumf	14	minnumf
+FastMathFlags ¶
+Floating point fast math flags
+
+Cases: ¶
+Symbol	Value	String
+none	0	none
+reassoc	1	reassoc
+nnan	2	nnan
+ninf	4	ninf
+nsz	8	nsz
+arcp	16	arcp
+contract	32	contract
+afn	64	afn
+fast	127	fast
+CachePolicy ¶
+Cache policy
+
+Cases: ¶
+Symbol	Value	String
+CACHED	0	cached
+UNCACHED	1	uncached
+STREAMING	2	streaming
+READ_INVALIDATE	3	read_invalidate
+WRITE_BACK	4	write_back
+WRITE_THROUGH	5	write_through
+FenceScope ¶
+The enumeration for the scope of fence operation.
+
+Cases: ¶
+Symbol	Value	String
+Workgroup	0	workgroup
+GPU	1	gpu
+MemorySpace ¶
+The address space of the memory the tensor descritor is created for
+
+Cases: ¶
+Symbol	Value	String
+Global	0	global
+SLM	3	slm

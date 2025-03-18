@@ -1,0 +1,30 @@
+transform.apply_patterns (transform::ApplyPatternsOp) ¶
+Greedily applies patterns to the body of the targeted op
+
+Syntax:
+
+operation ::= `transform.apply_patterns` `to` $target $patterns attr-dict `:` type($target)
+This transform greedily applies the specified patterns to the body of the targeted op until a fixpoint was reached. Patterns are not applied to the targeted op itself.
+
+The patterns that should be applied are specified in the graph region of this op. They must implement the PatternDescriptorOpInterface. The order in which patterns are applied is unspecified; i.e., the ordering of ops in the region of this op is irrelevant.
+
+If apple_cse is set, the greedy pattern rewrite is interleaved with common subexpression elimination (CSE): both are repeated until a fixpoint is reached.
+
+This transform only reads the target handle and modifies the payload. If a pattern erases or replaces a tracked op, the mapping is updated accordingly.
+
+Only replacements via RewriterBase::replaceOp or replaceOpWithNewOp are considered “payload op replacements”. Furthermore, only if the replacement values are defined by the same op and that op has the same type as the original op, the mapping is updated. Otherwise, this transform produces a silenceable failure. More details can be found at the documentation site of TrackingListener.
+
+This transform also produces a silenceable failure if the pattern application did not converge within the default number of iterations/rewrites of the greedy pattern rewrite driver.
+
+Traits: HasOnlyGraphRegion, NoTerminator, ReportTrackingListenerFailuresOpTrait, SingleBlock, TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, RegionKindInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+apply_cse	::mlir::UnitAttr	unit attribute
+max_iterations	::mlir::IntegerAttr	64-bit signless integer attribute
+max_num_rewrites	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

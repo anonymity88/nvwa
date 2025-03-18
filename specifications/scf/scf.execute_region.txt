@@ -1,0 +1,37 @@
+scf.execute_region (scf::ExecuteRegionOp) ¶
+Operation that executes its region exactly once
+
+The scf.execute_region operation is used to allow multiple blocks within SCF and other operations which can hold only one block. The scf.execute_region operation executes the region held exactly once and cannot have any operands. As such, its region has no arguments. All SSA values that dominate the op can be accessed inside the op. The op’s region can have multiple blocks and the blocks can have multiple distinct terminators. Values returned from this op’s region define the op’s results.
+
+Example:
+
+scf.for %i = 0 to 128 step %c1 {
+  %y = scf.execute_region -> i32 {
+    %x = load %A[%i] : memref<128xi32>
+    scf.yield %x : i32
+  }
+}
+
+affine.for %i = 0 to 100 {
+  "foo"() : () -> ()
+  %v = scf.execute_region -> i64 {
+    cf.cond_br %cond, ^bb1, ^bb2
+
+  ^bb1:
+    %c1 = arith.constant 1 : i64
+    cf.br ^bb3(%c1 : i64)
+
+  ^bb2:
+    %c2 = arith.constant 2 : i64
+    cf.br ^bb3(%c2 : i64)
+
+  ^bb3(%x : i64):
+    scf.yield %x : i64
+  }
+  "bar"(%v) : (i64) -> ()
+}
+Interfaces: RegionBranchOpInterface
+
+Results: ¶
+Result	Description
+«unnamed»	variadic of any type

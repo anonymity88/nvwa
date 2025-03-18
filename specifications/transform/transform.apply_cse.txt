@@ -1,0 +1,17 @@
+transform.apply_cse (transform::ApplyCommonSubexpressionEliminationOp) ¶
+Eliminate common subexpressions in the body of the target op
+
+Syntax:
+
+operation ::= `transform.apply_cse` `to` $target attr-dict `:` type($target)
+This transform applies common subexpression elimination (CSE) to the body of the targeted op.
+
+This transform reads the target handle and modifies the payload. Existing handles to operations inside of the targeted op are retained and updated if necessary. Note that this can lead to situations where a handle, that was previously mapped to multiple distinct (but equivalent) operations, is now mapped to the same operation multiple times.
+
+Traits: ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

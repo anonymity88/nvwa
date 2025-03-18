@@ -1,0 +1,27 @@
+complex.angle (complex::AngleOp) ¶
+Computes argument value of a complex number
+
+Syntax:
+
+operation ::= `complex.angle` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The angle op takes a single complex number and computes its argument value with a branch cut along the negative real axis.
+
+Example:
+
+     %a = complex.angle %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	floating-point

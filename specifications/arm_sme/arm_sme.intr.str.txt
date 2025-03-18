@@ -1,0 +1,6 @@
+arm_sme.intr.str (arm_sme::aarch64_sme_str) ¶
+Operands: ¶
+Operand	Description
+index	32-bit signless integer
+store_address	LLVM pointer type
+offset	32-bit signless integer

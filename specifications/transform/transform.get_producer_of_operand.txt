@@ -1,0 +1,21 @@
+transform.get_producer_of_operand (transform::GetProducerOfOperand) ¶
+Get handle to the producer of this operation’s operand number
+
+Syntax:
+
+operation ::= `transform.get_producer_of_operand` $target `[` $operand_number `]` attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op corresponds to operation that produces the SSA value defined by the target and operand_number arguments. If the origin of the SSA value is not an operations (i.e. it is a block argument), the transform produces a silenceable failure. The return handle points to only the subset of successfully produced computational operations, which can be empty.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+operand_number	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+producer	TransformHandleTypeInterface instance

@@ -1,0 +1,25 @@
+vector.fma (vector::FMAOp) ¶
+Vector fused multiply-add
+
+Syntax:
+
+operation ::= `vector.fma` $lhs `,` $rhs `,` $acc attr-dict `:` type($lhs)
+Multiply-add expressions operate on n-D vectors and compute a fused pointwise multiply-and-accumulate: $result = $lhs * $rhs + $acc. All operands and result have the same vector type. The semantics of the operation correspond to those of the llvm.fma intrinsic. In the particular case of lowering to LLVM, this is guaranteed to lower to the llvm.fma.* intrinsic.
+
+Example:
+
+%3 = vector.fma %0, %1, %2: vector<8x16xf32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	vector of floating-point values
+rhs	vector of floating-point values
+acc	vector of floating-point values
+Results: ¶
+Result	Description
+result	vector of floating-point values

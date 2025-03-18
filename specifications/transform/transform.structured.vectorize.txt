@@ -1,0 +1,39 @@
+transform.structured.vectorize (transform::VectorizeOp) ¶
+Syntax:
+
+operation ::= `transform.structured.vectorize` $target oilist(
+              `vector_sizes` custom<DynamicIndexList>(
+              $vector_sizes,
+              $static_vector_sizes,
+              $scalable_sizes))
+              attr-dict
+              `:` type($target)(`,`type($vector_sizes)^)?
+Vectorize the target ops, which must be Linalg ops.
+
+Use the optional vector sizes to specify exactly what configuration the vectorizer should use. It will then use masked vectors of the specified size to enforce this configuration (“masked vectorization”). If no vector sizes are specified, the vectorizer will infer the shapes to use from the target Linalg ops (“regular vectorization”). More specifically:
+
+transform.structured.vectorize %target vector_sizes [1, 4] : !transform.any_op
+# Regular vectorization - vector sizes are inferred from the target Op
+transform.structured.vectorize %target : !transform.any_op
+The vector sizes can be either static or dynamic (SSA values). In case of SSA values, the handle must be mapped to exactly one payload op with exactly one index-typed result.
+
+Note: The input vector sizes must be bigger than or equal to their counterpart iteration space sizes.
+
+Typically this operator should be applied to linalg operations that have already been tiled to the appropriate sizes.
+
+Return modes: ¶
+This operation produces a silenceable failure if at least one target op is not a Linalg op or fails to vectorize. It produces a definite failure if the dynamic vector sizes (SSA values) do not satisfy the constraints mentioned above.
+
+Traits: ReportTrackingListenerFailuresOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+static_vector_sizes	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+vectorize_nd_extract	::mlir::UnitAttr	unit attribute
+scalable_sizes	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+vector_sizes	variadic of transform any param type or any handle type

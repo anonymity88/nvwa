@@ -1,0 +1,32 @@
+vector.scan (vector::ScanOp) ¶
+Scan operation
+
+Syntax:
+
+operation ::= `vector.scan` $kind `,` $source `,` $initial_value attr-dict `:` type($source) `,` type($initial_value)
+Performs an inclusive/exclusive scan on an n-D vector along a single dimension returning an n-D result vector using the given operation (add/mul/minsi/minui/maxsi/maxui/and/or/xor for integers, and add/mul/minnumf/maxnumf/minimumf/maximumf for floats), and a specified value for the initial value. The operator returns the result of scan as well as the result of the last reduction in the scan.
+
+Example:
+
+%1:2 = vector.scan <add>, %0, %acc {inclusive = false, reduction_dim = 1 : i64} :
+  vector<4x8x16x32xf32>, vector<4x16x32xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::vector::CombiningKindAttr	
+Kind of combining function for contractions and reductions
+reduction_dim	::mlir::IntegerAttr	64-bit signless integer attribute
+inclusive	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+source	vector of any type values
+initial_value	vector of any type values
+Results: ¶
+Result	Description
+dest	vector of any type values
+accumulated_value	vector of any type values

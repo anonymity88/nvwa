@@ -1,0 +1,14 @@
+x86vector.avx512.intr.vp2intersect.q.512 (x86vector::Vp2IntersectQIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 64-bit signless integer values of length 8
+b	vector of 64-bit signless integer values of length 8
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

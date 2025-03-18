@@ -1,0 +1,12 @@
+llvm.intr.coro.end (LLVM::CoroEndOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.end` $handle `,` $unwind `,` $retvals attr-dict `:` functional-type(operands, results)
+Operands: ¶
+Operand	Description
+handle	LLVM pointer type
+unwind	1-bit signless integer
+retvals	LLVM token type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

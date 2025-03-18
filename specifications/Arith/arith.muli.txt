@@ -1,0 +1,46 @@
+//===----------------------------------------------------------------------===//
+// MulIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MulIOp : Arith_IntBinaryOpWithOverflowFlags<"muli",
+  [Commutative, DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>]
+> {
+  let summary = [{
+    Integer multiplication operation.
+  }];
+  let description = [{
+    Performs N-bit multiplication on the operands. The operands are interpreted as
+    unsigned bitvectors. The result is represented by a bitvector containing the
+    mathematical value of the multiplication modulo 2^n, where `n` is the bitwidth.
+    Because `arith` integers use a two's complement representation, this operation is
+    applicable on both signed and unsigned integer operands.
+
+    The `muli` operation takes two operands and returns one result, each of
+    these is required to be the same type. This type may be an integer scalar type,
+    a vector whose element type is integer, or a tensor of integers.
+
+    This op supports `nuw`/`nsw` overflow flags which stands stand for
+    "No Unsigned Wrap" and "No Signed Wrap", respectively. If the `nuw` and/or
+    `nsw` flags are present, and an unsigned/signed overflow occurs
+    (respectively), the result is poison.
+
+    Example:
+
+    ```mlir
+    // Scalar multiplication.
+    %a = arith.muli %b, %c : i64
+
+    // Scalar multiplication with overflow flags.
+    %a = arith.muli %b, %c overflow<nsw, nuw> : i64
+
+    // SIMD vector element-wise multiplication.
+    %f = arith.muli %g, %h : vector<4xi32>
+
+    // Tensor element-wise multiplication.
+    %x = arith.muli %y, %z : tensor<4x?xi8>
+    ```
+  }];
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

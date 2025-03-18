@@ -1,0 +1,24 @@
+pdl_interp.is_not_null (pdl_interp::IsNotNullOp) ¶
+Check if a positional value is non-null
+
+Syntax:
+
+operation ::= `pdl_interp.is_not_null` $value `:` type($value) attr-dict `->` successors
+pdl_interp.is_not_null operations check that a positional value or range exists. For ranges, this does not mean that the range was simply empty. On success, this operation branches to the true destination. Otherwise, the false destination is taken.
+
+Example:
+
+pdl_interp.is_not_null %value : !pdl.value -> ^matchDest, ^failureDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	pdl type
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

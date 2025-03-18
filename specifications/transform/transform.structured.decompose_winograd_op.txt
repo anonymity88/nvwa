@@ -1,0 +1,19 @@
+transform.structured.decompose_winograd_op (transform::DecomposeWinogradOp) ¶
+Syntax:
+
+operation ::= `transform.structured.decompose_winograd_op` $target attr-dict `:` functional-type($target, results)
+Decompose winograd operations. It will convert filter, input and output transform operations into a combination of scf, tensor, and linalg equivalent operations. Before applying this transform operations, users need to tile winograd transform operations into supported sizes.
+
+Return modes: ¶
+This operation fails if target is unsupported. Otherwise, the operation succeeds and returns a handle of the sequence that replaces the original operations.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

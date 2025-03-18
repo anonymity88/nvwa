@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// AsinOp
+//===----------------------------------------------------------------------===//
+
+def Math_AsinOp : Math_FloatUnaryOp<"asin">{
+  let summary = "arcus sine of the given value";
+  let description = [{
+    Syntax:
+
+    ```
+    operation ::= ssa-id `=` `math.asin` ssa-use `:` type
+    ```
+
+    The `asin` operation computes the arcus sine of a given value.  It takes
+    one operand of floating point type (i.e., scalar, tensor or vector) and returns
+    one result of the same type. It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Arcus sine of scalar value.
+    %a = math.asin %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

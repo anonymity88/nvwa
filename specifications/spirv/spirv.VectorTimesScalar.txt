@@ -1,0 +1,27 @@
+spirv.VectorTimesScalar (spirv::VectorTimesScalarOp) ¶
+Scale a floating-point vector.
+
+Syntax:
+
+operation ::= `spirv.VectorTimesScalar` operands attr-dict `:` `(` type(operands) `)` `->` type($result)
+Result Type must be a vector of floating-point type.
+
+The type of Vector must be the same as Result Type. Each component of Vector is multiplied by Scalar.
+
+Scalar must have the same type as the Component Type in Result Type.
+
+Example: ¶
+%0 = spirv.VectorTimesScalar %vector, %scalar : vector<4xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+vector	vector of 16/32/64-bit float values of length 2/3/4
+scalar	16/32/64-bit float
+Results: ¶
+Result	Description
+result	vector of 16/32/64-bit float values of length 2/3/4

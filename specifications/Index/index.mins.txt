@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// MinSOp
+//===----------------------------------------------------------------------===//
+
+def Index_MinSOp : IndexBinaryOp<"mins", [Commutative, Pure]> {
+  let summary = "index signed minimum";
+  let description = [{
+    The `index.mins` operation takes two index values and computes their signed
+    minimum value. Treats the leading bit as the sign, i.e. `min(-2, 6) = -2`.
+
+    Example:
+
+    ```mlir
+    // c = min(a, b)
+    %c = index.mins %a, %b
+    ```
+  }];
+}
+

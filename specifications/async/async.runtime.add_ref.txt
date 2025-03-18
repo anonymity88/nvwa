@@ -1,0 +1,14 @@
+async.runtime.add_ref (async::RuntimeAddRefOp) ¶
+Adds a reference to async value
+
+Syntax:
+
+operation ::= `async.runtime.add_ref` $operand attr-dict `:` type($operand)
+The async.runtime.add_ref operation adds a reference(s) to async value (token, value or group).
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+count	::mlir::IntegerAttr	64-bit signless integer attribute whose value is positive
+Operands: ¶
+Operand	Description
+operand	async value type or async token type or async group type

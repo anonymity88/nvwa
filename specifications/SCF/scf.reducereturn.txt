@@ -1,0 +1,24 @@
+//===----------------------------------------------------------------------===//
+// ReduceReturnOp
+//===----------------------------------------------------------------------===//
+
+def ReduceReturnOp :
+    SCF_Op<"reduce.return", [HasParent<"ReduceOp">, Pure, Terminator]> {
+  let summary = "terminator for reduce operation";
+  let description = [{
+    The `scf.reduce.return` operation is a special terminator operation for the block inside
+    `scf.reduce` regions. It terminates the region. It should have the same
+    operand type as the corresponding operand of the enclosing `scf.reduce` op.
+
+    Example:
+
+    ```mlir
+    scf.reduce.return %res : f32
+    ```
+  }];
+
+  let arguments = (ins AnyType:$result);
+  let assemblyFormat = "$result attr-dict `:` type($result)";
+  let hasVerifier = 1;
+}
+

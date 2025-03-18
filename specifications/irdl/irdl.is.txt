@@ -1,0 +1,30 @@
+irdl.is (irdl::IsOp) ¶
+Constraints an attribute/type to be a specific attribute instance
+
+Syntax:
+
+operation ::= `irdl.is` $expected ` ` attr-dict
+irdl.is defines a constraint that only accepts a specific instance of a type or attribute.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex_i32 {
+    %0 = irdl.is i32
+    irdl.parameters(%0)
+  }
+}
+The above program defines a complex_i32 type inside the dialect cmath that can only have a i32 as its parameter.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<TypeOp, AttributeOp, OperationOp>
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VerifyConstraintInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+expected	::mlir::Attribute	any attribute
+Results: ¶
+Result	Description
+output	IRDL handle to an mlir::Attribute

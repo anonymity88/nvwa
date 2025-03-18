@@ -1,0 +1,106 @@
+gpu.launch (gpu::LaunchOp) ¶
+GPU kernel launch operation
+
+Launch a kernel on the specified grid of thread blocks. The body of the kernel is defined by the single region that this operation contains. The operation takes an optional list of async dependencies followed by six operands and an optional operand.
+
+The async keyword indicates the kernel should be launched asynchronously; the operation returns a new !gpu.async.token when the keyword is specified. The kernel launched does not start executing until the ops producing its async dependencies (optional operands) have completed.
+
+The first three operands (following any async dependencies) are grid sizes along the x,y,z dimensions and the following three are block sizes along the x,y,z dimensions. When a lower-dimensional kernel is required, unused sizes must be explicitly set to 1. The last operand is optional and corresponds to the amount of dynamic shared memory a kernel’s workgroup should be allocated; when this operand is not present, a zero size is assumed.
+
+The body region has at least twelve arguments, or eighteen if cluster dimensions are present, grouped as follows:
+
+three optional arguments that contain cluster identifiers along x,y,z dimensions;
+three arguments that contain block identifiers along x,y,z dimensions;
+three arguments that contain thread identifiers along x,y,z dimensions;
+operands of the gpu.launch operation as is (i.e. the operands for grid and block sizes).
+a variadic number of Workgroup memory attributions.
+a variadic number of Private memory attributions.
+The kernelFunc and kernelModule attributes are optional and specifies the kernel name and a module in which the kernel should be outlined.
+
+Syntax:
+
+operation ::= `gpu.launch` (`async` (`[` ssa-id-list `]`)? )?
+                         ( `clusters` `(` ssa-id-list `)` `in` ssa-reassignment )?
+                         `blocks` `(` ssa-id-list `)` `in` ssa-reassignment
+                         `threads` `(` ssa-id-list `)` `in` ssa-reassignment
+                         (dynamic_shared_memory_size ssa-use)?
+                         memory-attribution
+                         region attr-dict?
+ssa-reassignment ::= `(` ssa-id `=` ssa-use (`,` ssa-id `=` ssa-use)* `)`
+memory-attribution ::= (`workgroup` `(` ssa-id-and-type-list `)`)?
+                       (`private` `(` ssa-id-and-type-list `)`)?
+Example:
+
+gpu.launch blocks(%bx, %by, %bz) in (%sz_bx = %0, %sz_by = %1, %sz_bz = %2)
+           threads(%tx, %ty, %tz) in (%sz_tx = %3, %sz_ty = %4, %sz_tz = %5) {
+  // Block and thread identifiers, as well as block/grid sizes are
+  // immediately usable inside body region.
+  "some_op"(%bx, %tx) : (index, index) -> ()
+  // Assuming %val1 is defined outside the gpu.launch region.
+  %42 = load %val1[%bx] : memref<?xf32, 1>
+}
+
+// Generic syntax explains how the pretty syntax maps to the IR structure.
+"gpu.launch"(%cst, %cst, %c1,  // Grid sizes.
+             %cst, %c1, %c1)   // Block sizes.
+
+    {/*attributes*/}
+    // All sizes and identifiers have "index" size.
+    : (index, index, index, index, index, index) -> () {
+// The operation passes block and thread identifiers, followed by grid and
+// block sizes.
+^bb0(%bx : index, %by : index, %bz : index,
+     %tx : index, %ty : index, %tz : index,
+     %num_bx : index, %num_by : index, %num_bz : index,
+     %num_tx : index, %num_ty : index, %num_tz : index)
+  "some_op"(%bx, %tx) : (index, index) -> ()
+  %3 = "memref.load"(%val1, %bx) : (memref<?xf32, 1>, index) -> f32
+}
+
+// Launch with memory attributions.
+gpu.launch blocks(%bx, %by, %bz) in (%sz_bx = %0, %sz_by = %1, %sz_bz = %2)
+           threads(%tx, %ty, %tz) in (%sz_tx = %3, %sz_ty = %4, %sz_tz = %5)
+           workgroup(%workgroup: memref<32xf32, 3>)
+           private(%private: memref<1xf32, 5>) {
+  // Block and thread identifiers, as well as block/grid sizes are
+  // immediately usable inside body region.
+  "some_op"(%bx, %tx) : (index, index) -> ()
+  // Assuming %val1 is defined outside the gpu.launch region.
+  %42 = load %workgroup[%bx] : memref<32xf32, 3>
+}
+
+// Launch with clusters.
+gpu.launch clusters(%cx, %cy, %cz) in (%sz_cx = %0, %sz_cy = %1, %sz_cz = %2)
+           blocks(%bx, %by, %bz) in (%sz_bx = %3, %sz_by = %4, %sz_bz = %5)
+           threads(%tx, %ty, %tz) in (%sz_tx = %6, %sz_ty = %7, %sz_tz = %8)
+{
+  // Cluster, block and thread identifiers, as well as cluster/block/grid
+  // sizes are immediately usable inside body region.
+  "some_op"(%cx, %bx, %tx) : (index, index, index) -> ()
+}
+Rationale: using operation/block arguments gives analyses a clear way of understanding that a value has additional semantics (e.g., we will need to know what value corresponds to threadIdx.x for coalescing). We can recover these properties by analyzing the operations producing values, but it is easier just to have that information by construction.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, RecursiveMemoryEffects
+
+Interfaces: GPU_AsyncOpInterface, InferIntRangeInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kernelFunc	::mlir::SymbolRefAttr	symbol reference attribute
+kernelModule	::mlir::SymbolRefAttr	symbol reference attribute
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+gridSizeX	index
+gridSizeY	index
+gridSizeZ	index
+blockSizeX	index
+blockSizeY	index
+blockSizeZ	index
+clusterSizeX	index
+clusterSizeY	index
+clusterSizeZ	index
+dynamicSharedMemorySize	32-bit signless integer
+Results: ¶
+Result	Description
+asyncToken	async token type

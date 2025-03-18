@@ -1,0 +1,27 @@
+complex.expm1 (complex::Expm1Op) ¶
+Computes exponential of a complex number minus 1
+
+Syntax:
+
+operation ::= `complex.expm1` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+complex.expm1(x) := complex.exp(x) - 1
+
+Example:
+
+%a = complex.expm1 %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

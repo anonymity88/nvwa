@@ -1,0 +1,20 @@
+async.coro.suspend (async::CoroSuspendOp) ¶
+Suspends the coroutine
+
+Syntax:
+
+operation ::= `async.coro.suspend` $state `,` $suspendDest `,` $resumeDest  `,` $cleanupDest attr-dict
+The async.coro.suspend suspends the coroutine and transfers control to the suspend successor. If suspended coroutine later resumed it will transfer control to the resume successor. If it is destroyed it will transfer control to the the cleanup successor.
+
+In switched-resume lowering coroutine can be already in resumed state when suspend operation is called, in this case control will be transferred to the resume successor skipping the suspend successor.
+
+Traits: Terminator
+
+Operands: ¶
+Operand	Description
+state	saved coroutine state
+Successors: ¶
+Successor	Description
+suspendDest	any successor
+resumeDest	any successor
+cleanupDest	any successor

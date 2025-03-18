@@ -1,0 +1,30 @@
+omp.atomic.read (omp::AtomicReadOp) ¶
+Performs an atomic read
+
+Syntax:
+
+operation ::= `omp.atomic.read` $v `=` $x oilist(
+              `hint` `(` custom<SynchronizationHint>($hint) `)`
+              |
+              `memory_order` `(` custom<ClauseAttr>($memory_order) `)`
+              ) `:` type($v) `,` type($x) `,` $element_type attr-dict
+This operation performs an atomic read.
+
+The operand x is the address from where the value is atomically read. The operand v is the address where the value is stored after reading.
+
+hint is the value of hint (as specified in the hint clause). It is a compile time constant. As the name suggests, this is just a hint for optimization.
+
+memory_order indicates the memory ordering behavior of the construct. It can be one of seq_cst, acq_rel, release, acquire or relaxed.
+
+Interfaces: AtomicReadOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+element_type	::mlir::TypeAttr	any type attribute
+hint	::mlir::IntegerAttr	64-bit signless integer attribute
+memory_order	::mlir::omp::ClauseMemoryOrderKindAttr	
+MemoryOrderKind Clause
+Operands: ¶
+Operand	Description
+x	OpenMP-compatible variable type
+v	OpenMP-compatible variable type

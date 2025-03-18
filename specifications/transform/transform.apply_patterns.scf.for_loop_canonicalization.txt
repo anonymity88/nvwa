@@ -1,0 +1,7 @@
+transform.apply_patterns.scf.for_loop_canonicalization (transform::ApplyForLoopCanonicalizationPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.scf.for_loop_canonicalization` attr-dict
+Collects patterns for canonicalizing operations inside SCF loop bodies. At the moment, only affine.min/max computations with iteration variables, loop bounds and loop steps are canonicalized.
+
+Interfaces: PatternDescriptorOpInterface

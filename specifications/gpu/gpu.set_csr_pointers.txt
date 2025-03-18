@@ -1,0 +1,28 @@
+gpu.set_csr_pointers (gpu::SetCsrPointersOp) ¶
+SpGEMM get size operation
+
+Syntax:
+
+operation ::= `gpu.set_csr_pointers` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $spmat `,` $positions `,` $coordinates `,` $values attr-dict
+              `:` type($positions) `,` type($coordinates) `,` type($values)
+The gpu.set_csr_pointers assigns the given positions, coordinates, and values buffer that reside on the device directly to the given sparse matrix descriptor in csr format.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%token = gpu.set_csr_pointers async [%dep] %positions, %coordinates, %values
+      : memref<?xf32>, memref<?xindex>, memref<?xindex>
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+spmat	sparse matrix handle type
+positions	memref of any type values
+coordinates	memref of any type values
+values	memref of any type values
+Results: ¶
+Result	Description
+asyncToken	async token type

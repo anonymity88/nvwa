@@ -1,0 +1,27 @@
+memref.store (memref::StoreOp) ¶
+Store operation
+
+Syntax:
+
+operation ::= `memref.store` $value `,` $memref `[` $indices `]` attr-dict `:` type($memref)
+Store a value to a memref location given by indices. The value stored should have the same type as the elemental type of the memref. The number of arguments provided within brackets need to match the rank of the memref.
+
+In an affine context, the indices of a store are restricted to SSA values bound to surrounding loop induction variables, symbols, results of a constant operation, or the result of an affine.apply operation that can in turn take as arguments all of the aforementioned SSA values or the recursively result of such an affine.apply operation.
+
+Example:
+
+memref.store %100, %A[%1, 1023] : memref<4x?xf32, #layout, memspace0>
+Context: The load and store operations are specifically crafted to fully resolve a reference to an element of a memref, and (in polyhedral affine.if and affine.for operations) the compiler can follow use-def chains (e.g. through affine.apply operations) to precisely analyze references at compile-time using polyhedral techniques. This is possible because of the restrictions on dimensions and symbols in these contexts.
+
+Traits: MemRefsNormalizable
+
+Interfaces: DestructurableAccessorOpInterface, PromotableMemOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+nontemporal	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+value	any type
+memref	memref of any type values
+indices	variadic of index

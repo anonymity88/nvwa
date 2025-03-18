@@ -1,0 +1,30 @@
+gpu.create_2to4_spmat (gpu::Create2To4SpMatOp) ¶
+Create sparse matrix with 2:4 sparsity operation
+
+Syntax:
+
+operation ::= `gpu.create_2to4_spmat` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              `{` $pruneFlag `}` $rows `,` $cols `,` $memref attr-dict `:` type($memref)
+The gpu.create_2to4_spmat operation initializes a sparse matrix in dense format with 2:4 sparsity. The buffers must already be copied from the host to the device prior to using this operation. The operation returns a handle to the sparse matrix descriptor.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%spmat, %token = gpu.create_2to4_spmat async [%dep] {PRUNE_AND_CHECK} %rows, %cols, %mem: memref<?xf64>
+Interfaces: GPU_AsyncOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pruneFlag	::mlir::gpu::Prune2To4SpMatFlagAttr	
+pruning strategy for 2:4 sparse matrix
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+rows	index
+cols	index
+memref	memref of any type values
+Results: ¶
+Result	Description
+spMat	sparse matrix handle type
+asyncToken	async token type

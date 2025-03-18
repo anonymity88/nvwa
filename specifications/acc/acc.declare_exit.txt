@@ -1,0 +1,27 @@
+acc.declare_exit (acc::DeclareExitOp) ¶
+Declare directive - exit from implicit data region
+
+Syntax:
+
+operation ::= `acc.declare_exit` oilist(
+              `token` `(` $token `)` |
+              `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              )
+              attr-dict-with-keyword
+The “acc.declare_exit” operation represents the OpenACC declare directive and captures the exit semantics from the implicit data region. This operation is modeled similarly to “acc.exit_data”.
+
+Example showing acc declare device_resident(a):
+
+%0 = acc.getdeviceptr varPtr(%a : !llvm.ptr) -> !llvm.ptr {dataClause = #acc<data_clause declare_device_resident>}
+acc.declare_exit dataOperands(%0 : !llvm.ptr)
+acc.delete accPtr(%0 : !llvm.ptr) {dataClause = #acc<data_clause declare_device_resident>}
+Traits: AttrSizedOperandSegments
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Operands: ¶
+Operand	Description
+token	declare token type
+dataClauseOperands	variadic of PointerLikeType instance

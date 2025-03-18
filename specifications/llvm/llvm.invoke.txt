@@ -1,0 +1,26 @@
+llvm.invoke (LLVM::InvokeOp) ¶
+Traits: AttrSizedOperandSegments, Terminator
+
+Interfaces: BranchOpInterface, BranchWeightOpInterface, CallOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+var_callee_type	::mlir::TypeAttr	type attribute of LLVM function type
+callee	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+branch_weights	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+CConv	::mlir::LLVM::CConvAttr	LLVM Calling Convention specification
+op_bundle_sizes	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+op_bundle_tags	::mlir::ArrayAttr	array attribute
+Operands: ¶
+Operand	Description
+callee_operands	variadic of LLVM dialect-compatible type
+normalDestOperands	variadic of LLVM dialect-compatible type
+unwindDestOperands	variadic of LLVM dialect-compatible type
+op_bundle_operands	variadic of LLVM dialect-compatible type
+Results: ¶
+Result	Description
+result	LLVM dialect-compatible type
+Successors: ¶
+Successor	Description
+normalDest	any successor
+unwindDest	any successor

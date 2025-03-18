@@ -1,0 +1,20 @@
+acc.atomic.read (acc::AtomicReadOp) ¶
+Performs an atomic read
+
+Syntax:
+
+operation ::= `acc.atomic.read` $v `=` $x
+              `:` type($v) `,` type($x) `,` $element_type attr-dict
+This operation performs an atomic read.
+
+The operand x is the address from where the value is atomically read. The operand v is the address where the value is stored after reading.
+
+Interfaces: AtomicReadOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+element_type	::mlir::TypeAttr	any type attribute
+Operands: ¶
+Operand	Description
+x	pointer-like type
+v	pointer-like type

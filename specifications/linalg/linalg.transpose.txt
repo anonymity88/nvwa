@@ -1,0 +1,27 @@
+linalg.transpose (linalg::TransposeOp)
+Transpose operator
+
+Permutes the dimensions of input according to the given permutation. dim(result, i) = dim(input, permutation[i])
+
+This op actually moves data, unlike memref.transpose which is a metadata operation only that produces a transposed “view”.
+
+Example:
+
+  %transpose = linalg.transpose
+      ins(%input:tensor<16x64xf32>)
+      outs(%init:tensor<64x16xf32>)
+      permutation = [1, 0]
+Traits: SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+permutation	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands:
+Operand	Description
+input	memref of any type values or ranked tensor of any type values
+init	memref of any type values or ranked tensor of any type values
+Results:
+Result	Description
+result	variadic of tensor of any type values

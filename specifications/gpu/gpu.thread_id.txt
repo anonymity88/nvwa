@@ -1,0 +1,27 @@
+gpu.thread_id (gpu::ThreadIdOp) ¶
+Syntax:
+
+operation ::= `gpu.thread_id` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the thread id, i.e. the index of the current thread within the block along the x, y, or z dimension.
+
+Example:
+
+%tIdX = gpu.thread_id x
+If upper_bound is set, or if one can be inferred from known_block_size-type annotations in context, executions where the thread index would be greater than or equal to that bound cause undefined behavior.
+
+There is an implicit upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

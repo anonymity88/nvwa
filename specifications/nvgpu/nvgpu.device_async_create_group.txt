@@ -1,0 +1,25 @@
+nvgpu.device_async_create_group (nvgpu::DeviceAsyncCreateGroupOp) ¶
+Device side asynchronous create group operation
+
+Syntax:
+
+operation ::= `nvgpu.device_async_create_group` $inputTokens attr-dict
+The nvgpu.device_async_create_group op creates a group of memory accesses containing all the pending device_async_copy operations associated with argument tokens. Each token can only be part of one group.
+
+It returns a token that can be use to wait until the group fully completes.
+
+This is meant to be used with nvgpu.device_async_wait to synchronize copies as explained in those ops descriptions.
+
+Groups are executed in the order they are created.
+
+Example:
+
+%0 = nvgpu.device_async_create_group
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+inputTokens	variadic of device async token type
+Results: ¶
+Result	Description
+asyncToken	device async token type

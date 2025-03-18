@@ -1,0 +1,38 @@
+vector.reduction (vector::ReductionOp) ¶
+Reduction operation
+
+Syntax:
+
+operation ::= `vector.reduction` $kind `,` $vector (`,` $acc^)? (`fastmath` `` $fastmath^)? attr-dict `:` type($vector) `into` type($dest)
+Reduces an 1-D vector “horizontally” into a scalar using the given operation: add/mul/minsi/minui/maxsi/maxui/and/or/xor for integers, and add/mul/minnumf/maxnumf/minimumf/maximumf for floats. Reductions also allow an optional fused accumulator.
+
+Note that these operations are restricted to 1-D vectors to remain close to the corresponding LLVM intrinsics:
+
+http://llvm.org/docs/LangRef.html#vector-reduction-intrinsics
+
+Example:
+
+%1 = vector.reduction <add>, %0 : vector<16xf32> into f32
+
+%3 = vector.reduction <xor>, %2 : vector<4xi32> into i32
+
+%4 = vector.reduction <mul>, %0, %1 : vector<16xf32> into f32
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, MaskableOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::vector::CombiningKindAttr	
+Kind of combining function for contractions and reductions
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+vector	vector of any type values
+acc	any type
+Results: ¶
+Result	Description
+dest	any type

@@ -1,0 +1,37 @@
+transform.apply_conversion_patterns (transform::ApplyConversionPatternsOp) ¶
+Applies conversion patterns to the body of the targeted op
+
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns` `to` $target $patterns
+              (`with` `type_converter` $default_type_converter_region^)?
+              attr-dict `:` type($target)
+This transform applies the specified conversion patterns to the targeted op and all nested ops. By default, this transform applies a “full” dialect conversion. If the partial_conversion unit attribute is present, this transform applies a partial dialect conversion.
+
+The patterns that should be applied are specified in the first graph region of this op. They must implement the ConversionPatternDescriptorOpInterface. The order in which patterns are applied is unspecified; i.e., the ordering of ops in the region of this op is irrelevant.
+
+The second, optional graph region contains exactly one op that specifies default type converter that should be used with this dialect conversion. If provided, this op must implement the TypeConverterBuilderOpInterface. Type converters are a property of conversion patterns: each conversion pattern stores the type converter that should be used in its C++ class. Each conversion pattern descriptor can optionally specify a type converter in its getTypeConverter interface method. If no type converter is specified in this method, the default type converter of the dialect conversion is used. Default type converters are useful if the same type converter should be used for multiple sets of conversion patterns. (Patterns that should not use this default type converter specify their own type converter.)
+
+The legal_ops, illegal_ops, legal_dialects, illegal_dialects attributes specify the conversion target.
+
+This transform modifies the payload. By default, it consumes the target handle. It does not produce any handles.
+
+If the preserve_handles attribute is set, this transform does not consume the target handle and instead updates handles based on notifications from a tracking listener that is attached to the dialect conversion, similar to transform.apply_patterns. Only replacements via RewriterBase::replaceOp or replaceOpWithNewOp are considered “payload op replacements”. In contrast to transform.apply_patterns, we allow replacement ops even if the op name has changed. This is because conversion patterns are expected to lower ops to different ops (from a different dialect). More details can be found at the documentation site of TrackingListener.
+
+This transform produces a silenceable failure if the dialect conversion was unsuccessful or the tracking listener failed to find a replacement op.
+
+Traits: HasOnlyGraphRegion, NoTerminator, ReportTrackingListenerFailuresOpTrait, SingleBlock
+
+Interfaces: MemoryEffectOpInterface, RegionKindInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+legal_ops	::mlir::ArrayAttr	string array attribute
+illegal_ops	::mlir::ArrayAttr	string array attribute
+legal_dialects	::mlir::ArrayAttr	string array attribute
+illegal_dialects	::mlir::ArrayAttr	string array attribute
+partial_conversion	::mlir::UnitAttr	unit attribute
+preserve_handles	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

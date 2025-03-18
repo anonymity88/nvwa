@@ -1,0 +1,47 @@
+index.cmp (index::CmpOp) ¶
+Index compare
+
+Syntax:
+
+operation ::= `index.cmp` `` $pred `(` $lhs `,` $rhs `)` attr-dict
+The index.cmp operation takes two index values and compares them according to the comparison predicate and returns an i1. The following comparisons are supported:
+
+eq: equal
+ne: not equal
+slt: signed less than
+sle: signed less than or equal
+sgt: signed greater than
+sge: signed greater than or equal
+ult: unsigned less than
+ule: unsigned less than or equal
+ugt: unsigned greater than
+uge: unsigned greater than or equal
+The result is 1 if the comparison is true and 0 otherwise.
+
+Example:
+
+// Signed less than comparison.
+%0 = index.cmp slt(%a, %b)
+
+// Unsigned greater than or equal comparison.
+%1 = index.cmp uge(%a, %b)
+
+// Not equal comparison.
+%2 = index.cmp ne(%a, %b)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pred	::mlir::index::IndexCmpPredicateAttr	
+index comparison predicate kind
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	1-bit signless integer

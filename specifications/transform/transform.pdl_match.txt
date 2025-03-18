@@ -1,0 +1,23 @@
+transform.pdl_match (transform::PDLMatchOp) ¶
+Finds ops that match the named PDL pattern
+
+Syntax:
+
+operation ::= `transform.pdl_match` $pattern_name `in` $root attr-dict `:` functional-type(operands, results)
+Find Payload IR ops nested within the Payload IR op associated with the operand that match the PDL pattern identified by its name. The pattern is expected to be defined in the closest surrounding WithPDLPatternsOp.
+
+Produces a Transform IR value associated with the list of Payload IR ops that matched the pattern. The order of results in the list is that of the Operation::walk, clients are advised not to rely on a specific order though. If the operand is associated with multiple Payload IR ops, finds matching ops nested within each of those and produces a single list containing all of the matched ops.
+
+The transformation is considered successful regardless of whether some Payload IR ops actually matched the pattern and only fails if the pattern could not be looked up or compiled.
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pattern_name	::mlir::SymbolRefAttr	symbol reference attribute
+Operands: ¶
+Operand	Description
+root	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+matched	TransformHandleTypeInterface instance

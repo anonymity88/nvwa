@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// Operator: avg_pool2d
+//===----------------------------------------------------------------------===//
+def Tosa_AvgPool2dOp : Tosa_InferShapedTypeOp<"avg_pool2d"> {
+  let summary = "Performs max pooling on the input.";
+
+  let description = [{
+    This performs an average pooling over the given input tensor. A sliding
+    window of size given by <kernel size> is passed over the input tensor, with
+    the mean value being placed in the output tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor4D:$input,
+    Tosa_IntArrayAttr2:$kernel,
+    Tosa_IntArrayAttr2:$stride,
+    Tosa_IntArrayAttr4:$pad,
+    TypeAttrOf<Tosa_AccType>:$acc_type,
+    OptionalAttr<Tosa_UnaryOpQuantizationAttr>:$quantization_info
+  );
+
+  let results = (outs
+    Tosa_Tensor4D:$output
+  );
+
+  let builders = [Tosa_AvgPool2dOpQuantInfoBuilder];
+  let hasVerifier = 1;
+}
+

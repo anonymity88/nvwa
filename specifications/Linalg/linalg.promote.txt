@@ -1,0 +1,50 @@
+//===----------------------------------------------------------------------===//
+// PromoteOp
+//===----------------------------------------------------------------------===//
+
+
+def PromoteOp : Op<Transform_Dialect, "structured.promote",
+    [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+    TransformOpInterface, TransformEachOpTrait,
+    ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Promotes the specified operands of the target into a separate memory buffer.
+
+    At this point, this transform does not allow customizing alloc/dealloc
+    functions nor the behavior on copy in/out operations.
+
+    #### Return modes
+
+    This operation applies to a single Linalg op that satisfies the
+    `promoteSubviewsPrecondition`, otherwise it fails.
+
+    If the operations referred to by the `target` handle promote
+    properly, the transform succeeds.
+
+    When successful, the return handle points to the $target operation that
+    was modified inplace.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target,
+                       DefaultValuedAttr<I64ArrayAttr, "{}">:$operands_to_promote,
+                       DefaultValuedAttr<BoolArrayAttr, "{}">:$use_full_tile_buffers,
+                       UnitAttr:$use_full_tiles_by_default,
+                       UnitAttr:$use_alloca,
+                       OptionalAttr<AnyAttr>:$memory_space,
+                       OptionalAttr<DeviceMappingArrayAttr>:$mapping,
+                       OptionalAttr<I64Attr>:$alignment);
+  let results = (outs TransformHandleTypeInterface:$transformed);
+
+  let assemblyFormat =
+    "$target attr-dict `:`"
+    "custom<SemiFunctionType>(type($target), type($transformed))";
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::linalg::LinalgOp target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+

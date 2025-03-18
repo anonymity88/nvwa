@@ -1,0 +1,67 @@
+omp.map.bounds (omp::MapBoundsOp) ¶
+Represents normalized bounds information for map clauses.
+
+Syntax:
+
+operation ::= `omp.map.bounds` oilist(
+              `lower_bound` `(` $lower_bound `:` type($lower_bound) `)`
+              | `upper_bound` `(` $upper_bound `:` type($upper_bound) `)`
+              | `extent` `(` $extent `:` type($extent) `)`
+              | `stride` `(` $stride `:` type($stride) `)`
+              | `start_idx` `(` $start_idx `:` type($start_idx) `)`
+              ) attr-dict
+This operation is a variation on the OpenACC dialects DataBoundsOp. Within the OpenMP dialect it stores the bounds/range of data to be mapped to a device specified by map clauses on target directives. Within the OpenMP dialect, the MapBoundsOp is associated with MapInfoOp, helping to store bounds information for the mapped variable.
+
+It is used to support OpenMP array sectioning, Fortran pointer and allocatable mapping and pointer/allocatable member of derived types. In all cases the MapBoundsOp holds information on the section of data to be mapped. Such as the upper bound and lower bound of the section of data to be mapped. This information is currently utilised by the LLVM-IR lowering to help generate instructions to copy data to and from the device when processing target operations.
+
+The example below copys a section of a 10-element array; all except the first element, utilising OpenMP array sectioning syntax where array subscripts are provided to specify the bounds to be mapped to device. To simplify the examples, the constants are used directly, in reality they will be MLIR SSA values.
+
+C++:
+
+int array[10];
+#pragma target map(array[1:9])
+=>
+
+omp.map.bounds lower_bound(1) upper_bound(9) extent(9) start_idx(0)
+Fortran:
+
+integer :: array(1:10)
+!$target map(array(2:10))
+=>
+
+omp.map.bounds lower_bound(1) upper_bound(9) extent(9) start_idx(1)
+For Fortran pointers and allocatables (as well as those that are members of derived types) the bounds information is provided by the Fortran compiler and runtime through descriptor information.
+
+A basic pointer example can be found below (constants again provided for simplicity, where in reality SSA values will be used, in this case that point to data yielded by Fortran’s descriptors):
+
+Fortran:
+
+integer, pointer :: ptr(:)
+allocate(ptr(10))
+!$target map(ptr)
+=>
+
+omp.map.bounds lower_bound(0) upper_bound(9) extent(10) start_idx(1)
+This operation records the bounds information in a normalized fashion (zero-based). This works well with the PointerLikeType requirement in data clauses - since a lower_bound of 0 means looking at data at the zero offset from pointer.
+
+This operation must have an upper_bound or extent (or both are allowed - but not checked for consistency). When the source language’s arrays are not zero-based, the start_idx must specify the zero-position index.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+stride_in_bytes	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+lower_bound	integer or index
+upper_bound	integer or index
+extent	integer or index
+stride	integer or index
+start_idx	integer or index
+Results: ¶
+Result	Description
+result	Type for representing omp map clause bounds information

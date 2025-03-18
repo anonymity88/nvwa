@@ -1,0 +1,38 @@
+spirv.AccessChain (spirv::AccessChainOp) ¶
+Create a pointer into a composite object.
+
+Syntax:
+
+operation ::= `spirv.AccessChain` $base_ptr `[` $indices `]` attr-dict `:` type($base_ptr) `,` type($indices) `->` type(results)
+Result Type must be an OpTypePointer. Its Type operand must be the type reached by walking the Base’s type hierarchy down to the last provided index in Indexes, and its Storage Class operand must be the same as the Storage Class of Base.
+
+Base must be a pointer, pointing to the base of a composite object.
+
+Indexes walk the type hierarchy to the desired depth, potentially down to scalar granularity. The first index in Indexes will select the top- level member/element/component/element of the base composite. All composite constituents use zero-based numbering, as described by their OpType… instruction. The second index will apply similarly to that result, and so on. Once any non-composite type is reached, there must be no remaining (unused) indexes.
+
+Each index in Indexes
+
+must be a scalar integer type,
+
+is treated as a signed count, and
+
+must be an OpConstant when indexing into a structure.
+
+Example: ¶
+%0 = "spirv.Constant"() { value = 1: i32} : () -> i32
+%1 = spirv.Variable : !spirv.ptr<!spirv.struct<f32, !spirv.array<4xf32>>, Function>
+%2 = spirv.AccessChain %1[%0] : !spirv.ptr<!spirv.struct<f32, !spirv.array<4xf32>>, Function> -> !spirv.ptr<!spirv.array<4xf32>, Function>
+%3 = spirv.Load "Function" %2 ["Volatile"] : !spirv.array<4xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+base_ptr	any SPIR-V pointer type
+indices	variadic of 8/16/32/64-bit integer
+Results: ¶
+Result	Description
+component_ptr	any SPIR-V pointer type

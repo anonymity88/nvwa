@@ -1,0 +1,105 @@
+mesh.shard (mesh::ShardOp) ¶
+Annotate on how a tensor is sharded across a mesh.
+
+Syntax:
+
+operation ::= `mesh.shard` $src `to` $sharding
+              (`annotate_for_users` $annotate_for_users^)?
+              attr-dict `:` type($result)
+The mesh.shard operation is designed to specify and guide the sharding behavior of a tensor value across a mesh topology. This operation has two operands and two optional attributes:
+
+input: This operand represents the tensor value that needs to be annotated for sharding.
+
+sharding: This attribute is type of MeshShardingType, which is the core data structure to represent distribution of a tensor on a mesh. it is typically defiend by an mesh.sharding operation.
+
+annotate_for_users: A unit attribute addressing the scenario when a tensor’s sharding annotation differs based on its context of use (either as a result or an operand). If specified, the sharding pertains to specific users of the tensor value, indicating how it should be considered when used as an operand in subsequent operations. If not, the sharding applies to the operation that defines the tensor value.
+
+Example:
+
+func.func @only_result_annotated(%arg0 : tensor<4x8xf32>) -> () {
+  %sharding = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding : tensor<4x8xf32>
+  ...
+}
+
+func.func @only_operand_annotated(%arg0 : tensor<4x8xf32>) -> () {
+  %sharding = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding annotate_for_users : tensor<4x8xf32>
+  ...
+}
+
+func.func @two_operands_annotated(%arg0 : tensor<4x8xf32>, %arg1 : tensor<16x8xf32>) -> () {
+  %sharding = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding annotate_for_users : tensor<4x8xf32>
+  %1 = mesh.shard %arg1 to %sharding annotate_for_users : tensor<16x8xf32>
+  ...
+}
+
+// The first mesh.shard op applies to %arg0, the second mesh.shard op
+// applies for the operand of op0, the third mesh.shard op applies for the
+// operand of op2
+func.func @both_result_and_multi_operands_annotated(
+    %arg0 : tensor<4x8xf32>) -> () {
+  %sharding = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding : tensor<4x8xf32>
+  %sharding1 = mesh.sharding @mesh0 split_axes = [[1]] : !mesh.sharding
+  %1 = mesh.shard %0 to %sharding1 annotate_for_users : tensor<4x8xf32>
+  %sharding2 = mesh.sharding @mesh0 split_axes = [[2]] : !mesh.sharding
+  %2 = mesh.shard %0 to %sharding2 annotate_for_users : tensor<4x8xf32>
+  "op0"(%1) : ...
+  "op1"(%2) : ...
+  ...
+}
+The following usages are undefined:
+
+func.func @annotate_on_same_result_with_different_sharding(
+    %arg0 : tensor<4x8xf32>) -> () {
+  %sharding1 = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %sharding2 = mesh.sharding @mesh0 split_axes = [[1]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to $sharding1 : tensor<4x8xf32>
+  %1 = mesh.shard %0 to sharding2 : tensor<4x8xf32>
+  ...
+}
+
+func.func @annotate_on_same_result_same_value_with_different_sharding(
+    %arg0 : tensor<4x8xf32>) -> () {
+  %sharding1 = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %sharding2 = mesh.sharding @mesh0 split_axes = [[1]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding1 : tensor<4x8xf32>
+  %1 = mesh.shard %arg0 to %sharding2 : tensor<4x8xf32>
+  ...
+}
+
+func.func @annotate_on_same_operand_with_different_sharding(
+    %arg0 : tensor<4x8xf32>) -> () {
+  %sharding1 = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %sharding2 = mesh.sharding @mesh0 split_axes = [[1]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding1 annotate_for_users : tensor<4x8xf32>
+  %1 = mesh.shard %0 to %sharding2 annotate_for_users : tensor<4x8xf32>
+  ...
+}
+
+func.func @result_annotated_after_operand(
+    %arg0 : tensor<4x8xf32>) -> () {
+  %sharding1 = mesh.sharding @mesh0 split_axes = [[0]] : !mesh.sharding
+  %sharding2 = mesh.sharding @mesh0 split_axes = [[1]] : !mesh.sharding
+  %0 = mesh.shard %arg0 to %sharding1 annotate_for_users : tensor<4x8xf32>
+  %1 = mesh.shard %0 to %sharding2 : tensor<4x8xf32>
+  ...
+}
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+annotate_for_users	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+src	ranked tensor of any type values
+sharding	sharding definition
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

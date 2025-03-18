@@ -1,0 +1,26 @@
+amx.tile_mulf (amx::TileMulFOp) ¶
+Tile multiplication operation (floating-point)
+
+Syntax:
+
+operation ::= `amx.tile_mulf` $lhs `,` $rhs `,` $acc attr-dict `:` qualified(type($lhs)) `,` qualified(type($rhs)) `,` qualified(type($acc))
+Multiplies a “m x k” tile with a “k x n” tile and accumulates the results into a “m x n” destination tile. Supports “f32 <- bf16 x bf16” (with pairs of “bf16”). The operation is eventually lowered into the “tdpbf16ps” instruction with the corresponding tile configuration.
+
+Example:
+
+  %0 = amx.tile_mulf %a, %b, %c
+    : !amx.tile<16x32xbf16>, !amx.tile<16x32xbf16>, !amx.tile<16x16xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	tile of 16-bit float or bfloat16 type values
+rhs	tile of 16-bit float or bfloat16 type values
+acc	tile of 32-bit float values
+Results: ¶
+Result	Description
+res	tile of 32-bit float values

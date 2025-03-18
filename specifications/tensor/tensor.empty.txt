@@ -1,0 +1,24 @@
+tensor.empty (tensor::EmptyOp) ¶
+Empty tensor operation
+
+Syntax:
+
+operation ::= `tensor.empty` `(`$dynamicSizes`)` attr-dict `:` type($result)
+tensor.empty is an operation that defines a tensor of a particular shape. The shape could be dynamic or static. The contents of the tensor are unspecified and the only purpose of the op result is to materialize the specified shape in IR and make it available to other transformations.
+
+tensor.empty is useful in transformations that expect destination style ops. I.e., ops that implement DestinationStyleOpInterface. Ops that are not in destination style can be made compatible with such transformations with a tensor.empty destination.
+
+Note: This op can be lowered to a bufferization.alloc_tensor, at which point it turns into an explicit buffer allocation.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), ReifyRankedShapedTypeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+dynamicSizes	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

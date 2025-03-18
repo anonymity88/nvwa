@@ -1,0 +1,7 @@
+transform.apply_patterns.tensor.fold_tensor_subset_ops (transform::ApplyFoldTensorSubsetOpsPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.fold_tensor_subset_ops` attr-dict
+Indicates that tensor.empty should be folded with tensor.extract_slice, tensor.expand_shape and tensor.collapse_shape.
+
+Interfaces: PatternDescriptorOpInterface

@@ -1,0 +1,7 @@
+transform.apply_conversion_patterns.scf.scf_to_control_flow (transform::ApplySCFToControlFlowPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.scf.scf_to_control_flow` attr-dict
+Collects patterns that lower structured control flow ops to unstructured control flow.
+
+Interfaces: ConversionPatternDescriptorOpInterface

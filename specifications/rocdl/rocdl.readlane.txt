@@ -1,0 +1,15 @@
+rocdl.readlane (ROCDL::ReadlaneOp) ¶
+Get the value in the specific lane.
+
+Syntax:
+
+operation ::= `rocdl.readlane` $src0 `,` $src1  attr-dict `:` `(` type($src0) `,` type($src1) `)` `->` type($res)
+Get the value in lane src1 from input src0.
+
+Operands: ¶
+Operand	Description
+src0	LLVM dialect-compatible type
+src1	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

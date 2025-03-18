@@ -1,0 +1,12 @@
+transform.apply_patterns.vector.drop_unit_dims_with_shape_cast (transform::ApplyDropUnitDimWithShapeCastPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.drop_unit_dims_with_shape_cast` attr-dict
+Apply vector patterns to fold unit dims with vector.shape_cast Ops:
+
+DropUnitDimFromElementwiseOps
+DropUnitDimsFromScfForOp
+DropUnitDimsFromTransposeOp
+Excludes patterns for vector.transfer Ops. This is complemented by shape_cast folding patterns.
+
+Interfaces: PatternDescriptorOpInterface

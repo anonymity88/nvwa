@@ -1,0 +1,36 @@
+irdl.all_of (irdl::AllOfOp) ¶
+Constraints to the intersection of the provided constraints
+
+Syntax:
+
+operation ::= `irdl.all_of` `(` $args `)` ` ` attr-dict
+irdl.all_of defines a constraint that accepts any type or attribute that satisfies all of its provided constraints.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex_f32 {
+    %0 = irdl.is i32
+    %1 = irdl.is f32
+    %2 = irdl.any_of(%0, %1) // is 32-bit
+
+    %3 = irdl.is f32
+    %4 = irdl.is f64
+    %5 = irdl.any_of(%3, %4) // is a float
+
+    %6 = irdl.all_of(%2, %5) // is a 32-bit float
+    irdl.parameters(%6)
+  }
+}
+The above program defines a type complex inside the dialect cmath that can has one parameter that must be 32-bit long and a float (in other words, that must be f32).
+
+Traits: HasParent<TypeOp, AttributeOp, OperationOp>, SameOperandsAndResultType
+
+Interfaces: VerifyConstraintInterface
+
+Operands: ¶
+Operand	Description
+args	variadic of IRDL handle to an mlir::Attribute
+Results: ¶
+Result	Description
+output	IRDL handle to an mlir::Attribute

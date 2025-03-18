@@ -1,0 +1,16 @@
+llvm.bitcast (LLVM::BitcastOp) ¶
+Syntax:
+
+operation ::= `llvm.bitcast` $arg attr-dict `:` type($arg) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), PromotableOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	LLVM-compatible non-aggregate type
+Results: ¶
+Result	Description
+res	LLVM-compatible non-aggregate type

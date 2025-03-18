@@ -1,0 +1,21 @@
+bufferization.clone (bufferization::CloneOp) ¶
+Clone a memref
+
+Syntax:
+
+operation ::= `bufferization.clone` $input attr-dict `:` type($input) `to` type($output)
+Clones the data in the input view into an implicitly defined output view.
+
+Usage:
+
+%arg1 = bufferization.clone %arg0 : memref<?xf32> to memref<?xf32>
+Valid implementations of this operation may alias the input and output views or create an actual copy. Mutating the source or result of the clone operation after the clone operation thus leads to undefined behavior.
+
+Interfaces: AllocationOpInterface, CopyOpInterface, MemoryEffectsOpInterface
+
+Operands: ¶
+Operand	Description
+input	ranked or unranked memref of any type values
+Results: ¶
+Result	Description
+output	ranked or unranked memref of any type values

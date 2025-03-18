@@ -1,0 +1,10 @@
+amx.tileloadd64 (amx::x86_amx_tileloadd64) ¶
+Operands: ¶
+Operand	Description
+«unnamed»	integer
+«unnamed»	integer
+«unnamed»	LLVM pointer type
+«unnamed»	integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

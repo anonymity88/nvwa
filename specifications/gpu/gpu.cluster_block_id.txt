@@ -1,0 +1,27 @@
+gpu.cluster_block_id (gpu::ClusterBlockIdOp) ¶
+Syntax:
+
+operation ::= `gpu.cluster_block_id` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the block id within the cluster along the x, y, or z dimension.
+
+Example:
+
+%cBlockIdY = gpu.cluster_block_id y
+If upper_bound is set, then executing (a lowering of) this operation in an environment where the number of thread blocks per cluster along dimension is greater than upper_bound causes undefined behavior.
+
+There is an implicit upper bound of kMaxClusterDim (currently 8).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

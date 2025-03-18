@@ -1,0 +1,41 @@
+transform.foreach_match (transform::ForeachMatchOp) ¶
+Applies named sequences when a named matcher succeeds
+
+Syntax:
+
+operation ::= `transform.foreach_match` oilist( `restrict_root` $restrict_root
+              | `flatten_results` $flatten_results
+              )
+              `in`
+              $root (`,` $forwarded_inputs^)?
+              custom<ForeachMatchSymbols>($matchers, $actions)
+              attr-dict
+              `:` functional-type(operands, results)
+Given a pair of co-indexed lists of transform dialect symbols (such as transform.named_sequence), walks the payload IR associated with the root handle and interprets the symbols as matcher/action pairs by applying the body of the corresponding symbol definition. The symbol from the first list is the matcher part: if it results in a silenceable error, the error is silenced and the next matcher is attempted. Definite failures from any matcher stop the application immediately and are propagated unconditionally. If none of the matchers succeeds, the next payload operation in walk order (post-order at the moment of writing, double check Operation::walk) is matched. If a matcher succeeds, the co-indexed action symbol is applied and the following matchers are not applied to the same payload operation. If the action succeeds, the next payload operation in walk order is matched. If it fails, both silenceable and definite errors are propagated as the result of this op; propagation of silenceable errors is postponed until the end of the walk.
+
+The matcher symbol must take at least one operand of a type that implements the same transform dialect interface as the root operand (a check is performed at application time to see if the associated payload satisfies the constraints of the actual type), and may take additional operands with a similar type requirement. It must not consume operands as multiple matchers may be applied. The matcher may produce any number of results. The action symbol paired with the matcher must take the same number of arguments as the matcher has results, and these arguments must implement the same transform dialect interfaces, but not necessarily have the exact same type (again, a check is performed at application time to see if the associated payload satisfies the constraints of actual types on both sides).
+
+The action symbol may have results that are accumulated from all actions and returned from the foreach_match operation on success. Unless the flatten_results attribute is present, each action result must be associated with exactly one payload entity. The actions are expected to only modify payload operations nested in the root payload operations associated with the operand of this transform operation. Furthermore, the actions may not modify operations outside of the currently matched payload operation, e.g., they may not modify sibling or parent operations. If such behavior is desired, the parent must be matched first and the nested operations obtained by traversing the IR from the parent. This is due to the matching being performed as a post-order IR walk.
+
+This operation consumes the operand and produces a new handle associated with the same payload. This is necessary to trigger invalidation of handles to any of the payload operations nested in the payload operations associated with the operand, as those are likely to be modified by actions.
+
+By default, the root payload operation associated with the operand is not matched. This is to support the conservative case where applied actions may invalidate the root payload operation. If the optional restrict_root attribute is set, the root operand is guaranteed to not be invalidated by any of the applied actions. In such cases, the root payload operation is also matched. This is useful because matching the root payload operation is a common idiom, when e.g. matching a func.func directly and operations nested under it.
+
+The operation succeeds if none of the matchers produced a definite failure during application and if all of the applied actions produced success. Note that it also succeeds if all the matchers failed on all payload operations, i.e. failure to apply is not an error. The operation produces a silenceable failure if any applied action produced a silenceable failure. In this case, the resulting handle is associated with an empty payload. The operation produces a definite failure if any of the applied matchers or actions produced a definite failure.
+
+Interfaces: MemoryEffectOpInterface, OpAsmOpInterface, SymbolUserOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+restrict_root	::mlir::UnitAttr	unit attribute
+flatten_results	::mlir::UnitAttr	unit attribute
+matchers	::mlir::ArrayAttr	symbol ref array attribute
+actions	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+root	TransformHandleTypeInterface instance
+forwarded_inputs	variadic of any transform handle or parameter
+Results: ¶
+Result	Description
+updated	TransformHandleTypeInterface instance
+forwarded_outputs	variadic of any transform handle or parameter

@@ -1,0 +1,11 @@
+xegpu.nbarrier_arrive (xegpu::NbarrierArriveOp) ¶
+It signals the arrival at the named barrier.
+
+Syntax:
+
+operation ::= `xegpu.nbarrier_arrive` $nbarrier attr-dict `:` qualified(type($nbarrier))
+NbarrierArriveOp signals the hardware (or other threads) that the current thread has produced its data for the consumer threads. When the hardware signalled by participant_thread_num threads for the named barrier, it will notify the threads waiting for the named barrier to continue their work.
+
+Operands: ¶
+Operand	Description
+nbarrier	!xegpu.nbarrier a custom XeGPU type representing a barrier.

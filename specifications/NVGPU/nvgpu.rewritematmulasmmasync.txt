@@ -1,0 +1,33 @@
+//===----------------------------------------------------------------------===//
+// RewriteMatmulAsMmaSyncOp
+//===----------------------------------------------------------------------===//
+
+def RewriteMatmulAsMmaSyncOp :
+  Op<Transform_Dialect, "nvgpu.rewrite_matmul_as_mma_sync",
+    [FunctionalStyleTransformOpTrait, 
+     MemoryEffectsOpInterface,
+     TransformEachOpTrait, 
+     TransformOpInterface,
+     ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Rewrite a matmul operation on memref to an mma.sync operation on vectors.
+
+    Memory copies with the required access patterns are automatically inserted.
+    Operations that do not have a 1-1 mapping to mma.sync operations are left
+    unchanged.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target);
+  let results = (outs);
+
+  let assemblyFormat = "$target attr-dict `:` functional-type(operands, results) ";
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::linalg::LinalgOp linalgOp,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+

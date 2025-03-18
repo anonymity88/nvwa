@@ -1,0 +1,64 @@
+//===----------------------------------------------------------------------===//
+// DimOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_DimOp : MemRef_Op<"dim", [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    MemRefsNormalizable,
+    ConditionallySpeculatable, NoMemoryEffect,
+    ShapedDimOpInterface]> {
+  let summary = "dimension index operation";
+  let description = [{
+    The `dim` operation takes a memref and a dimension operand of type `index`.
+    It returns the size of the requested dimension of the given memref.
+    If the dimension index is out of bounds the behavior is undefined.
+
+    The specified memref type is that of the first operand.
+
+    Example:
+
+    ```mlir
+    // Always returns 4, can be constant folded:
+    %c0 = arith.constant 0 : index
+    %x = memref.dim %A, %c0 : memref<4 x ? x f32>
+
+    // Returns the dynamic dimension of %A.
+    %c1 = arith.constant 1 : index
+    %y = memref.dim %A, %c1 : memref<4 x ? x f32>
+
+    // Equivalent generic form:
+    %x = "memref.dim"(%A, %c0) : (memref<4 x ? x f32>, index) -> index
+    %y = "memref.dim"(%A, %c1) : (memref<4 x ? x f32>, index) -> index
+    ```
+  }];
+
+  let arguments = (ins AnyNon0RankedOrUnrankedMemRef:$source,
+                       Index:$index);
+  let results = (outs Index:$result);
+
+  let assemblyFormat = [{
+    attr-dict $source `,` $index `:` type($source)
+  }];
+
+  let builders = [
+    OpBuilder<(ins "Value":$source, "int64_t":$index)>,
+  ];
+
+  let extraClassDeclaration = [{
+    /// Helper function to get the index as a simple integer if it is constant.
+    std::optional<int64_t> getConstantIndex();
+
+    /// Interface method of ShapedDimOpInterface: Return the source memref.
+    Value getShapedValue() { return getSource(); }
+
+    /// Interface method of ShapedDimOpInterface: Return the dimension.
+    OpFoldResult getDimension() { return getIndex(); }
+
+    /// Interface method for ConditionallySpeculatable.
+    Speculation::Speculatability getSpeculatability();
+  }];
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+}
+

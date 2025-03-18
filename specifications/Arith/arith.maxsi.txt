@@ -1,0 +1,9 @@
+//===----------------------------------------------------------------------===//
+// MaxSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MaxSIOp : Arith_TotalIntBinaryOp<"maxsi", [Commutative]> {
+  let summary = "signed integer maximum operation";
+  let hasFolder = 1;
+}
+

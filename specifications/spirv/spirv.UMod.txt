@@ -1,0 +1,28 @@
+spirv.UMod (spirv::UModOp) ¶
+Unsigned modulo operation of Operand 1 modulo Operand 2.
+
+Syntax:
+
+operation ::= `spirv.UMod` operands attr-dict `:` type($result)
+Result Type must be a scalar or vector of integer type, whose Signedness operand is 0.
+
+The types of Operand 1 and Operand 2 both must be the same as Result Type.
+
+Results are computed per component. The resulting value is undefined if Operand 2 is 0.
+
+Example: ¶
+%4 = spirv.UMod %0, %1 : i32
+%5 = spirv.UMod %2, %3 : vector<4xi32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType, UnsignedOp, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values
+operand2	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values

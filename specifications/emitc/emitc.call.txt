@@ -1,0 +1,24 @@
+emitc.call (emitc::CallOp) ¶
+Call operation
+
+Syntax:
+
+operation ::= `emitc.call` $callee `(` $operands `)` attr-dict `:` functional-type($operands, results)
+The emitc.call operation represents a direct call to an emitc.func that is within the same symbol scope as the call. The operands and result type of the call must match the specified function type. The callee is encoded as a symbol reference attribute named “callee”.
+
+Example:
+
+%2 = emitc.call @my_add(%0, %1) : (f32, f32) -> f32
+Traits: CExpression
+
+Interfaces: CallOpInterface, SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+callee	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Operands: ¶
+Operand	Description
+operands	variadic of type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	variadic of type supported by EmitC

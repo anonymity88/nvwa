@@ -154,5 +154,5 @@ if __name__ == "__main__":
 
     # 调用新函数处理指定目录
     new_base_directory = "llvm-project/"
-    new_output_base_dir = "official_IRs/Dialect"
+    new_output_base_dir = "official_IRs/"
     process_directory(new_base_directory, new_output_base_dir)

@@ -1,0 +1,30 @@
+nvgpu.rcp (nvgpu::RcpOp) ¶
+The reciprocal calculation for vector types
+
+Syntax:
+
+operation ::= `nvgpu.rcp` $in `{` `rounding` `=` $rounding (`,` `ftz` $ftz^)? `}`
+              attr-dict `:` type($out)
+Reciprocal calculation for vector types using nvvm.rcp OPs.
+
+Currently, only the approx rounding mode and ftz are supported, and only for the f32 type.
+
+The input and output must be of the same vector type and shape.
+
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+rounding	::mlir::nvgpu::RcpRoundingModeAttr	
+Rounding mode of rcp
+ftz	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+in	vector of 32-bit float values
+Results: ¶
+Result	Description
+out	vector of 32-bit float values

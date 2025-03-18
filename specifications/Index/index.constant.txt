@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// ConstantOp
+//===----------------------------------------------------------------------===//
+
+def Index_ConstantOp : IndexOp<"constant", [
+    ConstantLike, Pure,
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>
+  ]> {
+  let summary = "index constant";
+  let description = [{
+    The `index.constant` operation produces an index-typed SSA value equal to
+    some index-typed integer constant.
+
+    Example:
+
+    ```mlir
+    %0 = index.constant 42
+    ```
+  }];
+
+  let arguments = (ins IndexAttr:$value);
+  let results = (outs Index:$result);
+  let assemblyFormat = "attr-dict $value";
+  let hasFolder = 1;
+
+  let builders = [OpBuilder<(ins "int64_t":$value)>];
+}
+

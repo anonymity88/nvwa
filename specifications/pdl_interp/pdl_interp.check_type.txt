@@ -1,0 +1,27 @@
+pdl_interp.check_type (pdl_interp::CheckTypeOp) ¶
+Compare a type to a known value
+
+Syntax:
+
+operation ::= `pdl_interp.check_type` $value `is` $type attr-dict `->` successors
+pdl_interp.check_type operations compare a type with a statically known type. On success, this operation branches to the true destination, otherwise the false destination is taken.
+
+Example:
+
+pdl_interp.check_type %type is i32 -> ^matchDest, ^failureDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+type	::mlir::TypeAttr	any type attribute
+Operands: ¶
+Operand	Description
+value	PDL handle to an mlir::Type
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

@@ -1,0 +1,28 @@
+complex.atan2 (complex::Atan2Op) ¶
+Complex 2-argument arctangent
+
+Syntax:
+
+operation ::= `complex.atan2` $lhs `,` $rhs (`fastmath` `` $fastmath^)? attr-dict `:` type($result)
+For complex numbers it is expressed using complex logarithm atan2(y, x) = -i * log((x + i * y) / sqrt(x2 + y2))
+
+Example:
+
+%a = complex.atan2 %b, %c : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	complex type with floating-point elements
+rhs	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

@@ -1,0 +1,102 @@
+vector.contract (vector::ContractionOp) ¶
+Vector contraction operation
+
+Computes the sum of products of vector elements along contracting dimension pairs from 2 vectors of rank M and N respectively, adds this intermediate result to the accumulator argument of rank K, and returns a vector result of rank K (where K = num_lhs_free_dims + num_rhs_free_dims + num_batch_dims (see dimension type descriptions below)). For K = 0 (no free or batch dimensions), the accumulator and output are a scalar.
+
+If operands and the result have types of different bitwidths, operands are promoted to have the same bitwidth as the result before performing the contraction. For integer types, only signless integer types are supported, and the promotion happens via sign extension.
+
+An iterator type attribute list must be specified, where each element of the list represents an iterator with one of the following types:
+
+“reduction”: reduction dimensions are present in the lhs and rhs arguments but not in the output (and accumulator argument). These are the dimensions along which the vector contraction op computes the sum of products, and contracting dimension pair dimension sizes must match between lhs/rhs.
+
+“parallel”: Batch dimensions are iterator type “parallel”, and are non-contracting dimensions present in the lhs, rhs and output. The lhs/rhs co-iterate along the batch dimensions, which should be expressed in their indexing maps.
+
+Free dimensions are iterator type “parallel”, and are non-contraction, non-batch dimensions accessed by either the lhs or rhs (but not both). The lhs and rhs free dimensions are unrelated to each other and do not co-iterate, which should be expressed in their indexing maps.
+
+An indexing map attribute list must be specified with an entry for lhs, rhs and acc arguments. An indexing map attribute specifies a mapping from each iterator in the iterator type list, to each dimension of an N-D vector.
+
+An optional kind attribute may be used to specify the combining function between the intermediate result and accumulator argument of rank K. This attribute can take the values add/mul/minsi/minui/maxsi/maxui /and/or/xor for integers, and add/mul/minnumf/maxnumf /minimumf/maximumf for floats. The default is add.
+
+Example:
+
+// Simple DOT product (K = 0).
+#contraction_accesses = [
+ affine_map<(i) -> (i)>,
+ affine_map<(i) -> (i)>,
+ affine_map<(i) -> ()>
+]
+#contraction_trait = {
+  indexing_maps = #contraction_accesses,
+  iterator_types = ["reduction"]
+}
+%3 = vector.contract #contraction_trait %0, %1, %2
+  : vector<10xf32>, vector<10xf32> into f32
+
+// 2D vector contraction with one contracting dimension (matmul, K = 2).
+#contraction_accesses = [
+  affine_map<(i, j, k) -> (i, k)>,
+  affine_map<(i, j, k) -> (k, j)>,
+  affine_map<(i, j, k) -> (i, j)>
+]
+#contraction_trait = {
+  indexing_maps = #contraction_accesses,
+  iterator_types = ["parallel", "parallel", "reduction"]
+}
+
+%3 = vector.contract #contraction_trait %0, %1, %2
+  : vector<4x3xf32>, vector<3x7xf32> into vector<4x7xf32>
+
+// 4D to 3D vector contraction with two contracting dimensions and
+// one batch dimension (K = 3).
+#contraction_accesses = [
+  affine_map<(b0, f0, f1, c0, c1) -> (c0, b0, c1, f0)>,
+  affine_map<(b0, f0, f1, c0, c1) -> (b0, c1, c0, f1)>,
+  affine_map<(b0, f0, f1, c0, c1) -> (b0, f0, f1)>
+]
+#contraction_trait = {
+  indexing_maps = #contraction_accesses,
+  iterator_types = ["parallel", "parallel", "parallel",
+                    "reduction", "reduction"]
+}
+
+%4 = vector.contract #contraction_trait %0, %1, %2
+    : vector<7x8x16x15xf32>, vector<8x16x7x5xf32> into vector<8x15x5xf32>
+
+// Vector contraction with mixed typed. lhs/rhs have different element
+// types than accumulator/result.
+%5 = vector.contract #contraction_trait %0, %1, %2
+  : vector<10xf16>, vector<10xf16> into f32
+
+// Contract with max (K = 0).
+#contraction_accesses = [
+ affine_map<(i) -> (i)>,
+ affine_map<(i) -> (i)>,
+ affine_map<(i) -> ()>
+]
+#contraction_trait = {
+  indexing_maps = #contraction_accesses,
+  iterator_types = ["reduction"],
+  kind = #vector.kind<maxnumf>
+}
+%6 = vector.contract #contraction_trait %0, %1, %2
+  : vector<10xf32>, vector<10xf32> into f32
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, MaskableOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+indexing_maps	::mlir::ArrayAttr	array attribute
+iterator_types	::mlir::ArrayAttr	Iterator type should be an enum.
+kind	::mlir::vector::CombiningKindAttr	
+Kind of combining function for contractions and reductions
+Operands: ¶
+Operand	Description
+lhs	vector of any type values
+rhs	vector of any type values
+acc	any type
+Results: ¶
+Result	Description
+«unnamed»	any type

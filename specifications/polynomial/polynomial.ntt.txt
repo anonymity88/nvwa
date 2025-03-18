@@ -1,0 +1,31 @@
+polynomial.ntt (polynomial::NTTOp) ¶
+Computes point-value tensor representation of a polynomial.
+
+Syntax:
+
+operation ::= `polynomial.ntt` $input attr-dict `:` qualified(type($input)) `->` type($output)
+polynomial.ntt computes the forward integer Number Theoretic Transform (NTT) on the input polynomial. It returns a tensor containing a point-value representation of the input polynomial. The output tensor has shape equal to the degree of the ring’s polynomialModulus. The polynomial’s RingAttr is embedded as the encoding attribute of the output tensor.
+
+Given an input polynomial F(x) over a ring whose polynomialModulus has degree n, and a primitive n-th root of unity omega_n, the output is the list of n
+ evaluations
+
+f[k] = F(omega[n]^k) ; k = {0, ..., n-1}
+
+The choice of primitive root may be optionally specified.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+root	::mlir::polynomial::PrimitiveRootAttr	
+an attribute containing an integer and its degree as a root of unity
+Operands: ¶
+Operand	Description
+input	An element of a polynomial ring.
+Results: ¶
+Result	Description
+output	ranked tensor of integer values

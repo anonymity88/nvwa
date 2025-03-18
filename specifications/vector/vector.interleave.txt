@@ -1,0 +1,37 @@
+vector.interleave (vector::InterleaveOp) ¶
+Constructs a vector by interleaving two input vectors
+
+Syntax:
+
+operation ::= `vector.interleave` $lhs `,` $rhs  attr-dict `:` type($lhs) `->` type($result)
+The interleave operation constructs a new vector by interleaving the elements from the trailing (or final) dimension of two input vectors, returning a new vector where the trailing dimension is twice the size.
+
+Note that for the n-D case this differs from the interleaving possible with vector.shuffle, which would only operate on the leading dimension.
+
+Another key difference is this operation supports scalable vectors, though currently a general LLVM lowering is limited to the case where only the trailing dimension is scalable.
+
+Example:
+
+%a = arith.constant dense<[0, 1]> : vector<2xi32>
+%b = arith.constant dense<[2, 3]> : vector<2xi32>
+// The value of `%0` is `[0, 2, 1, 3]`.
+%0 = vector.interleave %a, %b : vector<2xi32> -> vector<4xi32>
+
+// Examples showing allowed input and result types.
+%1 = vector.interleave %c, %d : vector<f16> -> vector<2xf16>
+%2 = vector.interleave %e, %f : vector<6x3xf32> -> vector<6x6xf32>
+%3 = vector.interleave %g, %h : vector<[4]xi32> -> vector<[8]xi32>
+%4 = vector.interleave %i, %j : vector<2x4x[2]xf64> -> vector<2x4x[4]xf64>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	vector of any type values
+rhs	vector of any type values
+Results: ¶
+Result	Description
+result	vector of any type values

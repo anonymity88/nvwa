@@ -1,0 +1,40 @@
+memref.collapse_shape (memref::CollapseShapeOp) ¶
+Operation to produce a memref with a smaller rank.
+
+Syntax:
+
+operation ::= `memref.collapse_shape` $src $reassociation attr-dict `:` type($src) `into` type($result)
+The memref.collapse_shape op produces a new view with a smaller rank whose sizes are a reassociation of the original view. The operation is limited to such reassociations, where subsequent, contiguous dimensions are collapsed into a single dimension. Such reassociations never require additional allocs or copies.
+
+Collapsing non-contiguous dimensions is undefined behavior. When a group of dimensions can be statically proven to be non-contiguous, collapses of such groups are rejected in the verifier on a best-effort basis. In the general case, collapses of dynamically-sized dims with dynamic strides cannot be proven to be contiguous or non-contiguous due to limitations in the memref type.
+
+A reassociation is defined as a continuous grouping of dimensions and is represented with an array of DenseI64ArrayAttr attribute.
+
+Note: Only the dimensions within a reassociation group must be contiguous. The remaining dimensions may be non-contiguous.
+
+The result memref type can be zero-ranked if the source memref type is statically shaped with all dimensions being unit extent. In such a case, the reassociation indices must be empty.
+
+Examples:
+
+// Dimension collapse (i, j) -> i' and k -> k'
+%1 = memref.collapse_shape %0 [[0, 1], [2]] :
+    memref<?x?x?xf32, stride_spec> into memref<?x?xf32, stride_spec_2>
+For simplicity, this op may not be used to cast dynamicity of dimension sizes and/or strides. I.e., a result dimension must be dynamic if and only if at least one dimension in the corresponding reassociation group is dynamic. Similarly, the stride of a result dimension must be dynamic if and only if the corresponding start dimension in the source type is dynamic.
+
+Note: This op currently assumes that the inner strides are of the source/result layout map are the faster-varying ones.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reassociation	::mlir::ArrayAttr	Array of 64-bit integer array attributes
+Operands: ¶
+Operand	Description
+src	strided memref of any type values
+Results: ¶
+Result	Description
+result	strided memref of any type values

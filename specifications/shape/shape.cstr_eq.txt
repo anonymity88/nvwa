@@ -1,0 +1,24 @@
+shape.cstr_eq (shape::CstrEqOp) ¶
+Determines if all input shapes are equal
+
+Syntax:
+
+operation ::= `shape.cstr_eq` $shapes attr-dict `:` type($shapes)
+Given 1 or more input shapes, determine if all shapes are the exact same.
+
+“cstr” operations represent runtime assertions.
+
+Example:
+
+%w0 = shape.cstr_eq [1,2], [1,2], [1,2] // Passing
+%w1 = shape.cstr_eq [2,2], [1,2] // Failure
+Traits: Commutative
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+shapes	variadic of shape or extent tensor
+Results: ¶
+Result	Description
+result

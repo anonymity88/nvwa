@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// DivSOp
+//===----------------------------------------------------------------------===//
+
+def Index_DivSOp : IndexBinaryOp<"divs", [NoMemoryEffect]> {
+  let summary = "index signed division";
+  let description = [{
+    The `index.divs` operation takes two index values and computes their signed
+    quotient. Treats the leading bit as the sign and rounds towards zero, i.e.
+    `6 / -2 = -3`.
+
+    Note: division by zero and signed division overflow are undefined behaviour.
+
+    Example:
+
+    ```mlir
+    // c = a / b
+    %c = index.divs %a, %b
+    ```
+  }];
+}
+

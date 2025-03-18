@@ -1,0 +1,35 @@
+sparse_tensor.storage_specifier.init (sparse_tensor::StorageSpecifierInitOp) ¶
+Syntax:
+
+operation ::= `sparse_tensor.storage_specifier.init` attr-dict (`with` $source^)? `:` (`from` qualified(type($source))^ `to`)? qualified(type($result))
+Returns an initial storage specifier value. A storage specifier value holds the level-sizes, position arrays, coordinate arrays, and the value array. If this is a specifier for slices, it also holds the extra strides/offsets for each tensor dimension.
+
+TODO: The sparse tensor slice support is currently in a unstable state, and is subject to change in the future.
+
+Example:
+
+#CSR = #sparse_tensor.encoding<{
+  map = (i, j) -> (i : dense, j : compressed)
+}>
+#CSR_SLICE = #sparse_tensor.encoding<{
+  map = (d0 : #sparse_tensor<slice(1, 4, 1)>,
+         d1 : #sparse_tensor<slice(1, 4, 2)>) ->
+        (d0 : dense, d1 : compressed)
+}>
+
+%0 = sparse_tensor.storage_specifier.init :  !sparse_tensor.storage_specifier<#CSR>
+%1 = sparse_tensor.storage_specifier.init with %src
+     : !sparse_tensor.storage_specifier<#CSR> to
+       !sparse_tensor.storage_specifier<#CSR_SLICE>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	metadata
+Results: ¶
+Result	Description
+result	metadata

@@ -1,0 +1,18 @@
+x86vector.avx.rsqrt (x86vector::RsqrtOp) ¶
+Rsqrt
+
+Syntax:
+
+operation ::= `x86vector.avx.rsqrt` $a attr-dict `:` type($a)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit float values of length 8
+Results: ¶
+Result	Description
+b	vector of 32-bit float values of length 8

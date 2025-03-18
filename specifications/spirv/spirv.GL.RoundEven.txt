@@ -1,0 +1,27 @@
+spirv.GL.RoundEven (spirv::GLRoundEvenOp) ¶
+Rounds to the nearest even whole number
+
+Syntax:
+
+operation ::= `spirv.GL.RoundEven` $operand `:` type($operand) attr-dict
+Result is the value equal to the nearest whole number to x. A fractional part of 0.5 will round toward the nearest even whole number. (Both 3.5 and 4.5 for x will be 4.0.)
+
+The operand x must be a scalar or vector whose component type is floating-point.
+
+Result Type and the type of x must be the same type. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.RoundEven %0 : f32
+%3 = spirv.GL.RoundEven %1 : vector<3xf16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16

@@ -1,0 +1,24 @@
+pdl.operand (pdl::OperandOp) ¶
+Define an external input operand in a pattern
+
+Syntax:
+
+operation ::= `pdl.operand` (`:` $valueType^)? attr-dict
+pdl.operand operations capture external operand edges into an operation node that originate from operations or block arguments not otherwise specified within the pattern (i.e. via pdl.result or pdl.results). These operations define individual operands of a given operation. A pdl.operand may partially constrain an operand by specifying an expected value type (via a pdl.type operation).
+
+Example:
+
+// Define an external operand:
+%operand = pdl.operand
+
+// Define an external operand with an expected type:
+%type = pdl.type : i32
+%operand = pdl.operand : %type
+Traits: HasParent<pdl::PatternOp>
+
+Operands: ¶
+Operand	Description
+valueType	PDL handle to an mlir::Type
+Results: ¶
+Result	Description
+value	PDL handle for an mlir::Value

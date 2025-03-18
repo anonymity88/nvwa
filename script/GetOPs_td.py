@@ -3,8 +3,8 @@ import os
 import re
 
 # 设置路径
-base_dir = "/home/llm/llvm-project/mlir/include/mlir/Dialect"
-output_dir = "/home/llm/OPs"
+base_dir = "llvm-project/mlir/include/mlir/Dialect"
+output_dir = "specifications/"
 
 # 创建输出目录
 os.makedirs(output_dir, exist_ok=True)

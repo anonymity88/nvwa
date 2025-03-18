@@ -1,0 +1,36 @@
+ml_program.global (ml_program::GlobalOp) ¶
+Module level declaration of a global variable
+
+Syntax:
+
+operation ::= `ml_program.global` custom<SymbolVisibility>($sym_visibility)
+              (`mutable` $is_mutable^)?
+              $sym_name ``
+              custom<TypedInitialValue>($type, $value)
+              attr-dict
+Declares a named global variable (or constant).
+
+A global contains a value of a specified type which can be accessed at runtime via appropriate load/store operations. It can be mutable or constant, optionally taking an initial value or declared as extern (in which case, the initial value is found in external storage by symbol name).
+
+Generally, the type of the global and the type of the initial value will be the same. However, for type hierarchies which can have a more generalized bounding type that can be assigned from a narrow type, this is allowed (but not verified).
+
+Examples:
+
+// Constant global.
+ml_program.global @foobar(dense<4> : tensor<4xi32>) : tensor<?xi32>
+
+// Constant with external linkage.
+ml_program.global mutable @foobar(#ml_program.extern<tensor<4xi32>>)
+  : tensor<?xi32>
+
+// Mutable global with an undefined initial value.
+ml_program.global mutable @foobar : tensor<?xi32>
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+type	::mlir::TypeAttr	any type attribute
+is_mutable	::mlir::UnitAttr	unit attribute
+value	::mlir::Attribute	any attribute
+sym_visibility	::mlir::StringAttr	string attribute

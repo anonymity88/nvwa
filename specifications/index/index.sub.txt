@@ -1,0 +1,25 @@
+index.sub (index::SubOp) ¶
+Index subtraction
+
+Syntax:
+
+operation ::= `index.sub` $lhs `,` $rhs attr-dict
+The index.sub operation takes two index values and computes the difference of the first from the second operand.
+
+Example:
+
+// c = a - b
+%c = index.sub %a, %b
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

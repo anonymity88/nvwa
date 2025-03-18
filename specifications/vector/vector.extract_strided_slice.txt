@@ -1,0 +1,38 @@
+vector.extract_strided_slice (vector::ExtractStridedSliceOp) ¶
+Extract_strided_slice operation
+
+Syntax:
+
+operation ::= `vector.extract_strided_slice` $vector attr-dict `:` type($vector) `to` type(results)
+Takes an n-D vector, k-D offsets integer array attribute, a k-sized sizes integer array attribute, a k-sized strides integer array attribute and extracts the n-D subvector at the proper offset.
+
+At the moment strides must contain only 1s.
+
+Returns an n-D vector where the first k-D dimensions match the sizes attribute. The returned subvector contains the elements starting at offset offsets and ending at offsets + sizes.
+
+Example:
+
+%1 = vector.extract_strided_slice %0
+    {offsets = [0, 2], sizes = [2, 4], strides = [1, 1]}:
+  vector<4x8x16xf32> to vector<2x4x16xf32>
+
+// TODO: Evolve to a range form syntax similar to:
+%1 = vector.extract_strided_slice %0[0:2:1][2:4:1]
+  vector<4x8x16xf32> to vector<2x4x16xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+offsets	::mlir::ArrayAttr	64-bit integer array attribute
+sizes	::mlir::ArrayAttr	64-bit integer array attribute
+strides	::mlir::ArrayAttr	64-bit integer array attribute
+Operands: ¶
+Operand	Description
+vector	vector of any type values
+Results: ¶
+Result	Description
+«unnamed»	vector of any type values

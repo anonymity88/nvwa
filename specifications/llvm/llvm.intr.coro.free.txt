@@ -1,0 +1,11 @@
+llvm.intr.coro.free (LLVM::CoroFreeOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.free` $id `,` $handle attr-dict `:` functional-type(operands, results)
+Operands: ¶
+Operand	Description
+id	LLVM token type
+handle	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

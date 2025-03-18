@@ -1,0 +1,44 @@
+scf.if (scf::IfOp) ¶
+If-then-else operation
+
+The scf.if operation represents an if-then-else construct for conditionally executing two regions of code. The operand to an if operation is a boolean value. For example:
+
+scf.if %b  {
+  ...
+} else {
+  ...
+}
+scf.if may also produce results. Which values are returned depends on which execution path is taken.
+
+Example:
+
+%x, %y = scf.if %b -> (f32, f32) {
+  %x_true = ...
+  %y_true = ...
+  scf.yield %x_true, %y_true : f32, f32
+} else {
+  %x_false = ...
+  %y_false = ...
+  scf.yield %x_false, %y_false : f32, f32
+}
+The “then” region has exactly 1 block. The “else” region may have 0 or 1 block. In case the scf.if produces results, the “else” region must also have exactly 1 block.
+
+The blocks are always terminated with scf.yield. If scf.if defines no values, the scf.yield can be left out, and will be inserted implicitly. Otherwise, it must be explicit.
+
+Example:
+
+scf.if %b  {
+  ...
+}
+The types of the yielded values must match the result types of the scf.if.
+
+Traits: InferTypeOpAdaptor, NoRegionArguments, RecursiveMemoryEffects, SingleBlockImplicitTerminator<scf::YieldOp>, SingleBlock
+
+Interfaces: InferTypeOpInterface, RegionBranchOpInterface
+
+Operands: ¶
+Operand	Description
+condition	1-bit signless integer
+Results: ¶
+Result	Description
+results	variadic of any type

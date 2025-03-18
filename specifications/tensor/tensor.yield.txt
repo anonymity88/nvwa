@@ -1,0 +1,17 @@
+tensor.yield (tensor::YieldOp) ¶
+Yield a value from a region
+
+Syntax:
+
+operation ::= `tensor.yield` $value attr-dict `:` type($value)
+This operation is used to yield a single value from a within a region. It is used to create dynamically sized tensors (see tensor.generate and tensor.pad ops).
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<::mlir::tensor::GenerateOp, ::mlir::tensor::PadOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	any type

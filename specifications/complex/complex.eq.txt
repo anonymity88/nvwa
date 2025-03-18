@@ -1,0 +1,24 @@
+complex.eq (complex::EqualOp) ¶
+Computes whether two complex values are equal
+
+Syntax:
+
+operation ::= `complex.eq` $lhs `,` $rhs  attr-dict `:` type($lhs)
+The eq op takes two complex numbers and returns whether they are equal.
+
+Example:
+
+%a = complex.eq %b, %c : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	complex type with floating-point elements
+rhs	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	1-bit signless integer

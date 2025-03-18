@@ -1,0 +1,28 @@
+spirv.INTEL.SubgroupBlockRead (spirv::INTELSubgroupBlockReadOp) ¶
+See extension SPV_INTEL_subgroups
+
+Syntax:
+
+operation ::= `spirv.INTEL.SubgroupBlockRead` $ptr attr-dict `:` type($ptr) `->` type($value)
+Reads one or more components of Result data for each invocation in the subgroup from the specified Ptr as a block operation.
+
+The data is read strided, so the first value read is: Ptr[ SubgroupLocalInvocationId ]
+
+and the second value read is: Ptr[ SubgroupLocalInvocationId + SubgroupMaxSize ] etc.
+
+Result Type may be a scalar or vector type, and its component type must be equal to the type pointed to by Ptr.
+
+The type of Ptr must be a pointer type, and must point to a scalar type.
+
+subgroup-block-read-INTEL-op ::= ssa-id `=` `spirv.INTEL.SubgroupBlockRead`
+                            storage-class ssa_use `:` spirv-element-type
+Example: ¶
+%0 = spirv.INTEL.SubgroupBlockRead "StorageBuffer" %ptr : i32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Operands: ¶
+Operand	Description
+ptr	any SPIR-V pointer type
+Results: ¶
+Result	Description
+value	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

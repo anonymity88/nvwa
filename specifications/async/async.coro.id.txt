@@ -1,0 +1,13 @@
+async.coro.id (async::CoroIdOp) ¶
+Returns a switched-resume coroutine identifier
+
+Syntax:
+
+operation ::= `async.coro.id` attr-dict
+The async.coro.id returns a switched-resume coroutine identifier.
+
+Interfaces: InferTypeOpInterface
+
+Results: ¶
+Result	Description
+id	switched-resume coroutine identifier

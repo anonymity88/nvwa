@@ -1,0 +1,15 @@
+rocdl.raw.buffer.atomic.cmpswap (ROCDL::RawBufferAtomicCmpSwap) ¶
+Syntax:
+
+operation ::= `rocdl.raw.buffer.atomic.cmpswap` attr-dict `(` operands `)` `:` type($res) `,` type($rsrc)
+Operands: ¶
+Operand	Description
+src	LLVM dialect-compatible type
+cmp	LLVM dialect-compatible type
+rsrc	LLVM dialect-compatible type
+offset	32-bit signless integer
+soffset	32-bit signless integer
+aux	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

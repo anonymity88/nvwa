@@ -1,0 +1,11 @@
+transform.apply_patterns.tensor.rewrite_as_constant (transform::ApplyRewriteTensorOpsAsConstantPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.rewrite_as_constant` (`aggressive` $aggressive^)? attr-dict
+Indicates that tensor ops (such as tensor.generate) should be replaced with constants (arith.constant) when possible.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+aggressive	::mlir::UnitAttr	unit attribute

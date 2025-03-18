@@ -1,0 +1,28 @@
+complex.pow (complex::PowOp) ¶
+Complex power function
+
+Syntax:
+
+operation ::= `complex.pow` $lhs `,` $rhs (`fastmath` `` $fastmath^)? attr-dict `:` type($result)
+The sqrt operation takes a complex number raises it to the given complex exponent.
+
+Example:
+
+%a = complex.pow %b, %c : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	complex type with floating-point elements
+rhs	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

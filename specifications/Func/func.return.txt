@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// ReturnOp
+//===----------------------------------------------------------------------===//
+
+def ReturnOp : Func_Op<"return", [Pure, HasParent<"FuncOp">,
+                                MemRefsNormalizable, ReturnLike, Terminator]> {
+  let summary = "Function return operation";
+  let description = [{
+    The `func.return` operation represents a return operation within a function.
+    The operation takes variable number of operands and produces no results.
+    The operand number and types must match the signature of the function
+    that contains the operation.
+
+    Example:
+
+    ```mlir
+    func.func @foo() : (i32, f8) {
+      ...
+      return %0, %1 : i32, f8
+    }
+    ```
+  }];
+
+  let arguments = (ins Variadic<AnyType>:$operands);
+
+  let builders = [OpBuilder<(ins), [{
+    build($_builder, $_state, std::nullopt);
+  }]>];
+
+  let assemblyFormat = "attr-dict ($operands^ `:` type($operands))?";
+  let hasVerifier = 1;
+}
+
+#endif // MLIR_DIALECT_FUNC_IR_FUNCOPS_TD

@@ -1,0 +1,16 @@
+async.runtime.load (async::RuntimeLoadOp) ¶
+Loads the value from the runtime async.value
+
+Syntax:
+
+operation ::= `async.runtime.load` $storage attr-dict `:` type($storage)
+The async.runtime.load operation loads the value from the runtime async.value storage.
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+storage	async value type
+Results: ¶
+Result	Description
+result	any type

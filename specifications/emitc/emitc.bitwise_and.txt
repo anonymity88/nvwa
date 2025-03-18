@@ -1,0 +1,22 @@
+emitc.bitwise_and (emitc::BitwiseAndOp) ¶
+Bitwise and operation
+
+Syntax:
+
+operation ::= `emitc.bitwise_and` operands attr-dict `:` functional-type(operands, results)
+With the emitc.bitwise_and operation the bitwise operator & (and) can be applied.
+
+Example:
+
+%0 = emitc.bitwise_and %arg0, %arg1 : (i32, i32) -> i32
+// Code emitted for the operation above.
+int32_t v3 = v1 & v2;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+lhs	type supported by EmitC
+rhs	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

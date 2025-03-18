@@ -1,0 +1,15 @@
+omp.masked (omp::MaskedOp) ¶
+Masked construct
+
+Syntax:
+
+operation ::= `omp.masked` oilist(
+              `filter` `(` $filtered_thread_id `:` type($filtered_thread_id) `)`
+              ) $region attr-dict
+Masked construct allows to specify a structured block to be executed by a subset of threads of the current team.
+
+If filter is specified, the masked construct masks the execution of the region to only the thread id filtered. Other threads executing the parallel region are not expected to execute the region specified within the masked directive. If filter is not specified, master thread is expected to execute the region enclosed within masked directive.
+
+Operands: ¶
+Operand	Description
+filtered_thread_id	integer or index

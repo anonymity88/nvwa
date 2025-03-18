@@ -1,0 +1,22 @@
+async.return (async::ReturnOp) ¶
+Async function return operation
+
+Syntax:
+
+operation ::= `async.return` attr-dict ($operands^ `:` type($operands))?
+The async.return is a special terminator operation for Async function.
+
+Example:
+
+async.func @foo() : !async.token {
+  return
+}
+Traits: AlwaysSpeculatableImplTrait, HasParent<FuncOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

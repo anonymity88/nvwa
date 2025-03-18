@@ -1,0 +1,41 @@
+spirv.SUDotAccSat (spirv::SUDotAccSatOp) ¶
+Mixed-signedness integer dot product of Vector 1 and Vector 2 and signed saturating addition of the result with Accumulator. Components of Vector 1 are treated as signed, components of Vector 2 are treated as unsigned.
+
+Syntax:
+
+operation ::= `spirv.SUDotAccSat` $vector1 `,` $vector2 `,` $accumulator ( `,` $format^ )? attr-dict `:`
+              type($vector1) `->` type($result)
+Result Type must be an integer type whose Width must be greater than or equal to that of the components of Vector 1 and Vector 2.
+
+Vector 1 and Vector 2 must be either 32-bit integers (enabled by the DotProductInput4x8BitPacked capability) or vectors of integer type with the same number of components and same component Width (enabled by the DotProductInput4x8Bit or DotProductInputAll capability). When Vector 1 and Vector 2 are vectors, the components of Vector 2 must have a Signedness of 0.
+
+The type of Accumulator must be the same as Result Type.
+
+When Vector 1 and Vector 2 are scalar integer types, Packed Vector Format must be specified to select how the integers are to be interpreted as vectors.
+
+All components of Vector 1 are sign-extended to the bit width of the result’s type. All components of Vector 2 are zero-extended to the bit width of the result’s type. The sign- or zero-extended input vectors are then multiplied component-wise and all components of the vector resulting from the component-wise multiplication are added together. Finally, the resulting sum is added to the input accumulator. This final addition is saturating.
+
+If any of the multiplications or additions, with the exception of the final accumulation, overflow or underflow, the result of the instruction is undefined.
+
+Example: ¶
+%r = spirv.SUDotAccSat %a, %b, %acc, <PackedVectorFormat4x8Bit> : i32 -> i32
+%r = spirv.SUDotAccSat %a, %b, %acc, <PackedVectorFormat4x8Bit> : i32 -> i64
+%r = spirv.SUDotAccSat %a, %b, %acc : vector<4xi8> -> i32
+Traits: AlwaysSpeculatableImplTrait, SignedOp, UnsignedOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+format	::mlir::spirv::PackedVectorFormatAttr	
+valid SPIR-V PackedVectorFormat
+Operands: ¶
+Operand	Description
+vector1	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+vector2	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+accumulator	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer

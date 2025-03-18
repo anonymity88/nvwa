@@ -1,0 +1,18 @@
+transform.param.constant (transform::ParamConstantOp) ¶
+Produces a new transform dialect parameter value associated with the given attribute
+
+Syntax:
+
+operation ::= `transform.param.constant` $value attr-dict `->` type($param)
+Produces a new transform dialect parameter associated with the singleton list containing the given attribute. The operation itself always succeeds, but the general association check may fail if the parameter type does not accept the given kind of attribute as valid.
+
+Traits: ParamProducerTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	any attribute
+Results: ¶
+Result	Description
+param	TransformParamTypeInterface instance

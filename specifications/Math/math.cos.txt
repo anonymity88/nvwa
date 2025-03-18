@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// CosOp
+//===----------------------------------------------------------------------===//
+
+def Math_CosOp : Math_FloatUnaryOp<"cos"> {
+  let summary = "cosine of the specified value";
+  let description = [{
+    The `cos` operation computes the cosine of a given value. It takes one
+    operand of floating point type (i.e., scalar, tensor or vector) and returns one
+    result of the same type.  It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar cosine value.
+    %a = math.cos %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

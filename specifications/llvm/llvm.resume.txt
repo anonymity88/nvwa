@@ -1,0 +1,9 @@
+llvm.resume (LLVM::ResumeOp) ¶
+Syntax:
+
+operation ::= `llvm.resume` $value attr-dict `:` type($value)
+Traits: Terminator
+
+Operands: ¶
+Operand	Description
+value	LLVM dialect-compatible type

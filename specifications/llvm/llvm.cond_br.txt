@@ -1,0 +1,26 @@
+llvm.cond_br (LLVM::CondBrOp) ¶
+Syntax:
+
+operation ::= `llvm.cond_br` $condition ( `weights` `(` $branch_weights^ `)` )? `,`
+              $trueDest (`(` $trueDestOperands^ `:` type($trueDestOperands) `)`)? `,`
+              $falseDest (`(` $falseDestOperands^ `:` type($falseDestOperands) `)`)?
+              attr-dict
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, Terminator
+
+Interfaces: BranchOpInterface, BranchWeightOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+branch_weights	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+loop_annotation	::mlir::LLVM::LoopAnnotationAttr	
+Operands: ¶
+Operand	Description
+condition	1-bit signless integer
+trueDestOperands	variadic of LLVM dialect-compatible type
+falseDestOperands	variadic of LLVM dialect-compatible type
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

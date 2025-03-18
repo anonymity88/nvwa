@@ -1,0 +1,11 @@
+llvm.intr.coro.begin (LLVM::CoroBeginOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.begin` $token `,` $mem attr-dict `:` functional-type(operands, results)
+Operands: ¶
+Operand	Description
+token	LLVM token type
+mem	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

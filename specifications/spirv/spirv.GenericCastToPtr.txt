@@ -1,0 +1,27 @@
+spirv.GenericCastToPtr (spirv::GenericCastToPtrOp) ¶
+Convert a pointer’s Storage Class to a non-Generic class.
+
+Syntax:
+
+operation ::= `spirv.GenericCastToPtr` $pointer attr-dict `:` type($pointer) `to` type($result)
+Result Type must be an OpTypePointer. Its Storage Class must be Workgroup, CrossWorkgroup, or Function.
+
+Pointer must point to the Generic Storage Class.
+
+Result Type and Pointer must point to the same type.
+
+Example: ¶
+   %1 = spirv.GenericCastToPtrOp %0 : !spirv.ptr<f32, Generic> to
+   !spirv.ptr<f32, CrossWorkGroup>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+pointer	any SPIR-V pointer type
+Results: ¶
+Result	Description
+result	any SPIR-V pointer type

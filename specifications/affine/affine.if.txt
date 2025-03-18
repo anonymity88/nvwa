@@ -1,0 +1,57 @@
+affine.if (affine::AffineIfOp) ¶
+If-then-else operation
+
+Syntax:
+
+operation  ::= `affine.if` if-op-cond `{` op* `}` (`else` `{` op* `}`)?
+if-op-cond ::= integer-set-attr dim-and-symbol-use-list
+The affine.if operation restricts execution to a subset of the loop iteration space defined by an integer set (a conjunction of affine constraints). A single affine.if may end with an optional else clause.
+
+The condition of the affine.if is represented by an integer set (a conjunction of affine constraints), and the SSA values bound to the dimensions and symbols in the integer set. The same restrictions hold for these SSA values as for all bindings of SSA values to dimensions and symbols.
+
+The affine.if operation contains two regions for the “then” and “else” clauses. affine.if may return results that are defined in its regions. The values defined are determined by which execution path is taken. Each region of the affine.if must contain a single block with no arguments, and be terminated by affine.yield. If affine.if defines no values, the affine.yield can be left out, and will be inserted implicitly. Otherwise, it must be explicit. If no values are defined, the else block may be empty (i.e. contain no blocks).
+
+Example:
+
+#set = affine_set<(d0, d1)[s0]: (d0 - 10 >= 0, s0 - d0 - 9 >= 0,
+                                 d1 - 10 >= 0, s0 - d1 - 9 >= 0)>
+func.func @reduced_domain_example(%A, %X, %N) : (memref<10xi32>, i32, i32) {
+  affine.for %i = 0 to %N {
+     affine.for %j = 0 to %N {
+       %0 = affine.apply #map42(%j)
+       %tmp = call @S1(%X, %i, %0)
+       affine.if #set(%i, %j)[%N] {
+          %1 = affine.apply #map43(%i, %j)
+          call @S2(%tmp, %A, %i, %1)
+       }
+    }
+  }
+  return
+}
+Example with an explicit yield (initialization with edge padding):
+
+#interior = affine_set<(i, j) : (i - 1 >= 0, j - 1 >= 0,  10 - i >= 0, 10 - j >= 0)> (%i, %j)
+func.func @pad_edges(%I : memref<10x10xf32>) -> (memref<12x12xf32) {
+  %O = alloc memref<12x12xf32>
+  affine.parallel (%i, %j) = (0, 0) to (12, 12) {
+    %1 = affine.if #interior (%i, %j) {
+      %2 = load %I[%i - 1, %j - 1] : memref<10x10xf32>
+      affine.yield %2
+    } else {
+      %2 = arith.constant 0.0 : f32
+      affine.yield %2 : f32
+    }
+    affine.store %1, %O[%i, %j] : memref<12x12xf32>
+  }
+  return %O
+}
+Traits: NoRegionArguments, RecursiveMemoryEffects, RecursivelySpeculatableImplTrait, SingleBlockImplicitTerminator<AffineYieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, RegionBranchOpInterface
+
+Operands: ¶
+Operand	Description
+«unnamed»	variadic of any type
+Results: ¶
+Result	Description
+results	variadic of any type

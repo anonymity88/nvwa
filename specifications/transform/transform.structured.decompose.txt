@@ -1,0 +1,19 @@
+transform.structured.decompose (transform::DecomposeOp) ¶
+Syntax:
+
+operation ::= `transform.structured.decompose` $target attr-dict `:` functional-type(operands, results)
+Decomposes named complex operations, such as higher-dimensional (depthwise) convolutions, into combinations of lower-dimensional equivalents when possible.
+
+Return modes ¶
+This operation ignores non-Linalg ops and drops them in the return. If all the operations referred to by the target handle decompose properly, the transform succeeds. Otherwise the transform produces a silenceable failure. The return handle points to only the subset of successfully produced computational operations, which can be empty.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

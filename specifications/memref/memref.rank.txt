@@ -1,0 +1,24 @@
+memref.rank (memref::RankOp) ¶
+Rank operation
+
+Syntax:
+
+operation ::= `memref.rank` $memref attr-dict `:` type($memref)
+The memref.rank operation takes a memref operand and returns its rank.
+
+Example:
+
+%0 = memref.rank %arg0 : memref<*xf32>
+%1 = memref.rank %arg1 : memref<?x?xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+memref	ranked or unranked memref of any type values
+Results: ¶
+Result	Description
+«unnamed»	index

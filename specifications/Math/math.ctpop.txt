@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// CtPopOp
+//===----------------------------------------------------------------------===//
+
+def Math_CtPopOp : Math_IntegerUnaryOp<"ctpop"> {
+  let summary = "counts the number of set bits of an integer value";
+  let description = [{
+    The `ctpop` operation computes the number of set bits of an integer value.
+    It operates on scalar, tensor or vector.
+
+    Example:
+
+    ```mlir
+    // Scalar ctpop function value.
+    %a = math.ctpop %b : i32
+    ```
+  }];
+  let hasFolder = 1;
+}
+

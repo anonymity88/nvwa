@@ -1,0 +1,18 @@
+emitc.member (emitc::MemberOp) ¶
+Member operation
+
+With the emitc.member operation the member access operator . can be applied.
+
+Example:
+
+%0 = "emitc.member" (%arg0) {member = "a"}
+    : (!emitc.lvalue<!emitc.opaque<"mystruct">>) -> !emitc.lvalue<i32>
+Attributes: ¶
+Attribute	MLIR Type	Description
+member	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+operand	emitc.lvalue of EmitC opaque type values
+Results: ¶
+Result	Description
+«unnamed»	emitc.lvalue of type supported by EmitC values

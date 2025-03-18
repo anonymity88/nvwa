@@ -1,0 +1,17 @@
+transform.yield (transform::YieldOp) ¶
+Yields operation handles from a transform IR region
+
+Syntax:
+
+operation ::= `transform.yield` operands attr-dict (`:` type($operands)^)?
+This terminator operation yields operation handles from regions of the transform IR ops back to the containing op. It is not itself associated with any transformation on the payload IR and is used for flow purposes only.
+
+Traits: Terminator
+
+Interfaces: MemoryEffectOpInterface
+
+Operands: ¶
+Operand	Description
+operands	variadic of any transform handle or parameter
+Affine Transform Operations ¶
+source

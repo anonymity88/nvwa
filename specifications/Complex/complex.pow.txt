@@ -1,0 +1,18 @@
+//===----------------------------------------------------------------------===//
+// PowOp
+//===----------------------------------------------------------------------===//
+
+def PowOp : ComplexArithmeticOp<"pow"> {
+  let summary = "complex power function";
+  let description = [{
+    The `sqrt` operation takes a complex number raises it to the given complex
+    exponent.
+
+    Example:
+
+    ```mlir
+    %a = complex.pow %b, %c : complex<f32>
+    ```
+  }];
+}
+

@@ -1,0 +1,35 @@
+spirv.Variable (spirv::VariableOp) ¶
+Allocate an object in memory, resulting in a pointer to it, which can be used with OpLoad and OpStore.
+
+Result Type must be an OpTypePointer. Its Type operand is the type of object in memory.
+
+Storage Class is the Storage Class of the memory holding the object. Since the op is used to model function-level variables, the storage class must be the Function Storage Class.
+
+Initializer is optional. If Initializer is present, it will be the initial value of the variable’s memory content. Initializer must be an from a constant instruction or a global (module scope) OpVariable instruction. Initializer must have the same type as the type pointed to by Result Type.
+
+From SPV_KHR_physical_storage_buffer: If an OpVariable’s pointee type is a pointer (or array of pointers) in PhysicalStorageBuffer storage class, then the variable must be decorated with exactly one of AliasedPointer or RestrictPointer.
+
+variable-op ::= ssa-id `=` `spirv.Variable` (`init(` ssa-use `)`)?
+                attribute-dict? `:` spirv-pointer-type
+where init specifies initializer.
+
+Example: ¶
+%0 = spirv.Constant ...
+
+%1 = spirv.Variable : !spirv.ptr<f32, Function>
+%2 = spirv.Variable init(%0): !spirv.ptr<f32, Function>
+
+%3 = spirv.Variable {aliased_pointer} :
+  !spirv.ptr<!spirv.ptr<f32, PhysicalStorageBuffer>, Function>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+storage_class	::mlir::spirv::StorageClassAttr	
+valid SPIR-V StorageClass
+Operands: ¶
+Operand	Description
+initializer	any type
+Results: ¶
+Result	Description
+pointer	any SPIR-V pointer type

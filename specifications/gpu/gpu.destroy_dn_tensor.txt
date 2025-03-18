@@ -1,0 +1,23 @@
+gpu.destroy_dn_tensor (gpu::DestroyDnTensorOp) ¶
+Destroy dense tensor operation
+
+Syntax:
+
+operation ::= `gpu.destroy_dn_tensor` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $dnTensor attr-dict
+The gpu.destroy_dn_tensor operation releases all resources of a dense tensor represented by a handle that was previously created by a gpu.create_dn_tensor operation.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%token = gpu.destroy_dn_tensor async [%dep] %dnTensor
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+dnTensor	dense tensor handle type
+Results: ¶
+Result	Description
+asyncToken	async token type

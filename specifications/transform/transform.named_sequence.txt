@@ -1,0 +1,22 @@
+transform.named_sequence (transform::NamedSequenceOp) ¶
+Named transform sequence that can be included elsewhere
+
+Defines a named (callable, function-like) sequence of other Transform dialect operations that can be included using transform.include as part of another Transform dialect construct. This sequence is not processed immediately but rather dispatched to when the inclusion is processed. The arguments and results can be used to communicate a subset of mapping into the named sequence. The sequence must consist of a single block and end with a transform.yield terminator. The operands of the terminator become the results of the transform.include.
+
+When dispatched to, the operations in the named sequence are executed one by one, similarly to the regular unnamed sequence. The failure propagation mode is specified on the transform.include. Different inclusions may use different failure propagation modes. This transform operation always succeeds by itself, but the inclusion may fail if any of the operations fail.
+
+Named sequences can only appear at the top-level of the Transform dialect nesting structure. That is, they cannot be nested in other Transform dialect operations. Furthermore, one of the ancestors must have the SymbolTable trait and have the transform.with_named_sequence attribute attached.
+
+Named sequences may include other named sequences via transform.include, but recursion is not allowed.
+
+Traits: IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, MemoryEffectOpInterface, Symbol, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	function type attribute
+sym_visibility	::mlir::StringAttr	string attribute
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes

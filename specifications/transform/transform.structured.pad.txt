@@ -1,0 +1,40 @@
+transform.structured.pad (transform::PadOp) ¶
+Syntax:
+
+operation ::= `transform.structured.pad` $target
+              (`pad_to_multiple_of` custom<DynamicIndexList>($pad_to_multiple_of, $static_pad_to_multiple_of)^)?
+              attr-dict
+              `:` functional-type(operands, results)
+Pads the operations pointed to by the target handle using the options provides as operation attributes. The operation returns a handle to the padded operation and to the padding operation (“tensor.pad”).
+
+To preserve tensor SSA use-def chains, the unpadded result is copied back to the original destination tensor of the targeted op. The op that copies back the result can be customized with copy_back_op:
+
+“bufferization.materialize_in_destination” (default)
+“linalg.copy”
+“none” (no copy back)
+Return modes ¶
+This operation ignores non-Linalg ops and drops them in the return. This operation may produce a definite failure if the padding fails for any reason.
+
+If all the operations referred to by the target handle pad properly, the transform succeeds. Otherwise the transform produces a silenceable failure. The return handle points to only the subset of successfully produced padded operations, which can be empty.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+padding_values	::mlir::ArrayAttr	array attribute
+padding_dimensions	::mlir::ArrayAttr	64-bit integer array attribute
+static_pad_to_multiple_of	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+nofold_flags	::mlir::ArrayAttr	64-bit integer array attribute
+transpose_paddings	::mlir::ArrayAttr	array of arrays of i64
+copy_back_op	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+pad_to_multiple_of	variadic of transform any param type or any handle type
+Results: ¶
+Result	Description
+padded	TransformHandleTypeInterface instance
+pad	TransformHandleTypeInterface instance
+copy	TransformHandleTypeInterface instance

@@ -1,0 +1,39 @@
+ml_program.token (ml_program::TokenOp) ¶
+Produces a new token value
+
+Syntax:
+
+operation ::= `ml_program.token` attr-dict
+Token values are used to chain side effecting ops in a graph so as to establish an execution order. This op produces a token.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+token	Token for establishing execution ordering in a graph
+Attributes ¶
+ExternAttr ¶
+Value used for a global signalling external resolution
+
+Syntax:
+
+#ml_program.extern<
+  ::mlir::Type   # type
+>
+When used as the value for a GlobalOp, this indicates that the actual value should be resolved externally in an implementation defined manner. The sym_name of the global is the key for locating the value.
+
+Examples:
+
+extern : tensor<4xi32>
+Parameters: ¶
+Parameter	C++ type	Description
+type	::mlir::Type	
+Types ¶
+TokenType ¶
+Token for establishing execution ordering in a graph
+
+Syntax: !ml_program.token

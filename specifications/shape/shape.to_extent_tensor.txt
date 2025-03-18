@@ -1,0 +1,22 @@
+shape.to_extent_tensor (shape::ToExtentTensorOp) ¶
+Creates a dimension tensor from a shape
+
+Syntax:
+
+operation ::= `shape.to_extent_tensor` $input attr-dict `:` type($input) `->` type($result)
+Converts a shape to a 1D integral tensor of extents. The number of elements in the tensor equals the rank of the shape, and the elements equal the extents of the shape.
+
+If the shape represents an error, this op’s behavior is undefined.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: CastOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	shape or extent tensor
+Results: ¶
+Result	Description
+result	tensor of index values

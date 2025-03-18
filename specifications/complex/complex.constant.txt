@@ -1,0 +1,23 @@
+complex.constant (complex::ConstantOp) ¶
+Complex number constant operation
+
+Syntax:
+
+operation ::= `complex.constant` $value attr-dict `:` type($complex)
+The complex.constant operation creates a constant complex number from an attribute containing the real and imaginary parts.
+
+Example:
+
+%a = complex.constant [0.1, -1.0] : complex<f64>
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::ArrayAttr	array attribute
+Results: ¶
+Result	Description
+complex	complex-type

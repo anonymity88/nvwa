@@ -1,0 +1,29 @@
+sparse_tensor.concatenate (sparse_tensor::ConcatenateOp) ¶
+Concatenates a list of tensors into a single tensor.
+
+Syntax:
+
+operation ::= `sparse_tensor.concatenate` $inputs attr-dict `:` type($inputs) `to` type($result)
+Concatenates a list input tensors and the output tensor with the same dimension-rank. The concatenation happens on the specified dimension (0 <= dimension < dimRank). The resulting dimension size is the sum of all the input sizes for that dimension, while all the other dimensions should have the same size in the input and output tensors.
+
+Only statically-sized input tensors are accepted, while the output tensor can be dynamically-sized.
+
+Example:
+
+%0 = sparse_tensor.concatenate %1, %2 { dimension = 0 : index }
+  : tensor<64x64xf64, #CSR>, tensor<64x64xf64, #CSR> to tensor<128x64xf64, #CSR>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), StageWithSortSparseOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::IntegerAttr	dimension attribute
+Operands: ¶
+Operand	Description
+inputs	variadic of ranked tensor of any type values
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

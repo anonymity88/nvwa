@@ -1,0 +1,28 @@
+spirv.CL.u_min (spirv::CLUMinOp) ¶
+Return minimum of two unsigned integer operands
+
+Syntax:
+
+operation ::= `spirv.CL.u_min` operands attr-dict `:` type($result)
+Returns y if x < y, otherwise it returns x, where x and y are treated as unsigned integers.
+
+Result Type,x and y must be integer or vector(2,3,4,8,16) of integer values.
+
+All of the operands, including the Result Type operand, must be of the same type.
+
+Example: ¶
+%2 = spirv.CL.u_min %0, %1 : i32
+%3 = spirv.CL.u_min %0, %1 : vector<3xi16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+rhs	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

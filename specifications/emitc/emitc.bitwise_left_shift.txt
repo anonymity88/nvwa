@@ -1,0 +1,22 @@
+emitc.bitwise_left_shift (emitc::BitwiseLeftShiftOp) ¶
+Bitwise left shift operation
+
+Syntax:
+
+operation ::= `emitc.bitwise_left_shift` operands attr-dict `:` functional-type(operands, results)
+With the emitc.bitwise_left_shift operation the bitwise operator « (left shift) can be applied.
+
+Example:
+
+%0 = emitc.bitwise_left_shift %arg0, %arg1 : (i32, i32) -> i32
+// Code emitted for the operation above.
+int32_t v3 = v1 << v2;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+lhs	type supported by EmitC
+rhs	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

@@ -1,0 +1,24 @@
+gpu.dynamic_shared_memory (gpu::DynamicSharedMemoryOp) ¶
+Get the memref for dynamic shared memory
+
+Syntax:
+
+operation ::= `gpu.dynamic_shared_memory` attr-dict `:` type($resultMemref)
+This operation provides a memref pointer to the start of dynamic shared memory, often referred to as workgroup memory. It’s important to note that this dynamic shared memory needs to be allocated at kernel launch. One can conveniently utilize the dynamic_shared_memory_size parameter of gpu.launch for this purpose.
+
+Examples:
+
+%0 = gpu.dynamic.shared.memory : memref<?xi8, #gpu.address_space<workgroup>>
+%1 = memref.view %0[%c8192][] : memref<?xi8, #gpu.address_space<workgroup>>
+                        to memref<32x64xf32, #gpu.address_space<workgroup>>
+%2 = memref.view %0[%c16384][] : memref<?xi8, #gpu.address_space<workgroup>>
+                        to memref<32x64xf32, #gpu.address_space<workgroup>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+resultMemref	1D memref of 8-bit signless integer values

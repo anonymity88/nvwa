@@ -1,0 +1,22 @@
+llvm.mlir.poison (LLVM::PoisonOp) ¶
+Creates a poison value of LLVM dialect type.
+
+Syntax:
+
+operation ::= `llvm.mlir.poison` attr-dict `:` type($res)
+Unlike LLVM IR, MLIR does not have first-class poison values. Such values must be created as SSA values using llvm.mlir.poison. This operation has no operands or attributes. It creates a poison value of the specified LLVM IR dialect type.
+
+Example:
+
+// Create a poison value for a structure with a 32-bit integer followed
+// by a float.
+%0 = llvm.mlir.poison : !llvm.struct<(i32, f32)>
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

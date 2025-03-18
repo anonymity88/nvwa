@@ -1,0 +1,12 @@
+llvm.intr.annotation (LLVM::Annotation) ¶
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+integer	signless integer
+annotation	LLVM pointer type
+fileName	LLVM pointer type
+line	32-bit signless integer
+Results: ¶
+Result	Description
+res	signless integer

@@ -1,0 +1,34 @@
+irdl.base (irdl::BaseOp) ¶
+Constraints an attribute/type base
+
+Syntax:
+
+operation ::= `irdl.base` ($base_ref^)? ($base_name^)? ` ` attr-dict
+irdl.base defines a constraint that only accepts a single type or attribute base, e.g. an IntegerType. The attribute base is defined either by a symbolic reference to the corresponding IRDL definition, or by the name of the base. Named bases are prefixed with ! or # respectively for types and attributes.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex {
+    %0 = irdl.base "!builtin.integer"
+    irdl.parameters(%0)
+  }
+
+  irdl.type @complex_wrapper {
+    %0 = irdl.base @cmath::@complex
+    irdl.parameters(%0)
+  }
+}
+The above program defines a cmath.complex type that expects a single parameter, which is a type with base name builtin.integer, which is the name of an IntegerType type. It also defines a cmath.complex_wrapper type that expects a single parameter, which is a type of base type cmath.complex.
+
+Traits: HasParent<TypeOp, AttributeOp, OperationOp>
+
+Interfaces: InferTypeOpInterface, SymbolUserOpInterface, VerifyConstraintInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+base_ref	::mlir::SymbolRefAttr	symbol reference attribute
+base_name	::mlir::StringAttr	string attribute
+Results: ¶
+Result	Description
+output	IRDL handle to an mlir::Attribute

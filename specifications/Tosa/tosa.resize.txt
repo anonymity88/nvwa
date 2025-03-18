@@ -1,0 +1,35 @@
+//===----------------------------------------------------------------------===//
+// Operator: resize
+//===----------------------------------------------------------------------===//
+def Tosa_ResizeOp : Tosa_InferShapedTypeOp<"resize"> {
+  let summary = "Resize operation, supports various resize/upsample modes";
+
+  let description = [{
+    Resizes a tensor. Resize is only allowed in the H and W dimensions. In
+    expected use, The height dimension is scaled by factor (scale_y_n/scale_y_d).
+    And the width dimension is scaled by factor (scale_x_n/scale_x_d). Thus the
+    output dimensions can be derived from the input dimensions by inverting the
+    scale. And the [order_y, border_x] values adjust the output size to allow
+    fractional sampling beyond integer input position (IH-1,IW-1).
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor4D:$input,
+    Tosa_IntArrayAttr4:$scale,
+    Tosa_IntArrayAttr2:$offset,
+    Tosa_IntArrayAttr2:$border,
+    Tosa_ResizeTypeAttr:$mode
+  );
+
+  let results = (outs
+    Tosa_Tensor4D:$output
+  );
+
+  let hasFolder = 1;
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.12
+// Operator Class: Type Conversion.
+//===----------------------------------------------------------------------===//
+

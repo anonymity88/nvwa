@@ -1,0 +1,41 @@
+emitc.func (emitc::FuncOp) ¶
+An operation with a name containing a single SSACFG region
+
+Operations within the function cannot implicitly capture values defined outside of the function, i.e. Functions are IsolatedFromAbove. All external references must use function arguments or attributes that establish a symbolic connection (e.g. symbols referenced by name via a string attribute like SymbolRefAttr). While the MLIR textual form provides a nice inline syntax for function arguments, they are internally represented as “block arguments” to the first block in the region.
+
+Only dialect attribute names may be specified in the attribute dictionaries for function arguments, results, or the function itself.
+
+Example:
+
+// A function with no results:
+emitc.func @foo(%arg0 : i32) {
+  emitc.call_opaque "bar" (%arg0) : (i32) -> ()
+  emitc.return
+}
+
+// A function with its argument as single result:
+emitc.func @foo(%arg0 : i32) -> i32 {
+  emitc.return %arg0 : i32
+}
+
+// A function with specifiers attribute:
+emitc.func @example_specifiers_fn_attr() -> i32
+            attributes {specifiers = ["static","inline"]} {
+  %0 = emitc.call_opaque "foo" (): () -> i32
+  emitc.return %0 : i32
+}
+
+// An external function definition:
+emitc.func private @extern_func(i32)
+                    attributes {specifiers = ["extern"]}
+Traits: AutomaticAllocationScope, IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, OpAsmOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	type attribute of function type
+specifiers	::mlir::ArrayAttr	string array attribute
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes

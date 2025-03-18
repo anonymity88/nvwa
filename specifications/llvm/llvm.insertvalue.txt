@@ -1,0 +1,24 @@
+llvm.insertvalue (LLVM::InsertValueOp) ¶
+Insert a value into an LLVM struct.
+
+Syntax:
+
+operation ::= `llvm.insertvalue` $value `,` $container `` $position attr-dict `:` type($container)
+              custom<InsertExtractValueElementType>(type($value), ref(type($container)),
+              ref($position))
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+position	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+container	LLVM aggregate type
+value	primitive LLVM type
+Results: ¶
+Result	Description
+res	LLVM aggregate type

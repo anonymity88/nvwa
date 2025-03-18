@@ -1,0 +1,10 @@
+llvm.intr.eh.typeid.for (LLVM::EhTypeidForOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.eh.typeid.for` $type_info attr-dict `:` functional-type(operands, results)
+Operands: ¶
+Operand	Description
+type_info	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

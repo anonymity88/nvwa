@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// RemSOp
+//===----------------------------------------------------------------------===//
+
+def Index_RemSOp : IndexBinaryOp<"rems", [NoMemoryEffect]> {
+  let summary = "index signed remainder";
+  let description = [{
+    The `index.rems` operation takes two index values and computes their signed
+    remainder. Treats the leading bit as the sign, i.e. `6 % -2 = 0`.
+
+    Example:
+
+    ```mlir
+    // c = a % b
+    %c = index.rems %a, %b
+    ```
+  }];
+}
+

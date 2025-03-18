@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// MaximumFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MaximumFOp : Arith_FloatBinaryOp<"maximumf", [Commutative]> {
+  let summary = "floating-point maximum operation";
+  let description = [{
+    Returns the maximum of the two arguments, treating -0.0 as less than +0.0.
+    If one of the arguments is NaN, then the result is also NaN.
+
+    Example:
+
+    ```mlir
+    // Scalar floating-point maximum.
+    %a = arith.maximumf %b, %c : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

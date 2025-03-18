@@ -1,0 +1,35 @@
+vector.extract (vector::ExtractOp) ¶
+Extract operation
+
+Syntax:
+
+operation ::= `vector.extract` $vector ``
+              custom<DynamicIndexList>($dynamic_position, $static_position)
+              attr-dict `:` type($result) `from` type($vector)
+Takes an n-D vector and a k-D position and extracts the (n-k)-D vector at the proper position. Degenerates to an element type if n-k is zero.
+
+Dynamic indices must be greater or equal to zero and less than the size of the corresponding dimension. The result is undefined if any index is out-of-bounds.
+
+Example:
+
+%1 = vector.extract %0[3]: vector<8x16xf32> from vector<4x8x16xf32>
+%2 = vector.extract %0[2, 1, 3]: f32 from vector<4x8x16xf32>
+%3 = vector.extract %1[]: vector<f32> from vector<f32>
+%4 = vector.extract %0[%a, %b, %c]: f32 from vector<4x8x16xf32>
+%5 = vector.extract %0[2, %b]: vector<16xf32> from vector<4x8x16xf32>
+Traits: AlwaysSpeculatableImplTrait, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+static_position	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+vector	vector of any type values
+dynamic_position	variadic of index
+Results: ¶
+Result	Description
+result	any type

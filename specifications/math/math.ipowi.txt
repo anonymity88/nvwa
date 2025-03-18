@@ -1,0 +1,25 @@
+math.ipowi (math::IPowIOp) ¶
+Signed integer raised to the power of operation
+
+Syntax:
+
+operation ::= `math.ipowi` $lhs `,` $rhs attr-dict `:` type($result)
+The ipowi operation takes two operands of integer type (i.e., scalar, tensor or vector) and returns one result of the same type. Operands must have the same type.
+
+Example:
+
+// Scalar signed integer exponentiation.
+%a = math.ipowi %b, %c : i32
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	signless-integer-like
+rhs	signless-integer-like
+Results: ¶
+Result	Description
+result	signless-integer-like

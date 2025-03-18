@@ -1,0 +1,22 @@
+irdl.dialect (irdl::DialectOp) ¶
+Define a new dialect
+
+Syntax:
+
+operation ::= `irdl.dialect` $sym_name attr-dict-with-keyword custom<SingleBlockRegion>($body)
+The irdl.dialect operation defines a dialect. All operations, attributes, and types defined inside its region will be part of the dialect.
+
+Example:
+
+irdl.dialect @cmath {
+  ...
+}
+The above program defines a cmath dialect.
+
+Traits: IsolatedFromAbove, NoTerminator, SymbolTable
+
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute

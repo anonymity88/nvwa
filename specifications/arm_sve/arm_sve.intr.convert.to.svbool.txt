@@ -1,0 +1,7 @@
+arm_sve.intr.convert.to.svbool (arm_sve::ConvertToSvboolIntrOp) ¶
+Operands: ¶
+Operand	Description
+mask	vector<[1]xi1>, vector<[2]xi1>, vector<[4]xi1>, vector<[8]xi1>, or vector<[16]xi1>
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

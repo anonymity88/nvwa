@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// Operator: mul
+//===----------------------------------------------------------------------===//
+def Tosa_MulOp : Tosa_ElementwiseOp<"mul", [
+    Commutative,
+    MulOperandsAndResultElementType]> {
+  let summary = "Multiplication operator";
+
+  let description = [{
+    Elementwise multiplication (Hadamard product) of input1 and input2.
+    Axis of size 1 will be broadcast, as necessary.
+    i8/i16 input type can be promoted to i32 result type.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2,
+    I8Attr:$shift
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+

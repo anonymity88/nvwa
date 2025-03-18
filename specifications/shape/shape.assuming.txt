@@ -1,0 +1,17 @@
+shape.assuming (shape::AssumingOp) ¶
+Execute the region
+
+Executes the region assuming all witnesses are true.
+
+“assuming” operations represent an execution order restriction to the compiler, information for dependent code to rely on (by assuming), and nothing else. They should not exist after a program is fully lowered and ready to execute.
+
+Traits: RecursiveMemoryEffects, SingleBlockImplicitTerminator<AssumingYieldOp>, SingleBlock
+
+Interfaces: RegionBranchOpInterface
+
+Operands: ¶
+Operand	Description
+witness	
+Results: ¶
+Result	Description
+results	variadic of any type

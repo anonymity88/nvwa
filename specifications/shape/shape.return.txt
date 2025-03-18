@@ -1,0 +1,17 @@
+shape.return (shape::ReturnOp) ¶
+Shape function return operation
+
+Syntax:
+
+operation ::= `shape.return` attr-dict ($operands^ `:` type($operands))?
+The shape.return operation represents a return operation within a function. The operation takes variable number of operands and produces no results.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<FuncOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

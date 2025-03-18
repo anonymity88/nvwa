@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// Operator: abs
+//===----------------------------------------------------------------------===//
+def Tosa_AbsOp : Tosa_ElementwiseOp<"abs", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise abs op";
+
+  let description = [{
+    Elementwise absolute value operation
+
+    Example:
+
+    ```mlir
+    %out = tosa.abs(%in) : (tensor<21x3xf32>) -> tensor<21x3xf32>
+    ```
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+

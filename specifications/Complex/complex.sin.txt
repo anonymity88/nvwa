@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// SinOp
+//===----------------------------------------------------------------------===//
+
+def SinOp : ComplexUnaryOp<"sin", [SameOperandsAndResultType]> {
+  let summary = "computes sine of a complex number";
+  let description = [{
+    The `sin` op takes a single complex number and computes the sine of
+    it, i.e. `sin(x)`, where `x` is the input value.
+
+    Example:
+
+    ```mlir
+    %a = complex.sin %b : complex<f32>
+    ```
+  }];
+
+  let results = (outs Complex<AnyFloat>:$result);
+}
+

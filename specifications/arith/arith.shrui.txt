@@ -1,0 +1,24 @@
+//===----------------------------------------------------------------------===//
+// ShRUIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_ShRUIOp : Arith_TotalIntBinaryOp<"shrui"> {
+  let summary = "unsigned integer right-shift";
+  let description = [{
+    The `shrui` operation shifts an integer value of the first operand to the right 
+    by the value of the second operand. The first operand is interpreted as unsigned,
+    and the second operand is interpreted as unsigned. The high order bits are always 
+    filled with zeros. If the value of the second operand is greater or equal than the
+    bitwidth of the first operand, then the operation returns poison.
+
+    Example:
+
+    ```mlir
+    %1 = arith.constant 160 : i8               // %1 is 0b10100000
+    %2 = arith.constant 3 : i8
+    %3 = arith.shrui %1, %2 : (i8, i8) -> i8   // %3 is 0b00010100
+    ```
+  }];
+  let hasFolder = 1;
+}
+

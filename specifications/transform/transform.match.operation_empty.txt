@@ -1,0 +1,15 @@
+transform.match.operation_empty (transform::MatchOperationEmptyOp) ¶
+Matches if the handle is not associated to any op
+
+Syntax:
+
+operation ::= `transform.match.operation_empty` $operand_handle attr-dict `:` type($operand_handle)
+Succeeds if the handle is not associated to any op.
+
+Traits: AtMostOneOpMatcher
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance

@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// SubOp
+//===----------------------------------------------------------------------===//
+
+def Index_SubOp : IndexBinaryOp<"sub", [Pure]> {
+  let summary = "index subtraction";
+  let description = [{
+    The `index.sub` operation takes two index values and computes the difference
+    of the first from the second operand.
+
+    Example:
+
+    ```mlir
+    // c = a - b
+    %c = index.sub %a, %b
+    ```
+  }];
+}
+

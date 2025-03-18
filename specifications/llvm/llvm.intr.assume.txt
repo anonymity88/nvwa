@@ -1,0 +1,15 @@
+llvm.intr.assume (LLVM::AssumeOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.assume` $cond
+              ( custom<OpBundles>($op_bundle_operands, type($op_bundle_operands),
+              $op_bundle_tags)^ )?
+              `:` type($cond) attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+op_bundle_sizes	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+op_bundle_tags	::mlir::ArrayAttr	array attribute
+Operands: ¶
+Operand	Description
+cond	1-bit signless integer
+op_bundle_operands	variadic of LLVM dialect-compatible type

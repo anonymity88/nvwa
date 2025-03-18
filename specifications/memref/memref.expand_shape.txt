@@ -1,0 +1,43 @@
+memref.expand_shape (memref::ExpandShapeOp) ¶
+Operation to produce a memref with a higher rank.
+
+Syntax:
+
+operation ::= `memref.expand_shape` $src $reassociation `output_shape`
+              custom<DynamicIndexList>($output_shape, $static_output_shape) attr-dict `:`
+              type($src) `into` type($result)
+The memref.expand_shape op produces a new view with a higher rank whose sizes are a reassociation of the original view. The operation is limited to such reassociations, where a dimension is expanded into one or multiple contiguous dimensions. Such reassociations never require additional allocs or copies.
+
+A reassociation is defined as a grouping of dimensions and is represented with an array of DenseI64ArrayAttr attributes.
+
+Example:
+
+%r = memref.expand_shape %0 [[0, 1], [2]] output_shape [%sz0, %sz1, 32]
+    : memref<?x32xf32> into memref<?x?x32xf32>
+If an op can be statically proven to be invalid (e.g, an expansion from memref<10xf32> to memref<2x6xf32>), it is rejected by the verifier. If it cannot statically be proven invalid (e.g., the full example above; it is unclear whether the first source dimension is divisible by 5), the op is accepted by the verifier. However, if the op is in fact invalid at runtime, the behavior is undefined.
+
+The source memref can be zero-ranked. In that case, the reassociation indices must be empty and the result shape may only consist of unit dimensions.
+
+For simplicity, this op may not be used to cast dynamicity of dimension sizes and/or strides. I.e., if and only if a source dimension is dynamic, there must be a dynamic result dimension in the corresponding reassociation group. Same for strides.
+
+The representation for the output shape supports a partially-static specification via attributes specified through the static_output_shape argument. A special sentinel value ShapedType::kDynamic encodes that the corresponding entry has a dynamic value. There must be exactly as many SSA inputs in output_shape as there are ShapedType::kDynamic entries in static_output_shape.
+
+Note: This op currently assumes that the inner strides are of the source/result layout map are the faster-varying ones.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ReifyRankedShapedTypeOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reassociation	::mlir::ArrayAttr	Array of 64-bit integer array attributes
+static_output_shape	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+src	strided memref of any type values
+output_shape	variadic of index
+Results: ¶
+Result	Description
+result	strided memref of any type values

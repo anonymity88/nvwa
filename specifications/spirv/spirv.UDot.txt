@@ -1,0 +1,38 @@
+spirv.UDot (spirv::UDotOp) ¶
+Unsigned integer dot product of Vector 1 and Vector 2.
+
+Syntax:
+
+operation ::= `spirv.UDot` $vector1 `,` $vector2 ( `,` $format^ )? attr-dict `:`
+              type($vector1) `->` type($result)
+Result Type must be an integer type with Signedness of 0 whose Width must be greater than or equal to that of the components of Vector 1 and Vector 2.
+
+Vector 1 and Vector 2 must have the same type.
+
+Vector 1 and Vector 2 must be either 32-bit integers (enabled by the DotProductInput4x8BitPacked capability) or vectors of integer type with Signedness of 0 (enabled by the DotProductInput4x8Bit or DotProductInputAll capability).
+
+When Vector 1 and Vector 2 are scalar integer types, Packed Vector Format must be specified to select how the integers are to be interpreted as vectors.
+
+All components of the input vectors are zero-extended to the bit width of the result’s type. The zero-extended input vectors are then multiplied component-wise and all components of the vector resulting from the component-wise multiplication are added together. The resulting value will equal the low-order N bits of the correct result R, where N is the result width and R is computed with enough precision to avoid overflow and underflow.
+
+Example: ¶
+%r = spirv.UDot %a, %b, <PackedVectorFormat4x8Bit> : i32 -> i32
+%r = spirv.UDot %a, %b, <PackedVectorFormat4x8Bit> : i32 -> i64
+%r = spirv.UDot %a, %b : vector<4xi8> -> i32
+Traits: AlwaysSpeculatableImplTrait, Commutative, UnsignedOp
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+format	::mlir::spirv::PackedVectorFormatAttr	
+valid SPIR-V PackedVectorFormat
+Operands: ¶
+Operand	Description
+vector1	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+vector2	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer

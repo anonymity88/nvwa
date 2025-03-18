@@ -1,0 +1,24 @@
+shape.from_extents (shape::FromExtentsOp) ¶
+Creates a shape from extents
+
+Syntax:
+
+operation ::= `shape.from_extents` $extents attr-dict `:` type($extents)
+Creates a shape from multiple SSA values representing the extents of the shape.
+
+// Rank 2 shape.
+%s0 = shape.from_extents %a, %b
+// Rank 0 shape.
+%s1 = shape.from_extents
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+extents	variadic of size or index
+Results: ¶
+Result	Description
+shape

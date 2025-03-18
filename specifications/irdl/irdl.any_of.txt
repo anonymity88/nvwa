@@ -1,0 +1,32 @@
+irdl.any_of (irdl::AnyOfOp) ¶
+Constraints to the union of the provided constraints
+
+Syntax:
+
+operation ::= `irdl.any_of` `(` $args `)` ` ` attr-dict
+irdl.any_of defines a constraint that accepts any type or attribute that satisfies at least one of its provided type constraints.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex {
+    %0 = irdl.is i32
+    %1 = irdl.is i64
+    %2 = irdl.is f32
+    %3 = irdl.is f64
+    %4 = irdl.any_of(%0, %1, %2, %3)
+    irdl.parameters(%4)
+  }
+}
+The above program defines a type complex inside the dialect cmath that can have a single type parameter that can be either i32, i64, f32 or f64.
+
+Traits: HasParent<TypeOp, AttributeOp, OperationOp>, SameOperandsAndResultType
+
+Interfaces: VerifyConstraintInterface
+
+Operands: ¶
+Operand	Description
+args	variadic of IRDL handle to an mlir::Attribute
+Results: ¶
+Result	Description
+output	IRDL handle to an mlir::Attribute

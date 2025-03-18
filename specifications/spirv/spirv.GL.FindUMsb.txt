@@ -1,0 +1,24 @@
+spirv.GL.FindUMsb (spirv::GLFindUMsbOp) ¶
+Unsigned-integer most-significant bit
+
+Syntax:
+
+operation ::= `spirv.GL.FindUMsb` $operand `:` type($operand) attr-dict
+Results in the bit number of the most-significant 1-bit in the binary representation of Value. If Value is 0, the result is -1.
+
+Result Type and the type of Value must both be integer scalar or integer vector types. Result Type and operand types must have the same number of components with the same component width. Results are computed per component.
+
+This instruction is currently limited to 32-bit width components.
+
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	Int32 or vector of Int32 values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	Int32 or vector of Int32 values of length 2/3/4/8/16

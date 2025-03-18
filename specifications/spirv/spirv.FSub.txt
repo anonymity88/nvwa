@@ -1,0 +1,28 @@
+spirv.FSub (spirv::FSubOp) ¶
+Floating-point subtraction of Operand 2 from Operand 1.
+
+Syntax:
+
+operation ::= `spirv.FSub` operands attr-dict `:` type($result)
+Result Type must be a scalar or vector of floating-point type.
+
+The types of Operand 1 and Operand 2 both must be the same as Result Type.
+
+Results are computed per component.
+
+Example: ¶
+%4 = spirv.FRemOp %0, %1 : f32
+%5 = spirv.FRemOp %2, %3 : vector<4xf32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values
+operand2	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values

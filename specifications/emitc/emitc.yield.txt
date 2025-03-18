@@ -1,0 +1,140 @@
+emitc.yield (emitc::YieldOp) ¶
+Block termination operation
+
+Syntax:
+
+operation ::= `emitc.yield` attr-dict ($result^ `:` type($result))?
+The emitc.yield terminates its parent EmitC op’s region, optionally yielding an SSA value. The semantics of how the values are yielded is defined by the parent operation. If emitc.yield has an operand, the operand must match the parent operation’s result. If the parent operation defines no values, then the emitc.yield may be left out in the custom syntax and the builders will insert one implicitly. Otherwise, it has to be present in the syntax to indicate which value is yielded.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<ExpressionOp, IfOp, ForOp, SwitchOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+result	type supported by EmitC
+Attributes ¶
+OpaqueAttr ¶
+An opaque attribute
+
+Syntax:
+
+#emitc.opaque<
+  ::llvm::StringRef   # value
+>
+An opaque attribute of which the value gets emitted as is.
+
+Example:
+
+#emitc.opaque<"">
+#emitc.opaque<"NULL">
+#emitc.opaque<"nullptr">
+Parameters: ¶
+Parameter	C++ type	Description
+value	::llvm::StringRef	the opaque value
+Types ¶
+ArrayType ¶
+EmitC array type
+
+An array data type.
+
+Example:
+
+// Array emitted as `int32_t[10]`
+!emitc.array<10xi32>
+// Array emitted as `float[10][20]`
+!emitc.array<10x20xf32>
+Parameters: ¶
+Parameter	C++ type	Description
+shape	::llvm::ArrayRef<int64_t>	
+elementType	Type	
+LValueType ¶
+EmitC lvalue type
+
+Syntax:
+
+!emitc.lvalue<
+  Type   # valueType
+>
+Values of this type can be assigned to and their address can be taken.
+
+Parameters: ¶
+Parameter	C++ type	Description
+valueType	Type	
+OpaqueType ¶
+EmitC opaque type
+
+Syntax:
+
+!emitc.opaque<
+  ::llvm::StringRef   # value
+>
+An opaque data type of which the value gets emitted as is.
+
+Example:
+
+!emitc.opaque<"int">
+!emitc.opaque<"mytype">
+!emitc.opaque<"std::vector<std::string>">
+Parameters: ¶
+Parameter	C++ type	Description
+value	::llvm::StringRef	the opaque value
+PointerType ¶
+EmitC pointer type
+
+Syntax:
+
+!emitc.ptr<
+  Type   # pointee
+>
+A pointer data type.
+
+Example:
+
+// Pointer emitted as `int32_t*`
+!emitc.ptr<i32>
+// Pointer emitted as `float*`
+!emitc.ptr<f32>
+// Pointer emitted as `int*`
+!emitc.ptr<!emitc.opaque<"int">>
+Parameters: ¶
+Parameter	C++ type	Description
+pointee	Type	
+PtrDiffTType ¶
+EmitC signed pointer diff type
+
+Syntax: !emitc.ptrdiff_t
+
+Signed data type as wide as platform-specific pointer types. In particular, it is as wide as emitc.size_t. It corresponds to ptrdiff_t found in <stddef.h>.
+
+SignedSizeTType ¶
+EmitC signed size type
+
+Syntax: !emitc.ssize_t
+
+Data type representing all values of emitc.size_t, plus -1. It corresponds to ssize_t found in <sys/types.h>.
+
+Use of this type causes the code to be non-C99 compliant.
+
+SizeTType ¶
+EmitC unsigned size type
+
+Syntax: !emitc.size_t
+
+Unsigned data type as wide as platform-specific pointer types. It corresponds to size_t found in <stddef.h>.
+
+Enums ¶
+CmpPredicate ¶
+allowed 64-bit signless integer cases: 0, 1, 2, 3, 4, 5, 6
+
+Cases: ¶
+Symbol	Value	String
+eq	0	eq
+ne	1	ne
+lt	2	lt
+le	3	le
+gt	4	gt
+ge	5	ge
+three_way	6	three_way

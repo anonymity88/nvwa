@@ -1,0 +1,25 @@
+index.bool.constant (index::BoolConstantOp) ¶
+Boolean constant
+
+Syntax:
+
+operation ::= `index.bool.constant` attr-dict $value
+The index.bool.constant operation produces an bool-typed SSA value equal to either true or false.
+
+This operation is used to materialize bool constants that arise when folding index.cmp.
+
+Example:
+
+%0 = index.bool.constant true
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::BoolAttr	bool attribute
+Results: ¶
+Result	Description
+result	1-bit signless integer

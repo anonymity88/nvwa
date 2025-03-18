@@ -1,0 +1,13 @@
+x86vector.avx.intr.rsqrt.ps.256 (x86vector::RsqrtIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit float values of length 8
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

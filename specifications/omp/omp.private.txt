@@ -1,0 +1,65 @@
+omp.private (omp::PrivateClauseOp) ¶
+Provides declaration of [first]private logic.
+
+Syntax:
+
+operation ::= `omp.private` $data_sharing_type $sym_name `:` $type
+              `alloc` $alloc_region
+              (`copy` $copy_region^)?
+              (`dealloc` $dealloc_region^)?
+              attr-dict
+This operation provides a declaration of how to implement the [first]privatization of a variable. The dialect users should provide information about how to create an instance of the type in the alloc region, how to initialize the copy from the original item in the copy region, and if needed, how to deallocate allocated memory in the dealloc region.
+
+Examples:
+
+private(x) would be emitted as:
+omp.private {type = private} @x.privatizer : !fir.ref<i32> alloc {
+^bb0(%arg0: !fir.ref<i32>):
+%0 = ... allocate proper memory for the private clone ...
+omp.yield(%0 : !fir.ref<i32>)
+}
+firstprivate(x) would be emitted as:
+omp.private {type = firstprivate} @x.privatizer : !fir.ref<i32> alloc {
+^bb0(%arg0: !fir.ref<i32>):
+%0 = ... allocate proper memory for the private clone ...
+omp.yield(%0 : !fir.ref<i32>)
+} copy {
+^bb0(%arg0: !fir.ref<i32>, %arg1: !fir.ref<i32>):
+// %arg0 is the original host variable. Same as for `alloc`.
+// %arg1 represents the memory allocated in `alloc`.
+... copy from host to the privatized clone ....
+omp.yield(%arg1 : !fir.ref<i32>)
+}
+private(x) for “allocatables” would be emitted as:
+omp.private {type = private} @x.privatizer : !some.type alloc {
+^bb0(%arg0: !some.type):
+%0 = ... allocate proper memory for the private clone ...
+omp.yield(%0 : !fir.ref<i32>)
+} dealloc {
+^bb0(%arg0: !some.type):
+... deallocate allocated memory ...
+omp.yield
+}
+There are no restrictions on the body except for:
+
+The alloc & dealloc regions have a single argument.
+The copy region has 2 arguments.
+All three regions are terminated by omp.yield ops. The above restrictions and other obvious restrictions (e.g. verifying the type of yielded values) are verified by the custom op verifier. The actual contents of the blocks inside all regions are not verified.
+Instances of this op would then be used by ops that model directives that accept data-sharing attribute clauses.
+
+The $sym_name attribute provides a symbol by which the privatizer op can be referenced by other dialect ops.
+
+The $type attribute is the type of the value being privatized.
+
+The $data_sharing_type attribute specifies whether privatizer corresponds to a private or a firstprivate clause.
+
+Traits: IsolatedFromAbove
+
+Interfaces: RecipeInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+type	::mlir::TypeAttr	type attribute of any type
+data_sharing_type	::mlir::omp::DataSharingClauseTypeAttr	
+Type of a data-sharing clause

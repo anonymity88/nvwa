@@ -1,0 +1,18 @@
+//===----------------------------------------------------------------------===//
+// DivOp
+//===----------------------------------------------------------------------===//
+
+def DivOp : ComplexArithmeticOp<"div"> {
+  let summary = "complex division";
+  let description = [{
+    The `div` operation takes two complex numbers and returns result of their
+    division:
+
+    ```mlir
+    %a = complex.div %b, %c : complex<f32>
+    ```
+  }];
+
+  let hasFolder = 1;
+}
+

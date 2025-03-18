@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// Operator: floor
+//===----------------------------------------------------------------------===//
+def Tosa_FloorOp : Tosa_ElementwiseOp<"floor", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise floor op";
+
+  let description = [{
+    Elementwise floor operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

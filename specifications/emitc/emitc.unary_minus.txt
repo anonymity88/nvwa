@@ -1,0 +1,21 @@
+emitc.unary_minus (emitc::UnaryMinusOp) ¶
+Unary minus operation
+
+Syntax:
+
+operation ::= `emitc.unary_minus` operands attr-dict `:` functional-type(operands, results)
+With the emitc.unary_minus operation the unary operator - (minus) can be applied.
+
+Example:
+
+%0 = emitc.unary_minus %arg0 : (i32) -> i32
+// Code emitted for the operation above.
+int32_t v2 = -v1;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+«unnamed»	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

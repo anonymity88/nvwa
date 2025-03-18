@@ -1,0 +1,12 @@
+llvm.intr.lifetime.start (LLVM::LifetimeStartOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.lifetime.start` $size `,` $ptr attr-dict `:` qualified(type($ptr))
+Interfaces: PromotableOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+size	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+ptr	LLVM pointer type

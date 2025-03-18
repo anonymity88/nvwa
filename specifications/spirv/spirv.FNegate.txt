@@ -1,0 +1,27 @@
+spirv.FNegate (spirv::FNegateOp) ¶
+Inverts the sign bit of Operand. (Note, however, that OpFNegate is still considered a floating-point instruction, and so is subject to the general floating-point rules regarding, for example, subnormals and NaN propagation).
+
+Syntax:
+
+operation ::= `spirv.FNegate` operands attr-dict `:` type($result)
+Result Type must be a scalar or vector of floating-point type.
+
+The type of Operand must be the same as Result Type.
+
+Results are computed per component.
+
+Example: ¶
+%1 = spirv.FNegate %0 : f32
+%3 = spirv.FNegate %2 : vector<4xf32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values

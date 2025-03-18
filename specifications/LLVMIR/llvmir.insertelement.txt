@@ -1,0 +1,31 @@
+//===----------------------------------------------------------------------===//
+// InsertElementOp
+//===----------------------------------------------------------------------===//
+
+def LLVM_InsertElementOp : LLVM_Op<"insertelement", [Pure,
+    TypesMatchWith<"argument type matches vector element type", "vector",
+                   "value", "LLVM::getVectorElementType($_self)">,
+    AllTypesMatch<["res", "vector"]>]> {
+  let summary = "Insert an element into an LLVM vector.";
+
+  let arguments = (ins LLVM_AnyVector:$vector, LLVM_PrimitiveType:$value,
+                       AnySignlessInteger:$position);
+  let results = (outs LLVM_AnyVector:$res);
+
+  let builders = [LLVM_OneResultOpBuilder];
+
+  let assemblyFormat = [{
+    $value `,` $vector `[` $position `:` type($position) `]` attr-dict `:`
+    type($vector)
+  }];
+
+  string llvmInstName = "InsertElement";
+  string llvmBuilder = [{
+    $res = builder.CreateInsertElement($vector, $value, $position);
+  }];
+  string mlirBuilder = [{
+    $res = $_builder.create<LLVM::InsertElementOp>(
+      $_location, $vector, $value, $position);
+  }];
+}
+

@@ -1,0 +1,11 @@
+async.runtime.set_available (async::RuntimeSetAvailableOp) ¶
+Switches token or value to available state
+
+Syntax:
+
+operation ::= `async.runtime.set_available` $operand attr-dict `:` type($operand)
+The async.runtime.set_available operation switches async token or value state to available.
+
+Operands: ¶
+Operand	Description
+operand	async value type or async token type

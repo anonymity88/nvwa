@@ -1,0 +1,27 @@
+index.casts (index::CastSOp) ¶
+Index signed cast
+
+Syntax:
+
+operation ::= `index.casts` $input attr-dict `:` type($input) `to` type($output)
+The index.casts operation enables conversions between values of index type and concrete fixed-width integer types. If casting to a wider integer, the value is sign-extended. If casting to a narrower integer, the value is truncated.
+
+Example:
+
+// Cast to i32
+%0 = index.casts %a : index to i32
+
+// Cast from i64
+%1 = index.casts %b : i64 to index
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: CastOpInterface, ConditionallySpeculatable, InferIntRangeInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	integer or index
+Results: ¶
+Result	Description
+output	integer or index

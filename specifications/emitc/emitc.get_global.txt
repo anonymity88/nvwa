@@ -1,0 +1,24 @@
+emitc.get_global (emitc::GetGlobalOp) ¶
+Obtain access to a global variable
+
+Syntax:
+
+operation ::= `emitc.get_global` $name `:` type($result) attr-dict
+The emitc.get_global operation retrieves the lvalue of a named global variable. If the global variable is marked constant, assigning to that lvalue is undefined.
+
+Example:
+
+%x = emitc.get_global @foo : !emitc.array<2xf32>
+%y = emitc.get_global @bar : !emitc.lvalue<i32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+result	EmitC array type or EmitC lvalue type

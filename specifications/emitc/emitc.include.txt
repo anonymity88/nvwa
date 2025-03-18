@@ -1,0 +1,22 @@
+emitc.include (emitc::IncludeOp) ¶
+Include operation
+
+The emitc.include operation allows to define a source file inclusion via the #include directive.
+
+Example:
+
+// Custom form defining the inclusion of `<myheader>`.
+emitc.include <"myheader.h">
+
+// Generic form of the same operation.
+"emitc.include" (){include = "myheader.h", is_standard_include} : () -> ()
+
+// Custom form defining the inclusion of `"myheader"`.
+emitc.include "myheader.h"
+
+// Generic form of the same operation.
+"emitc.include" (){include = "myheader.h"} : () -> ()
+Attributes: ¶
+Attribute	MLIR Type	Description
+include	::mlir::StringAttr	string attribute
+is_standard_include	::mlir::UnitAttr	unit attribute

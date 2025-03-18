@@ -1,0 +1,31 @@
+//===----------------------------------------------------------------------===//
+// ExtSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_ExtSIOp : Arith_IToICastOp<"extsi"> {
+  let summary = "integer sign extension operation";
+
+  let description = [{
+    The integer sign extension operation takes an integer input of
+    width M and an integer destination type of width N. The destination
+    bit-width must be larger than the input bit-width (N > M).
+    The top-most (N - M) bits of the output are filled with copies
+    of the most-significant bit of the input.
+
+    Example:
+
+    ```mlir
+    %1 = arith.constant 5 : i3      // %1 is 0b101
+    %2 = arith.extsi %1 : i3 to i6  // %2 is 0b111101
+    %3 = arith.constant 2 : i3      // %3 is 0b010
+    %4 = arith.extsi %3 : i3 to i6  // %4 is 0b000010
+
+    %5 = arith.extsi %0 : vector<2 x i32> to vector<2 x i64>
+    ```
+  }];
+
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+  let hasVerifier = 1;
+}
+

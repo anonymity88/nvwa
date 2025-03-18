@@ -1,0 +1,22 @@
+vcix.v.sv (vcix::BinaryOp) ¶
+Binary VCIX operation
+
+Binary VCIX operation with an integer scalar, or floating pointer scalar or vector second operand.
+
+Correponds to:
+
+Mnemonic	funct6	vm	rs2	rs1	funct3	rd	Destination	Sources	
+sf.vc.v.vv	0010–	0	vs2	vs1	000	vd	vector vd	vector vs1, vector vs	
+sf.vc.v.xv	0010–	0	vs2	xs1	100	vd	vector vd	scalar xs1, vector vs2	
+sf.vc.v.fv	0010–	0	vs2	fs1	101	vd	vector vd	scalar fs1, vector vs2	
+Attributes: ¶
+Attribute	MLIR Type	Description
+opcode	::mlir::Attribute	32-bit signless integer attribute or 64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+vs2	LLVM dialect-compatible vector type
+op	LLVM dialect-compatible vector type or 64-bit signless integer or 32-bit signless integer or 16-bit float or 32-bit float or 64-bit float
+vl	64-bit signless integer or 32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

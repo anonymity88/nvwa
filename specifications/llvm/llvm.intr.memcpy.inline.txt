@@ -1,0 +1,15 @@
+llvm.intr.memcpy.inline (LLVM::MemcpyInlineOp) ¶
+Interfaces: AccessGroupOpInterface, AliasAnalysisOpInterface, DestructurableAccessorOpInterface, PromotableMemOpInterface, SafeMemorySlotAccessOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+len	::mlir::IntegerAttr	arbitrary integer attribute
+isVolatile	::mlir::IntegerAttr	1-bit signless integer attribute
+access_groups	::mlir::ArrayAttr	LLVM dialect access group metadata array
+alias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+noalias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+tbaa	::mlir::ArrayAttr	LLVM dialect TBAA tag metadata array
+Operands: ¶
+Operand	Description
+dst	LLVM pointer type
+src	LLVM pointer type

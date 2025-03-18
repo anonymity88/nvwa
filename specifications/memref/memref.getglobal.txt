@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// GetGlobalOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_GetGlobalOp : MemRef_Op<"get_global",
+    [Pure, DeclareOpInterfaceMethods<SymbolUserOpInterface>]> {
+  let summary = "get the memref pointing to a global variable";
+  let description = [{
+     The `memref.get_global` operation retrieves the memref pointing to a
+     named global variable. If the global variable is marked constant, writing
+     to the result memref (such as through a `memref.store` operation) is
+     undefined.
+
+     Example:
+
+     ```mlir
+     %x = memref.get_global @foo : memref<2xf32>
+     ```
+  }];
+
+  let arguments = (ins FlatSymbolRefAttr:$name);
+  let results = (outs AnyStaticShapeMemRef:$result);
+  let assemblyFormat = "$name `:` type($result) attr-dict";
+}
+

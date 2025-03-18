@@ -1,0 +1,7 @@
+transform.apply_patterns.linalg.erase_unnecessary_inputs (transform::ApplyEraseUnnecessaryInputsPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.linalg.erase_unnecessary_inputs` attr-dict
+Collects patterns that promote inputs to outputs and remove unused inputs of linalg.generic ops.
+
+Interfaces: PatternDescriptorOpInterface

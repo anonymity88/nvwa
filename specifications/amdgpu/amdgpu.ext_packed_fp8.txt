@@ -1,0 +1,27 @@
+amdgpu.ext_packed_fp8 (amdgpu::ExtPackedFp8Op) ¶
+Extend one of a vector of packed fp8 values to a float
+
+Syntax:
+
+operation ::= `amdgpu.ext_packed_fp8` attr-dict $source `[` $index `]` `:` type($source) `to` type($res)
+Extend the value source[index] to a 32-bit float and return it.
+
+This rather unusual signature arises from the fact that AMD GPUs cannot easily work with sub 32-bit quantities, so the compiler intrinsics for extending 8-bit floats (which are, currently, the only way to work with this operation) take packed vectors of 4 such floats.
+
+If the passed-in vector has fewer than four elements, or the input is scalar, the remaining values in the <4 x i8> will be filled with with undefined values as needed.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+index	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative whose maximum value is 3
+Operands: ¶
+Operand	Description
+source	f8E5M2FNUZ type or f8E4M3FNUZ type or vector of f8E5M2FNUZ type or f8E4M3FNUZ type values of length 1/2/3/4
+Results: ¶
+Result	Description
+res	32-bit float

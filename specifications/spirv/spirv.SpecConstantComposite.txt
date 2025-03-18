@@ -1,0 +1,32 @@
+spirv.SpecConstantComposite (spirv::SpecConstantCompositeOp) ¶
+Declare a new composite specialization constant.
+
+This op declares a SPIR-V composite specialization constant. This covers the OpSpecConstantComposite SPIR-V instruction. Scalar constants are covered by spirv.SpecConstant.
+
+A constituent of a spec constant composite can be:
+
+A symbol referring of another spec constant.
+The SSA ID of a non-specialization constant (i.e. defined through spirv.SpecConstant).
+The SSA ID of a spirv.Undef.
+spv-spec-constant-composite-op ::= `spirv.SpecConstantComposite` symbol-ref-id ` (`
+                                   symbol-ref-id (`, ` symbol-ref-id)*
+                                   `) :` composite-type
+where composite-type is some non-scalar type that can be represented in the spv dialect: spirv.struct, spirv.array, or vector.
+
+Example: ¶
+spirv.SpecConstant @sc1 = 1   : i32
+spirv.SpecConstant @sc2 = 2.5 : f32
+spirv.SpecConstant @sc3 = 3.5 : f32
+spirv.SpecConstantComposite @scc (@sc1, @sc2, @sc3) : !spirv.struct<i32, f32, f32>
+TODO Add support for constituents that are:
+
+regular constants.
+undef.
+spec constant composite.
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+type	::mlir::TypeAttr	any type attribute
+sym_name	::mlir::StringAttr	string attribute
+constituents	::mlir::ArrayAttr	symbol ref array attribute

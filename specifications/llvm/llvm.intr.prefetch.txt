@@ -1,0 +1,9 @@
+llvm.intr.prefetch (LLVM::Prefetch) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+rw	::mlir::IntegerAttr	32-bit signless integer attribute
+hint	::mlir::IntegerAttr	32-bit signless integer attribute
+cache	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+addr	LLVM pointer type

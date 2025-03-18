@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// TanhOp
+//===----------------------------------------------------------------------===//
+
+def Math_TanhOp : Math_FloatUnaryOp<"tanh"> {
+  let summary = "hyperbolic tangent of the specified value";
+  let description = [{
+    The `tanh` operation computes the hyperbolic tangent. It takes one operand
+    of floating point type (i.e., scalar, tensor or vector) and returns one
+    result of the same type. It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar hyperbolic tangent value.
+    %a = math.tanh %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

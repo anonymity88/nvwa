@@ -1,0 +1,27 @@
+x86vector.avx512.mask.scalef (x86vector::MaskScaleFOp) ¶
+ScaleF op
+
+Syntax:
+
+operation ::= `x86vector.avx512.mask.scalef` $src `,` $a `,` $b `,` $k `,` $rounding attr-dict `:` type($dst)
+The mask.scalef op is an AVX512 specific op that can lower to the proper LLVMAVX512 operation: llvm.mask.scalef.ps.512 or llvm.mask.scalef.pd.512 depending on the type of MLIR vectors it is applied to.
+
+From the Intel Intrinsics Guide: ¶
+Scale the packed floating-point elements in a using values from b, and store the results in dst using writemask k (elements are copied from src when the corresponding mask bit is not set).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+src	vector of 32-bit float or 64-bit float values of length 16/8
+a	vector of 32-bit float or 64-bit float values of length 16/8
+b	vector of 32-bit float or 64-bit float values of length 16/8
+k	16-bit signless integer or 8-bit signless integer
+rounding	32-bit signless integer
+Results: ¶
+Result	Description
+dst	vector of 32-bit float or 64-bit float values of length 16/8

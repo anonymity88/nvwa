@@ -1,0 +1,54 @@
+omp.loop (omp::LoopOp) ¶
+Loop construct
+
+Syntax:
+
+operation ::= `omp.loop` oilist(
+              `bind` `(` custom<ClauseAttr>($bind_kind) `)`
+              |
+              `order` `(` custom<OrderClause>($order, $order_mod) `)`
+              )
+              custom<PrivateReductionRegion>($region, $private_vars, type($private_vars),
+              $private_syms, $reduction_vars, type($reduction_vars), $reduction_byref,
+              $reduction_syms) attr-dict
+A loop construct specifies that the logical iterations of the associated loops may execute concurrently and permits the encountering threads to execute the loop accordingly. A loop construct can have 3 different types of binding:
+
+teams: in which case the binding region is the innermost enclosing teams region.
+parallel: in which case the binding region is the innermost enclosing parallel region.
+thread: in which case the binding region is not defined.
+The body region can only contain a single block which must contain a single operation, this operation must be an omp.loop_nest.
+
+omp.loop <clauses> {
+  omp.loop_nest (%i1, %i2) : index = (%c0, %c0) to (%c10, %c10) step (%c1, %c1) {
+    %a = load %arrA[%i1, %i2] : memref<?x?xf32>
+    %b = load %arrB[%i1, %i2] : memref<?x?xf32>
+    %sum = arith.addf %a, %b : f32
+    store %sum, %arrC[%i1, %i2] : memref<?x?xf32>
+    omp.yield
+  }
+}
+The bind clause specifies the binding region of the construct on which it appears.
+
+The optional order attribute specifies which order the iterations of the associated loops are executed in. Currently the only option for this attribute is “concurrent”.
+
+Reductions can be performed by specifying reduction accumulator variables in reduction_vars, symbols referring to reduction declarations in the reduction_syms attribute, and whether the reduction variable should be passed into the reduction region by value or by reference in reduction_byref. Each reduction is identified by the accumulator it uses and accumulators must not be repeated in the same reduction. A private variable corresponding to the accumulator is used in place of the accumulator inside the body of the operation. The reduction declaration specifies how to combine the values from each iteration, section, team, thread or simd lane defined by the operation’s region into the final value, which is available in the accumulator after they all complete.
+
+Traits: AttrSizedOperandSegments, NoTerminator, SingleBlock
+
+Interfaces: BlockArgOpenMPOpInterface, LoopWrapperInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+bind_kind	::mlir::omp::ClauseBindKindAttr	
+BindKind Clause
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+order	::mlir::omp::ClauseOrderKindAttr	
+OrderKind Clause
+order_mod	::mlir::omp::OrderModifierAttr	
+OpenMP Order Modifier
+reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+private_vars	variadic of any type
+reduction_vars	variadic of OpenMP-compatible variable type

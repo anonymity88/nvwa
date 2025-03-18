@@ -1,0 +1,25 @@
+spirv.INTEL.ConvertFToBF16 (spirv::INTELConvertFToBF16Op) ¶
+See extension SPV_INTEL_bfloat16_conversion
+
+Syntax:
+
+operation ::= `spirv.INTEL.ConvertFToBF16` $operand attr-dict `:` type($operand) `to` type($result)
+Convert value numerically from 32-bit floating point to bfloat16, which is represented as a 16-bit unsigned integer.
+
+Result Type must be a scalar or vector of integer type. The component width must be 16 bits. Bit pattern in the Result represents a bfloat16 value.
+
+Float Value must be a scalar or vector of floating-point type. It must have the same number of components as Result Type. The component width must be 32 bits.
+
+Results are computed per component.
+
+Example: ¶
+%1 = spirv.ConvertFToBF16 %0 : f32 to i16
+%3 = spirv.ConvertFToBF16 %2 : vector<3xf32> to vector<3xi16>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Operands: ¶
+Operand	Description
+operand	Float32 or vector of Float32 values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	Int16 or vector of Int16 values of length 2/3/4/8/16

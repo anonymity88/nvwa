@@ -1,0 +1,83 @@
+omp.wsloop (omp::WsloopOp) ¶
+Worksharing-loop construct
+
+Syntax:
+
+operation ::= `omp.wsloop` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              |
+              `linear` `(`
+              custom<LinearClause>($linear_vars, type($linear_vars),
+              $linear_step_vars) `)`
+              |
+              `nowait` $nowait
+              |
+              `order` `(` custom<OrderClause>($order, $order_mod) `)`
+              |
+              `ordered` `(` $ordered `)`
+              |
+              `schedule` `(`
+              custom<ScheduleClause>($schedule_kind, $schedule_mod, $schedule_simd,
+              $schedule_chunk, type($schedule_chunk)) `)`
+              )
+              custom<PrivateReductionRegion>($region, $private_vars, type($private_vars),
+              $private_syms, $reduction_vars, type($reduction_vars), $reduction_byref,
+              $reduction_syms) attr-dict
+The worksharing-loop construct specifies that the iterations of the loop(s) will be executed in parallel by threads in the current context. These iterations are spread across threads that already exist in the enclosing parallel region.
+
+The body region can only contain a single block which must contain a single operation. This operation must be another compatible loop wrapper or an omp.loop_nest.
+
+omp.wsloop <clauses> {
+  omp.loop_nest (%i1, %i2) : index = (%c0, %c0) to (%c10, %c10) step (%c1, %c1) {
+    %a = load %arrA[%i1, %i2] : memref<?x?xf32>
+    %b = load %arrB[%i1, %i2] : memref<?x?xf32>
+    %sum = arith.addf %a, %b : f32
+    store %sum, %arrC[%i1, %i2] : memref<?x?xf32>
+    omp.yield
+  }
+}
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+The linear_step_vars operand additionally specifies the step for each associated linear operand. Note that the linear_vars and linear_step_vars variadic lists should contain the same number of elements.
+
+The optional nowait attribute, when present, eliminates the implicit barrier at the end of the construct, so the parent operation can make progress even if the child operation has not completed yet.
+
+The optional order attribute specifies which order the iterations of the associated loops are executed in. Currently the only option for this attribute is “concurrent”.
+
+The optional ordered attribute specifies how many loops are associated with the worksharing-loop construct. The value of zero refers to the ordered clause specified without parameter.
+
+Reductions can be performed by specifying reduction accumulator variables in reduction_vars, symbols referring to reduction declarations in the reduction_syms attribute, and whether the reduction variable should be passed into the reduction region by value or by reference in reduction_byref. Each reduction is identified by the accumulator it uses and accumulators must not be repeated in the same reduction. A private variable corresponding to the accumulator is used in place of the accumulator inside the body of the operation. The reduction declaration specifies how to combine the values from each iteration, section, team, thread or simd lane defined by the operation’s region into the final value, which is available in the accumulator after they all complete.
+
+The optional schedule_kind attribute specifies the loop schedule for this loop, determining how the loop is distributed across the parallel threads. The optional schedule_chunk associated with this determines further controls this distribution.
+
+Traits: AttrSizedOperandSegments, NoTerminator, RecursiveMemoryEffects, SingleBlock
+
+Interfaces: BlockArgOpenMPOpInterface, ComposableOpInterface, LoopWrapperInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+nowait	::mlir::UnitAttr	unit attribute
+order	::mlir::omp::ClauseOrderKindAttr	
+OrderKind Clause
+order_mod	::mlir::omp::OrderModifierAttr	
+OpenMP Order Modifier
+ordered	::mlir::IntegerAttr	64-bit signless integer attribute whose minimum value is 0
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+schedule_kind	::mlir::omp::ClauseScheduleKindAttr	
+ScheduleKind Clause
+schedule_mod	::mlir::omp::ScheduleModifierAttr	
+OpenMP Schedule Modifier
+schedule_simd	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+linear_vars	variadic of any type
+linear_step_vars	variadic of 32-bit signless integer
+private_vars	variadic of any type
+reduction_vars	variadic of OpenMP-compatible variable type
+schedule_chunk	any type

@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// TokenOp
+//===----------------------------------------------------------------------===//
+
+def MLProgram_TokenOp : MLProgram_Op<"token", [
+    Pure
+  ]> {
+  let summary = "Produces a new token value";
+  let description = [{
+    Token values are used to chain side effecting ops in a graph so as to
+    establish an execution order. This op produces a token.
+  }];
+
+  let results = (outs
+    MLProgram_TokenType:$token
+  );
+
+  let assemblyFormat = "attr-dict";
+}
+
+#endif // MLPROGRAM_OPS

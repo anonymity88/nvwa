@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// IPowIOp
+//===----------------------------------------------------------------------===//
+
+def Math_IPowIOp : Math_IntegerBinaryOp<"ipowi"> {
+  let summary = "signed integer raised to the power of operation";
+  let description = [{
+    The `ipowi` operation takes two operands of integer type (i.e., scalar,
+    tensor or vector) and returns one result of the same type. Operands
+    must have the same type.
+
+    Example:
+
+    ```mlir
+    // Scalar signed integer exponentiation.
+    %a = math.ipowi %b, %c : i32
+    ```
+  }];
+  let hasFolder = 1;
+}
+

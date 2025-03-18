@@ -1,0 +1,23 @@
+xegpu.update_nd_offset (xegpu::UpdateNdOffsetOp) ¶
+It updates the offsets for the TensorDesc.
+
+Syntax:
+
+operation ::= `xegpu.update_nd_offset` $TensorDesc `,`
+              custom<DynamicIndexList>($offsets, $const_offsets)
+              attr-dict `:` qualified(type($result))
+The op updates the offset of the given TensorDesc. The offsets are relative offset to the current position in the number of elements. It will result in a same type TensorDesc as the input.
+
+example:
+
+  %2 = xegpu.update_nd_offset %1, [0, 16]: !xegpu.tensor_desc<8x16xf32>
+Attributes: ¶
+Attribute	MLIR Type	Description
+const_offsets	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+TensorDesc	TensorDesc describing regions of interested data.
+offsets	variadic of index
+Results: ¶
+Result	Description
+result	TensorDesc describing regions of interested data.

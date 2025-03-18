@@ -1,0 +1,45 @@
+gpu.subgroup_reduce (gpu::SubgroupReduceOp) ¶
+Reduce values among subgroup.
+
+Syntax:
+
+operation ::= `gpu.subgroup_reduce` custom<AllReduceOperation>($op) $value
+              (`uniform` $uniform^)?
+              (`cluster` `(` `size` `=` $cluster_size^ (`,` `stride` `=` $cluster_stride^)? `)`)?
+              attr-dict
+              `:` functional-type(operands, results)
+The subgroup_reduce op reduces the values of lanes (work items) across a subgroup.
+
+The subgroup is divided into clusters starting at lane index 0. Within each cluster, there are size lanes, and the lane index advances by stride. A reduction is done for each cluster in parallel: every lane in the cluster is reduced, and the result is equal for all lanes in the cluster. If size is omitted, there is a single cluster covering the entire subgroup. If stride is omitted, the stride is 1 (the cluster’s lanes are contiguous).
+
+When the reduced value is of a vector type, each vector element is reduced independently. Only 1-d vector types are allowed.
+
+Example:
+
+%1 = gpu.subgroup_reduce add %a : (f32) -> f32
+%2 = gpu.subgroup_reduce add %b : (vector<4xf16>) -> vector<4xf16>
+%3 = gpu.subgroup_reduce add %c cluster(size = 4) : (f32) -> f32
+%3 = gpu.subgroup_reduce add %c cluster(size = 4, stride = 2) : (f32) -> f32
+If uniform flag is set either none or all lanes of a subgroup need to execute this op in convergence.
+
+The reduction operation must be one of:
+
+Integer types: add, mul, minui, minsi, maxui, maxsi, and, or, xor
+Floating point types: add, mul, minnumf, maxnumf, minimumf, maximumf
+Traits: SameOperandsAndResultType
+
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+op	::mlir::gpu::AllReduceOperationAttr	
+built-in reduction operations supported by gpu.allreduce.
+uniform	::mlir::UnitAttr	unit attribute
+cluster_size	::mlir::IntegerAttr	32-bit signless integer attribute
+cluster_stride	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+value	Integer or Float or vector of Integer or Float values of ranks 1
+Results: ¶
+Result	Description
+result	Integer or Float or vector of Integer or Float values of ranks 1

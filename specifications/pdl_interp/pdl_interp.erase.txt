@@ -1,0 +1,14 @@
+pdl_interp.erase (pdl_interp::EraseOp) ¶
+Mark an operation as erased
+
+Syntax:
+
+operation ::= `pdl_interp.erase` $inputOp attr-dict
+pdl.erase operations are used to specify that an operation should be marked as erased. The semantics of this operation correspond with the eraseOp method on a PatternRewriter.
+
+Example:
+
+pdl_interp.erase %root
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *

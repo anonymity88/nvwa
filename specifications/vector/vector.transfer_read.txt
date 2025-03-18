@@ -1,0 +1,143 @@
+vector.transfer_read (vector::TransferReadOp) ¶
+Reads a supervector from memory into an SSA vector value.
+
+The vector.transfer_read op performs a read from a slice within a MemRef or a Ranked Tensor supplied as its first operand into a vector of the same base elemental type.
+
+A memref/tensor operand with vector element type, must have its vector element type match a suffix (shape and element type) of the vector (e.g. memref<3x2x6x4x3xf32>, vector<1x1x4x3xf32>).
+
+The slice is further defined by a full-rank index within the MemRef/Tensor, supplied as the operands [1 .. 1 + rank(memref/tensor)) that defines the starting point of the transfer (e.g. %A[%i0, %i1, %i2]).
+
+The permutation_map attribute is an affine-map which specifies the transposition on the slice to match the vector shape. The permutation map may be implicit and omitted from parsing and printing if it is the canonical minor identity map (i.e. if it does not permute or broadcast any dimension).
+
+The size of the slice is specified by the size of the vector, given as the return type.
+
+An SSA value padding of the same elemental type as the MemRef/Tensor is provided to specify a fallback value in the case of out-of-bounds accesses and/or masking.
+
+An optional SSA value mask may be specified to mask out elements read from the MemRef/Tensor. The mask type is an i1 vector with a shape that matches how elements are read from the MemRef/Tensor, before any permutation or broadcasting. Elements whose corresponding mask element is 0 are masked out and replaced with padding.
+
+For every vector dimension, the boolean array attribute in_bounds specifies if the transfer is guaranteed to be within the source bounds. If set to “false”, accesses (including the starting point) may run out-of-bounds along the respective vector dimension as the index increases. Non-vector dimensions must always be in-bounds. The in_bounds array length has to be equal to the vector rank. This attribute has a default value: false (i.e. “out-of-bounds”). When skipped in the textual IR, the default value is assumed. Similarly, the OP printer will omit this attribute when all dimensions are out-of-bounds (i.e. the default value is used).
+
+A vector.transfer_read can be lowered to a simple load if all dimensions are specified to be within bounds and no mask was specified.
+
+This operation is called ‘read’ by opposition to ’load’ because the super-vector granularity is generally not representable with a single hardware register. A vector.transfer_read is thus a mid-level abstraction that supports super-vectorization with non-effecting padding for full-tile only operations.
+
+More precisely, let’s dive deeper into the permutation_map for the following MLIR:
+
+vector.transfer_read %A[%expr1, %expr2, %expr3, %expr4]
+  { permutation_map : (d0,d1,d2,d3) -> (d2,0,d0) } :
+  memref<?x?x?x?xf32>, vector<3x4x5xf32>
+This operation always reads a slice starting at %A[%expr1, %expr2, %expr3, %expr4]. The size of the slice can be inferred from the resulting vector shape and walking back through the permutation map: 3 along d2 and 5 along d0, so the slice is: %A[%expr1 : %expr1 + 5, %expr2, %expr3:%expr3 + 3, %expr4]
+
+That slice needs to be read into a vector<3x4x5xf32>. Since the permutation map is not full rank, there must be a broadcast along vector dimension 1.
+
+A notional lowering of vector.transfer_read could generate code resembling:
+
+// %expr1, %expr2, %expr3, %expr4 defined before this point
+// alloc a temporary buffer for performing the "gather" of the slice.
+%tmp = memref.alloc() : memref<vector<3x4x5xf32>>
+for %i = 0 to 3 {
+  affine.for %j = 0 to 4 {
+    affine.for %k = 0 to 5 {
+      // Note that this load does not involve %j.
+      %a = load %A[%expr1 + %k, %expr2, %expr3 + %i, %expr4] : memref<?x?x?x?xf32>
+      // Update the temporary gathered slice with the individual element
+      %slice = memref.load %tmp : memref<vector<3x4x5xf32>> -> vector<3x4x5xf32>
+      %updated = vector.insert %a, %slice[%i, %j, %k] : f32 into vector<3x4x5xf32>
+      memref.store %updated, %tmp : memref<vector<3x4x5xf32>>
+}}}
+// At this point we gathered the elements from the original
+// memref into the desired vector layout, stored in the `%tmp` allocation.
+%vec = memref.load %tmp : memref<vector<3x4x5xf32>> -> vector<3x4x5xf32>
+On a GPU one could then map i, j, k to blocks and threads. Notice that the temporary storage footprint could conceptually be only 3 * 5 values but 3 * 4 * 5 values are actually transferred between %A and %tmp.
+
+Alternatively, if a notional vector broadcast operation were available, we could avoid the loop on %j and the lowered code would resemble:
+
+// %expr1, %expr2, %expr3, %expr4 defined before this point
+%tmp = memref.alloc() : memref<vector<3x4x5xf32>>
+for %i = 0 to 3 {
+  affine.for %k = 0 to 5 {
+    %a = load %A[%expr1 + %k, %expr2, %expr3 + %i, %expr4] : memref<?x?x?x?xf32>
+    %slice = memref.load %tmp : memref<vector<3x4x5xf32>> -> vector<3x4x5xf32>
+    // Here we only store to the first element in dimension one
+    %updated = vector.insert %a, %slice[%i, 0, %k] : f32 into vector<3x4x5xf32>
+    memref.store %updated, %tmp : memref<vector<3x4x5xf32>>
+}}
+// At this point we gathered the elements from the original
+// memref into the desired vector layout, stored in the `%tmp` allocation.
+// However we haven't replicated them alongside the first dimension, we need
+// to broadcast now.
+%partialVec = load %tmp : memref<vector<3x4x5xf32>> -> vector<3x4x5xf32>
+%vec = broadcast %tmpvec, 1 : vector<3x4x5xf32>
+where broadcast broadcasts from element 0 to all others along the specified dimension. This time, the number of loaded element is 3 * 5 values. An additional 1 broadcast is required. On a GPU this broadcast could be implemented using a warp-shuffle if loop j were mapped to threadIdx.x.
+
+Syntax
+
+operation ::= ssa-id `=` `vector.transfer_read` ssa-use-list
+  `{` attribute-entry `} :` memref-type `,` vector-type
+Example:
+
+// Read the slice `%A[%i0, %i1:%i1+256, %i2:%i2+32]` into vector<32x256xf32>
+// and pad with %f0 to handle the boundary case:
+%f0 = arith.constant 0.0f : f32
+affine.for %i0 = 0 to %0 {
+  affine.for %i1 = 0 to %1 step 256 {
+    affine.for %i2 = 0 to %2 step 32 {
+      %v = vector.transfer_read %A[%i0, %i1, %i2], (%f0)
+           {permutation_map: (d0, d1, d2) -> (d2, d1)} :
+           memref<?x?x?xf32>, vector<32x256xf32>
+}}}
+
+// or equivalently (rewrite with vector.transpose)
+%f0 = arith.constant 0.0f : f32
+affine.for %i0 = 0 to %0 {
+  affine.for %i1 = 0 to %1 step 256 {
+    affine.for %i2 = 0 to %2 step 32 {
+      %v0 = vector.transfer_read %A[%i0, %i1, %i2], (%f0)
+           {permutation_map: (d0, d1, d2) -> (d1, d2)} :
+           memref<?x?x?xf32>, vector<256x32xf32>
+      %v = vector.transpose %v0, [1, 0] :
+          vector<256x32xf32> to vector<32x256f32>
+}}}
+
+// Read the slice `%A[%i0, %i1]` (i.e. the element `%A[%i0, %i1]`) into
+// vector<128xf32>. The underlying implementation will require a 1-D vector
+// broadcast:
+affine.for %i0 = 0 to %0 {
+  affine.for %i1 = 0 to %1 {
+    %3 = vector.transfer_read %A[%i0, %i1]
+         {permutation_map: (d0, d1) -> (0)} :
+         memref<?x?xf32>, vector<128xf32>
+  }
+}
+
+// Read from a memref with vector element type.
+%4 = vector.transfer_read %arg1[%c3, %c3], %vf0
+  {permutation_map = (d0, d1)->(d0, d1)}
+    : memref<?x?xvector<4x3xf32>>, vector<1x1x4x3xf32>
+
+// Read from a tensor with vector element type.
+%4 = vector.transfer_read %arg1[%c3, %c3], %vf0
+  {permutation_map = (d0, d1)->(d0, d1)}
+    : tensor<?x?xvector<4x3xf32>>, vector<1x1x4x3xf32>
+
+// Special encoding for 0-d transfer with 0-d tensor/memref, vector shape
+// {1} and permutation_map () -> (0).
+%0 = vector.transfer_read %arg0[], %f0 {permutation_map = affine_map<()->(0)>} :
+  tensor<f32>, vector<1xf32>
+Traits: AttrSizedOperandSegments
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, MaskableOpInterface, MemoryEffectOpInterface, VectorTransferOpInterface, VectorUnrollOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+permutation_map	::mlir::AffineMapAttr	AffineMap attribute
+in_bounds	::mlir::ArrayAttr	1-bit boolean array attribute
+Operands: ¶
+Operand	Description
+source	shaped of any type values
+indices	variadic of index
+padding	any type
+mask	vector of 1-bit signless integer values
+Results: ¶
+Result	Description
+vector	vector of any type values

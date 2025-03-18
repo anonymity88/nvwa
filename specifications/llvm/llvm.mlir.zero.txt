@@ -1,0 +1,26 @@
+llvm.mlir.zero (LLVM::ZeroOp) ¶
+Creates a zero-initialized value of LLVM dialect type.
+
+Syntax:
+
+operation ::= `llvm.mlir.zero` attr-dict `:` type($res)
+Unlike LLVM IR, MLIR does not have first-class zero-initialized values. Such values must be created as SSA values using llvm.mlir.zero. This operation has no operands or attributes. It creates a zero-initialized value of the specified LLVM IR dialect type.
+
+Example:
+
+// Create a zero-initialized value for a structure with a 32-bit integer
+// followed by a float.
+%0 = llvm.mlir.zero : !llvm.struct<(i32, f32)>
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type
+Operations for LLVM IR Intrinsics ¶
+MLIR operation system is open making it unnecessary to introduce a hard bound between “core” operations and “intrinsics”. General LLVM IR intrinsics are modeled as first-class operations in the LLVM dialect. Target-specific LLVM IR intrinsics, e.g., NVVM or ROCDL, are modeled as separate dialects.
+
+source

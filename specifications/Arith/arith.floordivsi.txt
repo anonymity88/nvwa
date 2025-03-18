@@ -1,0 +1,25 @@
+//===----------------------------------------------------------------------===//
+// FloorDivSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_FloorDivSIOp : Arith_TotalIntBinaryOp<"floordivsi"> {
+  let summary = "signed floor integer division operation";
+  let description = [{
+    Signed integer division. Rounds towards negative infinity, i.e. `5 / -2 = -3`.
+
+    Divison by zero, or signed division overflow (minimum value divided by -1) 
+    is undefined behavior. When applied to `vector` and `tensor` values, the 
+    behavior is undefined if _any_ of its elements are divided by zero or has a 
+    signed division overflow.
+
+    Example:
+
+    ```mlir
+    // Scalar signed integer division.
+    %a = arith.floordivsi %b, %c : i64
+
+    ```
+  }];
+  let hasFolder = 1;
+}
+

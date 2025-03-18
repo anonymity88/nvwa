@@ -1,0 +1,14 @@
+transform.apply_patterns.vector.lower_multi_reduction (transform::ApplyLowerMultiReductionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_multi_reduction` (`lowering_strategy` `=` $lowering_strategy^)? attr-dict
+Indicates that vector multi_reduction-like operations should be lowered to finer-grained vector primitives.
+
+This is usually a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+lowering_strategy	::mlir::vector::VectorMultiReductionLoweringAttr	
+control the lowering of `vector.multi_reduction`.

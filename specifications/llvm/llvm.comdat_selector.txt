@@ -1,0 +1,21 @@
+llvm.comdat_selector (LLVM::ComdatSelectorOp) ¶
+LLVM dialect comdat selector declaration
+
+Syntax:
+
+operation ::= `llvm.comdat_selector` $sym_name $comdat attr-dict
+Provides access to object file COMDAT section/group functionality.
+
+Examples:
+
+llvm.comdat @__llvm_comdat {
+  llvm.comdat_selector @any any
+}
+llvm.mlir.global internal constant @has_any_comdat(1 : i64) comdat(@__llvm_comdat::@any) : i64
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+comdat	::mlir::LLVM::comdat::ComdatAttr	
+LLVM Comdat Types

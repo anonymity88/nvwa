@@ -1,0 +1,18 @@
+rocdl.raw.ptr.buffer.atomic.umin (ROCDL::RawPtrBufferAtomicUminOp) ¶
+Syntax:
+
+operation ::= `rocdl.raw.ptr.buffer.atomic.umin` operands attr-dict `:` type($vdata)
+Interfaces: AliasAnalysisOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+alias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+noalias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+tbaa	::mlir::ArrayAttr	LLVM dialect TBAA tag metadata array
+Operands: ¶
+Operand	Description
+vdata	LLVM dialect-compatible type
+rsrc	LLVM pointer in address space 8
+offset	32-bit signless integer
+soffset	32-bit signless integer
+aux	32-bit signless integer

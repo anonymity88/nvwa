@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// BoolConstantOp
+//===----------------------------------------------------------------------===//
+
+def Index_BoolConstantOp : IndexOp<"bool.constant", [
+    ConstantLike, Pure,
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>
+  ]> {
+  let summary = "boolean constant";
+  let description = [{
+    The `index.bool.constant` operation produces an bool-typed SSA value equal
+    to either `true` or `false`.
+
+    This operation is used to materialize bool constants that arise when folding
+    `index.cmp`.
+
+    Example:
+
+    ```mlir
+    %0 = index.bool.constant true
+    ```
+  }];
+
+  let arguments = (ins BoolAttr:$value);
+  let results = (outs I1:$result);
+  let assemblyFormat = "attr-dict $value";
+  let hasFolder = 1;
+}
+
+#endif // INDEX_OPS

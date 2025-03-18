@@ -1,0 +1,24 @@
+spirv.INTEL.ControlBarrierWait (spirv::INTELControlBarrierWaitOp) ¶
+See extension SPV_INTEL_split_barrier
+
+Syntax:
+
+operation ::= `spirv.INTEL.ControlBarrierWait` $execution_scope $memory_scope $memory_semantics attr-dict
+Waits for other invocations of this module to arrive at a split control barrier.
+
+When Execution is Workgroup or larger, behavior is undefined unless all invocations within Execution execute the same dynamic instance of this instruction. When Execution is Subgroup or Invocation, the behavior of this instruction in non-uniform control flow is defined by the client API.
+
+If Semantics is not None, this instruction also serves as the end of a memory barrier similar to an OpMemoryBarrier instruction with the same Memory and Semantics operands. This ensures that memory accesses issued before arriving at the split barrier are observed before memory accesses issued after this instruction. This control is ensured only for memory accesses issued by this invocation and observed by another invocation executing within Memory scope. This allows atomically specifying both a control barrier and a memory barrier (that is, without needing two instructions). If Semantics is None, Memory is ignored.
+
+Example: ¶
+spirv.ControlBarrierWait <Workgroup> <Device> <Acquire|UniformMemory>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+memory_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+memory_semantics	::mlir::spirv::MemorySemanticsAttr	
+valid SPIR-V MemorySemantics

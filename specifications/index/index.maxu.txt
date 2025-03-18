@@ -1,0 +1,25 @@
+index.maxu (index::MaxUOp) ¶
+Index unsigned maximum
+
+Syntax:
+
+operation ::= `index.maxu` $lhs `,` $rhs attr-dict
+The index.maxu operation takes two index values and computes their unsigned maximum value. Treats the leading bit as the most significant, i.e. max(15, 6) = 15 or max(-2, 6) = -2.
+
+Example:
+
+// c = max(a, b)
+%c = index.maxu %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

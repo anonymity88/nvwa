@@ -1,0 +1,20 @@
+linalg.elemwise_binary (linalg::ElemwiseBinaryOp)
+Applies the binary function fun elementwise.
+
+Numeric casting is performed on the input operand, promoting it to the same data type as the accumulator/output. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+fun	::mlir::linalg::BinaryFnAttr	
+allowed 32-bit signless integer cases: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+cast	::mlir::linalg::TypeFnAttr	
+allowed 32-bit signless integer cases: 0, 1
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

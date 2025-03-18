@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+// Operator: sin
+//===----------------------------------------------------------------------===//
+def Tosa_SinOp : Tosa_ElementwiseOp<"sin",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise sin op";
+
+  let description = [{
+    Elementwise sine operation for values given in radians.
+  }];
+
+  let arguments = (ins
+    Tosa_FloatTensor:$input
+  );
+
+  let results = (outs
+    Tosa_FloatTensor:$output
+  );
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.6
+// Operator Class: Elementwise unary/binary/ternary operators.
+// Operator Subclass: Elementwise ternary ops.
+//===----------------------------------------------------------------------===//
+

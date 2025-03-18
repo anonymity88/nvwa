@@ -1,0 +1,7 @@
+transform.apply_conversion_patterns.func.func_to_llvm (transform::ApplyFuncToLLVMConversionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.func.func_to_llvm` attr-dict
+Collects patterns that convert Func dialect ops to LLVM dialect ops. These patterns require an “LLVMTypeConverter”.
+
+Interfaces: ConversionPatternDescriptorOpInterface

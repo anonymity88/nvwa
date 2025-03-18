@@ -1,0 +1,25 @@
+index.divs (index::DivSOp) ¶
+Index signed division
+
+Syntax:
+
+operation ::= `index.divs` $lhs `,` $rhs attr-dict
+The index.divs operation takes two index values and computes their signed quotient. Treats the leading bit as the sign and rounds towards zero, i.e. 6 / -2 = -3.
+
+Note: division by zero and signed division overflow are undefined behaviour.
+
+Example:
+
+// c = a / b
+%c = index.divs %a, %b
+Interfaces: InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

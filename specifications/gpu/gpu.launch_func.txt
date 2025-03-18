@@ -1,0 +1,108 @@
+gpu.launch_func (gpu::LaunchFuncOp) ¶
+Launches a function as a GPU kernel
+
+Syntax:
+
+operation ::= `gpu.launch_func` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              (`<` $asyncObject^ `:` type($asyncObject) `>`)?
+              $kernel
+              ( `clusters` `in` ` ` `(` $clusterSizeX^ `,` $clusterSizeY `,` $clusterSizeZ `)` )?
+              `blocks` `in` ` ` `(` $gridSizeX `,` $gridSizeY `,` $gridSizeZ `)`
+              `threads` `in` ` ` `(` $blockSizeX `,` $blockSizeY `,` $blockSizeZ `)`
+              custom<LaunchDimType>(type($gridSizeX), ref($clusterSizeX), type($clusterSizeX), type($clusterSizeY), type($clusterSizeZ))
+              (`dynamic_shared_memory_size` $dynamicSharedMemorySize^)?
+              custom<LaunchFuncOperands>($kernelOperands, type($kernelOperands)) attr-dict
+Launch a kernel function on the specified grid of thread blocks. gpu.launch operations are lowered to gpu.launch_func operations by outlining the kernel body into a function in a dedicated module, which reflects the separate compilation process. The kernel function is required to have the gpu.kernel attribute. The module containing the kernel function is required to be a gpu.module. And finally, the module containing the kernel module (which thus cannot be the top-level module) is required to have the gpu.container_module attribute. The gpu.launch_func operation has a symbol attribute named kernel to identify the fully specified kernel function to launch (both the gpu.module and func).
+
+The gpu.launch_func supports async dependencies: the kernel does not start executing until the ops producing those async dependencies have completed.
+
+By the default, the host implicitly blocks until kernel execution has completed. If the async keyword is present, the host does not block but instead a !gpu.async.token is returned. Other async GPU ops can take this token as dependency.
+
+The operation requires at least the grid and block sizes along the x,y,z dimensions as arguments. When a lower-dimensional kernel is required, unused sizes must be explicitly set to 1.
+
+The remaining operands are optional. The first optional operand corresponds to the amount of dynamic shared memory a kernel’s workgroup should be allocated; when this operand is not present, a zero size is assumed.
+
+The remaining operands if present are passed as arguments to the kernel function.
+
+The gpu.launch_func also supports kernel launching with clusters if supported by the target architecture. The cluster size can be set by clusterSizeX, clusterSizeY, and clusterSizeZ arguments. When these arguments are present, the Op launches a kernel that clusters the given thread blocks. This feature is exclusive to certain architectures.
+
+Example:
+
+module attributes {gpu.container_module} {
+
+  // This module creates a separate compilation unit for the GPU compiler.
+  gpu.module @kernels {
+    func.func @kernel_1(%arg0 : f32, %arg1 : memref<?xf32, 1>)
+        attributes { nvvm.kernel = true } {
+
+      // Operations that produce block/thread IDs and dimensions are
+      // injected when outlining the `gpu.launch` body to a function called
+      // by `gpu.launch_func`.
+      %tIdX = gpu.thread_id x
+      %tIdY = gpu.thread_id y
+      %tIdZ = gpu.thread_id z
+
+      %bDimX = gpu.block_dim x
+      %bDimY = gpu.block_dim y
+      %bDimZ = gpu.block_dim z
+
+      %bIdX = gpu.block_id x
+      %bIdY = gpu.block_id y
+      %bIdZ = gpu.block_id z
+
+      %gDimX = gpu.grid_dim x
+      %gDimY = gpu.grid_dim y
+      %gDimZ = gpu.grid_dim z
+
+      // (Optional)  Cluster size only for support architectures
+      %cIdX = gpu.cluster_id x
+      %cIdY = gpu.cluster_id y
+      %cIdZ = gpu.cluster_id z
+
+      %cDimX = gpu.cluster_dim x
+      %cDimY = gpu.cluster_dim y
+      %cDimZ = gpu.cluster_dim z
+
+      "some_op"(%bx, %tx) : (index, index) -> ()
+      %42 = load %arg1[%bx] : memref<?xf32, 1>
+    }
+  }
+
+  %t0 = gpu.wait async
+  gpu.launch_func
+      async                           // (Optional) Don't block host, return token.
+      [%t0]                           // (Optional) Execute only after %t0 has completed.
+      @kernels::@kernel_1             // Kernel function.
+      clusters in (%cst, %cst, %cst)  // (Optional) Cluster size only for support architectures.
+      blocks in (%cst, %cst, %cst)    // Grid size.
+      threads in (%cst, %cst, %cst)   // Block size.
+      dynamic_shared_memory_size %s   // (Optional) Amount of dynamic shared
+                                      // memory to allocate for a workgroup.
+      args(%arg0 : f32,               // (Optional) Kernel arguments.
+           %arg1 : memref<?xf32, 1>)
+}
+Traits: AttrSizedOperandSegments
+
+Interfaces: GPU_AsyncOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kernel	::mlir::SymbolRefAttr	symbol reference attribute
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+gridSizeX	index or 32-bit signless integer or 64-bit signless integer
+gridSizeY	index or 32-bit signless integer or 64-bit signless integer
+gridSizeZ	index or 32-bit signless integer or 64-bit signless integer
+blockSizeX	index or 32-bit signless integer or 64-bit signless integer
+blockSizeY	index or 32-bit signless integer or 64-bit signless integer
+blockSizeZ	index or 32-bit signless integer or 64-bit signless integer
+clusterSizeX	index or 32-bit signless integer or 64-bit signless integer
+clusterSizeY	index or 32-bit signless integer or 64-bit signless integer
+clusterSizeZ	index or 32-bit signless integer or 64-bit signless integer
+dynamicSharedMemorySize	32-bit signless integer
+kernelOperands	variadic of any type
+asyncObject	any type
+Results: ¶
+Result	Description
+asyncToken	async token type

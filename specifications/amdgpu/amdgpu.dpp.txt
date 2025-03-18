@@ -1,0 +1,37 @@
+amdgpu.dpp (amdgpu::DPPOp) ¶
+AMDGPU DPP operation
+
+Syntax:
+
+operation ::= `amdgpu.dpp` $old $src $kind (`(` $permArgument^ `)`)? attr-dict `:` type($result)
+This operation represents DPP functionality in a GPU program. DPP provides the following operations:
+
+Full crossbar in a group of four (quad_perm)
+Wavefront shift left by one lane (wave_shl)
+Wavefront shift right by one lane (wave_shr)
+Wavefront rotate right by one lane (wave_ror)
+Wavefront rotate left by one lane (wave_rol)
+Row shift left by 1–15 lanes (row_shl)
+Row shift right by 1–15 lanes (row_shr)
+Row rotate right by 1–15 lanes (row_ror)
+Reverse within a row (row_mirror)
+Reverse within a half-row (row_half_mirror)
+Broadcast the 15th lane of each row to the next row (row_bcast)
+Broadcast lane 31 to rows 2 and 3 (row_bcast)
+Traits: SameTypeOperands
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::amdgpu::DPPPermAttr	
+The possible permutations for a DPP operation
+permArgument	::mlir::Attribute	32-bit signless integer attribute or array attribute or unit attribute
+row_mask	::mlir::IntegerAttr	32-bit signless integer attribute
+bank_mask	::mlir::IntegerAttr	32-bit signless integer attribute
+bound_ctrl	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+old	any type
+src	any type
+Results: ¶
+Result	Description
+result	any type

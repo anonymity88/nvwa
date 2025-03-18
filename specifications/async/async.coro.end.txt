@@ -1,0 +1,11 @@
+async.coro.end (async::CoroEndOp) ¶
+Marks the end of the coroutine in the suspend block
+
+Syntax:
+
+operation ::= `async.coro.end` $handle attr-dict
+The async.coro.end marks the point where a coroutine needs to return control back to the caller if it is not an initial invocation of the coroutine. It the start part of the coroutine is is no-op.
+
+Operands: ¶
+Operand	Description
+handle	coroutine handle

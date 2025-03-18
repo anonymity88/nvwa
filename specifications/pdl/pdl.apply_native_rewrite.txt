@@ -1,0 +1,32 @@
+pdl.apply_native_rewrite (pdl::ApplyNativeRewriteOp) ¶
+Apply a native rewrite method inside of pdl.rewrite region
+
+Syntax:
+
+operation ::= `pdl.apply_native_rewrite` $name (`(` $args^ `:` type($args) `)`)? (`:` type($results)^)? attr-dict
+pdl.apply_native_rewrite operations apply a native C++ function, that has been registered externally with the consumer of PDL, to perform a rewrite and optionally return a number of values. The native function may accept any number of arguments. This operation is used within a pdl.rewrite region to enable the interleaving of native rewrite methods with other pdl constructs.
+
+Example:
+
+// Apply a native rewrite method that returns an attribute.
+%ret = pdl.apply_native_rewrite "myNativeFunc"(%arg0, %attr1) : !pdl.attribute
+// The native rewrite as defined in C++:
+static Attribute myNativeFunc(PatternRewriter &rewriter, Value arg0, Attribute arg1) {
+  // Just return the second arg.
+  return arg1;
+}
+
+void registerNativeRewrite(PDLPatternModule &pdlModule) {
+  pdlModule.registerRewriteFunction("myNativeFunc", myNativeFunc);
+}
+Traits: HasParent<pdl::RewriteOp>
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+args	variadic of pdl type
+Results: ¶
+Result	Description
+results	variadic of pdl type

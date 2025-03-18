@@ -1,0 +1,17 @@
+shape.assuming_yield (shape::AssumingYieldOp) ¶
+Yield operation
+
+Syntax:
+
+operation ::= `shape.assuming_yield` attr-dict ($operands^ `:` type($operands))?
+This yield operation represents a return operation within the shape.assuming operation region. The operation takes variable number of operands and produces no results. The operand number and types must match the number and types of parent shape.assuming results.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<AssumingOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

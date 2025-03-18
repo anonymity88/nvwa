@@ -1,0 +1,66 @@
+transform.structured.tile_using_forall (transform::TileUsingForallOp) ¶
+Syntax:
+
+operation ::= `transform.structured.tile_using_forall` $target oilist(
+              `num_threads` custom<PackedOrDynamicIndexList>($packed_num_threads,
+              $num_threads,
+              $static_num_threads) |
+              `tile_sizes` custom<PackedOrDynamicIndexList>($packed_tile_sizes,
+              $tile_sizes,
+              $static_tile_sizes))
+              (`(` `mapping` `=` $mapping^ `)`)? attr-dict
+              `:` functional-type(operands, results)
+Tile a TilingInterface op to a tiled scf.forall.
+
+Tiling is applied by either specifying num_threads or tile_size. If num_threads is specified, then the tile size for each dimension i is calculated dynamically via ceilDiv(dimSize[i], num_threads[i]). num_threads and tile_size can be either static index attributes or operation handles (or a mix thereof). Operation handles must be mapped to exactly one op that has exactly one result of index type.
+
+Static zero tile sizes indicate that the dimension is not tiled and can be thought of as tiling by the full size of data.
+
+It is the user’s responsibility to ensure that num_threads/tile_sizes is a valid tiling specification (i.e. that only tiles parallel dimensions, e.g. in the Linalg case). If the dimension is not parallelizable, a warning is issued to notify the user that the generated code is not safe to parallelize.
+
+If non-empty, the mapping is added as an attribute to the resulting scf.forall.
+
+Note: tile_sizes and num_threads are variadic. Each tile size/number of threads can be an index attribute or a transform handle that is mapped to exactly one payload op with exactly one index result.
+
+Return modes ¶
+This operation ignores ops that do not implement the TilingInterface and drops them in the return.
+
+If all the operations referred to by the target handle tile successfully, the transform succeeds. Otherwise the transform produces a silenceable failure.
+
+The two returned handles point to only the subset of successfully produced tiled operations, which can all be empty.
+
+These two returned handles point to:
+
+the tiled op that implements TilingInterface,
+the new scf.forall op.
+Example using num_threads ¶
+%0 = transform.structured.match ops{["linalg.matmul"]} in %arg1
+   : (!transform.any_op) -> !transform.any_op
+%3:2 = transform.structured.tile_using_forall %0 num_threads [10, 20]
+   : (!transform.any_op) -> (!transform.any_op, !transform.any_op)
+Example using tile_sizes ¶
+%0 = transform.structured.match ops{["linalg.matmul"]} in %arg1
+   : (!transform.any_op) -> !transform.any_op
+%sz = transform.structured.match ...
+%3:2 = transform.structured.tile_using_forall %0 tile_sizes [0, %sz, 20]
+   : (!transform.any_op, !transform.any_op) -> (!transform.any_op, !transform.any_op)
+Traits: AttrSizedOperandSegments, ReportTrackingListenerFailuresOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+static_num_threads	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+static_tile_sizes	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+mapping	::mlir::ArrayAttr	Device Mapping array attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+num_threads	variadic of transform any param type or any handle type
+tile_sizes	variadic of transform any param type or any handle type
+packed_num_threads	transform any param type or any handle type
+packed_tile_sizes	transform any param type or any handle type
+Results: ¶
+Result	Description
+tiled_op	TransformHandleTypeInterface instance
+forall_op	TransformHandleTypeInterface instance

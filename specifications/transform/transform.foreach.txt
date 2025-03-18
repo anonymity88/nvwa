@@ -1,0 +1,32 @@
+transform.foreach (transform::ForeachOp) ¶
+Executes the body for each element of the payload
+
+Syntax:
+
+operation ::= `transform.foreach` $targets oilist(`with_zip_shortest` $with_zip_shortest) `:` type($targets) (`->` type($results)^)? $body attr-dict
+Execute the op’s body - its single region block - exactly once per element of the payload associated to a target handle. The body’s transformations are applied in order of appearance until reaching the (implicit) YieldOp terminator.
+
+Each iteration gets executed by co-indexing the payloads of the arguments and mapping the body’s arguments to these tuples, as though iterating over the zipped together targets. As such, in each iteration, the size of the payload of each of the body’s block arguments is exactly one. The attribute zip_shortest can be used if the targets vary in their number of payloads; this will limit the iterations to only the number of payloads found in the shortest target.
+
+This op always reads the target handles. Furthermore, it consumes a handle if there is a transform op in the body that consumes the corresponding block argument. Handles can point to ops, values, or parameters.
+
+Return Modes ¶
+This op produces as many result handles as the body’s terminating YieldOp has operands. For each result, the payloads of the corresponding YieldOp operand are merged and mapped to the same resulting handle.
+
+If the target handles do not associate payloads of the same size, a silencable failure will be generated.
+
+During application, if any transformation in the sequence fails, the entire sequence fails immediately with the same failure, leaving the payload IR in a potentially invalid state, i.e., this operation offers no transformation rollback capabilities.
+
+Traits: SingleBlockImplicitTerminator<::mlir::transform::YieldOp>, SingleBlock
+
+Interfaces: MemoryEffectOpInterface, RegionBranchOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+with_zip_shortest	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+targets	variadic of any transform handle or parameter
+Results: ¶
+Result	Description
+results	variadic of any transform handle or parameter

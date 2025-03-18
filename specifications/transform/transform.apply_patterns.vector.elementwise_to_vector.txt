@@ -1,0 +1,7 @@
+transform.apply_patterns.vector.elementwise_to_vector (transform::ApplyFoldElementwiseToVectorPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.elementwise_to_vector` attr-dict
+Collect a set of patterns that fold elementwise op on vectors to the vector dialect.
+
+Interfaces: PatternDescriptorOpInterface

@@ -1,0 +1,7 @@
+omp.barrier (omp::BarrierOp) ¶
+Barrier construct
+
+Syntax:
+
+operation ::= `omp.barrier` attr-dict
+The barrier construct specifies an explicit barrier at the point at which the construct appears.

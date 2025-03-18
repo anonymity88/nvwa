@@ -1,0 +1,8 @@
+llvm.intr.experimental.noalias.scope.decl (LLVM::NoAliasScopeDeclOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.experimental.noalias.scope.decl` $scope attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+scope	::mlir::LLVM::AliasScopeAttr	
+LLVM dialect alias scope

@@ -1,0 +1,24 @@
+//===----------------------------------------------------------------------===//
+// ImOp
+//===----------------------------------------------------------------------===//
+
+def ImOp : ComplexUnaryOp<"im",
+    [TypesMatchWith<"complex element type matches result type",
+                    "complex", "imaginary",
+                    "::llvm::cast<ComplexType>($_self).getElementType()">]> {
+  let summary = "extracts the imaginary part of a complex number";
+  let description = [{
+    The `im` op takes a single complex number and extracts the imaginary part.
+
+    Example:
+
+    ```mlir
+    %a = complex.im %b : complex<f32>
+    ```
+  }];
+
+  let results = (outs AnyFloat:$imaginary);
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

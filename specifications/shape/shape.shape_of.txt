@@ -1,0 +1,20 @@
+shape.shape_of (shape::ShapeOfOp) ¶
+Returns shape of a value or shaped type operand
+
+Syntax:
+
+operation ::= `shape.shape_of` $arg attr-dict `:` type($arg) `->` type($result)
+The operation takes a value or a shaped operand as an argument and it returns a shape or extent tensor.
+
+Traits: AlwaysSpeculatableImplTrait, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	shaped of any type values or
+Results: ¶
+Result	Description
+result	shape or extent tensor

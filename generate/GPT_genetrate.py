@@ -12,7 +12,7 @@ class Generator:
         self.dialect = dialect
         self.gentype = gentype
         self.fail_OPs = f"generate_results/fail_OPs/{self.dialect}_fail_OPs.txt"
-        self.directory = f"OPs/{self.dialect}"
+        self.directory = f"specifications/{self.dialect}"
         self.results_dir = f"generate_results/Single_OP/{self.dialect}"
         if not os.path.exists(self.results_dir):
             os.makedirs(self.results_dir)
@@ -50,7 +50,7 @@ class Generator:
     def setDialect(self, new_dialect):
         self.dialect = new_dialect
         self.fail_OPs = f"generate_results/fail_OPs/{self.dialect}_fail_OPs.txt"
-        self.directory = f"OP_web/{self.dialect}"
+        self.directory = f"specifications/{self.dialect}"
         self.results_dir = f"generate_results/Single_OP/{self.dialect}"
 
         if not os.path.exists(self.results_dir):
@@ -220,7 +220,7 @@ class Generator:
     def generate_multi(self, model="gpt-4o-mini", temperature=0.4):
         self.set_gentype("multi")
         
-        # self.target = f"OPs/{self.dialect}"
+        # self.target = f"specifications/{self.dialect}"
         
         retries = 0
         if not os.path.isdir(self.target):

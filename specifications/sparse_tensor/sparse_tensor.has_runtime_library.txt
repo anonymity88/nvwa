@@ -1,0 +1,19 @@
+sparse_tensor.has_runtime_library (sparse_tensor::HasRuntimeLibraryOp) ¶
+Indicates whether running in runtime/codegen mode
+
+Syntax:
+
+operation ::= `sparse_tensor.has_runtime_library` attr-dict
+Returns a boolean value that indicates whether the sparsifier runs in runtime library mode or not. For testing only! This operation is useful for writing test cases that require different code depending on runtime/codegen mode.
+
+Example:
+
+%has_runtime = sparse_tensor.has_runtime_library
+scf.if %has_runtime {
+  ...
+}
+Interfaces: InferTypeOpInterface
+
+Results: ¶
+Result	Description
+result	1-bit signless integer

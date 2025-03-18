@@ -1,0 +1,22 @@
+spirv.ConvertPtrToU (spirv::ConvertPtrToUOp) ¶
+Bit pattern-preserving conversion of a pointer to an unsigned scalar integer of possibly different bit width.
+
+Syntax:
+
+operation ::= `spirv.ConvertPtrToU` $pointer attr-dict `:` type($pointer) `to` type($result)
+Result Type must be a scalar of integer type, whose Signedness operand is 0.
+
+Pointer must be a physical pointer type. If the bit width of Pointer is smaller than that of Result Type, the conversion zero extends Pointer. If the bit width of Pointer is larger than that of Result Type, the conversion truncates Pointer.
+
+For same bit width Pointer and Result Type, this is the same as OpBitcast.
+
+Example: ¶
+%1 = spirv.ConvertPtrToU %0 : !spirv.ptr<i32, Generic> to i32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Operands: ¶
+Operand	Description
+pointer	any SPIR-V pointer type
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer

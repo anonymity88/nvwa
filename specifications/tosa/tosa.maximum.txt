@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: maximum
+//===----------------------------------------------------------------------===//
+def Tosa_MaximumOp : Tosa_ElementwiseOp<"maximum", [
+    Commutative,
+    SameOperandsAndResultElementType]> {
+  let summary = "Elementwise Maximum";
+
+  let description = [{
+    Elementwise max of input1 and input2. Axis of size 1 will be broadcast, as
+    necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

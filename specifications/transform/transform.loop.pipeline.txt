@@ -1,0 +1,29 @@
+transform.loop.pipeline (transform::LoopPipelineOp) ¶
+Applies software pipelining to the loop
+
+Syntax:
+
+operation ::= `transform.loop.pipeline` $target attr-dict `:` functional-type(operands, results)
+Transforms the given loops one by one to achieve software pipelining for each of them. That is, performs some amount of reads from memory before the loop rather than inside the loop, the same amount of writes into memory after the loop, and updates each iteration to read the data for a following iteration rather than the current one.
+
+The amount is specified by the attributes.
+
+The values read and about to be stored are transferred as loop iteration arguments. Currently supports memref and vector transfer operations as memory reads/writes.
+
+Return modes ¶
+This operation ignores non-scf::For ops and drops them in the return. If all the operations referred to by the target PDLOperation pipeline properly, the transform succeeds. Otherwise the transform produces a silenceable failure. The return handle points to only the subset of successfully produced pipelined loops, which can be empty.
+
+Traits: FunctionalStyleTransformOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+iteration_interval	::mlir::IntegerAttr	64-bit signless integer attribute
+read_latency	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	Transform IR handle to scf.for operations
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

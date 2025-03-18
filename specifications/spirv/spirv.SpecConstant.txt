@@ -1,0 +1,24 @@
+spirv.SpecConstant (spirv::SpecConstantOp) ¶
+Declare a new integer-type or floating-point-type scalar specialization constant.
+
+This op declares a SPIR-V scalar specialization constant. SPIR-V has multiple constant instructions covering different scalar types:
+
+OpSpecConstantTrue and OpSpecConstantFalse for boolean constants
+OpSpecConstant for scalar constants
+Similar as spirv.Constant, this op represents all of the above cases. OpSpecConstantComposite and OpSpecConstantOp are modelled with separate ops.
+
+spv-spec-constant-op ::= `spirv.SpecConstant` symbol-ref-id
+                         `spec_id(` integer `)`
+                         `=` attribute-value (`:` spirv-type)?
+where spec_id specifies the SPIR-V SpecId decoration associated with the op.
+
+Example: ¶
+spirv.SpecConstant @spec_const1 = true
+spirv.SpecConstant @spec_const2 spec_id(5) = 42 : i32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+default_value	::mlir::TypedAttr	
+TypedAttr instance

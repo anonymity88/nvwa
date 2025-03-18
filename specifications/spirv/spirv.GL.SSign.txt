@@ -1,0 +1,25 @@
+spirv.GL.SSign (spirv::GLSSignOp) ¶
+Returns the sign of the operand
+
+Syntax:
+
+operation ::= `spirv.GL.SSign` $operand `:` type($operand) attr-dict
+Result is 1 if x > 0, 0 if x = 0, or -1 if x < 0, where x is interpreted as a signed integer.
+
+Result Type and the type of x must both be integer scalar or integer vector types. Result Type and operand types must have the same number of components with the same component width. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.SSign %0 : i32
+%3 = spirv.GL.SSign %1 : vector<3xi16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

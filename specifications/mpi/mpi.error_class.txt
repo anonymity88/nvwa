@@ -1,0 +1,14 @@
+mpi.error_class (mpi::ErrorClassOp) ¶
+Get the error class from an error code, equivalent to the MPI_Error_class function
+
+Syntax:
+
+operation ::= `mpi.error_class` $val attr-dict `:` type($val)
+MPI_Error_class maps return values from MPI calls to a set of well-known MPI error classes.
+
+Operands: ¶
+Operand	Description
+val	MPI function call return value
+Results: ¶
+Result	Description
+errclass	MPI function call return value

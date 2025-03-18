@@ -1,0 +1,27 @@
+pdl_interp.get_value_type (pdl_interp::GetValueTypeOp) ¶
+Get the result type of a specified Value
+
+Syntax:
+
+operation ::= `pdl_interp.get_value_type` `of` $value `:` type($result) attr-dict
+pdl_interp.get_value_type operations get the resulting type of a specific value or range thereof.
+
+Example:
+
+// Get the type of a single value.
+%type = pdl_interp.get_value_type of %value : !pdl.type
+
+// Get the types of a value range.
+%type = pdl_interp.get_value_type of %values : !pdl.range<type>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	single element or range of PDL handle for an mlir::Value
+Results: ¶
+Result	Description
+result	single element or range of PDL handle to an mlir::Type

@@ -1,0 +1,7 @@
+llvm.intr.stacksave (LLVM::StackSaveOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.stacksave` attr-dict `:` qualified(type($res))
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

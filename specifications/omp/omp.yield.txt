@@ -1,0 +1,476 @@
+omp.yield (omp::YieldOp) ¶
+Loop yield and termination operation
+
+Syntax:
+
+operation ::= `omp.yield` ( `(` $results^ `:` type($results) `)` )? attr-dict
+“omp.yield” yields SSA values from the OpenMP dialect op region and terminates the region. The semantics of how the values are yielded is defined by the parent operation.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<AtomicUpdateOp, DeclareReductionOp, LoopNestOp, PrivateClauseOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+results	variadic of any type
+Attributes ¶
+ClauseBindKindAttr ¶
+BindKind Clause
+
+Syntax:
+
+#omp.bindkind<
+  ::mlir::omp::ClauseBindKind   # value
+>
+Enum cases:
+
+parallel (Parallel)
+teams (Teams)
+thread (Thread)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseBindKind	an enum of type ClauseBindKind
+ClauseCancellationConstructTypeAttr ¶
+CancellationConstructType Clause
+
+Syntax:
+
+#omp.cancellationconstructtype<
+  ::mlir::omp::ClauseCancellationConstructType   # value
+>
+Enum cases:
+
+parallel (Parallel)
+loop (Loop)
+sections (Sections)
+taskgroup (Taskgroup)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseCancellationConstructType	an enum of type ClauseCancellationConstructType
+ClauseDependAttr ¶
+depend clause
+
+Syntax:
+
+#omp.clause_depend<
+  ::mlir::omp::ClauseDepend   # value
+>
+Enum cases:
+
+dependsource (dependsource)
+dependsink (dependsink)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseDepend	an enum of type ClauseDepend
+ClauseRequiresAttr ¶
+requires clauses
+
+Syntax:
+
+#omp.clause_requires<
+  ::mlir::omp::ClauseRequires   # value
+>
+Enum cases:
+
+none (none)
+reverse_offload (reverse_offload)
+unified_address (unified_address)
+unified_shared_memory (unified_shared_memory)
+dynamic_allocators (dynamic_allocators)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseRequires	an enum of type ClauseRequires
+ClauseTaskDependAttr ¶
+depend clause in a target or task construct
+
+Syntax:
+
+#omp.clause_task_depend<
+  ::mlir::omp::ClauseTaskDepend   # value
+>
+Enum cases:
+
+taskdependin (taskdependin)
+taskdependout (taskdependout)
+taskdependinout (taskdependinout)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseTaskDepend	an enum of type ClauseTaskDepend
+DataSharingClauseTypeAttr ¶
+Type of a data-sharing clause
+
+Syntax:
+
+#omp.data_sharing_type<
+  ::mlir::omp::DataSharingClauseType   # value
+>
+Enum cases:
+
+private (Private)
+firstprivate (FirstPrivate)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::DataSharingClauseType	an enum of type DataSharingClauseType
+DeclareTargetAttr ¶
+Syntax:
+
+#omp.declaretarget<
+  DeclareTargetDeviceTypeAttr,   # device_type
+  DeclareTargetCaptureClauseAttr   # capture_clause
+>
+Parameters: ¶
+Parameter	C++ type	Description
+device_type	DeclareTargetDeviceTypeAttr	
+capture_clause	DeclareTargetCaptureClauseAttr	
+DeclareTargetCaptureClauseAttr ¶
+capture clause
+
+Syntax:
+
+#omp.capture_clause<
+  ::mlir::omp::DeclareTargetCaptureClause   # value
+>
+Enum cases:
+
+to (to)
+link (link)
+enter (enter)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::DeclareTargetCaptureClause	an enum of type DeclareTargetCaptureClause
+DeclareTargetDeviceTypeAttr ¶
+device_type clause
+
+Syntax:
+
+#omp.device_type<
+  ::mlir::omp::DeclareTargetDeviceType   # value
+>
+Enum cases:
+
+any (any)
+host (host)
+nohost (nohost)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::DeclareTargetDeviceType	an enum of type DeclareTargetDeviceType
+FlagsAttr ¶
+Syntax:
+
+#omp.flags<
+  uint32_t,   # debug_kind
+  bool,   # assume_teams_oversubscription
+  bool,   # assume_threads_oversubscription
+  bool,   # assume_no_thread_state
+  bool,   # assume_no_nested_parallelism
+  bool,   # no_gpu_lib
+  uint32_t   # openmp_device_version
+>
+Parameters: ¶
+Parameter	C++ type	Description
+debug_kind	uint32_t	
+assume_teams_oversubscription	bool	
+assume_threads_oversubscription	bool	
+assume_no_thread_state	bool	
+assume_no_nested_parallelism	bool	
+no_gpu_lib	bool	
+openmp_device_version	uint32_t	
+ClauseGrainsizeTypeAttr ¶
+GrainsizeType Clause
+
+Syntax:
+
+#omp.grainsizetype<
+  ::mlir::omp::ClauseGrainsizeType   # value
+>
+Enum cases:
+
+strict (Strict)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseGrainsizeType	an enum of type ClauseGrainsizeType
+ClauseMemoryOrderKindAttr ¶
+MemoryOrderKind Clause
+
+Syntax:
+
+#omp.memoryorderkind<
+  ::mlir::omp::ClauseMemoryOrderKind   # value
+>
+Enum cases:
+
+seq_cst (Seq_cst)
+acq_rel (Acq_rel)
+acquire (Acquire)
+release (Release)
+relaxed (Relaxed)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseMemoryOrderKind	an enum of type ClauseMemoryOrderKind
+ClauseNumTasksTypeAttr ¶
+NumTasksType Clause
+
+Syntax:
+
+#omp.numtaskstype<
+  ::mlir::omp::ClauseNumTasksType   # value
+>
+Enum cases:
+
+strict (Strict)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseNumTasksType	an enum of type ClauseNumTasksType
+ClauseOrderKindAttr ¶
+OrderKind Clause
+
+Syntax:
+
+#omp.orderkind<
+  ::mlir::omp::ClauseOrderKind   # value
+>
+Enum cases:
+
+concurrent (Concurrent)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseOrderKind	an enum of type ClauseOrderKind
+OrderModifierAttr ¶
+OpenMP Order Modifier
+
+Syntax:
+
+#omp.order_mod<
+  ::mlir::omp::OrderModifier   # value
+>
+Enum cases:
+
+reproducible (reproducible)
+unconstrained (unconstrained)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::OrderModifier	an enum of type OrderModifier
+ClauseProcBindKindAttr ¶
+ProcBindKind Clause
+
+Syntax:
+
+#omp.procbindkind<
+  ::mlir::omp::ClauseProcBindKind   # value
+>
+Enum cases:
+
+primary (Primary)
+master (Master)
+close (Close)
+spread (Spread)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseProcBindKind	an enum of type ClauseProcBindKind
+ClauseScheduleKindAttr ¶
+ScheduleKind Clause
+
+Syntax:
+
+#omp.schedulekind<
+  ::mlir::omp::ClauseScheduleKind   # value
+>
+Enum cases:
+
+static (Static)
+dynamic (Dynamic)
+guided (Guided)
+auto (Auto)
+runtime (Runtime)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ClauseScheduleKind	an enum of type ClauseScheduleKind
+ScheduleModifierAttr ¶
+OpenMP Schedule Modifier
+
+Syntax:
+
+#omp.sched_mod<
+  ::mlir::omp::ScheduleModifier   # value
+>
+Enum cases:
+
+none (none)
+monotonic (monotonic)
+nonmonotonic (nonmonotonic)
+simd (simd)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::ScheduleModifier	an enum of type ScheduleModifier
+VariableCaptureKindAttr ¶
+variable capture kind
+
+Syntax:
+
+#omp.variable_capture_kind<
+  ::mlir::omp::VariableCaptureKind   # value
+>
+Enum cases:
+
+This (This)
+ByRef (ByRef)
+ByCopy (ByCopy)
+VLAType (VLAType)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::omp::VariableCaptureKind	an enum of type VariableCaptureKind
+VersionAttr ¶
+Syntax:
+
+#omp.version<
+  uint32_t   # version
+>
+Parameters: ¶
+Parameter	C++ type	Description
+version	uint32_t	
+Types ¶
+MapBoundsType ¶
+Type for representing omp map clause bounds information
+
+Syntax: !omp.map_bounds_ty
+
+Enums ¶
+ClauseBindKind ¶
+BindKind Clause
+
+Cases: ¶
+Symbol	Value	String
+Parallel	0	parallel
+Teams	1	teams
+Thread	2	thread
+ClauseCancellationConstructType ¶
+CancellationConstructType Clause
+
+Cases: ¶
+Symbol	Value	String
+Parallel	0	parallel
+Loop	1	loop
+Sections	2	sections
+Taskgroup	3	taskgroup
+ClauseDepend ¶
+depend clause
+
+Cases: ¶
+Symbol	Value	String
+dependsource	0	dependsource
+dependsink	1	dependsink
+ClauseRequires ¶
+requires clauses
+
+Cases: ¶
+Symbol	Value	String
+none	0	none
+reverse_offload	1	reverse_offload
+unified_address	2	unified_address
+unified_shared_memory	4	unified_shared_memory
+dynamic_allocators	8	dynamic_allocators
+ClauseTaskDepend ¶
+depend clause in a target or task construct
+
+Cases: ¶
+Symbol	Value	String
+taskdependin	0	taskdependin
+taskdependout	1	taskdependout
+taskdependinout	2	taskdependinout
+DataSharingClauseType ¶
+Type of a data-sharing clause
+
+Cases: ¶
+Symbol	Value	String
+Private	0	private
+FirstPrivate	1	firstprivate
+DeclareTargetCaptureClause ¶
+capture clause
+
+Cases: ¶
+Symbol	Value	String
+to	0	to
+link	1	link
+enter	2	enter
+DeclareTargetDeviceType ¶
+device_type clause
+
+Cases: ¶
+Symbol	Value	String
+any	0	any
+host	1	host
+nohost	2	nohost
+ClauseGrainsizeType ¶
+GrainsizeType Clause
+
+Cases: ¶
+Symbol	Value	String
+Strict	0	strict
+ClauseMemoryOrderKind ¶
+MemoryOrderKind Clause
+
+Cases: ¶
+Symbol	Value	String
+Seq_cst	0	seq_cst
+Acq_rel	1	acq_rel
+Acquire	2	acquire
+Release	3	release
+Relaxed	4	relaxed
+ClauseNumTasksType ¶
+NumTasksType Clause
+
+Cases: ¶
+Symbol	Value	String
+Strict	0	strict
+ClauseOrderKind ¶
+OrderKind Clause
+
+Cases: ¶
+Symbol	Value	String
+Concurrent	1	concurrent
+OrderModifier ¶
+OpenMP Order Modifier
+
+Cases: ¶
+Symbol	Value	String
+reproducible	0	reproducible
+unconstrained	1	unconstrained
+ClauseProcBindKind ¶
+ProcBindKind Clause
+
+Cases: ¶
+Symbol	Value	String
+Primary	0	primary
+Master	1	master
+Close	2	close
+Spread	3	spread
+ClauseScheduleKind ¶
+ScheduleKind Clause
+
+Cases: ¶
+Symbol	Value	String
+Static	0	static
+Dynamic	1	dynamic
+Guided	2	guided
+Auto	3	auto
+Runtime	4	runtime
+ScheduleModifier ¶
+OpenMP Schedule Modifier
+
+Cases: ¶
+Symbol	Value	String
+none	0	none
+monotonic	1	monotonic
+nonmonotonic	2	nonmonotonic
+simd	3	simd
+VariableCaptureKind ¶
+variable capture kind
+
+Cases: ¶
+Symbol	Value	String
+This	0	This
+ByRef	1	ByRef
+ByCopy	2	ByCopy
+VLAType	3	VLAType

@@ -1,0 +1,31 @@
+emitc.conditional (emitc::ConditionalOp) ¶
+Conditional (ternary) operation
+
+Syntax:
+
+operation ::= `emitc.conditional` operands attr-dict `:` type($result)
+With the emitc.conditional operation the ternary conditional operator can be applied.
+
+Example:
+
+%0 = emitc.cmp gt, %arg0, %arg1 : (i32, i32) -> i1
+
+%c0 = "emitc.constant"() {value = 10 : i32} : () -> i32
+%c1 = "emitc.constant"() {value = 11 : i32} : () -> i32
+
+%1 = emitc.conditional %0, %c0, %c1 : i32
+// Code emitted for the operations above.
+bool v3 = v1 > v2;
+int32_t v4 = 10;
+int32_t v5 = 11;
+int32_t v6 = v3 ? v4 : v5;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+condition	1-bit signless integer
+true_value	type supported by EmitC
+false_value	type supported by EmitC
+Results: ¶
+Result	Description
+result	type supported by EmitC

@@ -1,0 +1,20 @@
+llvm.mlir.none (LLVM::NoneTokenOp) ¶
+Defines a value containing an empty token to LLVM type.
+
+Syntax:
+
+operation ::= `llvm.mlir.none` attr-dict `:` type($res)
+Unlike LLVM IR, MLIR does not have first-class token values. They must be explicitly created as SSA values using llvm.mlir.none. This operation has no operands or attributes, and returns a none token value of a wrapped LLVM IR pointer type.
+
+Examples:
+
+%0 = llvm.mlir.none : !llvm.token
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+res	LLVM token type

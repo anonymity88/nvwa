@@ -1,0 +1,11 @@
+omp.section (omp::SectionOp) ¶
+Section directive
+
+Syntax:
+
+operation ::= `omp.section` $region attr-dict
+A section operation encloses a region which represents one section in a sections construct. A section op should always be surrounded by an omp.sections operation. The section operation may have block args which corespond to the block arguments of the surrounding omp.sections operation. This is done to reflect situations where these block arguments represent variables private to each section.
+
+Traits: HasParent<SectionsOp>
+
+Interfaces: BlockArgOpenMPOpInterface

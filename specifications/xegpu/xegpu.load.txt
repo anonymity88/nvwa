@@ -1,0 +1,42 @@
+xegpu.load (xegpu::LoadGatherOp) ¶
+Load a set of scattered data points from memory.
+
+Syntax:
+
+operation ::= `xegpu.load` $TensorDesc `,` $mask prop-dict attr-dict
+              `:` qualified(type($TensorDesc)) `,` type($mask) `->` type($value)
+It (aka. load) load data per each work-item. The output describes the data being loaded at the subgroup level, so its size is consistent with the number of work-items in a subgroup. When the chunk size is larger than 2, the output vector is a 2D vector, with dim-1 correspoding to work-items, and dim-0 corresponding to the chunk size loaded by each work-item. Specially, there is a transpose effect on the result (as compared to the TensorDesc) due to the hardware implementation. Therefore, a transpose attribute is introduced on purpose, making sure users are aware of this implicit transformation.
+
+The mask operand masks out memory access so that it is safe to pass out-of-boundary addresses/offsets as long as they are masked. It applies to slots of SIMD lanes.
+
+Example 1:
+
+  %2 = xegpu.load %1, %0 {l1_hint = #xegpu.cache_hint<cached>,
+                          l2_hint = #xegpu.cache_hint<uncached>,
+                          l3_hint = #xegpu.cache_hint<uncached>}
+        : !xegpu.tensor_desc<16xf32, #xegpu.scatter_tdesc_attr<memory_space=global>>,
+          vector<16xi1> -> vector<16xf32>
+Example 2:
+
+  %2 = xegpu.load %1, %0 {transpose,
+                          l1_hint = #xegpu.cache_hint<cached>,
+                          l2_hint = #xegpu.cache_hint<uncached>,
+                          l3_hint = #xegpu.cache_hint<uncached>}
+        : !xegpu.tensor_desc<16x8xf32, #xegpu.scatter_tdesc_attr<memory_space=global, chunk_size=8>>,
+          vector<16xi1> -> vector<8x16xf32>
+Attributes: ¶
+Attribute	MLIR Type	Description
+transpose	::mlir::UnitAttr	unit attribute
+l1_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l2_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l3_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+Operands: ¶
+Operand	Description
+TensorDesc	TensorDesc describing regions of interested data.
+mask	vector of 1-bit signless integer values of ranks 1 or 1-bit signless integer
+Results: ¶
+Result	Description
+value	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 1/2/3/4 or 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type

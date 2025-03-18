@@ -1,0 +1,16 @@
+xegpu.init_nbarrier (xegpu::InitNbarrierOp) ¶
+It assigns a named barrier to the current thread.
+
+Syntax:
+
+operation ::= `xegpu.init_nbarrier` $nbarrier_id `,` $participant_thread_num attr-dict `:`
+              type($nbarrier_id) `,` type($participant_thread_num) `->` qualified(type($result))
+InitNbarrierOp assigns the named barrier with the specified barrier ID (0~31) to the current thread. Multiple threads may bind to the same named barrier, and the participant_thread_num specifies the total number of threads associated with the nbarrier. It returns an object of NbarrierType representing the barrier
+
+Operands: ¶
+Operand	Description
+nbarrier_id	8-bit signless integer
+participant_thread_num	8-bit signless integer
+Results: ¶
+Result	Description
+result	!xegpu.nbarrier a custom XeGPU type representing a barrier.

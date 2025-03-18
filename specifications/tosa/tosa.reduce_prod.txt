@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// Operator: reduce_prod
+//===----------------------------------------------------------------------===//
+def Tosa_ReduceProdOp : Tosa_InferTensorTypeOp<"reduce_prod"> {
+  let summary = "Reduce Prod operator";
+
+  let description = [{
+    Reduce a tensor along the given axis by computing the product of the axis.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input,
+    I32Attr:$axis
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+
+  let extraClassDeclaration = [{
+    /// Returns true when two result types are compatible for this op;
+    /// Method used by InferTypeOpInterface.
+    static bool isCompatibleReturnTypes(TypeRange l, TypeRange r);
+
+    /// Return the prod of the two integer operands
+    static inline APInt calcOneElement(APInt leftOperand, APInt rightOperand) {
+      return leftOperand * rightOperand;
+    }
+  }];
+}
+

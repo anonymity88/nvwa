@@ -1,0 +1,52 @@
+gpu.func (gpu::GPUFuncOp) ¶
+Function executable on a GPU
+
+Defines a function that can be executed on a GPU. This supports memory attribution and its body has a particular execution model.
+
+GPU functions are either kernels (as indicated by the kernel attribute) or regular functions. The former can be launched from the host side, while the latter are device side only.
+
+The memory attribution defines SSA values that correspond to memory buffers allocated in the memory hierarchy of the GPU (see below).
+
+The operation has one attached region that corresponds to the body of the function. The region arguments consist of the function arguments without modification, followed by buffers defined in memory annotations. The body of a GPU function, when launched, is executed by multiple work items. There are no guarantees on the order in which work items execute, or on the connection between them. In particular, work items are not necessarily executed in lock-step. Synchronization ops such as “gpu.barrier” should be used to coordinate work items. Declarations of GPU functions, i.e. not having the body region, are not supported.
+
+A function may optionally be annotated with the block and/or grid sizes that will be used when it is launched using the known_block_size and known_grid_size attributes, respectively. If set, these attributes must be arrays of three 32-bit integers giving the x, y, and z launch dimensions. Launching a kernel that has these annotations, or that calls a function with these annotations, using a block size or grid size other than what is specified is undefined behavior. These attributes may be set on non-gpu.func functions by using gpu.known_block_size or gpu.known_grid_size, but this carries the risk that they will de discarded.
+
+Syntax:
+
+op ::= `gpu.func` symbol-ref-id `(` argument-list `)` (`->`
+function-result-list)?
+       memory-attribution `kernel`? function-attributes? region
+
+memory-attribution ::= (`workgroup` `(` ssa-id-and-type-list `)`)?
+                       (`private` `(` ssa-id-and-type-list `)`)?
+Example:
+
+gpu.func @foo(%arg0: index)
+    workgroup(%workgroup: memref<32xf32, 3>)
+    private(%private: memref<1xf32, 5>)
+    kernel
+    attributes {qux: "quux"} {
+  gpu.return
+}
+The generic form illustrates the concept
+
+"gpu.func"(%arg: index) {sym_name: "foo", kernel, qux: "quux"} ({
+^bb0(%arg0: index, %workgroup: memref<32xf32, 3>,
+     %private: memref<1xf32, 5>):
+  "gpu.return"() : () -> ()
+}) : (index) -> ()
+Note the non-default memory spaces used in memref types in memory attribution.
+
+Traits: AffineScope, AutomaticAllocationScope, HasParent<GPUModuleOp>, IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+function_type	::mlir::TypeAttr	type attribute of function type
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+workgroup_attrib_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+private_attrib_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+known_block_size	::mlir::DenseI32ArrayAttr	i32 dense array attribute with 3 elements (if present)
+known_grid_size	::mlir::DenseI32ArrayAttr	i32 dense array attribute with 3 elements (if present)

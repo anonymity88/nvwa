@@ -1,0 +1,26 @@
+cf.br (cf::BranchOp) ¶
+Branch operation
+
+Syntax:
+
+operation ::= `cf.br` $dest (`(` $destOperands^ `:` type($destOperands) `)`)? attr-dict
+The cf.br operation represents a direct branch operation to a given block. The operands of this operation are forwarded to the successor block, and the number and type of the operands must match the arguments of the target block.
+
+Example:
+
+^bb2:
+  %2 = call @someFn()
+  cf.br ^bb3(%2 : tensor<*xf32>)
+^bb3(%3: tensor<*xf32>):
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: BranchOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+destOperands	variadic of any type
+Successors: ¶
+Successor	Description
+dest	any successor

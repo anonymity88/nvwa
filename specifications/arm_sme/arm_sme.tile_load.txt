@@ -1,0 +1,43 @@
+arm_sme.tile_load (arm_sme::TileLoadOp) ¶
+Tile load operation
+
+Syntax:
+
+operation ::= `arm_sme.tile_load` $base `[` $indices `]` (`,` $padding `,` $mask^)? (`layout` `` $layout^)?attr-dict `:` type($base) `,` type($result)
+Loads a 2D SME “virtual tile” from memory defined by a base and indices, with the shape defined by the 2D scalable vector type of the result tile. An optional tile slice layout attribute specifies whether the slices of the tile being loaded are horizontal (default) or vertical. The slice of memory must be contiguous. The memref must be either rank 1 or rank 2 with dynamic dimensions, since the operation is scalable, and the element type must be a scalar that matches the element type of the result.
+
+An optional SSA value padding of the same elemental type as the MemRef is provided to specify a fallback value in the case of masking.
+
+An optional SSA value mask may be specified to mask out elements read from the MemRef. The mask type is an i1 vector with a shape that matches how elements are read from the MemRef. Elements whose corresponding mask element is 0 are masked out and replaced with padding.
+
+If either padding or mask are specified, both must be specified.
+
+Example 1: Load an 8-bit element ZA tile with horizontal layout (default) from memory (ZA0.B).
+
+%tile = arm_sme.tile_load %base[%c0, %c0] : memref<?x?xi8>, vector<[16]x[16]xi8>
+Example 2: Load a FP 32-bit element ZA tile with vertical layout from memory.
+
+%tile = arm_sme.tile_load %base[%c0, %c0] layout<vertical> : memref<?x?xf32>, vector<[4]x[4]xf32>
+Example 3: Load a 128-bit element ZA tile with horizontal layout (default) from memory.
+
+%tile = arm_sme.tile_load %base[%c0, %c0] layout<horizontal> : memref<?x?xi128>, vector<[1]x[1]xi128>
+Example 4: Masked load of int 32-bit element ZA tile with horizontal layout (default) from memory.
+
+%tile = arm_sme.tile_load %base[%c0, %c0], %pad, %mask : memref<?x?xf32>, vector<[4]x[4]xf32>
+Traits: AttrSizedOperandSegments
+
+Interfaces: ArmSMETileOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+layout	::mlir::arm_sme::TileSliceLayoutAttr	
+Layout of a tile slice
+Operands: ¶
+Operand	Description
+base	memref of any type values
+indices	variadic of index
+padding	any type
+mask	vector of any type values
+Results: ¶
+Result	Description
+result	a vector type that fits into a SME tile

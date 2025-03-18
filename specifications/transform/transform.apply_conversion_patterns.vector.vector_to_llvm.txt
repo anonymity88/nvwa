@@ -1,0 +1,149 @@
+transform.apply_conversion_patterns.vector.vector_to_llvm (transform::ApplyVectorToLLVMConversionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.vector.vector_to_llvm` attr-dict
+Collects patterns that convert vector dialect ops to LLVM dialect ops. These patterns require an “LLVMTypeConverter”.
+
+The patterns can be customized as follows:
+
+reassociate_fp_reductions: Allows LLVM to reassociate floating-point reductions for speed.
+force_32bit_vector_indices: Allows the compiler to assume that vector indices fit in 32-bit if that yields faster code.
+Interfaces: ConversionPatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reassociate_fp_reductions	::mlir::BoolAttr	bool attribute
+force_32bit_vector_indices	::mlir::BoolAttr	bool attribute
+TransformHandleTypeInterface (TransformHandleTypeInterface) ¶
+Types that can be used for the Transform dialect operation handle values. Such types define the properties of Payload IR operations associated with the handle. A user of such a handle can assume that these properties have been verified for any Payload IR operation associated with it.
+
+Methods: ¶
+checkPayload ¶
+::mlir::DiagnosedSilenceableFailure checkPayload(::mlir::Location loc, ::mlir::ArrayRef<::mlir::Operation *> payload);
+Checks if the given associated objects (Payload IR operations or attributes) satisfy the conditions defined by this type. If not, produces a silenceable error at the specified location.
+
+NOTE: This method must be implemented by the user.
+
+TransformParamTypeInterface (TransformParamTypeInterface) ¶
+Types that can be used for the Transform dialect parameter values. Such types define the structure of the parameters associated with the value, e.g., their underlying type. A user of the value can assume that the parameter has been verified.
+
+Methods: ¶
+checkPayload ¶
+::mlir::DiagnosedSilenceableFailure checkPayload(::mlir::Location loc, ::mlir::ArrayRef<::mlir::Attribute> payload);
+Checks if the given associated objects (Payload IR operations or attributes) satisfy the conditions defined by this type. If not, produces a silenceable error at the specified location.
+
+NOTE: This method must be implemented by the user.
+
+TransformValueHandleTypeInterface (TransformValueHandleTypeInterface) ¶
+Types that can be used for the Transform dialect handle values pointing to Payload IR values. Such types define the properties of Payload IR values associated with the handle. Users of such a handle can assume that these properties have been verified for any Payload IR value associated with it.
+
+Methods: ¶
+checkPayload ¶
+::mlir::DiagnosedSilenceableFailure checkPayload(::mlir::Location loc, ::mlir::ArrayRef<::mlir::Value> payload);
+Checks if the given associated objects (Payload IR operations or attributes) satisfy the conditions defined by this type. If not, produces a silenceable error at the specified location.
+
+NOTE: This method must be implemented by the user.
+
+ConversionPatternDescriptorOpInterface (ConversionPatternDescriptorOpInterface) ¶
+This interface should be implemented by ops that select conversion patterns of a transform.apply_patterns op. It provides a method to populate a rewrite pattern set with conversion patterns.
+
+Note: Non-conversion rewrite patterns should not be populated with ConversionPatternDescriptorOpInterface because it is not generally safe to use non-conversion rewrite patterns as part of a dialect conversion.
+
+Methods: ¶
+populatePatterns ¶
+void populatePatterns(::mlir::TypeConverter &typeConverter, ::mlir::RewritePatternSet &patterns);
+Populate conversion patterns into the given pattern set with the given type converter.
+
+NOTE: This method must be implemented by the user.
+
+populateConversionTargetRules ¶
+void populateConversionTargetRules(const ::mlir::TypeConverter &typeConverter, ::mlir::ConversionTarget &conversionTarget);
+Populate the ConversionTarget using the final TypeConverter. The default implementation is to do nothing. Overriding this method can be useful in order to setup the ConversionTarget for structural type conversions. In such a situation, an op’s legality depends on using the TypeConverter to determine whether the op’s operand and result types are legal (defined as converting to themselves).
+
+NOTE: This method must be implemented by the user.
+
+getTypeConverter ¶
+std::unique_ptr<::mlir::TypeConverter> getTypeConverter();
+Return the type converter to be used with this pattern set. If no type converter is specified, the default type converter of the enclosing “apply_conversion_patterns” op is used.
+
+NOTE: This method must be implemented by the user.
+
+verifyTypeConverter ¶
+::llvm::LogicalResult verifyTypeConverter(TypeConverterBuilderOpInterface builder);
+Verify the default type converter that is provided by the enclosing “apply_conversion_patterns” op.
+
+NOTE: This method must be implemented by the user.
+
+FindPayloadReplacementOpInterface (FindPayloadReplacementOpInterface) ¶
+This interface is queried by the TrackingListener and can be implemented by payload ops to indicate that the lookup should be continue with its operands when looking for payload op replacements.
+
+Example: Consider the case where a tracked “test.foo” payload op is replaced with a new “test.foo” op, but wrapped in a “tensor.reshape” op. In that case, the mapping of the original “test.foo” op should be updated with the new “test.foo” op. A “tensor.reshape” is a metadata-only op that should be skipped when inspecting the replacement values of the original “test.foo” op. More details can be found at TrackingListener documentation.
+
+Note: Ops that implement CastOpInterface do not need to implement this interface. Such ops are skipped by default. This interface should be implemented by cast-like/metadata-only ops that cannot implement CastOpInterface.
+
+Methods: ¶
+getNextOperands ¶
+::llvm::SmallVector<::mlir::Value> getNextOperands();
+Return the operands at which the lookup for replacement payload ops should continue.
+
+NOTE: This method must be implemented by the user.
+
+PatternDescriptorOpInterface (PatternDescriptorOpInterface) ¶
+This interface should be implemented by ops that select rewrite patterns of a transform.apply_patterns op. It provides a method to populate a rewrite pattern set with patterns.
+
+Note: Conversion patterns are rewrite patterns in MLIR, but they should not be populated with PatternDescriptorOpInterface because they cannot be used in a greedy pattern rewrite.
+
+Methods: ¶
+populatePatterns ¶
+void populatePatterns(::mlir::RewritePatternSet &patterns);
+Populate rewrite patterns into the given pattern set.
+
+NOTE: This method must be implemented by the user.
+
+populatePatternsWithState ¶
+void populatePatternsWithState(::mlir::RewritePatternSet &patterns, ::mlir::transform::TransformState &state);
+Populate rewrite patterns into the given pattern set taking into account the transform state.
+
+NOTE: This method must be implemented by the user.
+
+TransformOpInterface (TransformOpInterface) ¶
+This interface is to be implemented by operations that identify transformations to be performed on other operations. The former are referred to as transform IR operations. The latter are referred to as payload IR operations. Such transform IR operations provide a fine-grain control mechanism over how transformations are applied by using and defining transform IR values, referred to as handles, that correspond to sets of operations in the payload IR. Transformations are applied starting from the operations identified by handles, but may affect other operations as well. Further restrictions may be imposed by flows that rely on transform IR operations to control transformations.
+
+Methods: ¶
+apply ¶
+::mlir::DiagnosedSilenceableFailure apply(::mlir::transform::TransformRewriter &rewriter, ::mlir::transform::TransformResults &transformResults, ::mlir::transform::TransformState &state);
+Applies the transformation represented by the current operation. This accepts as arguments the object that must be populated with results of the current transformation and a transformation state object that can be used for queries, e.g., to obtain the list of operations on which the transformation represented by the current op is targeted. Returns a special status object indicating whether the transformation succeeded or failed, and, if it failed, whether the failure is recoverable or not.
+
+IR must be created, modified and deleted with the provided rewriter. implementations are responsible for setting the insertion point of the rewriter to the desired location.
+
+NOTE: This method must be implemented by the user.
+
+allowsRepeatedHandleOperands ¶
+bool allowsRepeatedHandleOperands();
+Indicates whether the op instance allows its handle operands to be associated with the same payload operations.
+
+NOTE: This method must be implemented by the user.
+
+TypeConverterBuilderOpInterface (TypeConverterBuilderOpInterface) ¶
+This interface should be implemented by ops that specify a type converter for a dialect conversion, or to populate a type converter with conversions.
+
+When such ops are intended to be used with “apply_conversion_patterns” or other operations that expect a type converter, a non-default implementation of getTypeConverter should be implemented. For use with “cast_and_call” like ops that construct a type converter iteratively, non-default populateTypeMaterializations should be implemented.
+
+Methods: ¶
+getTypeConverter ¶
+std::unique_ptr<::mlir::TypeConverter> getTypeConverter();
+Return the type converter to be used with a dialect conversion.
+
+NOTE: This method must be implemented by the user.
+
+getTypeConverterType ¶
+static StringRef getTypeConverterType();
+Return the type of type converter that this getTypeConverter returns. This function is used for op verification.
+
+NOTE: This method must be implemented by the user.
+
+populateTypeMaterializations ¶
+void populateTypeMaterializations(::mlir::TypeConverter &converter);
+Populate the given type converter with source/target materialization functions.
+
+NOTE: This method must be implemented by the user.

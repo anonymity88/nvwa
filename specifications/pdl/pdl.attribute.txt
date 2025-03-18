@@ -1,0 +1,28 @@
+pdl.attribute (pdl::AttributeOp) ¶
+Define an input attribute in a pattern
+
+Syntax:
+
+operation ::= `pdl.attribute` (`:` $valueType^)? (`=` $value^)? attr-dict-with-keyword
+pdl.attribute operations capture named attribute edges into an operation. Instances of this operation define, and partially constrain, attributes of a given operation. A pdl.attribute may partially constrain the input by specifying an expected attribute value type (via a pdl.type operation), or a constant value for the attribute (via val). Only one of these may be set for a given input, as the type of the constant value provides the type. When defined within a pdl.rewrite region, the constant value must be specified.
+
+Example:
+
+// Define an attribute:
+%attr = pdl.attribute
+
+// Define an attribute with an expected type:
+%type = pdl.type : i32
+%attr = pdl.attribute : %type
+
+// Define an attribute with a constant value:
+%attr = pdl.attribute = "hello"
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	any attribute
+Operands: ¶
+Operand	Description
+valueType	PDL handle to an mlir::Type
+Results: ¶
+Result	Description
+attr	PDL handle to an mlir::Attribute

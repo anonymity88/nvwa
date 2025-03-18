@@ -1,0 +1,27 @@
+tensor.generate (tensor::GenerateOp) ¶
+Creates a dynamically sized tensor from elements
+
+Syntax:
+
+operation ::= `tensor.generate` $dynamicExtents $body attr-dict `:` type($result)
+This operation creates a dynamically sized tensor with elements of any type. It expects one index operand per dynamic extent of the result tensor.
+
+The body region defines the tensor’s elements. It takes index operands as its region arguments that span the index space. The element at the given position is yielded with the yield operation (see YieldOp). There is no defined ordering to the invocations of the body. It is conceptually a “parallel map” operation.
+
+Example:
+
+  %tnsr = tensor.generate %m, %n {
+  ^bb0(%i : index, %j : index, %k : index):
+    ...
+    yield %elem : f32
+  } : tensor<?x3x?f32>
+Traits: RecursiveMemoryEffects, SingleBlockImplicitTerminator<mlir::tensor::YieldOp>, SingleBlock
+
+Interfaces: OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands: ¶
+Operand	Description
+dynamicExtents	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

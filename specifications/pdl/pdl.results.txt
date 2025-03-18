@@ -1,0 +1,39 @@
+pdl.results (pdl::ResultsOp) ¶
+Extract a result group from an operation
+
+Syntax:
+
+operation ::= `pdl.results` ($index^)? `of` $parent custom<ResultsValueType>(ref($index), type($val))
+              attr-dict
+pdl.results operations extract a result group from an operation within a pattern or rewrite region. If an index is provided, this operation extracts a result group as defined by the ODS definition of the operation. In this case the result of this operation may be either a single pdl.value or a pdl.range<value>, depending on the constraint of the result in ODS. If no index is provided, this operation extracts the full result range of the operation.
+
+Example:
+
+// Extract all of the results of an operation:
+%operation = pdl.operation ...
+%results = pdl.results of %operation
+
+// Extract the results in the first result group of an operation, which is
+// variadic:
+%operation = pdl.operation ...
+%results = pdl.results 0 of %operation -> !pdl.range<value>
+
+// Extract the results in the second result group of an operation, which is
+// not variadic:
+%operation = pdl.operation ...
+%results = pdl.results 1 of %operation -> !pdl.value
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+index	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+parent	PDL handle to an mlir::Operation *
+Results: ¶
+Result	Description
+val	single element or range of PDL handle for an mlir::Value

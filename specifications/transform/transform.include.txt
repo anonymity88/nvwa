@@ -1,0 +1,21 @@
+transform.include (transform::IncludeOp) ¶
+Includes a named transform sequence
+
+Syntax:
+
+operation ::= `transform.include` $target `failures` `(` $failure_propagation_mode `)``(` $operands `)` attr-dict `:` functional-type($operands, $results)
+The application of this transform operation is equivalent to applying the operations contained in the named transform sequence with operands being remapped to block arguments. The behavior of the operation when a transformation in the included named sequence produces a silenceable error is controlled by the failure_propagation_mode attribute. When set to propagate, the failure of any nested transformation in the sequence implies immediate failure of the entire sequence with a silenceable error, and no further transformation is attempted. When set to suppress, silenceable errors in nested operations are ignored and further transformations are applied. Beware that even silenceable errors may leave the payload IR in a state unsuitable for further transformations. It is the responsibility of the user to ensure the following transformations are robust enough when errors are suppressed. Definite errors are propagated immediately regardless of the mode. The objects associated with the results of this operation are the same as those associated with the operands of the transform.yield in the referenced named sequence.
+
+Interfaces: CallOpInterface, MatchOpInterface, MemoryEffectOpInterface, SymbolUserOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+target	::mlir::SymbolRefAttr	symbol reference attribute
+failure_propagation_mode	::mlir::transform::FailurePropagationModeAttr	
+Silenceable error propagation policy
+Operands: ¶
+Operand	Description
+operands	variadic of any transform handle or parameter
+Results: ¶
+Result	Description
+results	variadic of any transform handle or parameter

@@ -1,0 +1,23 @@
+pdl_interp.get_defining_op (pdl_interp::GetDefiningOpOp) ¶
+Get the defining operation of a Value
+
+Syntax:
+
+operation ::= `pdl_interp.get_defining_op` `of` $value `:` type($value) attr-dict
+pdl_interp.get_defining_op operations try to get the defining operation of a specific value or range of values. In the case of range, the defining op of the first value is returned. If the value is not an operation result or range of operand results, null is returned.
+
+Example:
+
+%op = pdl_interp.get_defining_op of %value : !pdl.value
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	single element or range of PDL handle for an mlir::Value
+Results: ¶
+Result	Description
+inputOp	PDL handle to an mlir::Operation *

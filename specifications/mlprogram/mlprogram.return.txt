@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+// ReturnOp
+//===----------------------------------------------------------------------===//
+
+def MLProgram_ReturnOp : MLProgram_Op<"return", [
+    Pure, HasParent<"FuncOp">, ReturnLike, Terminator
+  ]> {
+  let summary = "Returns values from a `func` function";
+  let description = [{
+    The `return` operation terminates a `func` function by yielding values
+    to the caller.
+    The operation takes variable number of operands and produces no results.
+    The operand number and types must match the signature of the function
+    that contains the operation.
+  }];
+
+  let arguments = (ins Variadic<AnyType>:$operands);
+
+  let builders = [OpBuilder<(ins), [{
+    build($_builder, $_state, std::nullopt);
+  }]>];
+
+  let assemblyFormat = "attr-dict ($operands^ `:` type($operands))?";
+  let hasVerifier = 1;
+}
+

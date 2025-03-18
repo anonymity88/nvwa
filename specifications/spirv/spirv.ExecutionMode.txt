@@ -1,0 +1,25 @@
+spirv.ExecutionMode (spirv::ExecutionModeOp) ¶
+Declare an execution mode for an entry point.
+
+Entry Point must be the Entry Point operand of an OpEntryPoint instruction.
+
+Mode is the execution mode. See Execution Mode.
+
+This instruction is only valid when the Mode operand is an execution mode that takes no Extra Operands, or takes Extra Operands that are not operands.
+
+execution-mode ::= "Invocations" | "SpacingEqual" |
+                   <and other SPIR-V execution modes...>
+
+execution-mode-op ::= `spirv.ExecutionMode ` ssa-use execution-mode
+                      (integer-literal (`, ` integer-literal)* )?
+Example: ¶
+spirv.ExecutionMode @foo "ContractionOff"
+spirv.ExecutionMode @bar "LocalSizeHint", 3, 4, 5
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fn	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+execution_mode	::mlir::spirv::ExecutionModeAttr	
+valid SPIR-V ExecutionMode
+values	::mlir::ArrayAttr	32-bit integer array attribute

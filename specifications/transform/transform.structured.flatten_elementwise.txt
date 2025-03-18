@@ -1,0 +1,22 @@
+transform.structured.flatten_elementwise (transform::FlattenElementwiseLinalgOp) ¶
+Syntax:
+
+operation ::= `transform.structured.flatten_elementwise` $target attr-dict `:` functional-type($target, results)
+Flattens the iteration space and (applicable) operands of elementwise linalg ops to a single dimension.
+
+Returns one handle:
+
+Flattened linalg operation.
+Return modes: ¶
+Returns a definite failure if target is not isolated from above. Returns a silenceable failure if the pattern application failed.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

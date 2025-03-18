@@ -1,0 +1,31 @@
+tensor.cast (tensor::CastOp) ¶
+Tensor cast operation
+
+Syntax:
+
+operation ::= `tensor.cast` $source attr-dict `:` type($source) `to` type($dest)
+Convert a tensor from one type to an equivalent type without changing any data elements. The source and destination types must both be tensor types with the same element type. If both are ranked, then the rank should be the same and static dimensions should match. The operation is invalid if converting to a mismatching constant dimension.
+
+Example:
+
+// Convert from unknown rank to rank 2 with unknown dimension sizes.
+%2 = tensor.cast %1 : tensor<*xf32> to tensor<?x?xf32>
+
+// Convert to a type with more known dimensions.
+%3 = tensor.cast %2 : tensor<?x?xf32> to tensor<4x?xf32>
+
+// Discard static dimension and rank information.
+%4 = tensor.cast %3 : tensor<4x?xf32> to tensor<?x?xf32>
+%5 = tensor.cast %4 : tensor<?x?xf32> to tensor<*xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: CastOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	tensor of any type values
+Results: ¶
+Result	Description
+dest	tensor of any type values

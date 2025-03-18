@@ -1,0 +1,62 @@
+//===----------------------------------------------------------------------===//
+// AddOp
+//===----------------------------------------------------------------------===//
+
+def AddOp : ComplexArithmeticOp<"add"> {
+  let summary = "complex addition";
+  let description = [{
+    The `add` operation takes two complex numbers and returns their sum.
+
+    Example:
+
+    ```mlir
+    %a = complex.add %b, %c : complex<f32>
+    ```
+  }];
+
+  let hasFolder = 1;
+}
+
+//===----------------------------------------------------------------------===//
+// Atan2
+//===----------------------------------------------------------------------===//
+
+def Atan2Op : ComplexArithmeticOp<"atan2"> {
+  let summary = "complex 2-argument arctangent";
+  let description = [{
+    For complex numbers it is expressed using complex logarithm
+    atan2(y, x) = -i * log((x + i * y) / sqrt(x**2 + y**2))
+
+    Example:
+
+    ```mlir
+    %a = complex.atan2 %b, %c : complex<f32>
+    ```
+  }];
+}
+
+
+//===----------------------------------------------------------------------===//
+// Bitcast
+//===----------------------------------------------------------------------===//
+
+def BitcastOp : Complex_Op<"bitcast", [Pure]> {
+
+  let summary = "computes bitcast between complex and equal arith types";
+  let description = [{
+
+    Example:
+
+    ```mlir
+         %a = complex.bitcast %b : complex<f32> -> i64
+    ```
+  }];
+  let assemblyFormat = "$operand attr-dict `:` type($operand) `to` type($result)";
+  let arguments = (ins AnyType:$operand);
+  let results = (outs AnyType:$result);
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+

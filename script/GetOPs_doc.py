@@ -2,10 +2,10 @@ import os
 import re
 
 # 源文件路径
-input_file = '/home/llm/test/Corpus.txt'
+input_file = 'test/Corpus.txt'
 
 # 目标文件夹
-output_dir = 'OPs/transform'
+output_dir = 'specifications/transform'
 
 # 确保文件夹存在，不存在则创建
 os.makedirs(output_dir, exist_ok=True)

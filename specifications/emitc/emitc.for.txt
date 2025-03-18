@@ -1,0 +1,26 @@
+emitc.for (emitc::ForOp) ¶
+For operation
+
+The emitc.for operation represents a C loop of the following form:
+
+for (T i = lb; i < ub; i += step) { /* ... */ } // where T is typeof(lb)
+The operation takes 3 SSA values as operands that represent the lower bound, upper bound and step respectively, and defines an SSA value for its induction variable. It has one region capturing the loop body. The induction variable is represented as an argument of this region. This SSA value is a signless integer, or an index. The step is a value of same type.
+
+This operation has no result. The body region must contain exactly one block that terminates with emitc.yield. Calling ForOp::build will create such a region and insert the terminator implicitly if none is defined, so will the parsing even in cases when it is absent from the custom format. For example:
+
+// Index case.
+emitc.for %iv = %lb to %ub step %step {
+  ... // body
+}
+...
+// Integer case.
+emitc.for %iv_32 = %lb_32 to %ub_32 step %step_32 : i32 {
+  ... // body
+}
+Traits: RecursiveMemoryEffects, SingleBlockImplicitTerminator<emitc::YieldOp>, SingleBlock
+
+Operands: ¶
+Operand	Description
+lowerBound	integer, index or opaque type supported by EmitC
+upperBound	integer, index or opaque type supported by EmitC
+step	integer, index or opaque type supported by EmitC

@@ -1,0 +1,33 @@
+gpu.subgroup_mma_elementwise (gpu::SubgroupMmaElementwiseOp) ¶
+GPU warp elementwise operation on a matrix
+
+Syntax:
+
+operation ::= `gpu.subgroup_mma_elementwise` $opType $args attr-dict `:` functional-type($args, $res)
+The gpu.subgroup_mma_elementwise takes !gpu.mma_matrix inputs and compute a new !gpu.mma_matrix by applying an elementwise operation to each element.
+
+Since the operation is elementwise and the matrix type must match, the matrix elements are processed independently of the matrix layout.
+
+This op is meant to be used along with gpu.subgroup_mma_compute.
+
+Example:
+
+ %0 =  %A, %B { opType = "ADD" } :
+  (!gpu.mma_matrix<16x16xf16, "COp">, !gpu.mma_matrix<16x16xf16, "COp">)
+  -> !gpu.mma_matrix<16x16xf16, "COp">
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+opType	::mlir::gpu::MMAElementwiseOpAttr	
+elementwise operation to apply to mma matrix
+Operands: ¶
+Operand	Description
+args	variadic of MMAMatrix type
+Results: ¶
+Result	Description
+res	MMAMatrix type

@@ -1,0 +1,27 @@
+complex.exp (complex::ExpOp) ¶
+Computes exponential of a complex number
+
+Syntax:
+
+operation ::= `complex.exp` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The exp op takes a single complex number and computes the exponential of it, i.e. exp(x) or e^(x), where x is the input value. e denotes Euler’s number and is approximately equal to 2.718281.
+
+Example:
+
+%a = complex.exp %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

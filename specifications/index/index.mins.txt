@@ -1,0 +1,25 @@
+index.mins (index::MinSOp) ¶
+Index signed minimum
+
+Syntax:
+
+operation ::= `index.mins` $lhs `,` $rhs attr-dict
+The index.mins operation takes two index values and computes their signed minimum value. Treats the leading bit as the sign, i.e. min(-2, 6) = -2.
+
+Example:
+
+// c = min(a, b)
+%c = index.mins %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

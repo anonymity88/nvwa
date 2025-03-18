@@ -1,0 +1,42 @@
+//===----------------------------------------------------------------------===//
+// ConstantOp
+//===----------------------------------------------------------------------===//
+
+def ConstantOp : Func_Op<"constant",
+    [ConstantLike, Pure,
+     DeclareOpInterfaceMethods<SymbolUserOpInterface>,
+     DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>]> {
+  let summary = "constant";
+  let description = [{
+    The `func.constant` operation produces an SSA value from a symbol reference
+    to a `func.func` operation
+
+    Example:
+
+    ```mlir
+    // Reference to function @myfn.
+    %2 = func.constant @myfn : (tensor<16xf32>, f32) -> tensor<16xf32>
+
+    // Equivalent generic forms
+    %2 = "func.constant"() { value = @myfn } : () -> ((tensor<16xf32>, f32) -> tensor<16xf32>)
+    ```
+
+    MLIR does not allow direct references to functions in SSA operands because
+    the compiler is multithreaded, and disallowing SSA values to directly
+    reference a function simplifies this
+    ([rationale](../Rationale/Rationale.md#multithreading-the-compiler)).
+  }];
+
+  let arguments = (ins FlatSymbolRefAttr:$value);
+  let results = (outs AnyType);
+  let assemblyFormat = "attr-dict $value `:` type(results)";
+
+  let extraClassDeclaration = [{
+    /// Returns true if a constant operation can be built with the given value
+    /// and result type.
+    static bool isBuildableWith(Attribute value, Type type);
+  }];
+
+  let hasFolder = 1;
+}
+

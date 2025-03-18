@@ -1,0 +1,20 @@
+gpu.printf (gpu::PrintfOp) ¶
+Device-side printf, as in CUDA or OpenCL, for debugging
+
+Syntax:
+
+operation ::= `gpu.printf` $format attr-dict ($args^ `:` type($args))?
+gpu.printf takes a literal format string format and an arbitrary number of scalar arguments that should be printed.
+
+The format string is a C-style printf string, subject to any restrictions imposed by one’s target platform.
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::SideEffects::DefaultResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+format	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+args	variadic of integer or index or floating-point

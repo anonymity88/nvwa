@@ -1,0 +1,23 @@
+vector.step (vector::StepOp) ¶
+A linear sequence of values from 0 to N
+
+Syntax:
+
+operation ::= `vector.step` attr-dict `:` type($result)
+A step operation produces an index vector, i.e. a 1-D vector of values of index type that represents a linear sequence from 0 to N-1, where N is the number of elements in the result vector.
+
+Supports fixed-width and scalable vectors.
+
+Examples:
+
+%0 = vector.step : vector<4xindex> ; [0, 1, 2, 3]
+%1 = vector.step : vector<[4]xindex> ; [0, 1, .., <vscale * 4 - 1>]
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+result	vector of index values of ranks 1

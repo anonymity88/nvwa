@@ -1,0 +1,35 @@
+arm_sme.store_tile_slice (arm_sme::StoreTileSliceOp) ¶
+Tile slice store operation
+
+Syntax:
+
+operation ::= `arm_sme.store_tile_slice` $tile `,` $tile_slice_index `,` $mask `,` $base `[` $indices `]` (`layout` `` $layout^)?
+              attr-dict `:` type($base) `,` type($mask) `,` type($tile)
+Stores a 1D tile slice from a 2D SME “virtual tile” into memory. The tile slice is defined by the dimension of the 2D scalable vector type pointed by the index. A tile slice index describes where in the input tile the tile slice is stored from. An optional tile slice layout attribute specifies whether the tile slice being stored from the given index is horizontal (default) or vertical.
+
+The slice of memory written is defined by a base and indices and must be contiguous. The memref must be either rank 1 or rank 2, have dynamic dimensions since the operation is scalable, and the element type must be a scalar that matches the element type of the input tile.
+
+The provided mask is used to specify which elements of the tile slice will be stored.
+
+Example 1: Store vector<[16]xi8> horizontal (default) tile slice from tile at given index to memory.
+
+arm_sme.store_tile_slice %tile, %tile_slice_index, %mask, %base[%c0] : vector<[16]x[16]xi8>, vector<[16]xi1>, memref<?x?xi8>
+Example 2: Store vector<[4]xf32> vertical tile slice from tile at given index to memory.
+
+arm_sme.store_tile_slice %tile, %tile_slice_index, %mask, %base[%c0] layout<vertical> : vector<[4]x[4]xf32>, vector<[4]xi1>, memref<?x?xf32>
+Example 3: Store a vector<[1]xi128> vertical tile slice from tile at given index to memory.
+
+arm_sme.store_tile_slice %tile, %tile_slice_index, %mask, %base[%c0] layout<vertical> : vector<[1]x[1]xi128>, vector<[1]xi1>, memref<?x?xi128>
+Interfaces: ArmSMETileOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+layout	::mlir::arm_sme::TileSliceLayoutAttr	
+Layout of a tile slice
+Operands: ¶
+Operand	Description
+tile	a vector type that fits into a SME tile
+tile_slice_index	index
+mask	a vector type that matches the size of a SVE predicate
+base	memref of any type values
+indices	variadic of index

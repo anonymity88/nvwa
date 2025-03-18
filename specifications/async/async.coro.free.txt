@@ -1,0 +1,12 @@
+async.coro.free (async::CoroFreeOp) ¶
+Deallocates the coroutine frame
+
+Syntax:
+
+operation ::= `async.coro.free` $id `,` $handle attr-dict
+The async.coro.free deallocates the coroutine frame created by the async.coro.begin operation.
+
+Operands: ¶
+Operand	Description
+id	switched-resume coroutine identifier
+handle	coroutine handle

@@ -1,0 +1,23 @@
+pdl_interp.create_attribute (pdl_interp::CreateAttributeOp) ¶
+Create an interpreter handle to a constant Attribute
+
+Syntax:
+
+operation ::= `pdl_interp.create_attribute` $value attr-dict-with-keyword
+pdl_interp.create_attribute operations generate a handle within the interpreter for a specific constant attribute value.
+
+Example:
+
+%attr = pdl_interp.create_attribute 10 : i64
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	any attribute
+Results: ¶
+Result	Description
+attribute	PDL handle to an mlir::Attribute

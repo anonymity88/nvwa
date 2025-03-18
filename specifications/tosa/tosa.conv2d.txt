@@ -1,0 +1,31 @@
+//===----------------------------------------------------------------------===//
+// Operator: conv2d
+//===----------------------------------------------------------------------===//
+def Tosa_Conv2DOp : Tosa_InferShapedTypeOp<"conv2d"> {
+  let summary = "2D Convolution Operator";
+
+  let description = [{
+    Performs a 2D convolution over the given tensor input, using the weight
+    tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor4D:$input,
+    4DTensorOf<[Tosa_Weight]>:$weight,
+    Tosa_Tensor1D:$bias,
+
+    Tosa_IntArrayAttr4:$pad,
+    Tosa_IntArrayAttr2:$stride,
+    Tosa_IntArrayAttr2:$dilation,
+    OptionalAttr<Tosa_ConvOpQuantizationAttr>:$quantization_info,
+    DefaultValuedOptionalAttr<BoolAttr, "false">:$local_bound
+  );
+
+  let results = (outs
+    Tosa_Tensor4D:$output
+  );
+
+  let builders = [Tosa_ConvOpQuantInfoBuilder];
+  let hasVerifier = 1;
+}
+

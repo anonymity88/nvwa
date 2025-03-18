@@ -1,0 +1,47 @@
+llvm.load (LLVM::LoadOp) ¶
+Syntax:
+
+operation ::= `llvm.load` (`volatile` $volatile_^)? $addr
+              (`atomic` (`syncscope` `(` $syncscope^ `)`)? $ordering^)?
+              (`invariant` $invariant^)?
+              (`invariant_group` $invariantGroup^)?
+              attr-dict `:` qualified(type($addr)) `->` type($res)
+The load operation is used to read from memory. A load may be marked as atomic, volatile, and/or nontemporal, and takes a number of optional attributes that specify aliasing information.
+
+An atomic load only supports a limited set of pointer, integer, and floating point types, and requires an explicit alignment.
+
+Examples:
+
+// A volatile load of a float variable.
+%0 = llvm.load volatile %ptr : !llvm.ptr -> f32
+
+// A nontemporal load of a float variable.
+%0 = llvm.load %ptr {nontemporal} : !llvm.ptr -> f32
+
+// An atomic load of an integer variable.
+%0 = llvm.load %ptr atomic monotonic {alignment = 8 : i64}
+    : !llvm.ptr -> i64
+See the following link for more details: https://llvm.org/docs/LangRef.html#load-instruction
+
+Interfaces: AccessGroupOpInterface, AliasAnalysisOpInterface, DestructurableAccessorOpInterface, MemoryEffectOpInterface, PromotableMemOpInterface, SafeMemorySlotAccessOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+volatile_	::mlir::UnitAttr	unit attribute
+nontemporal	::mlir::UnitAttr	unit attribute
+invariant	::mlir::UnitAttr	unit attribute
+invariantGroup	::mlir::UnitAttr	unit attribute
+ordering	::mlir::LLVM::AtomicOrderingAttr	
+Atomic ordering for LLVM's memory model
+syncscope	::mlir::StringAttr	string attribute
+access_groups	::mlir::ArrayAttr	LLVM dialect access group metadata array
+alias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+noalias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+tbaa	::mlir::ArrayAttr	LLVM dialect TBAA tag metadata array
+Operands: ¶
+Operand	Description
+addr	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM type with size

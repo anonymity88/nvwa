@@ -1,0 +1,7 @@
+rocdl.s.setprio (ROCDL::SetPrioOp) ¶
+Syntax:
+
+operation ::= `rocdl.s.setprio` $priority attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+priority	::mlir::IntegerAttr	16-bit signless integer attribute

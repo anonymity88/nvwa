@@ -1,0 +1,54 @@
+mesh.all_to_all (mesh::AllToAllOp) ¶
+All-to-all over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.all_to_all` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              `split_axis` `=` $split_axis
+              `concat_axis` `=` $concat_axis
+              attr-dict `:` type($input) `->` type($result)
+Performs an all-to-all on tensor pieces split along split_axis. The resulting pieces are concatenated along concat_axis on ech device.
+
+Example:
+
+mesh.mesh @mesh0(shape = 3)
+...
+%1 = mesh.all_to_all %0 on @mesh0 mesh_axes = [0]
+  split_axis = 0 concat_axis = 0
+  : tensor<3x2xi8> -> tensor<3x2xi8>
+Input:
+
+ device  device  device
+ (0)     (1)     (2)
++-------+-------+-------+  | split and concat along
+| 11 12 | 21 22 | 31 32 |  | tensor axis 0
+| 13 14 | 23 24 | 33 34 |  ↓
+| 15 16 | 25 26 | 35 36 |
++-------+-------+-------+
+Result:
+
+ device  device  device
+ (0)     (1)     (2)
++-------+-------+-------+
+| 11 12 | 13 14 | 15 16 |
+| 21 22 | 23 24 | 25 26 |
+| 31 32 | 33 34 | 35 36 |
++-------+-------+-------+
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultElementType, SameOperandsAndResultRank
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+split_axis	::mlir::IntegerAttr	index attribute
+concat_axis	::mlir::IntegerAttr	index attribute
+Operands: ¶
+Operand	Description
+input	non-0-ranked.tensor of any type values
+Results: ¶
+Result	Description
+result	non-0-ranked.tensor of any type values

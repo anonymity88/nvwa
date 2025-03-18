@@ -1,0 +1,31 @@
+//===----------------------------------------------------------------------===//
+// CeilDivSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_CeilDivSIOp : Arith_IntBinaryOp<"ceildivsi",
+                                          [ConditionallySpeculatable]> {
+  let summary = "signed ceil integer division operation";
+  let description = [{
+    Signed integer division. Rounds towards positive infinity, i.e. `7 / -2 = -3`.
+
+    Divison by zero, or signed division overflow (minimum value divided by -1) 
+    is undefined behavior. When applied to `vector` and `tensor` values, the 
+    behavior is undefined if _any_ of its elements are divided by zero or has a 
+    signed division overflow.
+
+    Example:
+
+    ```mlir
+    // Scalar signed integer division.
+    %a = arith.ceildivsi %b, %c : i64
+    ```
+  }];
+
+  let extraClassDeclaration = [{
+    /// Interface method for ConditionallySpeculatable.
+    Speculation::Speculatability getSpeculatability();
+  }];
+
+  let hasFolder = 1;
+}
+

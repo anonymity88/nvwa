@@ -1,0 +1,16 @@
+transform.apply_patterns.vector.reduction_to_contract (transform::ApplyVectorReductionToContractPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.reduction_to_contract` attr-dict
+Apply opt-in patterns that convert reductions to contract:
+
+MultiReduceToContract
+CombineContractBroadcast
+CombineContractABTranspose
+CombineContractResultTranspose
+ReorderElementwiseOpsOnTranspose
+ReorderElementwiseOpsOnBroadcast
+ReorderCastOpsOnBroadcast
+These patterns have the effect of rewriting a vector.multi_reduce into a vector.contract.
+
+Interfaces: PatternDescriptorOpInterface

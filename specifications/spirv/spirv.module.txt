@@ -1,0 +1,39 @@
+spirv.module (spirv::ModuleOp) ¶
+The top-level op that defines a SPIR-V module
+
+This op defines a SPIR-V module using a MLIR region. The region contains one block. Module-level operations, including functions definitions, are all placed in this block.
+
+Using an op with a region to define a SPIR-V module enables “embedding” SPIR-V modules in other dialects in a clean manner: this op guarantees the validity and serializability of a SPIR-V module and thus serves as a clear-cut boundary.
+
+This op takes no operands and generates no results. This op should not implicitly capture values from the enclosing environment.
+
+This op has only one region, which only contains one block. The block has no terminator.
+
+addressing-model ::= `Logical` | `Physical32` | `Physical64` | ...
+memory-model ::= `Simple` | `GLSL450` | `OpenCL` | `Vulkan` | ...
+spv-module-op ::= `spirv.module` addressing-model memory-model
+                  (requires  spirv-vce-attribute)?
+                  (`attributes` attribute-dict)?
+                  region
+Example: ¶
+spirv.module Logical GLSL450  {}
+
+spirv.module Logical Vulkan
+    requires #spirv.vce<v1.0, [Shader], [SPV_KHR_vulkan_memory_model]>
+    attributes { some_additional_attr = ... } {
+  spirv.func @do_nothing() -> () {
+    spirv.Return
+  }
+}
+Traits: IsolatedFromAbove, NoRegionArguments, NoTerminator, SingleBlock, SymbolTable
+
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+addressing_model	::mlir::spirv::AddressingModelAttr	
+valid SPIR-V AddressingModel
+memory_model	::mlir::spirv::MemoryModelAttr	
+valid SPIR-V MemoryModel
+vce_triple	::mlir::spirv::VerCapExtAttr	version-capability-extension attribute
+sym_name	::mlir::StringAttr	string attribute

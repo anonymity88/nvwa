@@ -1,0 +1,21 @@
+shape.get_extent (shape::GetExtentOp) ¶
+Gets the specified extent from a shape or extent tensor
+
+Syntax:
+
+operation ::= `shape.get_extent` $shape `,` $dim attr-dict `:` type($shape) `,` type($dim) `->` type($extent)
+Gets the extent indexed by dim from the shape operand. If the shape is an error then it returns an invalid size.
+
+Traits: AlwaysSpeculatableImplTrait, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+shape	shape or extent tensor
+dim	size or index
+Results: ¶
+Result	Description
+extent	size or index

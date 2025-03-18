@@ -1,0 +1,23 @@
+llvm.extractvalue (LLVM::ExtractValueOp) ¶
+Extract a value from an LLVM struct.
+
+Syntax:
+
+operation ::= `llvm.extractvalue` $container `` $position attr-dict `:` type($container)
+              custom<InsertExtractValueElementType>(type($res), ref(type($container)),
+              ref($position))
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+position	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+container	LLVM aggregate type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

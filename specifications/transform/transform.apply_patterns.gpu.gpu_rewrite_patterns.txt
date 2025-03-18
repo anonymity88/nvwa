@@ -1,0 +1,10 @@
+transform.apply_patterns.gpu.gpu_rewrite_patterns (transform::ApplyGPURewritePatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.gpu.gpu_rewrite_patterns` attr-dict
+Collects GPU rewrite patterns comprising:
+
+GpuAllReduceRewrite patterns
+GpuGlobalIdRewriter patterns
+GpuShuffleRewriter patterns
+Interfaces: PatternDescriptorOpInterface

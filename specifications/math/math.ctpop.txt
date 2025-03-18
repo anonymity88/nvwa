@@ -1,0 +1,24 @@
+math.ctpop (math::CtPopOp) ¶
+Counts the number of set bits of an integer value
+
+Syntax:
+
+operation ::= `math.ctpop` $operand attr-dict `:` type($result)
+The ctpop operation computes the number of set bits of an integer value. It operates on scalar, tensor or vector.
+
+Example:
+
+// Scalar ctpop function value.
+%a = math.ctpop %b : i32
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	signless-integer-like
+Results: ¶
+Result	Description
+result	signless-integer-like

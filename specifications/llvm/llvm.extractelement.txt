@@ -1,0 +1,19 @@
+llvm.extractelement (LLVM::ExtractElementOp) ¶
+Extract an element from an LLVM vector.
+
+Syntax:
+
+operation ::= `llvm.extractelement` $vector `[` $position `:` type($position) `]` attr-dict `:` type($vector)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+vector	LLVM dialect-compatible vector type
+position	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

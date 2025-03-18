@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+// InsertValueOp
+//===----------------------------------------------------------------------===//
+
+def LLVM_InsertValueOp : LLVM_Op<
+    "insertvalue", [Pure, AllTypesMatch<["container", "res"]>]> {
+  let summary = "Insert a value into an LLVM struct.";
+
+  let arguments = (ins LLVM_AnyAggregate:$container, LLVM_PrimitiveType:$value,
+                       DenseI64ArrayAttr:$position);
+  let results = (outs LLVM_AnyAggregate:$res);
+
+  let assemblyFormat = [{
+    $value `,` $container `` $position attr-dict `:` type($container)
+    custom<InsertExtractValueElementType>(type($value), ref(type($container)),
+                                          ref($position))
+  }];
+
+  let hasVerifier = 1;
+
+  string llvmInstName = "InsertValue";
+  string llvmBuilder = [{
+    $res = builder.CreateInsertValue($container, $value,
+                                     extractPosition($position));
+  }];
+  string mlirBuilder = [{
+    auto *ivInst = cast<llvm::InsertValueInst>(inst);
+    $res = $_builder.create<LLVM::InsertValueOp>($_location,
+      $container, $value, getPositionFromIndices(ivInst->getIndices()));
+  }];
+}
+

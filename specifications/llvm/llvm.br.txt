@@ -1,0 +1,19 @@
+llvm.br (LLVM::BrOp) ¶
+Syntax:
+
+operation ::= `llvm.br` $dest (`(` $destOperands^ `:` type($destOperands) `)`)? attr-dict
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: BranchOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+loop_annotation	::mlir::LLVM::LoopAnnotationAttr	
+Operands: ¶
+Operand	Description
+destOperands	variadic of LLVM dialect-compatible type
+Successors: ¶
+Successor	Description
+dest	any successor

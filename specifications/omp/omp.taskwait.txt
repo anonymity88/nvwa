@@ -1,0 +1,24 @@
+omp.taskwait (omp::TaskwaitOp) ¶
+Taskwait construct
+
+Syntax:
+
+operation ::= `omp.taskwait` oilist(
+              `depend` `(`
+              custom<DependVarList>($depend_vars, type($depend_vars), $depend_kinds) `)`
+              |
+              `nowait` $nowait
+              ) attr-dict
+The taskwait construct specifies a wait on the completion of child tasks of the current task.
+
+The depend_kinds and depend_vars arguments are variadic lists of values that specify the dependencies of this particular task in relation to other tasks.
+
+The optional nowait attribute, when present, eliminates the implicit barrier at the end of the construct, so the parent operation can make progress even if the child operation has not completed yet.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+depend_kinds	::mlir::ArrayAttr	depend clause in a target or task construct array
+nowait	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+depend_vars	variadic of OpenMP-compatible variable type

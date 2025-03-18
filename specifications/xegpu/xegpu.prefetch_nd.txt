@@ -1,0 +1,25 @@
+xegpu.prefetch_nd (xegpu::PrefetchNdOp) ¶
+Prefetches a n-D block to cache
+
+Syntax:
+
+operation ::= `xegpu.prefetch_nd` $TensorDesc prop-dict attr-dict `:` qualified(type($TensorDesc))
+It issues an instruction to prefetch a block of data from continuous memory regions to each level of the cache based on their cache policy.
+
+Example:
+
+  xegpu.prefetch_nd %tdesc {l1_hint = #xegpu.cache_hint<cached>,
+                            l2_hint = #xegpu.cache_hint<cached>,
+                            l3_hint = #xegpu.cache_hint<cached>}
+    : !xegpu.tensor_desc<8x16xf16>
+Attributes: ¶
+Attribute	MLIR Type	Description
+l1_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l2_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l3_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+Operands: ¶
+Operand	Description
+TensorDesc	TensorDesc describing regions of interested data.

@@ -1,0 +1,98 @@
+//===----------------------------------------------------------------------===//
+// UnPackOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_UnPackOp : Tensor_RelayoutOp<"unpack"> {
+  let summary = "tensor unpack operation";
+  let description = [{
+    The "unpack" operation converts a source tensor of rank `n` with a tiled and
+    packed layout to a result tensor of rank `n - k`.
+
+    `inner_dims_pos` (mandatory) specifies `k` source tensor dimensions with
+    which the last `k` source tensor dimensions are combined, where
+    `0 < k <= n/2`. Each `inner_dims_pos` element must be `>= 0` and `< n - k`.
+    The order of the dimensions in `inner_dims_pos` matters: dimension
+    `inner_dims_pos[i]` is combined with dimension `n - k + i` (assuming that
+    `outer_dims_perm` is not specified).
+
+    `inner_tiles` (mandatory) specifies `k` tile sizes. These tile sizes
+    correspond to the least significant ("inner") source tensor dimension sizes.
+    The behavior of this op is undefined if:
+    - `inner_tiles` do not exactly match with the corresponding source tensor
+      dimension sizes.
+    - Or, `inner_tiles[i]` does not divide the size of dimension
+      `inner_dims_pos[i]` (assuming that `outer_dims_perm` is not specified)
+      evenly.
+
+    `outer_dims_perm` (optional) specifies a permutation for the outer
+    dimensions. If specified, it must have `n - k` elements. If specified, this
+    permutation is applied before combining any dimensions.
+
+    Example:
+
+    ```mlir
+    // NCnc to NC:
+    %0 = tensor.unpack %source inner_dims_pos = [0, 1] inner_tiles = [8, 32]
+        into %dest : tensor<16x8x8x32xf32> -> tensor<128x256xf32>
+
+    // CK to KCck:
+    %0 = tensor.unpack %source outer_dims_perm = [1, 0] inner_dims_pos = [0, 1]
+        inner_tiles = [8, 32] into %dest
+        : tensor<8x16x8x32xf32> -> tensor<128x256xf32>
+    ```
+  }];
+  let arguments = (ins AnyRankedTensor:$source,
+                       AnyRankedTensor:$dest,
+                       DefaultValuedOptionalAttr<DenseI64ArrayAttr, "{}">:$outer_dims_perm,
+                       DenseI64ArrayAttr:$inner_dims_pos,
+                       Variadic<Index>:$inner_tiles,
+                       DenseI64ArrayAttr:$static_inner_tiles);
+  let results = (outs AnyRankedTensor:$result);
+  let assemblyFormat = [{
+    $source
+    (`outer_dims_perm` `=` $outer_dims_perm^)?
+    `inner_dims_pos` `=` $inner_dims_pos
+    `inner_tiles` `=`
+    custom<DynamicIndexList>($inner_tiles, $static_inner_tiles)
+    `into` $dest attr-dict `:` type($source) `->` type($dest)
+  }];
+
+  let builders = [
+    OpBuilder<(ins "Value":$source, "Value":$dest,
+    "ArrayRef<int64_t>":$innerDimsPos,
+    "ArrayRef<OpFoldResult>":$innerTiles,
+    CArg<"ArrayRef<int64_t>", "{}">:$outerDimsPerm)>
+  ];
+
+  let extraClassDeclaration = commonExtraClassDeclaration # [{
+    static Value createDestinationTensor(OpBuilder &b, Location loc,
+        Value source, ArrayRef<OpFoldResult> innerTileSizes,
+        ArrayRef<int64_t> innerDimsPos, ArrayRef<int64_t> outerDimsPerm);
+
+    /// Build and return a new UnPackOp that is a clone of the current UnPackOp
+    /// with (innerDimsPos, innerTiles) (resp. outerDimsPerm) are permuted by
+    /// innerPermutation (resp. outerPermutation).
+    /// Asserts that:
+    ///   - At least one of innerPermutation or outerPermutation is non-empty.
+    ///   - If not empty, innerPermutation is a valid permutation of size
+    ///     matching innerDimPos.
+    ///   - If not empty, outerPermutation is a valid permutation of size
+    ///     matching outerDimsPerm.
+    UnPackOp createTransposedClone(OpBuilder &b,
+                                   Location loc,
+                                   Value transposedSource,
+                                   ArrayRef<int64_t> innerPermutation,
+                                   ArrayRef<int64_t> outerPermutation);
+
+    /// Check if this UnPackOp is like a simple unpad operation.
+    /// In other words, this operation:
+    /// 1. drops useless dimensions (dimension of size 1), and
+    /// 2. reduces dimensions in place (i.e., no tranpose.)
+    bool isLikeUnPad();
+  }];
+
+  let hasCanonicalizeMethod = 1;
+
+  let hasFolder = 1;
+}
+

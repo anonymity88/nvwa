@@ -1,0 +1,19 @@
+rocdl.make.buffer.rsrc (ROCDL::MakeBufferRsrcOp) ¶
+Syntax:
+
+operation ::= `rocdl.make.buffer.rsrc` operands attr-dict `:` type($base) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+base	LLVM pointer type
+stride	16-bit signless integer
+numRecords	32-bit signless integer
+flags	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM pointer in address space 8

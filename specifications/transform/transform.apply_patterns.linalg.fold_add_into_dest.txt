@@ -1,0 +1,7 @@
+transform.apply_patterns.linalg.fold_add_into_dest (transform::ApplyFoldAddIntoDestPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.linalg.fold_add_into_dest` attr-dict
+Collects patterns to replace linalg.add when destination passing suffices for achieving the sum.
+
+Interfaces: PatternDescriptorOpInterface

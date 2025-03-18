@@ -1,0 +1,36 @@
+bufferization.materialize_in_destination (bufferization::MaterializeInDestinationOp) ¶
+Copy a tensor
+
+Syntax:
+
+operation ::= `bufferization.materialize_in_destination` $source `in` (`restrict` $restrict^)? (`writable` $writable^)? $dest
+              attr-dict `:` functional-type(operands, results)
+This op indicates that the data of the source tensor is guaranteed to materialize in dest, which can be a tensor or a memref. In case of a tensor, source materializes in the future buffer of dest and a the updated destination tensor is returned. If this is not possible, e.g., because the destination tensor is read-only or because its original contents are still read later, the input IR fails to bufferize. In case of a memref, source materializes in dest, which is already a buffer. The op has no results in that case.
+
+source, dest and result (if present) must have the same runtime shape and element type. If the op has a result, the types of result and dest must match exactly (e.g., including any tensor encodings).
+
+By default, this op bufferizes to a memcpy from the future buffer of the source tensor to the future buffer of the dest tensor or to the dest buffer. However, transformations such as “empty tensor elimination” may rewrite IR such that a computation is performed directly in dest and no memcpy is needed.
+
+If dest is a buffer, the writable attribute must be specified and the restrict keyword can be specified. These attributes have the same meaning as the respective attributes of bufferization.to_tensor.
+
+writable indicates that the dest buffer is considered writable. It does not make sense to materialize a computation in a read-only buffer, so writable is required.
+
+restrict indicates that there is no bufferization.to_tensor op and no other bufferization.materialize_in_destination op with dest (or an alias thereof) and “restrict”. Only ops with this attribute are considered for “empty tensor elimination”. As part of empty tensor elimination, a new to_tensor op with dest may be inserted and the restrict attribute is transferred from this op to the new to_tensor op. Having “restrict” on this op guarantees that performing empty tensor elimination would not create invalid IR (i.e., having multiple to_tensor restrict with aliasing buffers).
+
+Note: writable could be removed from this op because it must always be set for memref destinations. This op has that attribute to make clear the requirements on the dest operand in the op assembly format.
+
+Note: If dest is a tensor, tensor.insert_slice could be used for the same purpose, but since tensor dialect ops only indicate what should be computed but not where, it could fold away, causing the computation to materialize in a different buffer.
+
+Interfaces: BufferizableOpInterface, DestinationStyleOpInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface, SubsetInsertionOpInterface, SubsetOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+restrict	::mlir::UnitAttr	unit attribute
+writable	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+source	tensor of any type values
+dest	shaped of any type values
+Results: ¶
+Result	Description
+result	tensor of any type values

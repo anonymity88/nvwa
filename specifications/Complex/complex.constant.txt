@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// ConstantOp
+//===----------------------------------------------------------------------===//
+
+def ConstantOp : Complex_Op<"constant", [
+    ConstantLike, Pure,
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>
+  ]> {
+  let summary = "complex number constant operation";
+  let description = [{
+    The `complex.constant` operation creates a constant complex number from an
+    attribute containing the real and imaginary parts.
+
+    Example:
+
+    ```mlir
+    %a = complex.constant [0.1, -1.0] : complex<f64>
+    ```
+  }];
+
+  let arguments = (ins ArrayAttr:$value);
+  let results = (outs AnyComplex:$complex);
+
+  let assemblyFormat = "$value attr-dict `:` type($complex)";
+  let hasFolder = 1;
+  let hasVerifier = 1;
+
+  let extraClassDeclaration = [{
+    /// Returns true if a constant operation can be built with the given value
+    /// and result type.
+    static bool isBuildableWith(Attribute value, Type type);
+  }];
+}
+

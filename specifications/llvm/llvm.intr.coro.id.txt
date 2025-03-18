@@ -1,0 +1,13 @@
+llvm.intr.coro.id (LLVM::CoroIdOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.id` $align `,` $promise `,` $coroaddr `,` $fnaddrs attr-dict `:` functional-type(operands, results)
+Operands: ¶
+Operand	Description
+align	32-bit signless integer
+promise	LLVM pointer type
+coroaddr	LLVM pointer type
+fnaddrs	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

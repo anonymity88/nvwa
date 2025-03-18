@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// DeallocOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_DeallocOp : MemRef_Op<"dealloc", [MemRefsNormalizable]> {
+  let summary = "memory deallocation operation";
+  let description = [{
+    The `dealloc` operation frees the region of memory referenced by a memref
+    which was originally created by the `alloc` operation.
+    The `dealloc` operation should not be called on memrefs which alias an
+    alloc'd memref (e.g. memrefs returned by `view` operations).
+
+    Example:
+
+    ```mlir
+    %0 = memref.alloc() : memref<8x64xf32, affine_map<(d0, d1) -> (d0, d1), 1>>
+    memref.dealloc %0 : memref<8x64xf32,  affine_map<(d0, d1) -> (d0, d1), 1>>
+    ```
+  }];
+
+  let arguments = (ins Arg<AnyRankedOrUnrankedMemRef, "",
+                           [MemFreeAt<0, FullEffect>]>:$memref);
+
+  let hasFolder = 1;
+  let assemblyFormat = "$memref attr-dict `:` type($memref)";
+}
+

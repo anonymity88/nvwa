@@ -1,0 +1,14 @@
+xegpu.fence (xegpu::FenceOp) ¶
+It synchronizes memory accesses.
+
+Syntax:
+
+operation ::= `xegpu.fence` `memory_kind` `=` `` $memory_kind `,` `fence_scope` `=` `` $fence_scope attr-dict
+It synchronizes the memory access between write and following read or write. 1. Memory_kind describes the memory kind. “global” means the global memory, “slm” means the share local memory. 2. Fence_scope describes the scope of fence. “Workgroup” means that the scope would be within each workgroup. “GPU” means the scope would be across workgroups within the GPU.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+memory_kind	::mlir::xegpu::MemorySpaceAttr	
+Describe the location of data described by a `TensorDesc`: Global device memory (`Global`) or Shared local memory (`SLM`).
+fence_scope	::mlir::xegpu::FenceScopeAttr	
+Describes the scope of fence. "workgroup" means that the scope is within each work group. "gpu" means the scope is across work groups within the gpu.

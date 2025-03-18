@@ -1,0 +1,13 @@
+llvm.intr.stepvector (LLVM::StepVectorOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.stepvector` attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector of signless integer

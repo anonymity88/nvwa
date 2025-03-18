@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// Operator: gather
+//===----------------------------------------------------------------------===//
+def Tosa_GatherOp : Tosa_InferShapedTypeOp<"gather"> {
+  let summary = "Gather operation,";
+
+  let description = [{
+    Generate a tensor for which each element in the output is a slice of the
+    values tensor based on the value of indices.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor3D:$values,
+    TosaTensorRankOf<[Tosa_Int32], [2]>:$indices
+  );
+
+  let results = (outs
+    Tosa_Tensor3D:$output
+  );
+}
+

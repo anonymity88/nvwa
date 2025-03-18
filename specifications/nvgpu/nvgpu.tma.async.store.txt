@@ -1,0 +1,21 @@
+nvgpu.tma.async.store (nvgpu::TmaAsyncStoreOp) ¶
+TMA asynchronous store
+
+Syntax:
+
+operation ::= `nvgpu.tma.async.store` $src `to` $tensorMapDescriptor `[` $coordinates `]`
+              (`,` `predicate` `=` $predicate^)?
+              attr-dict `:` type($src)
+              `->` type($tensorMapDescriptor)
+The Op store a tile memory region from global memory to shared memory by Tensor Memory Access (TMA).
+
+$tensorMapDescriptor is tensor map descriptor which has information about tile shape. The descriptor is created by nvgpu.tma.create.descriptor
+
+Traits: AttrSizedOperandSegments
+
+Operands: ¶
+Operand	Description
+src	memref of any type values
+tensorMapDescriptor	TensorMap descriptor
+coordinates	variadic of index
+predicate	1-bit signless integer

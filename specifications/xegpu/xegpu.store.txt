@@ -1,0 +1,36 @@
+xegpu.store (xegpu::StoreScatterOp) ¶
+Store data to scattered memory locations.
+
+Syntax:
+
+operation ::= `xegpu.store` $value `,` $TensorDesc `,` $mask prop-dict attr-dict
+              `:` type($value) `,` qualified(type($TensorDesc)) `,` type($mask)
+It (aka. store) stores data to scattered memory locations. The value is typically a 1D vector. But when the chunk size of the TensorDesc is larger than 1, it will be a 2D vector instead. For the later case, dim-1 of the value correspods to the simd lanes and the dim-0 of the value corresponds to the chunk size stored per lane. So store_scatter has transpose effect, which is similar to load_gather. Therefore, a transpose attribute is introduced on purpose, making sure users are aware of this implicit transformation.
+
+Example 1:
+
+  %3 = xegpu.store %0, %1, %2 {l1_hint = #xegpu.cache_hint<uncached>,
+                               l2_hint = #xegpu.cache_hint<write_back>,
+                               l3_hint = #xegpu.cache_hint<write_through>}
+        : vector<16xf32>, !xegpu.tensor_desc<16xf32, #xegpu.scattered_tdesc_attr<>>, vector<16xi1>
+Example 2:
+
+  %3 = xegpu.store %0, %1, %2 {transpose,
+                               l1_hint = #xegpu.cache_hint<uncached>,
+                               l2_hint = #xegpu.cache_hint<write_back>,
+                               l3_hint = #xegpu.cache_hint<write_through>}
+        : vector<8x16xf32>, !xegpu.tensor_desc<16x8xf32, #xegpu.scattered_tdesc_attr<chunk_size=8>>, vector<16xi1>
+Attributes: ¶
+Attribute	MLIR Type	Description
+transpose	::mlir::UnitAttr	unit attribute
+l1_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l2_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l3_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+Operands: ¶
+Operand	Description
+value	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 1/2/3/4 or 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type
+TensorDesc	TensorDesc describing regions of interested data.
+mask	vector of 1-bit signless integer values of ranks 1 or 1-bit signless integer

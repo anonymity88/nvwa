@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// RemSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_RemSIOp : Arith_TotalIntBinaryOp<"remsi"> {
+  let summary = "signed integer division remainder operation";
+  let description = [{
+    Signed integer division remainder. Treats the leading bit as sign, i.e. `6 %
+    -2 = 0`.
+
+    Division by zero is undefined behavior. When applied to `vector` and 
+    `tensor` values, the behavior is undefined if _any_ elements are divided by 
+    zero.
+
+    Example:
+
+    ```mlir
+    // Scalar signed integer division remainder.
+    %a = arith.remsi %b, %c : i64
+
+    // SIMD vector element-wise division remainder.
+    %f = arith.remsi %g, %h : vector<4xi32>
+
+    // Tensor element-wise integer division remainder.
+    %x = arith.remsi %y, %z : tensor<4x?xi8>
+    ```
+  }];
+  let hasFolder = 1;
+}
+

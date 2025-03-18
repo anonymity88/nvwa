@@ -1,0 +1,24 @@
+shape.div (shape::DivOp) ¶
+Division of sizes and indices
+
+Syntax:
+
+operation ::= `shape.div` $lhs `,` $rhs attr-dict `:` type($lhs) `,` type($rhs) `->` type($result)
+Divides two sizes or indices. If either operand is an error it will be propagated to the result. The operands can be of type size or index. If at least one of the operands can hold an error, i.e. if it is of type size, the result must be of type size. If error propagation is not possible because both operands are of type index then the result may be of type size or index. If both operands and result are of type index, their runtime values could be negative. The result is rounded toward negative infinity, i.e. floor(lhs / rhs), such that
+
+div(lhs, rhs) * rhs + mod(lhs, rhs) = lhs
+always holds. If any of the values is of type size, the behavior for negative value is undefined.
+
+Traits: AlwaysSpeculatableImplTrait, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	size or index
+rhs	size or index
+Results: ¶
+Result	Description
+result	size or index

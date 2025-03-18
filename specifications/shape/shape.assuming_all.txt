@@ -1,0 +1,29 @@
+shape.assuming_all (shape::AssumingAllOp) ¶
+Return a logical AND of all witnesses
+
+Syntax:
+
+operation ::= `shape.assuming_all` $inputs attr-dict
+Used to simplify constraints as any single failing precondition is enough to prevent execution.
+
+“assuming” operations represent an execution order restriction to the compiler, information for dependent code to rely on (by assuming), and nothing else. They should not exist after a program is fully lowered and ready to execute.
+
+Example:
+
+%w0 = shape.cstr_broadcastable [2,2], [3,1,2] // Passing
+%w1 = shape.cstr_broadcastable [2,2], [3,2] // Failure
+%w2 = shape.cstr_eq [1,2], [1,2], [1,2] // Passing
+%wf = shape.assuming_all %w0, %w1 // Failure
+%wt = shape.assuming_all %w0, %w2 // Passing
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+inputs	variadic of
+Results: ¶
+Result	Description
+result

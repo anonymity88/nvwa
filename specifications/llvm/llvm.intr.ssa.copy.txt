@@ -1,0 +1,16 @@
+llvm.intr.ssa.copy (LLVM::SSACopyOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.ssa.copy` $operand attr-dict `:` type($operand)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	any type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

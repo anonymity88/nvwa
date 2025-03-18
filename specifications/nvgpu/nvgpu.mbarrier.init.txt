@@ -1,0 +1,19 @@
+nvgpu.mbarrier.init (nvgpu::MBarrierInitOp) ¶
+Initialize the nvgpu.mbarrier.
+
+Syntax:
+
+operation ::= `nvgpu.mbarrier.init` $barriers `[` $mbarId `]` `,` $count (`,` `predicate` `=` $predicate^)? attr-dict `:` type($barriers)
+The Op initializes the mbarrier object with the given number of threads.
+
+Example:
+
+  %num_threads = gpu.block_dim x
+  %barrier = nvgpu.mbarrier.create -> !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>>
+  nvgpu.mbarrier.init %barrier, %num_threads : !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>>
+Operands: ¶
+Operand	Description
+barriers	mbarrier barrier type
+count	index
+mbarId	index
+predicate	1-bit signless integer

@@ -1,0 +1,9 @@
+arm_sve.intr.sdot (arm_sve::SdotIntrOp) ¶
+Operands: ¶
+Operand	Description
+«unnamed»	scalable vector of any type values
+«unnamed»	scalable vector of any type values
+«unnamed»	scalable vector of any type values
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,36 @@
+vector.expandload (vector::ExpandLoadOp) ¶
+Reads elements from memory and spreads them into a vector as defined by a mask
+
+Syntax:
+
+operation ::= `vector.expandload` $base `[` $indices `]` `,` $mask `,` $pass_thru attr-dict `:` type($base) `,` type($mask) `,` type($pass_thru) `into` type($result)
+The expand load reads elements from memory into a vector as defined by a base with indices and a mask vector. Expansion only applies to the innermost dimension. When the mask is set, the next element is read from memory. Otherwise, the corresponding element is taken from a pass-through vector. Informally the semantics are:
+
+index = i
+result[0] := if mask[0] then base[index++] else pass_thru[0]
+result[1] := if mask[1] then base[index++] else pass_thru[1]
+etc.
+Note that the index increment is done conditionally.
+
+If a mask bit is set and the corresponding index is out-of-bounds for the given base, the behavior is undefined. If a mask bit is not set, the value comes from the pass-through vector regardless of the index, and the index is allowed to be out-of-bounds.
+
+The expand load can be used directly where applicable, or can be used during progressively lowering to bring other memory operations closer to hardware ISA support for an expand. The semantics of the operation closely correspond to those of the llvm.masked.expandload intrinsic.
+
+Note, at the moment this Op is only available for fixed-width vectors.
+
+Examples:
+
+%0 = vector.expandload %base[%i], %mask, %pass_thru
+   : memref<?xf32>, vector<8xi1>, vector<8xf32> into vector<8xf32>
+
+%1 = vector.expandload %base[%i, %j], %mask, %pass_thru
+   : memref<?x?xf32>, vector<16xi1>, vector<16xf32> into vector<16xf32>
+Operands: ¶
+Operand	Description
+base	memref of any type values
+indices	variadic of index
+mask	fixed-length vector of 1-bit signless integer values
+pass_thru	vector of any type values
+Results: ¶
+Result	Description
+result	vector of any type values

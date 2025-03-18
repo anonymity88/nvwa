@@ -1,0 +1,19 @@
+transform.apply_dce (transform::ApplyDeadCodeEliminationOp) ¶
+Eliminate dead operations in the body of the target op
+
+Syntax:
+
+operation ::= `transform.apply_dce` `to` $target attr-dict `:` type($target)
+This transform applies dead code elimination (DCE) to the body of the targeted op.
+
+Note: “transform.apply_patterns” with an empty region can also be used to remove dead ops. However, that op applies additional simplifications such as op folding and region simplification.
+
+This transform reads the target handle and modifies the payload. Note that this transform may silently remove payload ops from handles.
+
+Traits: ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

@@ -1,0 +1,23 @@
+acc.shutdown (acc::ShutdownOp) ¶
+Shutdown operation
+
+Syntax:
+
+operation ::= `acc.shutdown` oilist(`device_num` `(` $deviceNumOperand `:` type($deviceNumOperand) `)`
+              |`if` `(` $ifCond `)`
+              ) attr-dict-with-keyword
+The “acc.shutdown” operation represents the OpenACC shutdown executable directive.
+
+Example:
+
+acc.shutdown
+acc.shutdown device_num(%dev1 : i32)
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+device_types	::mlir::ArrayAttr	Device type attributes
+Operands: ¶
+Operand	Description
+deviceNumOperand	integer or index
+ifCond	1-bit signless integer

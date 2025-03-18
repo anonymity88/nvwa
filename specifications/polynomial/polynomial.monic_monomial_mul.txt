@@ -1,0 +1,23 @@
+polynomial.monic_monomial_mul (polynomial::MonicMonomialMulOp) ¶
+Multiply a polynomial by a monic monomial.
+
+Syntax:
+
+operation ::= `polynomial.monic_monomial_mul` operands attr-dict `:` functional-type(operands, results)
+Multiply a polynomial by a monic monomial, meaning a polynomial of the form 1 * x^k for an index operand k.
+
+In some special rings of polynomials, such as a ring of polynomials modulo x^n - 1, monomial_mul can be interpreted as a cyclic shift of the coefficients of the polynomial. For some rings, this results in optimized lowerings that involve rotations and rescaling of the coefficients of the input.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	polynomial-like
+monomialDegree	index
+Results: ¶
+Result	Description
+output	polynomial-like

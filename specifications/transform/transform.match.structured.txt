@@ -1,0 +1,31 @@
+transform.match.structured (transform::MatchStructuredOp) ¶
+Matches a structured (linalg) operation with additional conditions
+
+Syntax:
+
+operation ::= `transform.match.structured` (`failures` `(` $failure_propagation_mode^ `)`)?$current `:` custom<SemiFunctionType>(type($current), type($outputs))attr-dict-with-keyword regions
+Checks if the payload operation associated with the operand handle is a structured operation, that is, an operation that implements LinalgOpInterface, and that all conditions listed in the body of this operation are satisfied. Produces a silenceable failure if the payload operation is not structured.
+
+The transform operations nested in the body region are applied one by one. If any of them produces a failure, silenceable or definite, the following operations are not applied. If the failure propagation mode is “propagate”, silenceable failures are forwarded as the result of this operation. If it is “suppress”, they are ignored and this operation immediately succeeds. Definite failures are always propagated immediately.
+
+In case of success, the transform values produced by this operation are associated with the same payload as the operands of the block terminator. If any of the nested operations produced a silenceable failure, regardless of the failure propagation mode, the transform values produced by this operation that correspond to the already defined terminator operands are associated with the same payload as the already defined terminator operands. Other values produced by this operation are associated with empty payloads.
+
+If the failure propagation mode is not specified, it is considered “propagate” by default. The “suppress” mode can be used to specify optional matches.
+
+Return modes ¶
+This operation only reads all operand handles and produces all resulting handles. It succeeds in “propagate” mode if the payload operation is a structured operation and if all the nested operations succeed. It succeeds in “suppress” mode as long as the operand handle is associated with exactly one payload operation. It produces a definite failure when the handle is not associated with exactly one payload operation.
+
+Traits: SingleBlockImplicitTerminator<::mlir::transform::MatchStructuredYieldOp>, SingleBlock, SingleOpMatcher
+
+Interfaces: MatchOpInterface, MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+failure_propagation_mode	::mlir::transform::FailurePropagationModeAttr	
+Silenceable error propagation policy
+Operands: ¶
+Operand	Description
+current	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+outputs	variadic of any transform handle or parameter

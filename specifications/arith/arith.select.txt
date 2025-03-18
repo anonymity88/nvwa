@@ -1,0 +1,60 @@
+//===----------------------------------------------------------------------===//
+// SelectOp
+//===----------------------------------------------------------------------===//
+
+def SelectOp : Arith_Op<"select", [Pure,
+    AllTypesMatch<["true_value", "false_value", "result"]>,
+    ScalarConditionOrMatchingShape<["condition", "result"]>,
+    DeclareOpInterfaceMethods<InferIntRangeInterface>,
+  ] # ElementwiseMappable.traits> {
+  let summary = "select operation";
+  let description = [{
+    The `arith.select` operation chooses one value based on a binary condition
+    supplied as its first operand. 
+    
+    If the value of the first operand (the condition) is `1`, then the second 
+    operand is returned, and the third operand is ignored, even if it was poison. 
+    
+    If the value of the first operand (the condition) is `0`, then the third 
+    operand is returned, and the second operand is ignored, even if it was poison. 
+    
+    If the value of the first operand (the condition) is poison, then the 
+    operation returns poison. 
+
+    The operation applies to vectors and tensors elementwise given the _shape_
+    of all operands is identical. The choice is made for each element
+    individually based on the value at the same position as the element in the
+    condition operand. If an i1 is provided as the condition, the entire vector
+    or tensor is chosen.
+
+    Example:
+
+    ```mlir
+    // Custom form of scalar selection.
+    %x = arith.select %cond, %true, %false : i32
+
+    // Generic form of the same operation.
+    %x = "arith.select"(%cond, %true, %false) : (i1, i32, i32) -> i32
+
+    // Element-wise vector selection.
+    %vx = arith.select %vcond, %vtrue, %vfalse : vector<42xi1>, vector<42xf32>
+
+    // Full vector selection.
+    %vx = arith.select %cond, %vtrue, %vfalse : vector<42xf32>
+    ```
+  }];
+
+  let arguments = (ins BoolLike:$condition,
+                       AnyType:$true_value,
+                       AnyType:$false_value);
+  let results = (outs AnyType:$result);
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+  let hasVerifier = 1;
+
+  // FIXME: Switch this to use the declarative assembly format.
+  let hasCustomAssemblyFormat = 1;
+}
+
+#endif // ARITH_OPS

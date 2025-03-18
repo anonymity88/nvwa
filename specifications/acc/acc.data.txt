@@ -1,0 +1,47 @@
+acc.data (acc::DataOp) ¶
+Data construct
+
+Syntax:
+
+operation ::= `acc.data` oilist(
+              `if` `(` $ifCond `)`
+              | `async` `(` custom<DeviceTypeOperands>($asyncOperands,
+              type($asyncOperands), $asyncOperandsDeviceType) `)`
+              | `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              | `wait` `` custom<WaitClause>($waitOperands, type($waitOperands),
+              $waitOperandsDeviceType, $waitOperandsSegments, $hasWaitDevnum,
+              $waitOnly)
+              )
+              $region attr-dict-with-keyword
+The “acc.data” operation represents a data construct. It defines vars to be allocated in the current device memory for the duration of the region, whether data should be copied from local memory to the current device memory upon region entry , and copied from device memory to local memory upon region exit.
+
+Example:
+
+acc.data present(%a: memref<10x10xf32>, %b: memref<10x10xf32>,
+    %c: memref<10xf32>, %d: memref<10xf32>) {
+  // data region
+}
+async and wait operands are supported with device_type information. They should only be accessed by the extra provided getters. If modified, the corresponding device_type attributes must be modified as well.
+
+Traits: AttrSizedOperandSegments, RecursiveMemoryEffects
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+asyncOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+asyncOnly	::mlir::ArrayAttr	device type array attribute
+waitOperandsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+waitOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+hasWaitDevnum	::mlir::ArrayAttr	1-bit boolean array attribute
+waitOnly	::mlir::ArrayAttr	device type array attribute
+defaultAttr	::mlir::acc::ClauseDefaultValueAttr	
+DefaultValue Clause
+Operands: ¶
+Operand	Description
+ifCond	1-bit signless integer
+asyncOperands	variadic of integer or index
+waitOperands	variadic of integer or index
+dataClauseOperands	variadic of PointerLikeType instance

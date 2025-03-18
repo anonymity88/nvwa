@@ -1,0 +1,16 @@
+nvgpu.mbarrier.create (nvgpu::MBarrierCreateOp) ¶
+Creates a nvgpu.mbarrier object.
+
+Syntax:
+
+operation ::= `nvgpu.mbarrier.create` attr-dict `->` type($barriers)
+The Op generates one or more mbarrier object, which is a barrier created in shared memory and supports various synchronization behaviors for threads.
+
+The mbarrier object has the following type and alignment requirements: Type: .b64, Alignment: 8, Memory space: .shared
+
+Example:
+
+  %barrier = nvgpu.mbarrier.create -> !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>>
+Results: ¶
+Result	Description
+barriers	mbarrier barrier type

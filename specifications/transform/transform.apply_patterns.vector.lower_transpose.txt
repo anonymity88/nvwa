@@ -1,0 +1,19 @@
+transform.apply_patterns.vector.lower_transpose (transform::ApplyLowerTransposePatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_transpose` oilist (
+              `lowering_strategy` `=` $lowering_strategy
+              | `avx2_lowering_strategy` `=` $avx2_lowering_strategy
+              )
+              attr-dict
+Indicates that vector transpose-like operations should be lowered to finer-grained vector primitives.
+
+This is usually a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+lowering_strategy	::mlir::vector::VectorTransposeLoweringAttr	
+control the lowering of `vector.transpose` operations.
+avx2_lowering_strategy	::mlir::BoolAttr	bool attribute

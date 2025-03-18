@@ -1,0 +1,25 @@
+omp.declare_reduction (omp::DeclareReductionOp) ¶
+Declares a reduction kind
+
+Syntax:
+
+operation ::= `omp.declare_reduction` $sym_name `:` $type attr-dict-with-keyword ( `alloc` $allocRegion^ )? `init` $initializerRegion `combiner` $reductionRegion ( `atomic` $atomicReductionRegion^ )? ( `cleanup` $cleanupRegion^ )?
+Declares an OpenMP reduction kind. This requires two mandatory and three optional regions.
+
+The optional alloc region specifies how to allocate the thread-local reduction value. This region should not contain control flow and all IR should be suitable for inlining straight into an entry block. In the common case this is expected to contain only allocas. It is expected to omp.yield the allocated value on all control paths. If allocation is conditional (e.g. only allocate if the mold is allocated), this should be done in the initilizer region and this region not included. The alloc region is not used for by-value reductions (where allocation is implicit).
+The initializer region specifies how to initialize the thread-local reduction value. This is usually the neutral element of the reduction. For convenience, the region has an argument that contains the value of the reduction accumulator at the start of the reduction. If an alloc region is specified, there is a second block argument containing the address of the allocated memory. The initializer region is expected to omp.yield the new value on all control flow paths.
+The reduction region specifies how to combine two values into one, i.e. the reduction operator. It accepts the two values as arguments and is expected to omp.yield the combined value on all control flow paths.
+The atomic reduction region is optional and specifies how two values can be combined atomically given local accumulator variables. It is expected to store the combined value in the first accumulator variable.
+The cleanup region is optional and specifies how to clean up any memory allocated by the initializer region. The region has an argument that contains the value of the thread-local reduction accumulator. This will be executed after the reduction has completed.
+Note that the MLIR type system does not allow for type-polymorphic reductions. Separate reduction declarations should be created for different element and accumulator types.
+
+For initializer and reduction regions, the operand to omp.yield must match the parent operation’s results.
+
+Traits: IsolatedFromAbove
+
+Interfaces: RecipeInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+type	::mlir::TypeAttr	any type attribute

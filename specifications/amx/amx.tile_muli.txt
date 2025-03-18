@@ -1,0 +1,30 @@
+amx.tile_muli (amx::TileMulIOp) ¶
+Tile multiplication operation (integer)
+
+Syntax:
+
+operation ::= `amx.tile_muli` $lhs (`zext` $isZextLhs^)? `,` $rhs (`zext` $isZextRhs^)? `,` $acc attr-dict `:` qualified(type($lhs)) `,` qualified(type($rhs)) `,` qualified(type($acc))
+Multiplies a “m x k” tile with a “k x n” tile and accumulates the results into a “m x n” destination tile. Supports all “si32 <- s/ui8 x s/ui8” combinations (4 bytes packed into dwords in the columns of both the source operand tiles; the zero or sign extension is specified with the attributes and default to sign extended). The operation is eventually lowered into one of the “tdpbssd”, “tdpbsud”, “tdpbusd”, or “tdpbuud” instructions with the corresponding tile configuration.
+
+Example:
+
+  %0 = amx.tile_muli %a zext, %b zext, %c
+    : !amx.tile<16x64xi8>, !amx.tile<16x64xi8>, !amx.tile<16x16xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+isZextLhs	::mlir::UnitAttr	unit attribute
+isZextRhs	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+lhs	tile of 8-bit signless integer values
+rhs	tile of 8-bit signless integer values
+acc	tile of 32-bit signless integer values
+Results: ¶
+Result	Description
+res	tile of 32-bit signless integer values

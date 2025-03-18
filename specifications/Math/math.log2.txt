@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// Log2Op
+//===----------------------------------------------------------------------===//
+
+def Math_Log2Op : Math_FloatUnaryOp<"log2"> {
+  let summary = "base-2 logarithm of the specified value";
+
+  let description = [{
+    Computes the base-2 logarithm of the given value. It takes one operand of
+    floating point type (i.e., scalar, tensor or vector) and returns one result of
+    the same type.
+
+    Example:
+
+    ```mlir
+    // Scalar log2 operation.
+    %y = math.log2 %x : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

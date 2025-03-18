@@ -1,0 +1,10 @@
+arm_sve.intr.zip.x4 (arm_sve::ZipX4IntrOp) ¶
+Operands: ¶
+Operand	Description
+v1	scalable vector of any type values
+v2	scalable vector of any type values
+v3	scalable vector of any type values
+v4	scalable vector of any type values
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

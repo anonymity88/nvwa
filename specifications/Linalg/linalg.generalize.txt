@@ -1,0 +1,37 @@
+//===----------------------------------------------------------------------===//
+// GeneralizeOp
+//===----------------------------------------------------------------------===//
+
+def GeneralizeOp : Op<Transform_Dialect, "structured.generalize",
+    [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+     TransformOpInterface, TransformEachOpTrait,
+     ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Transforms a named structured operation into the generic form with the
+    explicit attached region.
+
+    #### Return modes
+
+    This operation ignores non-Linalg ops and drops them in the return.
+    If all the operations referred to by the `target` handle generalize
+    properly, the transform succeeds. Otherwise the transform produces a
+    silenceable failure.  The return handle points to only the subset of
+    successfully produced equivalent generic operations, which can be empty or
+    contain the original ops if they were already in generic form.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target);
+  let results = (outs TransformHandleTypeInterface:$transformed);
+  let assemblyFormat =
+      "$target attr-dict `:` "
+      "custom<SemiFunctionType>(type($target), type($transformed))";
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::linalg::LinalgOp target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+

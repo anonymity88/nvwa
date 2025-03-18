@@ -1,0 +1,36 @@
+transform.match.structured.classify_contraction_dims (transform::MatchStructuredClassifyContractionDimsOp) ¶
+Checks if an operation has contraction-like dimensions and returns them
+
+Syntax:
+
+operation ::= `transform.match.structured.classify_contraction_dims` $operand_handle attr-dict `:` functional-type(operands, results)
+Checks if the structured payload op has contraction-like dimensions as follows:
+
+C(batch, m, n) += A(batch, m, k) * B(batch, k, n)
+
+That is:
+
+‘batch’ are parallel dimensions used in inputs and result;
+’m’ are parallel dimensions used in the LHS and result;
+’n’ are parallel dimensions used in rhe RHS and result;
+‘k’ are reduction dimensions present only in LHS and RHS.
+Note that this doesn’t check the operation in the body.
+
+This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the operation has the contraction-like dimensions, produces a silenceable failure otherwise.
+
+Traits: SingleOpMatcher, StructuredPredicate
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+batch	TransformParamTypeInterface instance
+m	TransformParamTypeInterface instance
+n	TransformParamTypeInterface instance
+k	TransformParamTypeInterface instance

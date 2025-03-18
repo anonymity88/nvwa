@@ -1,0 +1,31 @@
+spirv.CompositeExtract (spirv::CompositeExtractOp) ¶
+Extract a part of a composite object.
+
+Result Type must be the type of object selected by the last provided index. The instruction result is the extracted object.
+
+Composite is the composite to extract from.
+
+Indexes walk the type hierarchy, potentially down to component granularity, to select the part to extract. All indexes must be in bounds. All composite constituents use zero-based numbering, as described by their OpType… instruction.
+
+composite-extract-op ::= ssa-id `=` `spirv.CompositeExtract` ssa-use
+                         `[` integer-literal (',' integer-literal)* `]`
+                         `:` composite-type
+Example: ¶
+%0 = spirv.Variable : !spirv.ptr<!spirv.array<4x!spirv.array<4xf32>>, Function>
+%1 = spirv.Load "Function" %0 ["Volatile"] : !spirv.array<4x!spirv.array<4xf32>>
+%2 = spirv.CompositeExtract %1[1 : i32] : !spirv.array<4x!spirv.array<4xf32>>
+Traits: AlwaysSpeculatableImplTrait, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+indices	::mlir::ArrayAttr	32-bit integer array attribute
+Operands: ¶
+Operand	Description
+composite	vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type
+Results: ¶
+Result	Description
+component	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

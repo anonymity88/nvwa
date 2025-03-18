@@ -1,0 +1,27 @@
+gpu.cluster_dim_blocks (gpu::ClusterDimBlocksOp) ¶
+Syntax:
+
+operation ::= `gpu.cluster_dim_blocks` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the number of thread blocks in the cluster along the x, y, or z dimension.
+
+Example:
+
+%cDimBlocksX = gpu.cluster_dim_blocks x
+If upper_bound is set, then executing (a lowering of) this operation in an environment where the thread blocks per cluster is greater than upper_bound causes undefined behavior.
+
+There is an implicit upper bound of kMaxClusterDim (currently 8).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

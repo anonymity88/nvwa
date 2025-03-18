@@ -1,0 +1,35 @@
+//===----------------------------------------------------------------------===//
+// ExtractOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_ExtractOp : Tensor_Op<"extract", [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    Pure,
+    TypesMatchWith<"result type matches element type of tensor",
+                   "tensor", "result",
+                   "::llvm::cast<TensorType>($_self).getElementType()">]> {
+  let summary = "element extraction operation";
+  let description = [{
+    The `tensor.extract` op reads a ranked tensor and returns one element as
+    specified by the given indices. The result of the op is a value with the
+    same type as the elements of the tensor. The arity of indices must match
+    the rank of the accessed value. All indices should all be of `index` type.
+
+    Example:
+
+    ```mlir
+    %4 = tensor.extract %t[%1, %2] : tensor<4x4xi32>
+    %5 = tensor.extract %rt[%1, %2] : tensor<?x?xi32>
+    ```
+  }];
+
+  let arguments = (ins AnyRankedTensor:$tensor, Variadic<Index>:$indices);
+  let results = (outs AnyType:$result);
+  let assemblyFormat = "$tensor `[` $indices `]` attr-dict `:` type($tensor)";
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+
+

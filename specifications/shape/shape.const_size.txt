@@ -1,0 +1,21 @@
+shape.const_size (shape::ConstSizeOp) ¶
+Creates a constant of type shape.size
+
+Syntax:
+
+operation ::= `shape.const_size` $value attr-dict
+Creates a shape.size type representing the constant size given by value.
+
+%x = shape.const_size 10
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+result

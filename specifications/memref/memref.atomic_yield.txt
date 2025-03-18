@@ -1,0 +1,17 @@
+memref.atomic_yield (memref::AtomicYieldOp) ¶
+Yield operation for GenericAtomicRMWOp
+
+Syntax:
+
+operation ::= `memref.atomic_yield` $result attr-dict `:` type($result)
+“memref.atomic_yield” yields an SSA value from a GenericAtomicRMWOp region.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<GenericAtomicRMWOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+result	any type

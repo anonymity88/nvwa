@@ -1,0 +1,30 @@
+acc.atomic.capture (acc::AtomicCaptureOp) ¶
+Performs an atomic capture
+
+Syntax:
+
+operation ::= `acc.atomic.capture` $region attr-dict
+This operation performs an atomic capture.
+
+The region has the following allowed forms:
+
+  acc.atomic.capture {
+    acc.atomic.update ...
+    acc.atomic.read ...
+    acc.terminator
+  }
+
+  acc.atomic.capture {
+    acc.atomic.read ...
+    acc.atomic.update ...
+    acc.terminator
+  }
+
+  acc.atomic.capture {
+    acc.atomic.read ...
+    acc.atomic.write ...
+    acc.terminator
+  }
+Traits: RecursiveMemoryEffects, SingleBlockImplicitTerminator<TerminatorOp>, SingleBlock
+
+Interfaces: AtomicCaptureOpInterface

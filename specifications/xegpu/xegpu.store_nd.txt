@@ -1,0 +1,27 @@
+xegpu.store_nd (xegpu::StoreNdOp) ¶
+Stores a n-D block register region back to memory, currently only supports 2D
+
+Syntax:
+
+operation ::= `xegpu.store_nd` $value `,` $TensorDesc prop-dict attr-dict
+              `:` type($value) `,` qualified(type($TensorDesc))
+StoreNdOp essentially mimics the hardware block write instruction io write a block of data from register into the memory region as described by the TensorDesc. It takes a set of optional cache hints for each level of cache, L1, L2 and L3. If hardware does not have a correspoding cache, Corresponding cache hint attribute will be masked.
+
+Example:
+
+  xegpu.store_nd %3, %2 {l1_hint = #xegpu.cache_hint<uncached>,
+                         l2_hint = #xegpu.cache_hint<write_back>,
+                         l3_hint = #xegpu.cache_hint<write_through>}
+                         : vector<8x16xf16>, !xegpu.tensor_desc<8x16xf16>
+Attributes: ¶
+Attribute	MLIR Type	Description
+l1_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l2_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l3_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+Operands: ¶
+Operand	Description
+value	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 1/2/3/4 or 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type
+TensorDesc	TensorDesc describing regions of interested data.

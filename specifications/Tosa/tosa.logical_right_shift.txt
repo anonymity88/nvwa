@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// Operator: logical_right_shift
+//===----------------------------------------------------------------------===//
+def Tosa_LogicalRightShiftOp : Tosa_ElementwiseOp<"logical_right_shift",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise Logical Right Shift";
+
+  let description = [{
+    Elementwise logical right shift of input1 by the amount specified in input2.
+    Axis of size 1 will be broadcast, as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

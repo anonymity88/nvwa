@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// Operator: ceil
+//===----------------------------------------------------------------------===//
+def Tosa_CeilOp : Tosa_ElementwiseOp<"ceil", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise ceil op";
+
+  let description = [{
+    Elementwise ceiling operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

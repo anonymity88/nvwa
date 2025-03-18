@@ -1,0 +1,16 @@
+pdl.erase (pdl::EraseOp) ¶
+Mark an input operation as erased
+
+Syntax:
+
+operation ::= `pdl.erase` $opValue attr-dict
+pdl.erase operations are used within pdl.rewrite regions to specify that an input operation should be marked as erased. The semantics of this operation correspond with the eraseOp method on a PatternRewriter.
+
+Example:
+
+pdl.erase %root
+Traits: HasParent<pdl::RewriteOp>
+
+Operands: ¶
+Operand	Description
+opValue	PDL handle to an mlir::Operation *

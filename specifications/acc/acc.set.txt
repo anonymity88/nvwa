@@ -1,0 +1,29 @@
+acc.set (acc::SetOp) ¶
+Set operation
+
+Syntax:
+
+operation ::= `acc.set` oilist(`default_async` `(` $defaultAsync `:` type($defaultAsync) `)`
+              | `device_num` `(` $deviceNum `:` type($deviceNum) `)`
+              | `if` `(` $ifCond `)`
+              ) attr-dict-with-keyword
+The “acc.set” operation represents the OpenACC set directive.
+
+Example:
+
+acc.set device_num(%dev1 : i32)
+Traits: AttrSizedOperandSegments
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+device_type	::mlir::acc::DeviceTypeAttr	
+built-in device type supported by OpenACC
+Operands: ¶
+Operand	Description
+defaultAsync	integer or index
+deviceNum	integer or index
+ifCond	1-bit signless integer

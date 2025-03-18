@@ -1,0 +1,54 @@
+gpu.shuffle (gpu::ShuffleOp) ¶
+Shuffles values within a subgroup.
+
+Syntax:
+
+operation ::= `gpu.shuffle` $mode $value `,` $offset `,` $width attr-dict `:` type($value)
+The “shuffle” op moves values to a across lanes (a.k.a., invocations, work items) within the same subgroup. The width argument specifies the number of lanes that participate in the shuffle, and must be uniform across all lanes. Further, the first width lanes of the subgroup must be active.
+
+The intepretation of the offset arguments depends on the selected mode.
+
+Returns the shuffleResult and true if the current lane id is smaller than width, and an unspecified value and false otherwise.
+
+xor example:
+
+%1, %2 = gpu.shuffle xor %0, %offset, %width : f32
+For lane k, returns the value %0 from lane k ^ offset. Every lane trades value with exactly one other lane.
+
+down example:
+
+%cst1 = arith.constant 1 : i32
+%3, %4 = gpu.shuffle down %0, %cst1, %width : f32
+For lane k, returns the value from lane (k + 1) % width.
+
+up example:
+
+%cst1 = arith.constant 1 : i32
+%5, %6 = gpu.shuffle up %0, %cst1, %width : f32
+For lane k, returns the value from lane (k - 1) % width.
+
+idx example:
+
+%cst0 = arith.constant 0 : i32
+%7, %8 = gpu.shuffle idx %0, %cst0, %width : f32
+Broadcasts the value from lane 0 to all lanes.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mode	::mlir::gpu::ShuffleModeAttr	
+Indexing modes supported by gpu.shuffle.
+Operands: ¶
+Operand	Description
+value	Integer or Float or vector of Integer or Float values of ranks 1
+offset	32-bit signless integer
+width	32-bit signless integer
+Results: ¶
+Result	Description
+shuffleResult	Integer or Float or vector of Integer or Float values of ranks 1
+valid	1-bit signless integer

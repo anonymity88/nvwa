@@ -1,0 +1,46 @@
+//===----------------------------------------------------------------------===//
+// DmaWaitOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_DmaWaitOp : MemRef_Op<"dma_wait"> {
+  let summary = "blocking DMA operation that waits for transfer completion";
+  let description = [{
+   DmaWaitOp blocks until the completion of a DMA operation associated with the
+   tag element '%tag[%index]'. %tag is a memref, and %index has to be an index
+   with the same restrictions as any load/store index. %num_elements is the
+   number of elements associated with the DMA operation.
+
+   Example:
+
+   ```mlir
+    dma_start %src[%i, %j], %dst[%k, %l], %num_elements, %tag[%index] :
+      memref<2048 x f32>, affine_map<(d0) -> (d0)>, 0>,
+      memref<256 x f32>, affine_map<(d0) -> (d0)>, 1>
+      memref<1 x i32>, affine_map<(d0) -> (d0)>, 2>
+    ...
+    ...
+    dma_wait %tag[%index], %num_elements : memref<1 x i32, affine_map<(d0) -> (d0)>, 2>
+    ```
+  }];
+  let arguments = (ins AnyMemRef:$tagMemRef,
+                       Variadic<Index>:$tagIndices,
+                       Index:$numElements);
+  let assemblyFormat = [{
+    $tagMemRef `[` $tagIndices `]` `,` $numElements attr-dict `:` type($tagMemRef)
+  }];
+  let extraClassDeclaration = [{
+    /// Returns the rank (number of indices) of the tag memref.
+    unsigned getTagMemRefRank() {
+      return ::llvm::cast<MemRefType>(getTagMemRef().getType()).getRank();
+    }
+    void getEffects(
+        SmallVectorImpl<SideEffects::EffectInstance<MemoryEffects::Effect>> &
+        effects) {
+      effects.emplace_back(MemoryEffects::Read::get(), getTagMemRef(),
+                           SideEffects::DefaultResource::get());
+    }
+  }];
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+

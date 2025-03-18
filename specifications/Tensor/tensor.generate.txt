@@ -1,0 +1,47 @@
+//===----------------------------------------------------------------------===//
+// GenerateOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_GenerateOp : Tensor_Op<"generate", [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    RecursiveMemoryEffects,
+    DeclareOpInterfaceMethods<ReifyRankedShapedTypeOpInterface>,
+    SingleBlockImplicitTerminator<"mlir::tensor::YieldOp">]> {
+  let summary = "Creates a dynamically sized tensor from elements";
+  let description = [{
+    This operation creates a dynamically sized tensor with elements of any type.
+    It expects one index operand per dynamic extent of the result tensor.
+
+    The body region defines the tensor's elements. It takes index operands as
+    its region arguments that span the index space. The element at the given
+    position is yielded with the `yield` operation (see `YieldOp`). There is
+    no defined ordering to the invocations of the body. It is conceptually
+    a "parallel map" operation.
+
+    Example:
+
+    ```mlir
+      %tnsr = tensor.generate %m, %n {
+      ^bb0(%i : index, %j : index, %k : index):
+        ...
+        yield %elem : f32
+      } : tensor<?x3x?f32>
+    ```
+  }];
+
+  let arguments = (ins Variadic<Index>:$dynamicExtents);
+  let results = (outs AnyRankedTensor:$result);
+  let regions = (region SizedRegion<1>:$body);
+  let assemblyFormat = "$dynamicExtents $body attr-dict `:` type($result)";
+
+  let builders = [
+    // Build op and populate its body per callback function.
+    OpBuilder<(ins "Type":$resultTy, "ValueRange":$dynamicExtents,
+      "function_ref<void(OpBuilder &, Location, ValueRange)>")>,
+  ];
+
+  let hasCanonicalizer = 1;
+  let hasVerifier = 1;
+  let hasRegionVerifier = 1;
+}
+

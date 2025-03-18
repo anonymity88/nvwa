@@ -1,0 +1,17 @@
+linalg.yield (linalg::YieldOp)
+Linalg yield operation
+
+linalg.yield is a special terminator operation for blocks inside regions in linalg generic ops. It returns values to the immediately enclosing linalg generic op.
+
+Example:
+
+linalg.yield %f0, %f1 : f32, f32
+Traits: AlwaysSpeculatableImplTrait, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands:
+Operand	Description
+values	variadic of any type

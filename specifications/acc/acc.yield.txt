@@ -1,0 +1,333 @@
+acc.yield (acc::YieldOp) ¶
+Acc yield and termination operation
+
+Syntax:
+
+operation ::= `acc.yield` attr-dict ($operands^ `:` type($operands))?
+acc.yield is a special terminator operation for block inside regions in various acc ops (including parallel, loop, atomic.update). It returns values to the immediately enclosing acc op.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<FirstprivateRecipeOp, LoopOp, ParallelOp, PrivateRecipeOp,ReductionRecipeOp, SerialOp, AtomicUpdateOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type
+Attributes ¶
+DeclareActionAttr ¶
+Syntax:
+
+#acc.declare_action<
+  SymbolRefAttr,   # preAlloc
+  SymbolRefAttr,   # postAlloc
+  SymbolRefAttr,   # preDealloc
+  SymbolRefAttr   # postDealloc
+>
+Parameters: ¶
+Parameter	C++ type	Description
+preAlloc	SymbolRefAttr	
+postAlloc	SymbolRefAttr	
+preDealloc	SymbolRefAttr	
+postDealloc	SymbolRefAttr	
+DeclareAttr ¶
+Syntax:
+
+#acc.declare<
+  DataClauseAttr,   # dataClause
+  bool   # implicit
+>
+Parameters: ¶
+Parameter	C++ type	Description
+dataClause	DataClauseAttr	
+implicit	bool	
+ClauseDefaultValueAttr ¶
+DefaultValue Clause
+
+Syntax:
+
+#acc.defaultvalue<
+  ::mlir::acc::ClauseDefaultValue   # value
+>
+Enum cases:
+
+present (Present)
+none (None)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::ClauseDefaultValue	an enum of type ClauseDefaultValue
+CombinedConstructsTypeAttr ¶
+Differentiate between combined constructs
+
+Syntax:
+
+#acc.combined_constructs<
+  ::mlir::acc::CombinedConstructsType   # value
+>
+Enum cases:
+
+kernels_loop (KernelsLoop)
+parallel_loop (ParallelLoop)
+serial_loop (SerialLoop)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::CombinedConstructsType	an enum of type CombinedConstructsType
+ConstructAttr ¶
+constructs supported by OpenACC
+
+Syntax:
+
+#acc.construct<
+  ::mlir::acc::Construct   # value
+>
+Enum cases:
+
+acc_construct_parallel (acc_construct_parallel)
+acc_construct_kernels (acc_construct_kernels)
+acc_construct_loop (acc_construct_loop)
+acc_construct_data (acc_construct_data)
+acc_construct_enter_data (acc_construct_enter_data)
+acc_construct_exit_data (acc_construct_exit_data)
+acc_construct_host_data (acc_construct_host_data)
+acc_construct_atomic (acc_construct_atomic)
+acc_construct_declare (acc_construct_declare)
+acc_construct_init (acc_construct_init)
+acc_construct_shutdown (acc_construct_shutdown)
+acc_construct_set (acc_construct_set)
+acc_construct_update (acc_construct_update)
+acc_construct_routine (acc_construct_routine)
+acc_construct_wait (acc_construct_wait)
+acc_construct_runtime_api (acc_construct_runtime_api)
+acc_construct_serial (acc_construct_serial)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::Construct	an enum of type Construct
+DataClauseAttr ¶
+data clauses supported by OpenACC
+
+Syntax:
+
+#acc.data_clause<
+  ::mlir::acc::DataClause   # value
+>
+Enum cases:
+
+acc_copyin (acc_copyin)
+acc_copyin_readonly (acc_copyin_readonly)
+acc_copy (acc_copy)
+acc_copyout (acc_copyout)
+acc_copyout_zero (acc_copyout_zero)
+acc_present (acc_present)
+acc_create (acc_create)
+acc_create_zero (acc_create_zero)
+acc_delete (acc_delete)
+acc_attach (acc_attach)
+acc_detach (acc_detach)
+acc_no_create (acc_no_create)
+acc_private (acc_private)
+acc_firstprivate (acc_firstprivate)
+acc_deviceptr (acc_deviceptr)
+acc_getdeviceptr (acc_getdeviceptr)
+acc_update_host (acc_update_host)
+acc_update_self (acc_update_self)
+acc_update_device (acc_update_device)
+acc_use_device (acc_use_device)
+acc_reduction (acc_reduction)
+acc_declare_device_resident (acc_declare_device_resident)
+acc_declare_link (acc_declare_link)
+acc_cache (acc_cache)
+acc_cache_readonly (acc_cache_readonly)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::DataClause	an enum of type DataClause
+DeviceTypeAttr ¶
+built-in device type supported by OpenACC
+
+Syntax:
+
+#acc.device_type<
+  ::mlir::acc::DeviceType   # value
+>
+Enum cases:
+
+none (None)
+star (Star)
+default (Default)
+host (Host)
+multicore (Multicore)
+nvidia (Nvidia)
+radeon (Radeon)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::DeviceType	an enum of type DeviceType
+GangArgTypeAttr ¶
+Differentiate the different gang arg values
+
+Syntax:
+
+#acc.gang_arg_type<
+  ::mlir::acc::GangArgType   # value
+>
+Enum cases:
+
+Num (Num)
+Dim (Dim)
+Static (Static)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::GangArgType	an enum of type GangArgType
+ReductionOperatorAttr ¶
+built-in reduction operations supported by OpenACC
+
+Syntax:
+
+#acc.reduction_operator<
+  ::mlir::acc::ReductionOperator   # value
+>
+Enum cases:
+
+add (AccAdd)
+mul (AccMul)
+max (AccMax)
+min (AccMin)
+iand (AccIand)
+ior (AccIor)
+xor (AccXor)
+eqv (AccEqv)
+neqv (AccNeqv)
+land (AccLand)
+lor (AccLor)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::acc::ReductionOperator	an enum of type ReductionOperator
+RoutineInfoAttr ¶
+Keeps track of associated acc routine information
+
+Syntax:
+
+#acc.routine_info<
+  ::llvm::ArrayRef<SymbolRefAttr>   # accRoutines
+>
+This attribute is used to create the association between a function and its acc.routine operation. A func.func uses this if its name was referenced in an acc routine directive.
+
+Parameters: ¶
+Parameter	C++ type	Description
+accRoutines	::llvm::ArrayRef<SymbolRefAttr>	
+Types ¶
+DataBoundsType ¶
+Type for representing acc data clause bounds information
+
+Syntax: !acc.data_bounds_ty
+
+DeclareTokenType ¶
+declare token type
+
+Syntax: !acc.declare_token
+
+acc.declare_token is a type returned by a declare_enter operation and can be passed to a declare_exit operation to represent an implicit data region.
+
+Enums ¶
+ClauseDefaultValue ¶
+DefaultValue Clause
+
+Cases: ¶
+Symbol	Value	String
+Present	0	present
+None	1	none
+CombinedConstructsType ¶
+Differentiate between combined constructs
+
+Cases: ¶
+Symbol	Value	String
+KernelsLoop	1	kernels_loop
+ParallelLoop	2	parallel_loop
+SerialLoop	3	serial_loop
+Construct ¶
+constructs supported by OpenACC
+
+Cases: ¶
+Symbol	Value	String
+acc_construct_parallel	0	acc_construct_parallel
+acc_construct_kernels	1	acc_construct_kernels
+acc_construct_loop	2	acc_construct_loop
+acc_construct_data	3	acc_construct_data
+acc_construct_enter_data	4	acc_construct_enter_data
+acc_construct_exit_data	5	acc_construct_exit_data
+acc_construct_host_data	6	acc_construct_host_data
+acc_construct_atomic	7	acc_construct_atomic
+acc_construct_declare	8	acc_construct_declare
+acc_construct_init	9	acc_construct_init
+acc_construct_shutdown	10	acc_construct_shutdown
+acc_construct_set	11	acc_construct_set
+acc_construct_update	12	acc_construct_update
+acc_construct_routine	13	acc_construct_routine
+acc_construct_wait	14	acc_construct_wait
+acc_construct_runtime_api	15	acc_construct_runtime_api
+acc_construct_serial	16	acc_construct_serial
+DataClause ¶
+data clauses supported by OpenACC
+
+Cases: ¶
+Symbol	Value	String
+acc_copyin	1	acc_copyin
+acc_copyin_readonly	2	acc_copyin_readonly
+acc_copy	3	acc_copy
+acc_copyout	4	acc_copyout
+acc_copyout_zero	5	acc_copyout_zero
+acc_present	6	acc_present
+acc_create	7	acc_create
+acc_create_zero	8	acc_create_zero
+acc_delete	9	acc_delete
+acc_attach	10	acc_attach
+acc_detach	11	acc_detach
+acc_no_create	12	acc_no_create
+acc_private	13	acc_private
+acc_firstprivate	14	acc_firstprivate
+acc_deviceptr	15	acc_deviceptr
+acc_getdeviceptr	16	acc_getdeviceptr
+acc_update_host	17	acc_update_host
+acc_update_self	18	acc_update_self
+acc_update_device	19	acc_update_device
+acc_use_device	20	acc_use_device
+acc_reduction	21	acc_reduction
+acc_declare_device_resident	22	acc_declare_device_resident
+acc_declare_link	23	acc_declare_link
+acc_cache	24	acc_cache
+acc_cache_readonly	25	acc_cache_readonly
+DeviceType ¶
+built-in device type supported by OpenACC
+
+Cases: ¶
+Symbol	Value	String
+None	0	none
+Star	1	star
+Default	2	default
+Host	3	host
+Multicore	4	multicore
+Nvidia	5	nvidia
+Radeon	6	radeon
+GangArgType ¶
+Differentiate the different gang arg values
+
+Cases: ¶
+Symbol	Value	String
+Num	0	Num
+Dim	1	Dim
+Static	2	Static
+ReductionOperator ¶
+built-in reduction operations supported by OpenACC
+
+Cases: ¶
+Symbol	Value	String
+AccAdd	0	add
+AccMul	1	mul
+AccMax	2	max
+AccMin	3	min
+AccIand	4	iand
+AccIor	5	ior
+AccXor	6	xor
+AccEqv	7	eqv
+AccNeqv	8	neqv
+AccLand	9	land
+AccLor	10	lor

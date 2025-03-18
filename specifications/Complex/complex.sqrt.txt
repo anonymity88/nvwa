@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// SqrtOp
+//===----------------------------------------------------------------------===//
+
+def SqrtOp : ComplexUnaryOp<"sqrt", [SameOperandsAndResultType]> {
+  let summary = "complex square root";
+  let description = [{
+    The `sqrt` operation takes a complex number and returns its square root.
+
+    Example:
+
+    ```mlir
+    %a = complex.sqrt %b : complex<f32>
+    ```
+  }];
+
+  let results = (outs Complex<AnyFloat>:$result);
+}
+

@@ -1,0 +1,24 @@
+math.absi (math::AbsIOp) ¶
+Integer absolute-value operation
+
+Syntax:
+
+operation ::= `math.absi` $operand attr-dict `:` type($result)
+The absi operation computes the absolute value. It takes one operand of integer type (i.e., scalar, tensor or vector) and returns one result of the same type.
+
+Example:
+
+// Scalar absolute value.
+%a = math.absi %b : i64
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	signless-integer-like
+Results: ¶
+Result	Description
+result	signless-integer-like

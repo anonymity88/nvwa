@@ -1,0 +1,7 @@
+transform.apply_patterns.tensor.reassociative_reshape_folding (transform::ApplyReassociativeReshapeFoldingPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.reassociative_reshape_folding` attr-dict
+Indicates that reassociative reshapes (tensor.collapse_shape / tensor.expand_shape) should be folded with inverse rank expansions / rank reductions (via tensor.insert_slice / tensor.extract_slice).
+
+Interfaces: PatternDescriptorOpInterface

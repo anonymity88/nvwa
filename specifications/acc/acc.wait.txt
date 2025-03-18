@@ -1,0 +1,29 @@
+acc.wait (acc::WaitOp) ¶
+Wait operation
+
+Syntax:
+
+operation ::= `acc.wait` ( `(` $waitOperands^ `:` type($waitOperands) `)` )?
+              oilist(`async` `(` $asyncOperand `:` type($asyncOperand) `)`
+              |`wait_devnum` `(` $waitDevnum `:` type($waitDevnum) `)`
+              |`if` `(` $ifCond `)`
+              ) attr-dict-with-keyword
+The “acc.wait” operation represents the OpenACC wait executable directive.
+
+Example:
+
+acc.wait(%value1: index)
+acc.wait() async(%async1: i32)
+acc.wait does not implement MemoryEffects interface, so it affects all the resources. This is conservatively correct. More precise modelling of the memory effects seems to be impossible without the whole program analysis.
+
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+async	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+waitOperands	variadic of integer or index
+asyncOperand	integer or index
+waitDevnum	integer or index
+ifCond	1-bit signless integer

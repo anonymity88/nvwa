@@ -1,0 +1,5 @@
+llvm.unreachable (LLVM::UnreachableOp) ¶
+Syntax:
+
+operation ::= `llvm.unreachable` attr-dict
+Traits: Terminator

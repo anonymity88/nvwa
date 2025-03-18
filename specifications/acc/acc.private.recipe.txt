@@ -1,0 +1,36 @@
+acc.private.recipe (acc::PrivateRecipeOp) ¶
+Privatization recipe
+
+Syntax:
+
+operation ::= `acc.private.recipe` $sym_name `:` $type attr-dict-with-keyword `init` $initRegion
+              (`destroy` $destroyRegion^)?
+Declares an OpenACC privatization recipe. The operation requires one mandatory and one optional region.
+
+The initializer region specifies how to allocate and initialize a new private value. For example in Fortran, a derived-type might have a default initialization. The region has an argument that contains the value that need to be privatized. This is useful if the type is not known at compile time and the private value is needed to create its copy.
+The destroy region specifies how to destruct the value when it reaches its end of life. It takes the privatized value as argument.
+A single privatization recipe can be used for multiple operand if they have the same type and do not require a specific default initialization.
+
+Example:
+
+acc.private.recipe @privatization_f32 : f32 init {
+^bb0(%0: f32):
+  // init region contains a sequence of operations to create and
+  // initialize the copy if needed. It yields the create copy.
+} destroy {
+^bb0(%0: f32)
+  // destroy region contains a sequences of operations to destruct the
+  // created copy.
+}
+
+// The privatization symbol is then used in the corresponding operation.
+acc.parallel private(@privatization_f32 -> %a : f32) {
+}
+Traits: IsolatedFromAbove
+
+Interfaces: RecipeInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+type	::mlir::TypeAttr	any type attribute

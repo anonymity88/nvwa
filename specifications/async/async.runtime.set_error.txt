@@ -1,0 +1,11 @@
+async.runtime.set_error (async::RuntimeSetErrorOp) ¶
+Switches token or value to error state
+
+Syntax:
+
+operation ::= `async.runtime.set_error` $operand attr-dict `:` type($operand)
+The async.runtime.set_error operation switches async token or value state to error.
+
+Operands: ¶
+Operand	Description
+operand	async value type or async token type

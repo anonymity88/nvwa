@@ -1,0 +1,25 @@
+index.or (index::OrOp) ¶
+Index bitwise or
+
+Syntax:
+
+operation ::= `index.or` $lhs `,` $rhs attr-dict
+The index.or operation takes two index values and computes their bitwise or.
+
+Example:
+
+// c = a | b
+%c = index.or %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

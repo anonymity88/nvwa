@@ -1,0 +1,15 @@
+omp.ordered.region (omp::OrderedRegionOp) ¶
+Ordered construct with region
+
+Syntax:
+
+operation ::= `omp.ordered.region` oilist(
+              `par_level_simd` $par_level_simd
+              ) $region attr-dict
+The ordered construct with region specifies a structured block in a worksharing-loop, SIMD, or worksharing-loop SIMD region that is executed in the order of the loop iterations.
+
+The par_level_simd attribute corresponds to the simd clause specified. If it is not present, it behaves as if the threads clause is specified or no clause is specified.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+par_level_simd	::mlir::UnitAttr	unit attribute

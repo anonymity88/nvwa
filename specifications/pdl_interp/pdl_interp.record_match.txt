@@ -1,0 +1,30 @@
+pdl_interp.record_match (pdl_interp::RecordMatchOp) ¶
+Record the metadata for a successful pattern match
+
+Syntax:
+
+operation ::= `pdl_interp.record_match` $rewriter (`(` $inputs^ `:` type($inputs) `)`)? `:`
+              `benefit` `(` $benefit `)` `,`
+              (`generatedOps` `(` $generatedOps^ `)` `,`)?
+              `loc` `(` `[` $matchedOps `]` `)`
+              (`,` `root` `(` $rootKind^ `)`)? attr-dict `->` $dest
+pdl_interp.record_match operations record a successful pattern match with the interpreter and branch to the next part of the matcher. The metadata recorded by these operations correspond to a specific pdl.pattern, as well as what values were used during that match that should be propagated to the rewriter.
+
+Example:
+
+pdl_interp.record_match @rewriters::myRewriter(%root : !pdl.operation) : benefit(1), loc([%root, %op1]), root("foo.op") -> ^nextDest
+Traits: AttrSizedOperandSegments, Terminator
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+rewriter	::mlir::SymbolRefAttr	symbol reference attribute
+rootKind	::mlir::StringAttr	string attribute
+generatedOps	::mlir::ArrayAttr	string array attribute
+benefit	::mlir::IntegerAttr	16-bit signless integer attribute whose value is non-negative
+Operands: ¶
+Operand	Description
+inputs	variadic of pdl type
+matchedOps	variadic of PDL handle to an mlir::Operation *
+Successors: ¶
+Successor	Description
+dest	any successor

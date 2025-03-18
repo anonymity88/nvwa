@@ -1,0 +1,34 @@
+spirv.ImageQuerySize (spirv::ImageQuerySizeOp) ¶
+Query the dimensions of Image, with no level of detail.
+
+Syntax:
+
+operation ::= `spirv.ImageQuerySize` attr-dict $image `:` type($image) `->` type($result)
+Result Type must be an integer type scalar or vector. The number of components must be:
+
+1 for the 1D and Buffer dimensionalities,
+
+2 for the 2D, Cube, and Rect dimensionalities,
+
+3 for the 3D dimensionality,
+
+plus 1 more if the image type is arrayed. This vector is filled in with (width [, height] [, elements]) where elements is the number of layers in an image array or the number of cubes in a cube-map array.
+
+Image must be an object whose type is OpTypeImage. Its Dim operand must be one of those listed under Result Type, above. Additionally, if its Dim is 1D, 2D, 3D, or Cube, it must also have either an MS of 1 or a Sampled of 0 or 2. There is no implicit level-of-detail consumed by this instruction. See OpImageQuerySizeLod for querying images having level of detail. This operation is allowed on an image decorated as NonReadable. See the client API specification for additional image type restrictions.
+
+Example: ¶
+%3 = spirv.ImageQuerySize %0 : !spirv.image<i32, Dim1D, NoDepth, NonArrayed, SingleSampled, NoSampler, Unknown> -> i32
+%4 = spirv.ImageQuerySize %1 : !spirv.image<i32, Dim2D, NoDepth, NonArrayed, SingleSampled, NoSampler, Unknown> -> vector<2xi32>
+%5 = spirv.ImageQuerySize %2 : !spirv.image<i32, Dim2D, NoDepth, Arrayed, SingleSampled, NoSampler, Unknown> -> vector<3xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+image	any SPIR-V image type
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

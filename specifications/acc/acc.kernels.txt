@@ -1,0 +1,65 @@
+acc.kernels (acc::KernelsOp) ¶
+Kernels construct
+
+Syntax:
+
+operation ::= `acc.kernels` ( `combined` `(` `loop` `)` $combined^)?
+              oilist(
+              `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              | `async` `(` custom<DeviceTypeOperands>($asyncOperands,
+              type($asyncOperands), $asyncOperandsDeviceType) `)`
+              | `num_gangs` `(` custom<NumGangs>($numGangs,
+              type($numGangs), $numGangsDeviceType, $numGangsSegments) `)`
+              | `num_workers` `(` custom<DeviceTypeOperands>($numWorkers,
+              type($numWorkers), $numWorkersDeviceType) `)`
+              | `vector_length` `(` custom<DeviceTypeOperands>($vectorLength,
+              type($vectorLength), $vectorLengthDeviceType) `)`
+              | `wait` `` custom<WaitClause>($waitOperands, type($waitOperands),
+              $waitOperandsDeviceType, $waitOperandsSegments, $hasWaitDevnum,
+              $waitOnly)
+              | `self` `(` $selfCond `)`
+              | `if` `(` $ifCond `)`
+              )
+              $region attr-dict-with-keyword
+The “acc.kernels” operation represents a kernels construct block. It has one region to be compiled into a sequence of kernels for execution on the current device.
+
+Example:
+
+acc.kernels num_gangs(%c10) num_workers(%c10)
+    private(%c : memref<10xf32>) {
+  // kernels region
+}
+collapse, gang, worker, vector, seq, independent, auto and tile operands are supported with device_type information. They should only be accessed by the extra provided getters. If modified, the corresponding device_type attributes must be modified as well.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, RecursiveMemoryEffects
+
+Interfaces: ComputeRegionOpInterface, MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+asyncOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+asyncOnly	::mlir::ArrayAttr	device type array attribute
+waitOperandsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+waitOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+hasWaitDevnum	::mlir::ArrayAttr	1-bit boolean array attribute
+waitOnly	::mlir::ArrayAttr	device type array attribute
+numGangsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+numGangsDeviceType	::mlir::ArrayAttr	device type array attribute
+numWorkersDeviceType	::mlir::ArrayAttr	device type array attribute
+vectorLengthDeviceType	::mlir::ArrayAttr	device type array attribute
+selfAttr	::mlir::UnitAttr	unit attribute
+defaultAttr	::mlir::acc::ClauseDefaultValueAttr	
+DefaultValue Clause
+combined	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+asyncOperands	variadic of integer or index
+waitOperands	variadic of integer or index
+numGangs	variadic of integer or index
+numWorkers	variadic of integer or index
+vectorLength	variadic of integer or index
+ifCond	1-bit signless integer
+selfCond	1-bit signless integer
+dataClauseOperands	variadic of PointerLikeType instance

@@ -1,0 +1,9 @@
+transform.apply_patterns.vector.materialize_masks (transform::ApplyMaterializeMasksPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.materialize_masks` attr-dict
+Indicates that mask operations should be lowered to fine-grained arithemtic operations.
+
+This is usually the last step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface

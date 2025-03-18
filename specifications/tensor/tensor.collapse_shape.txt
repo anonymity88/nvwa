@@ -1,0 +1,30 @@
+tensor.collapse_shape (tensor::CollapseShapeOp) ¶
+Operation to produce a tensor with a smaller rank
+
+Syntax:
+
+operation ::= `tensor.collapse_shape` $src $reassociation attr-dict `:` type($src) `into` type($result)
+The tensor.collapse_shape op produces a new tensor of lower (or equal) rank whose dimension sizes are a reassociation of the original src dimensions.
+
+A reassociation is defined as a continuous grouping of dimensions and is represented by an array of DenseI64ArrayAttr attribute. The reassociation maps are applied to the operand shape to obtain the result shape.
+
+Example:
+
+// Dimension collapse (i, j) -> i' and k -> k'
+%b = tensor.collapse_shape %a [[0, 1], [2]]
+    : tensor<?x?x?xf32> into tensor<?x?xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reassociation	::mlir::ArrayAttr	Array of 64-bit integer array attributes
+Operands: ¶
+Operand	Description
+src	tensor of any type values
+Results: ¶
+Result	Description
+result	tensor of any type values

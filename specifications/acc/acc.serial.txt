@@ -1,0 +1,66 @@
+acc.serial (acc::SerialOp) ¶
+Serial construct
+
+Syntax:
+
+operation ::= `acc.serial` ( `combined` `(` `loop` `)` $combined^)?
+              oilist(
+              `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              | `async` `(` custom<DeviceTypeOperands>($asyncOperands,
+              type($asyncOperands), $asyncOperandsDeviceType) `)`
+              | `firstprivate` `(` custom<SymOperandList>($firstprivateOperands,
+              type($firstprivateOperands), $firstprivatizations)
+              `)`
+              | `private` `(` custom<SymOperandList>(
+              $privateOperands, type($privateOperands), $privatizations)
+              `)`
+              | `wait` `` custom<WaitClause>($waitOperands, type($waitOperands),
+              $waitOperandsDeviceType, $waitOperandsSegments, $hasWaitDevnum,
+              $waitOnly)
+              | `self` `(` $selfCond `)`
+              | `if` `(` $ifCond `)`
+              | `reduction` `(` custom<SymOperandList>(
+              $reductionOperands, type($reductionOperands), $reductionRecipes)
+              `)`
+              )
+              $region attr-dict-with-keyword
+The “acc.serial” operation represents a serial construct block. It has one region to be executed in serial on the current device.
+
+Example:
+
+acc.serial private(%c : memref<10xf32>) {
+  // serial region
+}
+async and wait operands are supported with device_type information. They should only be accessed by the extra provided getters. If modified, the corresponding device_type attributes must be modified as well.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, RecursiveMemoryEffects
+
+Interfaces: ComputeRegionOpInterface, MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+asyncOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+asyncOnly	::mlir::ArrayAttr	device type array attribute
+waitOperandsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+waitOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+hasWaitDevnum	::mlir::ArrayAttr	1-bit boolean array attribute
+waitOnly	::mlir::ArrayAttr	device type array attribute
+selfAttr	::mlir::UnitAttr	unit attribute
+reductionRecipes	::mlir::ArrayAttr	symbol ref array attribute
+privatizations	::mlir::ArrayAttr	symbol ref array attribute
+firstprivatizations	::mlir::ArrayAttr	symbol ref array attribute
+defaultAttr	::mlir::acc::ClauseDefaultValueAttr	
+DefaultValue Clause
+combined	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+asyncOperands	variadic of integer or index
+waitOperands	variadic of integer or index
+ifCond	1-bit signless integer
+selfCond	1-bit signless integer
+reductionOperands	variadic of any type
+privateOperands	variadic of PointerLikeType instance
+firstprivateOperands	variadic of PointerLikeType instance
+dataClauseOperands	variadic of PointerLikeType instance

@@ -1,0 +1,36 @@
+arm_sme.sumops_4way (arm_sme::SuMops4WayOp) ¶
+Signed by unsigned integer sum of 4 outer products and subtract
+
+Syntax:
+
+operation ::= `arm_sme.sumops_4way` $lhs `,` $rhs
+              oilist(
+              `acc` `` `(` $acc `)`
+              | `masks` `` `(` $lhsMask `,` $rhsMask `)`
+              ) attr-dict `:` type($lhs) `,` type($rhs) `into` type($result)
+Example: I8 to I32
+
+%result = arm_sme.sumops_4way $lhs, $rhs : vector<[16]xi8>, vector<[16]xi8> into vector<[4]x[4]xi32>
+Example: I16 to I64
+
+%result = arm_sme.sumops_4way $lhs, $rhs : vector<[8]xi16>, vector<[8]xi16> into vector<[2]x[2]xi64>
+Refer to smopa_4way for a detailed description of 4-way outer products.
+
+Spec	Features
+SUMOPS (4-way)	+sme (32-bit), +sme-i16i64 (64-bit)
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	of ranks 1scalable vector of 8-bit signless integer values of length 16 or of ranks 1scalable vector of 16-bit signless integer values of length 8
+rhs	vector of any type values
+lhsMask	vector of any type values
+rhsMask	vector of any type values
+acc	vector of any type values
+Results: ¶
+Result	Description
+result	vector<[4]x[4]xi32> of 32-bit signless integer values or vector<[2]x[2]xi64> of 64-bit signless integer values

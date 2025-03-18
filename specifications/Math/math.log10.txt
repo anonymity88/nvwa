@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// Log10Op
+//===----------------------------------------------------------------------===//
+
+def Math_Log10Op : Math_FloatUnaryOp<"log10"> {
+  let summary = "base-10 logarithm of the specified value";
+
+  let description = [{
+    Computes the base-10 logarithm of the given value. It takes one operand of
+    floating point type (i.e., scalar, tensor or vector) and returns one result of
+    the same type.
+
+    Example:
+
+    ```mlir
+    // Scalar log10 operation.
+    %y = math.log10 %x : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

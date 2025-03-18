@@ -1,0 +1,18 @@
+llvm.intr.vector.reduce.fadd (LLVM::vector_reduce_fadd) ¶
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultElementType
+
+Interfaces: ConditionallySpeculatable, FastmathFlagsInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmathFlags	::mlir::LLVM::FastmathFlagsAttr	
+LLVM fastmath flags
+Operands: ¶
+Operand	Description
+start_value	floating-point
+input	LLVM dialect-compatible vector of floating-point
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// OrOp
+//===----------------------------------------------------------------------===//
+
+def Index_OrOp : IndexBinaryOp<"or", [Commutative, Pure]> {
+  let summary = "index bitwise or";
+  let description = [{
+    The `index.or` operation takes two index values and computes their bitwise
+    or.
+
+    Example:
+
+    ```mlir
+    // c = a | b
+    %c = index.or %a, %b
+    ```
+  }];
+}
+

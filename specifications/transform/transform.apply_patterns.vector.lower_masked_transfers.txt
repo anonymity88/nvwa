@@ -1,0 +1,12 @@
+transform.apply_patterns.vector.lower_masked_transfers (transform::ApplyLowerMaskedTransfersPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_masked_transfers` attr-dict
+Apply opt-in patterns that lower vector.mask operations surrounding side-effecting ops:
+
+MaskedTransferReadOpPattern
+MaskedTransferWriteOpPattern
+MaskedGatherOpPattern
+This is usually a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface

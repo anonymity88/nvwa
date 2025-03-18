@@ -1,0 +1,17 @@
+transform.match.structured.yield (transform::MatchStructuredYieldOp) ¶
+Terminator for transform.match.structured blocks
+
+Syntax:
+
+operation ::= `transform.match.structured.yield` $handles attr-dict (`:` type($handles)^)?
+Forwards the payload association from the operands to the results of the parent op. Always succeeds.
+
+Traits: Terminator
+
+Interfaces: MemoryEffectOpInterface
+
+Operands: ¶
+Operand	Description
+handles	variadic of any transform handle or parameter
+Structured (Linalg) Transform Operations ¶
+source

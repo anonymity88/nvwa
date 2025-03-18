@@ -1,0 +1,9 @@
+llvm.intr.vaend (LLVM::VaEndOp) ¶
+Destroys arg_list, which has been initialized by intr.vastart or intr.vacopy.
+
+Syntax:
+
+operation ::= `llvm.intr.vaend` $arg_list attr-dict `:` qualified(type($arg_list))
+Operands: ¶
+Operand	Description
+arg_list	LLVM pointer type

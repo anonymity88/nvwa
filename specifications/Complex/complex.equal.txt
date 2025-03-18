@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// EqualOp
+//===----------------------------------------------------------------------===//
+
+def EqualOp : Complex_Op<"eq",
+    [Pure, AllTypesMatch<["lhs", "rhs"]>, Elementwise]> {
+  let summary = "computes whether two complex values are equal";
+  let description = [{
+    The `eq` op takes two complex numbers and returns whether they are equal.
+
+    Example:
+
+    ```mlir
+    %a = complex.eq %b, %c : complex<f32>
+    ```
+  }];
+
+  let arguments = (ins Complex<AnyFloat>:$lhs, Complex<AnyFloat>:$rhs);
+  let results = (outs I1:$result);
+
+  let assemblyFormat = "$lhs `,` $rhs  attr-dict `:` type($lhs)";
+}
+

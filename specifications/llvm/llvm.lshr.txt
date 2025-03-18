@@ -1,0 +1,20 @@
+llvm.lshr (LLVM::LShrOp) ¶
+Syntax:
+
+operation ::= `llvm.lshr` (`exact` $isExact^)? $lhs `,` $rhs attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, ExactFlagInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+isExact	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+lhs	signless integer or LLVM dialect-compatible vector of signless integer
+rhs	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	signless integer or LLVM dialect-compatible vector of signless integer

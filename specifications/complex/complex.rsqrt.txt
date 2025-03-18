@@ -1,0 +1,27 @@
+complex.rsqrt (complex::RsqrtOp) ¶
+Complex reciprocal of square root
+
+Syntax:
+
+operation ::= `complex.rsqrt` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The rsqrt operation computes reciprocal of square root.
+
+Example:
+
+%a = complex.rsqrt %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

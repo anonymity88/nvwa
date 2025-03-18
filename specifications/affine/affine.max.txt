@@ -1,0 +1,23 @@
+affine.max (affine::AffineMaxOp) ¶
+Max operation
+
+The affine.max operation computes the maximum value result from a multi-result affine map.
+
+Example:
+
+%0 = affine.max (d0) -> (1000, d0 + 512) (%i0) : index
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+map	::mlir::AffineMapAttr	AffineMap attribute
+Operands: ¶
+Operand	Description
+operands	variadic of index
+Results: ¶
+Result	Description
+«unnamed»	index

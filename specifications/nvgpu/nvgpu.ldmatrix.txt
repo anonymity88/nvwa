@@ -1,0 +1,27 @@
+nvgpu.ldmatrix (nvgpu::LdMatrixOp) ¶
+Syntax:
+
+operation ::= `nvgpu.ldmatrix` $srcMemref`[` $indices `]` attr-dict `:` type($srcMemref) `->` type($res)
+The nvgpu.ldmatrix op represents loading a matrix fragment from memory to registers. The source and result type must be compatible with lowering to the nvvm.ldmatrix instruction. This op represents the distributed version of a vector.transfer_read as an intermediate step between lowering from vector.transfer_read to nvvm.ldmatrix.
+
+This operation is meant to follow the semantic of described here: https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-instructions-ldmatrix
+
+Example:
+
+%0 = nvgpu.ldmatrix %sm[%c0, %c0] {numTiles = 4 : i32, transpose = false} :
+  memref<?x?xf16, 3> -> vector<4x2xf16>
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Read on ::mlir::SideEffects::DefaultResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+transpose	::mlir::BoolAttr	bool attribute
+numTiles	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+srcMemref	memref of any type values
+indices	variadic of index
+Results: ¶
+Result	Description
+res	vector of any type values

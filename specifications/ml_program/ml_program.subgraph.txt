@@ -1,0 +1,24 @@
+ml_program.subgraph (ml_program::SubgraphOp) ¶
+An function containing a single Graph region
+
+This simple function container represents callables in an ML program where the body is a Graph region containing a single block. It must be terminated by an output op which yields values with the same arity and types as the FunctionType results of the containing subgraph.
+
+This op is a Symbol but does not introduce a new SymbolTable. As such, it cannot represented nested symbols.
+
+Example:
+
+ml_program.subgraph private @some_extern(i32) -> i32
+ml_program.subgraph @compute(%arg0 : i32) -> i32 {
+  ml_program.output %arg0 : i32
+}
+Traits: HasOnlyGraphRegion, IsolatedFromAbove, SingleBlock
+
+Interfaces: CallableOpInterface, FunctionOpInterface, RegionKindInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	type attribute of function type
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+sym_visibility	::mlir::StringAttr	string attribute

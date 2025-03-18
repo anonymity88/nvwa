@@ -1,0 +1,12 @@
+arm_sme.intr.read.vert (arm_sme::aarch64_sme_read_vert) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+tile_id	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+vector	a vector type that matches the size of a SVE vector
+predicate	a vector type that matches the size of a SVE predicate
+tile_slice_index	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,24 @@
+mesh.shard_shape (mesh::ShardShapeOp) ¶
+Get the shard shape of a given process/device.
+
+Syntax:
+
+operation ::= `mesh.shard_shape` custom<DimensionList>($shape) $sharding $device attr-dict `:` type($result)
+The device/process id is a linearized id of the device/process in the mesh. This operation might be used during spmdization when the shard shape depends on (non-constant) values used in mesh.sharding.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+shape	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+sharding	sharding definition
+device	index
+Results: ¶
+Result	Description
+result	variadic of index

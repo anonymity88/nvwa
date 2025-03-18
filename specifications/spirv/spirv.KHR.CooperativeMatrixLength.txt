@@ -1,0 +1,25 @@
+spirv.KHR.CooperativeMatrixLength (spirv::KHRCooperativeMatrixLengthOp) ¶
+Queries the number of cooperative matrix components
+
+Syntax:
+
+operation ::= `spirv.KHR.CooperativeMatrixLength` attr-dict `:` $cooperative_matrix_type
+Number of components of a cooperative matrix type accessible to each invocation when treated as a composite.
+
+The type attribute must be a cooperative matrix type.
+
+Example: ¶
+%0 = spirv.KHR.CooperativeMatrixLength :
+       !spirv.coopmatrix<8x16xi32, Subgroup, MatrixA>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+cooperative_matrix_type	::mlir::TypeAttr	type attribute of any SPIR-V cooperative matrix type
+Results: ¶
+Result	Description
+result	Int32

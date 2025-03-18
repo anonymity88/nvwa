@@ -1,0 +1,26 @@
+transform.apply_registered_pass (transform::ApplyRegisteredPassOp) ¶
+Applies the specified registered pass or pass pipeline
+
+Syntax:
+
+operation ::= `transform.apply_registered_pass` $pass_name `to` $target attr-dict `:` functional-type(operands, results)
+This transform applies the specified pass or pass pipeline to the targeted ops. The name of the pass/pipeline is specified as a string attribute, as set during pass/pipeline registration. Optionally, pass options may be specified as a string attribute. The pass options syntax is identical to the one used with “mlir-opt”.
+
+This op first looks for a pass pipeline with the specified name. If no such pipeline exists, it looks for a pass with the specified name. If no such pass exists either, this op fails definitely.
+
+This transform consumes the target handle and produces a new handle that is mapped to the same op. Passes are not allowed to remove/modify the operation that they operate on, so the target op is guaranteed to still exist. The target handle is invalidated because a pass may arbitrarily modify the body of targeted ops.
+
+Traits: FunctionalStyleTransformOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pass_name	::mlir::StringAttr	string attribute
+options	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformHandleTypeInterface instance

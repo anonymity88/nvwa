@@ -1,0 +1,26 @@
+gpu.memcpy (gpu::MemcpyOp) ¶
+GPU memcpy operation
+
+Syntax:
+
+operation ::= `gpu.memcpy` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $dst`,` $src `:` type($dst)`,` type($src) attr-dict
+The gpu.memcpy operation copies the content of one memref to another.
+
+The op does not execute before all async dependencies have finished executing.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token.
+
+Example:
+
+%token = gpu.memcpy async [%dep] %dst, %src : memref<?xf32, 1>, memref<?xf32>
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+dst	memref of any type values
+src	memref of any type values
+Results: ¶
+Result	Description
+asyncToken	async token type

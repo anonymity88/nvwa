@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// CastUOp
+//===----------------------------------------------------------------------===//
+
+def Index_CastUOp : IndexOp<"castu", [Pure,
+    DeclareOpInterfaceMethods<CastOpInterface>]> {
+  let summary = "index unsigned cast";
+  let description = [{
+    The `index.castu` operation enables conversions between values of index type
+    and concrete fixed-width integer types. If casting to a wider integer, the
+    value is zero-extended. If casting to a narrower integer, the value is
+    truncated.
+
+    Example:
+
+    ```mlir
+    // Cast to i32
+    %0 = index.castu %a : index to i32
+
+    // Cast from i64
+    %1 = index.castu %b : i64 to index
+    ```
+  }];
+
+  let arguments = (ins AnyTypeOf<[AnyInteger, Index]>:$input);
+  let results = (outs AnyTypeOf<[AnyInteger, Index]>:$output);
+  let assemblyFormat = "$input attr-dict `:` type($input) `to` type($output)";
+  let hasFolder = 1;
+}
+

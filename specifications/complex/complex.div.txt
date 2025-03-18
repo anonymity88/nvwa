@@ -1,0 +1,26 @@
+complex.div (complex::DivOp) ¶
+Complex division
+
+Syntax:
+
+operation ::= `complex.div` $lhs `,` $rhs (`fastmath` `` $fastmath^)? attr-dict `:` type($result)
+The div operation takes two complex numbers and returns result of their division:
+
+%a = complex.div %b, %c : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	complex type with floating-point elements
+rhs	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

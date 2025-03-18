@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// Operator: log
+//===----------------------------------------------------------------------===//
+def Tosa_LogOp : Tosa_ElementwiseOp<"log", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise log op";
+
+  let description = [{
+    Elementwise natural logarithm operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+

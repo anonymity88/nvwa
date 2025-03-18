@@ -1,0 +1,26 @@
+arm_sve.ummla (arm_sve::UmmlaOp) ¶
+Matrix-matrix multiply and accumulate op
+
+Syntax:
+
+operation ::= `arm_sve.ummla` $acc `,` $src1 `,` $src2 attr-dict `:` type($src1) `to` type($dst)
+UMMLA: Unsigned integer matrix multiply-accumulate.
+
+This function maps to the UMMLA instruction, and it takes signless integer operands that the operation interprets as unsigned. It partitions the inputs into 128-bit quadwords, with the first input containing a row-by-row 2×2 matrix of 32-bit integers, the second input containing a row-by-row 2×8 matrix of 8-bit integers, and the third input containing a column-by-column 8×2 matrix of 8-bit integers. For each quadword, they multiply the second input matrix by the third input matrix using natural arithmetic and then add the result to the first input using modular arithmetic.
+
+Source: https://developer.arm.com/documentation/100987/0000
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+acc	scalable vector of 32-bit signless integer values of length 4
+src1	scalable vector of 8-bit signless integer values of length 16
+src2	scalable vector of 8-bit signless integer values of length 16
+Results: ¶
+Result	Description
+dst	scalable vector of 32-bit signless integer values of length 4

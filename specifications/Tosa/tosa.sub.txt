@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: sub
+//===----------------------------------------------------------------------===//
+def Tosa_SubOp : Tosa_ElementwiseOp<"sub", [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise subtraction operator";
+
+  let description = [{
+    Elementwise subtraction of input1 and input2. Axis of size 1 will be
+    broadcast as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+

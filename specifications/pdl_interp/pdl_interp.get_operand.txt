@@ -1,0 +1,26 @@
+pdl_interp.get_operand (pdl_interp::GetOperandOp) ¶
+Get a specified operand from an Operation
+
+Syntax:
+
+operation ::= `pdl_interp.get_operand` $index `of` $inputOp attr-dict
+pdl_interp.get_operand operations try to get a specific operand from an operation If the operation does not have an operand for the given index, a null value is returned.
+
+Example:
+
+%operand = pdl_interp.get_operand 1 of %op
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+index	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *
+Results: ¶
+Result	Description
+value	PDL handle for an mlir::Value

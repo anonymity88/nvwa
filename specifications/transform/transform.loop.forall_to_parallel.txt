@@ -1,0 +1,25 @@
+transform.loop.forall_to_parallel (transform::ForallToParallelOp) ¶
+Converts scf.forall into a nest of scf.for operations
+
+Syntax:
+
+operation ::= `transform.loop.forall_to_parallel` $target attr-dict `:` functional-type(operands, results)
+Converts the scf.forall operation pointed to by the given handle into an scf.parallel operation.
+
+The operand handle must be associated with exactly one payload operation.
+
+Loops with outputs are not supported.
+
+Return Modes ¶
+Consumes the operand handle. Produces a silenceable failure if the operand is not associated with a single scf.forall payload operation. Returns a handle to the new scf.parallel operation. Produces a silenceable failure if another number of resulting handles is requested.
+
+Traits: FunctionalStyleTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	variadic of TransformHandleTypeInterface instance

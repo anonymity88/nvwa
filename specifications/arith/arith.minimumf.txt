@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// MinimumFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MinimumFOp : Arith_FloatBinaryOp<"minimumf", [Commutative]> {
+  let summary = "floating-point minimum operation";
+  let description = [{
+    Returns the minimum of the two arguments, treating -0.0 as less than +0.0.
+    If one of the arguments is NaN, then the result is also NaN.
+
+    Example:
+
+    ```mlir
+    // Scalar floating-point minimum.
+    %a = arith.minimumf %b, %c : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

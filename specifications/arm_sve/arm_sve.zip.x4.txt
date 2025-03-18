@@ -1,0 +1,41 @@
+arm_sve.zip.x4 (arm_sve::ZipX4Op) ¶
+Multi-vector four-way zip op
+
+Syntax:
+
+operation ::= `arm_sve.zip.x4` $sourceV1 `,` $sourceV2 `,` $sourceV3 `,` $sourceV4 attr-dict
+              `:` type($sourceV1)
+This operation interleaves elements from four input SVE vectors, returning four new SVE vectors, each of which contain a quarter of the result. The first quarter will be in resultV1, second in resultV2, third in resultV3, and fourth in resultV4.
+
+// sourceV1 = [ A1, A2, ... An ]
+// sourceV2 = [ B1, B2, ... Bn ]
+// sourceV3 = [ C1, C2, ... Cn ]
+// sourceV4 = [ D1, D2, ... Dn ]
+// (resultV1, resultV2, resultV3, resultV4)
+//   = [ A1, B1, C1, D1, A2, B2, C2, D2, ... An, Bn, Cn, Dn ]
+%resultV1, %resultV2, %resultV3, %resultV4 = arm_sve.zip.x4
+  %sourceV1, %sourceV2, %sourceV3, %sourceV4 : vector<[16]xi8>
+Warning: The result of this op is undefined for 64-bit elements on hardware with less than 256-bit vectors!
+
+Note: This requires SME 2 (+sme2 in LLVM target features)
+
+Source
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+sourceV1	an SVE vector with element size <= 64-bit
+sourceV2	an SVE vector with element size <= 64-bit
+sourceV3	an SVE vector with element size <= 64-bit
+sourceV4	an SVE vector with element size <= 64-bit
+Results: ¶
+Result	Description
+resultV1	an SVE vector with element size <= 64-bit
+resultV2	an SVE vector with element size <= 64-bit
+resultV3	an SVE vector with element size <= 64-bit
+resultV4	an SVE vector with element size <= 64-bit

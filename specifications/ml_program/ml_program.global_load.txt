@@ -1,0 +1,23 @@
+ml_program.global_load (ml_program::GlobalLoadOp) ¶
+Direct load of a mutable value from a global
+
+Syntax:
+
+operation ::= `ml_program.global_load` $global `:` type($result) attr-dict
+Performs a non-atomic, non-volatile, non-synchronized load from a global that may be mutable.
+
+It is fully expected that these constraints are not suitable for all situations, and alternative ops should be defined and used for more advanced cases.
+
+This op is side effecting and may not be valid to use in graph regions without additional consideration to evaluation order constraints. See global_load_graph for op which allows for explicit ordering constraints.
+
+Example:
+
+%0 = ml_program.global_load @foobar : tensor<?xi32>
+Interfaces: OpAsmOpInterface, SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+global	::mlir::SymbolRefAttr	symbol reference attribute
+Results: ¶
+Result	Description
+result	any type

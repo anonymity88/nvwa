@@ -1,0 +1,9 @@
+rocdl.sched.group.barrier (ROCDL::SchedGroupBarrier) ¶
+Syntax:
+
+operation ::= `rocdl.sched.group.barrier` $mask `,` $size `,` $groupId attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+mask	::mlir::IntegerAttr	32-bit signless integer attribute
+size	::mlir::IntegerAttr	32-bit signless integer attribute
+groupId	::mlir::IntegerAttr	32-bit signless integer attribute

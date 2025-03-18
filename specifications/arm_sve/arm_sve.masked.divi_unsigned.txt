@@ -1,0 +1,16 @@
+arm_sve.masked.divi_unsigned (arm_sve::ScalableMaskedUDivIOp) ¶
+Masked unsigned division for scalable vectors of integers
+
+Syntax:
+
+operation ::= `arm_sve.masked.divi_unsigned` $mask `,` $src1 `,` $src2 attr-dict `:` type($mask) `,` type($res)
+The arm_sve.masked.divi_unsigned operation takes one scalable vector mask and two scalable vector operands, and perform integer unsigned division on active lanes. Inactive lanes will keep the value of the first operand.
+
+Operands: ¶
+Operand	Description
+mask	scalable vector of 1-bit signless integer values
+src1	scalable vector of 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer values
+src2	scalable vector of 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer values
+Results: ¶
+Result	Description
+res	scalable vector of 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer values

@@ -1,0 +1,24 @@
+transform.structured.transpose_conv2d (transform::TransposeConv2DOp) ¶
+Syntax:
+
+operation ::= `transform.structured.transpose_conv2d` $target attr-dict `:` functional-type($target, results)
+Convert linalg.conv_2d_nhwc_fhwc into linalg.conv_2d_nhwc_hwcf by introducing a linalg.transpose on the filter tensor/memref.
+
+Whilst the fhwc filter channel ordering can be desirable for certain targets and is a more direct mapping to higher level dialects such as TOSA (which only supports this ordering) hwcf is better suited for transformations such as img2col which can make use of optimized BLAS routines such as GEMM.
+
+Returns one handle:
+
+The final operation of the sequence that replaces the original convolution.
+Return modes: ¶
+Returns a definite failure if target is not isolated from above. Returns a silenceable failure if the pattern application failed.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

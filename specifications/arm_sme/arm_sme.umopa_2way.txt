@@ -1,0 +1,33 @@
+arm_sme.umopa_2way (arm_sme::UMopa2WayOp) ¶
+Unsiged integer sum of 2 outer products and accumulate
+
+Syntax:
+
+operation ::= `arm_sme.umopa_2way` $lhs `,` $rhs
+              oilist(
+              `acc` `` `(` $acc `)`
+              | `masks` `` `(` $lhsMask `,` $rhsMask `)`
+              ) attr-dict `:` type($lhs) `,` type($rhs) `into` type($result)
+Example:
+
+%result = arm_sme.umopa_2way $lhs, $rhs : vector<[8]xi16>, vector<[8]xi16> into vector<[4]x[4]xi32>
+Refer to fmopa_2way for a detailed description of 2-way outer products.
+
+Spec	Features
+UMOPA (2-way)	+sme2
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	of ranks 1scalable vector of 16-bit signless integer values of length 8
+rhs	vector of any type values
+lhsMask	vector of any type values
+rhsMask	vector of any type values
+acc	vector of any type values
+Results: ¶
+Result	Description
+result	vector<[4]x[4]xi32> of 32-bit signless integer values

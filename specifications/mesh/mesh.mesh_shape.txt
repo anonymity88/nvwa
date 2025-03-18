@@ -1,0 +1,20 @@
+mesh.mesh_shape (mesh::MeshShapeOp) ¶
+Get the shape of the mesh.
+
+Syntax:
+
+operation ::= `mesh.mesh_shape` $mesh (`axes` `=` $axes^)?
+              attr-dict `:` type($result)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+Results: ¶
+Result	Description
+result	variadic of index

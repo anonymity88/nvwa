@@ -1,0 +1,15 @@
+transform.apply_patterns.vector.transfer_permutation_patterns (transform::ApplyTransferPermutationPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.transfer_permutation_patterns` attr-dict
+Apply opt-in vector transfer permutation patterns that include:
+
+TransferReadPermutationLowering
+TransferWritePermutationLowering
+TransferOpReduceRank
+TransferWriteNonPermutationLowering
+These patterns have the effect of rewriting a vector.transfer with an arbitrary permutation_map to a vector.transfer with a permutation_map that is a minor identity followed by a vector.transpose.
+
+In other words, this makes the vector.transfer contiguous on the most minor dimensions and materializes the permutation_map as a vector.transpose.
+
+Interfaces: PatternDescriptorOpInterface

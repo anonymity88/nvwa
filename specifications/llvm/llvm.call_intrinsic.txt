@@ -1,0 +1,30 @@
+llvm.call_intrinsic (LLVM::CallIntrinsicOp) ¶
+Call to an LLVM intrinsic function.
+
+Syntax:
+
+operation ::= `llvm.call_intrinsic` $intrin `(` $args `)`
+              ( custom<OpBundles>($op_bundle_operands, type($op_bundle_operands),
+              $op_bundle_tags)^ )?
+              `:` functional-type($args, $results)
+              attr-dict
+Call the specified llvm intrinsic. If the intrinsic is overloaded, use the MLIR function type of this op to determine which intrinsic to call.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: FastmathFlagsInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+intrin	::mlir::StringAttr	string attribute
+fastmathFlags	::mlir::LLVM::FastmathFlagsAttr	
+LLVM fastmath flags
+op_bundle_sizes	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+op_bundle_tags	::mlir::ArrayAttr	array attribute
+Operands: ¶
+Operand	Description
+args	variadic of LLVM dialect-compatible type
+op_bundle_operands	variadic of LLVM dialect-compatible type
+Results: ¶
+Result	Description
+results	LLVM dialect-compatible type

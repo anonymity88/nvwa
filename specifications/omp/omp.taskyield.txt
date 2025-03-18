@@ -1,0 +1,7 @@
+omp.taskyield (omp::TaskyieldOp) ¶
+Taskyield construct
+
+Syntax:
+
+operation ::= `omp.taskyield` attr-dict
+The taskyield construct specifies that the current task can be suspended in favor of execution of a different task.

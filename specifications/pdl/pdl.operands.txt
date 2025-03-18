@@ -1,0 +1,24 @@
+pdl.operands (pdl::OperandsOp) ¶
+Define a range of input operands in a pattern
+
+Syntax:
+
+operation ::= `pdl.operands` (`:` $valueType^)? attr-dict
+pdl.operands operations capture external operand range edges into an operation node that originate from operations or block arguments not otherwise specified within the pattern (i.e. via pdl.result or pdl.results). These operations define groups of input operands into a given operation. A pdl.operands may partially constrain a set of input operands by specifying expected value types (via pdl.types operations).
+
+Example:
+
+// Define a range of input operands:
+%operands = pdl.operands
+
+// Define a range of input operands with expected types:
+%types = pdl.types : [i32, i64, i32]
+%typed_operands = pdl.operands : %types
+Traits: HasParent<pdl::PatternOp>
+
+Operands: ¶
+Operand	Description
+valueType	range of PDL handle to an mlir::Type values
+Results: ¶
+Result	Description
+value	range of PDL handle for an mlir::Value values

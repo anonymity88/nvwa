@@ -1,0 +1,27 @@
+pdl_interp.check_operation_name (pdl_interp::CheckOperationNameOp) ¶
+Check the OperationName of an Operation
+
+Syntax:
+
+operation ::= `pdl_interp.check_operation_name` `of` $inputOp `is` $name attr-dict `->` successors
+pdl_interp.check_operation_name operations compare the name of a given operation with a known name. On success, this operation branches to the true destination, otherwise the false destination is taken.
+
+Example:
+
+pdl_interp.check_operation_name of %op is "foo.op" -> ^matchDest, ^failureDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

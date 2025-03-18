@@ -1,0 +1,16 @@
+transform.structured.decompose_interface (transform::DecomposeInterfaceOp) ¶
+Syntax:
+
+operation ::= `transform.structured.decompose_interface` $target attr-dict `:` functional-type(operands, results)
+TODO
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

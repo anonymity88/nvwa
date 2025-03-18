@@ -1,0 +1,13 @@
+llvm.intr.threadlocal.address (LLVM::ThreadlocalAddressOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+global	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

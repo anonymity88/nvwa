@@ -1,0 +1,26 @@
+emitc.cast (emitc::CastOp) ¶
+Cast operation
+
+Syntax:
+
+operation ::= `emitc.cast` $source attr-dict `:` type($source) `to` type($dest)
+The emitc.cast operation performs an explicit type conversion and is emitted as a C-style cast expression. It can be applied to integer, float, index and EmitC types.
+
+Example:
+
+// Cast from `int32_t` to `float`
+%0 = emitc.cast %arg0: i32 to f32
+
+// Cast from `void` to `int32_t` pointer
+%1 = emitc.cast %arg1 :
+    !emitc.ptr<!emitc.opaque<"void">> to !emitc.ptr<i32>
+Traits: CExpression, SameOperandsAndResultShape
+
+Interfaces: CastOpInterface
+
+Operands: ¶
+Operand	Description
+source	type supported by EmitC
+Results: ¶
+Result	Description
+dest	type supported by EmitC

@@ -1,0 +1,44 @@
+acc.update (acc::UpdateOp) ¶
+Update operation
+
+Syntax:
+
+operation ::= `acc.update` oilist(
+              `if` `(` $ifCond `)`
+              | `async` `` custom<DeviceTypeOperandsWithKeywordOnly>(
+              $asyncOperands, type($asyncOperands),
+              $asyncOperandsDeviceType, $async)
+              | `wait` `` custom<WaitClause>($waitOperands, type($waitOperands),
+              $waitOperandsDeviceType, $waitOperandsSegments, $hasWaitDevnum,
+              $waitOnly)
+              | `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              )
+              attr-dict-with-keyword
+The acc.update operation represents the OpenACC update executable directive. As host and self clauses are synonyms, any operands for host and self are add to $hostOperands.
+
+Example:
+
+acc.update device(%d1 : memref<10xf32>) attributes {async}
+async and wait operands are supported with device_type information. They should only be accessed by the extra provided getters. If modified, the corresponding device_type attributes must be modified as well.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+asyncOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+async	::mlir::ArrayAttr	device type array attribute
+waitOperandsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+waitOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+hasWaitDevnum	::mlir::ArrayAttr	1-bit boolean array attribute
+waitOnly	::mlir::ArrayAttr	device type array attribute
+ifPresent	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+ifCond	1-bit signless integer
+asyncOperands	variadic of integer or index
+waitOperands	variadic of integer or index
+dataClauseOperands	variadic of PointerLikeType instance

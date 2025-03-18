@@ -1,0 +1,37 @@
+sparse_tensor.push_back (sparse_tensor::PushBackOp) ¶
+Pushes a value to the back of a given buffer
+
+Syntax:
+
+operation ::= `sparse_tensor.push_back` (`inbounds` $inbounds^)? $curSize `,` $inBuffer `,` $value (`,` $n^ )?  attr-dict `:` type($curSize) `,` type($inBuffer) `,` type($value) (`,` type($n)^ )?
+Pushes value to the end of the given sparse tensor storage buffer inBuffer as indicated by the value of curSize and returns the new size of the buffer in newSize (newSize = curSize + n). The capacity of the buffer is recorded in the memref type of inBuffer. If the current buffer is full, then inBuffer.realloc is called before pushing the data to the buffer. This is similar to std::vector push_back.
+
+The optional input n specifies the number of times to repeately push the value to the back of the tensor. When n is a compile-time constant, its value can’t be less than 1. If n is a runtime value that is less than 1, the behavior is undefined. Although using input n is semantically equivalent to calling push_back n times, it gives compiler more chances to to optimize the memory reallocation and the filling of the memory with the same value.
+
+The inbounds attribute tells the compiler that the insertion won’t go beyond the current storage buffer. This allows the compiler to not generate the code for capacity check and reallocation. The typical usage will be for “dynamic” sparse tensors for which a capacity can be set beforehand.
+
+Note that this operation is “impure” in the sense that even though the result is modeled through an SSA value, referencing the memref through the old SSA value after this operation is undefined behavior.
+
+Example:
+
+%buf, %newSize = sparse_tensor.push_back %curSize, %buffer, %val
+   : index, memref<?xf64>, f64
+%buf, %newSize = sparse_tensor.push_back inbounds %curSize, %buffer, %val
+   : xindex, memref<?xf64>, f64
+%buf, %newSize = sparse_tensor.push_back inbounds %curSize, %buffer, %val, %n
+   : xindex, memref<?xf64>, f64
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+inbounds	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+curSize	index
+inBuffer	1D memref of any type values
+value	any type
+n	index
+Results: ¶
+Result	Description
+outBuffer	1D memref of any type values
+newSize	index

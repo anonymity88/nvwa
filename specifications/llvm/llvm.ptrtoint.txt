@@ -1,0 +1,16 @@
+llvm.ptrtoint (LLVM::PtrToIntOp) ¶
+Syntax:
+
+operation ::= `llvm.ptrtoint` $arg attr-dict `:` type($arg) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	LLVM pointer type or LLVM dialect-compatible vector of LLVM pointer type
+Results: ¶
+Result	Description
+res	signless integer or LLVM dialect-compatible vector of signless integer

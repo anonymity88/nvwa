@@ -1,0 +1,11 @@
+rocdl.ds_bpermute (ROCDL::DsBpermuteOp) ¶
+Syntax:
+
+operation ::= `rocdl.ds_bpermute` $index `,` $src  attr-dict `:` `(` type($index) `,` type($src) `)` `->` type($res)
+Operands: ¶
+Operand	Description
+index	32-bit signless integer
+src	32-bit signless integer
+Results: ¶
+Result	Description
+res	32-bit signless integer

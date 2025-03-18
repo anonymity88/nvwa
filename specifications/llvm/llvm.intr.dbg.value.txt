@@ -1,0 +1,15 @@
+llvm.intr.dbg.value (LLVM::DbgValueOp) ¶
+Describes how the value relates to a source language variable.
+
+Syntax:
+
+operation ::= `llvm.intr.dbg.value` qualified($varInfo) (qualified($locationExpr)^)? `=` $value `:` qualified(type($value)) attr-dict
+Interfaces: PromotableOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+varInfo	::mlir::LLVM::DILocalVariableAttr	
+locationExpr	::mlir::LLVM::DIExpressionAttr	
+Operands: ¶
+Operand	Description
+value	LLVM dialect-compatible type

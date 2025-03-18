@@ -1,0 +1,83 @@
+sparse_tensor.unary (sparse_tensor::UnaryOp) ¶
+Unary set operation utilized within linalg.generic
+
+Syntax:
+
+operation ::= `sparse_tensor.unary` $x attr-dict `:` type($x) `to` type($output) `\n`
+              `present` `=` $presentRegion `\n`
+              `absent` `=` $absentRegion
+Defines a computation with a linalg.generic operation that takes a single operand and executes one of two regions depending on whether the operand is nonzero (i.e. stored explicitly in the sparse storage format).
+
+Two regions are defined for the operation must appear in this order:
+
+present (elements present in the sparse tensor)
+absent (elements not present in the sparse tensor)
+Each region contains a single block describing the computation and result. A non-empty block must end with a sparse_tensor.yield and the return type must match the type of output. The primary region’s block has one argument, while the missing region’s block has zero arguments. The absent region may only generate constants or values already computed on entry of the linalg.generic operation.
+
+A region may also be declared empty (i.e. absent={}), indicating that the region does not contribute to the output.
+
+Due to the possibility of empty regions, i.e. lack of a value for certain cases, the result of this operation may only feed directly into the output of the linalg.generic operation or into into a custom reduction sparse_tensor.reduce operation that follows in the same region.
+
+Example of A+1, restricted to existing elements:
+
+%C = tensor.empty(...) : tensor<?xf64, #SparseVector>
+%0 = linalg.generic #trait
+   ins(%A: tensor<?xf64, #SparseVector>)
+  outs(%C: tensor<?xf64, #SparseVector>) {
+  ^bb0(%a: f64, %c: f64) :
+    %result = sparse_tensor.unary %a : f64 to f64
+      present={
+      ^bb0(%arg0: f64):
+        %cf1 = arith.constant 1.0 : f64
+        %ret = arith.addf %arg0, %cf1 : f64
+        sparse_tensor.yield %ret : f64
+      }
+      absent={}
+    linalg.yield %result : f64
+} -> tensor<?xf64, #SparseVector>
+Example returning +1 for existing values and -1 for missing values:
+
+%p1 = arith.constant  1 : i32
+%m1 = arith.constant -1 : i32
+%C = tensor.empty(...) : tensor<?xi32, #SparseVector>
+%1 = linalg.generic #trait
+   ins(%A: tensor<?xf64, #SparseVector>)
+  outs(%C: tensor<?xi32, #SparseVector>) {
+  ^bb0(%a: f64, %c: i32) :
+    %result = sparse_tensor.unary %a : f64 to i32
+      present={
+      ^bb0(%x: f64):
+        sparse_tensor.yield %p1 : i32
+      }
+      absent={
+        sparse_tensor.yield %m1 : i32
+      }
+    linalg.yield %result : i32
+} -> tensor<?xi32, #SparseVector>
+Example showing a structural inversion (existing values become missing in the output, while missing values are filled with 1):
+
+%c1 = arith.constant 1 : i64
+%C = tensor.empty(...) : tensor<?xi64, #SparseVector>
+%2 = linalg.generic #trait
+   ins(%A: tensor<?xf64, #SparseVector>)
+  outs(%C: tensor<?xi64, #SparseVector>) {
+  ^bb0(%a: f64, %c: i64) :
+    %result = sparse_tensor.unary %a : f64 to i64
+      present={}
+      absent={
+        sparse_tensor.yield %c1 : i64
+      }
+    linalg.yield %result : i64
+} -> tensor<?xi64, #SparseVector>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+x	any type
+Results: ¶
+Result	Description
+output	any type

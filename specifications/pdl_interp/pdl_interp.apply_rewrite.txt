@@ -1,0 +1,28 @@
+pdl_interp.apply_rewrite (pdl_interp::ApplyRewriteOp) ¶
+Invoke and apply an externally registered rewrite method
+
+Syntax:
+
+operation ::= `pdl_interp.apply_rewrite` $name (`(` $args^ `:` type($args) `)`)? (`:` type($results)^)? attr-dict
+pdl_interp.apply_rewrite operations invoke an external rewriter that has been registered with the interpreter to perform the rewrite after a successful match. The rewrite is passed a set of positional arguments. The rewrite function may return any number of results.
+
+Example:
+
+// Rewriter operating solely on the root operation.
+pdl_interp.apply_rewrite "rewriter"(%root : !pdl.operation)
+
+// Rewriter operating solely on the root operation and return an attribute.
+%attr = pdl_interp.apply_rewrite "rewriter"(%root : !pdl.operation) : !pdl.attribute
+
+// Rewriter operating on the root operation along with additional arguments
+// from the matcher.
+pdl_interp.apply_rewrite "rewriter"(%root : !pdl.operation, %value : !pdl.value)
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+args	variadic of pdl type
+Results: ¶
+Result	Description
+results	variadic of pdl type

@@ -1,0 +1,23 @@
+transform.match.structured.num_inputs (transform::MatchStructuredNumInputsOp) ¶
+Captures the number of input operands of a structured operation as parameter
+
+Syntax:
+
+operation ::= `transform.match.structured.num_inputs` $operand_handle attr-dict `:` functional-type(operands, results)
+Produces a transform dialect parameter value associated with an integer attribute containing the number of input operands of the payload operation associated with the operand handle.
+
+This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the operand is associated with exactly one structured payload operation. Produces a silenceable failure otherwise.
+
+Traits: SingleOpMatcher, StructuredPredicate
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformParamTypeInterface instance

@@ -1,0 +1,17 @@
+llvm.intr.smin (LLVM::SMinOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.smin` `(` operands `)` attr-dict `:` functional-type(operands, results)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	signless integer or LLVM dialect-compatible vector of signless integer
+b	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

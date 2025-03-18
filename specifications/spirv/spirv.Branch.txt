@@ -1,0 +1,23 @@
+spirv.Branch (spirv::BranchOp) ¶
+Unconditional branch to target block.
+
+Syntax:
+
+operation ::= `spirv.Branch` $target (`(` $targetOperands^ `:` type($targetOperands) `)`)? attr-dict
+This instruction must be the last instruction in a block.
+
+Example: ¶
+spirv.Branch ^target
+spirv.Branch ^target(%0, %1: i32, f32)
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: BranchOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+targetOperands	variadic of void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type
+Successors: ¶
+Successor	Description
+target	any successor

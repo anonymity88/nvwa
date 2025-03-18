@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// AndOp
+//===----------------------------------------------------------------------===//
+
+def Index_AndOp : IndexBinaryOp<"and", [Commutative, Pure]> {
+  let summary = "index bitwise and";
+  let description = [{
+    The `index.and` operation takes two index values and computes their bitwise
+    and.
+
+    Example:
+
+    ```mlir
+    // c = a & b
+    %c = index.and %a, %b
+    ```
+  }];
+}
+

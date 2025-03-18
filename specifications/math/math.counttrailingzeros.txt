@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// CountTrailingZerosOp
+//===----------------------------------------------------------------------===//
+
+def Math_CountTrailingZerosOp : Math_IntegerUnaryOp<"cttz"> {
+  let summary = "counts the trailing zeros an integer value";
+  let description = [{
+    The `cttz` operation computes the number of trailing zeros of an integer value.
+    It operates on scalar, tensor or vector.
+
+    Example:
+
+    ```mlir
+    // Scalar cttz function value.
+    %a = math.cttz %b : i32
+    ```
+  }];
+  let hasFolder = 1;
+}
+

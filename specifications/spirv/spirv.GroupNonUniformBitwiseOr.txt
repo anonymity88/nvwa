@@ -1,0 +1,38 @@
+spirv.GroupNonUniformBitwiseOr (spirv::GroupNonUniformBitwiseOrOp) ¶
+A bitwise or group operation of all Value operands contributed by active invocations in the group.
+
+Syntax:
+
+operation ::= `spirv.GroupNonUniformBitwiseOr` $execution_scope $group_operation $value (`cluster_size``(` $cluster_size^ `)`)? attr-dict `:` type($value) (`,` type($cluster_size)^)? `->` type(results)
+Result Type must be a scalar or vector of integer type.
+
+Execution is a Scope. It must be either Workgroup or Subgroup.
+
+The identity I for Operation is 0. If Operation is ClusteredReduce, ClusterSize must be present.
+
+The type of Value must be the same as Result Type.
+
+ClusterSize is the size of cluster to use. ClusterSize must be a scalar of integer type, whose Signedness operand is 0. ClusterSize must come from a constant instruction. ClusterSize must be at least 1, and must be a power of 2. If ClusterSize is greater than the declared SubGroupSize, executing this instruction results in undefined behavior.
+
+Example: ¶
+%four = spirv.Constant 4 : i32
+%scalar = ... : i32
+%vector = ... : vector<4xi32>
+%0 = spirv.GroupNonUniformBitwiseOr <Workgroup> <Reduce> %scalar : i32 -> i32
+%1 = spirv.GroupNonUniformBitwiseOr <Subgroup> <ClusteredReduce>
+       %vector cluster_size(%four) : vector<4xi32>, i32 -> vector<4xi32>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+group_operation	::mlir::spirv::GroupOperationAttr	
+valid SPIR-V GroupOperation
+Operands: ¶
+Operand	Description
+value	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+cluster_size	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

@@ -1,0 +1,32 @@
+transform.structured.gpu.map_copy_to_threads (transform::MapCopyToThreadsOp) ¶
+Syntax:
+
+operation ::= `transform.structured.gpu.map_copy_to_threads` $target
+              `total_num_threads` `=` $total_num_threads
+              `desired_bit_alignment` `=` $desired_bit_alignment
+              attr-dict
+              `:` functional-type(operands, results)
+Targeted mapping of a linalg.copy / tensor.pad operation on tensors to a GPU thread mapping.
+
+This operation implements a greedy heuristic that determines a good distribution of threads to break down the copy/pad operation into. The heuristic is driven by considerations related to the underlying architecture for which good high-level decisions are needed assuming certain hardware features. Relevant features are exposed via first-class attributes to control the behavior of the transformation at a high level.
+
+For now, a single heuristic is implemented and can be extended on a per-need basis.
+
+Return modes ¶
+This operation fails definitely if there is an unsupported op (i.e., not linalg.copy / tensor.pad) among the targeted op. Otherwise, the operation always succeeds and returns a handle to the relevant tiled linalg.copy / tensor.pad op and the enclosing scf.forall op.
+
+Traits: FunctionalStyleTransformOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+total_num_threads	::mlir::IntegerAttr	64-bit signless integer attribute
+desired_bit_alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+forall_op	TransformHandleTypeInterface instance
+tiled_op	TransformHandleTypeInterface instance

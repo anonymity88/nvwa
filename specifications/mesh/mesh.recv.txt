@@ -1,0 +1,24 @@
+mesh.recv (mesh::RecvOp) ¶
+Send over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.recv` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              (`source` `=` custom<DynamicIndexList>($source_dynamic, $source)^)?
+              attr-dict `:` functional-type(operands, results)
+Receive from a device within a device group.
+
+Interfaces: OpAsmOpInterface, SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+source	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+input	non-0-ranked.tensor of any type values
+source_dynamic	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

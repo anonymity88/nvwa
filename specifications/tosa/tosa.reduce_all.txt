@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// Operator: reduce_all
+//===----------------------------------------------------------------------===//
+def Tosa_ReduceAllOp : Tosa_InferTensorTypeOp<"reduce_all"> {
+  let summary = "Reduce All operator";
+
+  let description = [{
+    Reduce a tensor along the given axis with a logical AND operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input,
+    I32Attr:$axis
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+
+  let extraClassDeclaration = [{
+    /// Returns true when two result types are compatible for this op;
+    /// Method used by InferTypeOpInterface.
+    static bool isCompatibleReturnTypes(TypeRange l, TypeRange r);
+
+    /// Return the AND result between two integer operands
+    static inline APInt calcOneElement(APInt leftOperand, APInt rightOperand) {
+      return leftOperand & rightOperand;
+    }
+  }];
+}
+

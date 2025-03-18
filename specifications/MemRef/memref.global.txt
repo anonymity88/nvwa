@@ -1,0 +1,70 @@
+//===----------------------------------------------------------------------===//
+// GlobalOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_GlobalOp : MemRef_Op<"global", [Symbol]> {
+  let summary = "declare or define a global memref variable";
+  let description = [{
+    The `memref.global` operation declares or defines a named global memref
+    variable. The backing memory for the variable is allocated statically and is
+    described by the type of the variable (which should be a statically shaped
+    memref type). The operation is a declaration if no `initial_value` is
+    specified, else it is a definition. The `initial_value` can either be a unit
+    attribute to represent a definition of an uninitialized global variable, or
+    an elements attribute to represent the definition of a global variable with
+    an initial value. The global variable can also be marked constant using the
+    `constant` unit attribute. Writing to such constant global variables is
+    undefined.
+
+    The global variable can be accessed by using the `memref.get_global` to
+    retrieve the memref for the global variable. Note that the memref
+    for such global variable itself is immutable (i.e., memref.get_global for a
+    given global variable will always return the same memref descriptor).
+
+    Example:
+
+    ```mlir
+    // Private variable with an initial value.
+    memref.global "private" @x : memref<2xf32> = dense<0.0,2.0>
+
+    // Private variable with an initial value and an alignment (power of 2).
+    memref.global "private" @x : memref<2xf32> = dense<0.0,2.0> {alignment = 64}
+
+    // Declaration of an external variable.
+    memref.global "private" @y : memref<4xi32>
+
+    // Uninitialized externally visible variable.
+    memref.global @z : memref<3xf16> = uninitialized
+
+    // Externally visible constant variable.
+    memref.global constant @c : memref<2xi32> = dense<1, 4>
+    ```
+  }];
+
+  let arguments = (ins SymbolNameAttr:$sym_name,
+                       OptionalAttr<StrAttr>:$sym_visibility,
+                       MemRefTypeAttr:$type,
+                       OptionalAttr<AnyAttr>:$initial_value,
+                       UnitAttr:$constant,
+                       OptionalAttr<I64Attr>:$alignment);
+
+  let assemblyFormat = [{
+       ($sym_visibility^)?
+       (`constant` $constant^)?
+       $sym_name `:`
+       custom<GlobalMemrefOpTypeAndInitialValue>($type, $initial_value)
+       attr-dict
+  }];
+
+  let extraClassDeclaration = [{
+     bool isExternal() { return !getInitialValue(); }
+     bool isUninitialized() {
+       return !isExternal() && ::llvm::isa<UnitAttr>(*getInitialValue());
+     }
+     /// Returns the constant initial value if the memref.global is a constant,
+     /// or null otherwise.
+     ElementsAttr getConstantInitValue();
+  }];
+  let hasVerifier = 1;
+}
+

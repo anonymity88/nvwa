@@ -1,0 +1,23 @@
+memref.transpose (memref::TransposeOp) ¶
+transpose produces a new strided memref (metadata-only)
+
+The transpose op produces a strided memref whose sizes and strides are a permutation of the original in memref. This is purely a metadata transformation.
+
+Example:
+
+%1 = memref.transpose %0 (i, j) -> (j, i) : memref<?x?xf32> to memref<?x?xf32, affine_map<(d0, d1)[s0] -> (d1 * s0 + d0)>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+permutation	::mlir::AffineMapAttr	AffineMap attribute
+Operands: ¶
+Operand	Description
+in	strided memref of any type values
+Results: ¶
+Result	Description
+«unnamed»	strided memref of any type values

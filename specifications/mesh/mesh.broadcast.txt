@@ -1,0 +1,50 @@
+mesh.broadcast (mesh::BroadcastOp) ¶
+Broadcast over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.broadcast` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              `root` `=` custom<DynamicIndexList>($root_dynamic, $root)
+              attr-dict `:` functional-type(operands, results)
+Broadcast the tensor on root to all devices in each respective group. The operation broadcasts along mesh axes mesh_axes. The root device specifies the in-group multi-index that is broadcast to all other devices in the group.
+
+Example:
+
+mesh.mesh @mesh0(shape = 2x2)
+
+%1 = mesh.broadcast %0 on @mesh0
+  mesh_axes = [0]
+  root = [0]
+  : (tensor<2xi8>) -> tensor<2xi8>
+Input:
+
+                 +-------+-------+                   | broadcast
+device (0, 0) -> |  1  2 |  3  4 | <- device (0, 1)  | along axis 0
+                 +-------+-------+                   ↓
+device (1, 0) -> |       |       | <- device (1, 1) 
+                 +-------+-------+
+Output:
+
+                 +-------+-------+
+device (0, 0) -> |  1  2 |  3  4 | <- device (0, 1)
+                 +-------+-------+
+device (1, 0) -> |  1  2 |  3  4 | <- device (1, 1)
+                 +-------+-------+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+root	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+input	ranked tensor of any type values
+root_dynamic	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

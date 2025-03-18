@@ -1,0 +1,12 @@
+amdgpu.sched_barrier (amdgpu::SchedBarrierOp) ¶
+Barrier that limits the backend scheduler of instruction movement
+
+Syntax:
+
+operation ::= `amdgpu.sched_barrier` `allow` `=` $opts attr-dict
+amdgpu.sched_barrier serves as a barrier that could be configured to restrict movements of instructions through it as defined by sched_barrier_opts.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+opts	::mlir::amdgpu::sched_barrier_opt_enumAttr	
+The possible options for scheduling barriers

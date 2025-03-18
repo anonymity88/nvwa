@@ -1,0 +1,26 @@
+acc.global_ctor (acc::GlobalConstructorOp) ¶
+Used to hold construction operations associated with globals such as declare
+
+Syntax:
+
+operation ::= `acc.global_ctor` $sym_name $region attr-dict-with-keyword
+The “acc.global_ctor” operation is used to capture OpenACC actions to apply on globals (such as acc declare) at the entry to the implicit data region. This operation is isolated and intended to be used in a module.
+
+Example showing declare create of global:
+
+llvm.mlir.global external @globalvar() : i32 {
+  %0 = llvm.mlir.constant(0 : i32) : i32
+  llvm.return %0 : i32
+}
+acc.global_ctor @acc_constructor {
+  %0 = llvm.mlir.addressof @globalvar : !llvm.ptr
+  %1 = acc.create varPtr(%0 : !llvm.ptr) -> !llvm.ptr
+  acc.declare_enter dataOperands(%1 : !llvm.ptr)
+}
+Traits: IsolatedFromAbove
+
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute

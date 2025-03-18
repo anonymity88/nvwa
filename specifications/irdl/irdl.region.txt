@@ -1,0 +1,45 @@
+irdl.region (irdl::RegionOp) ¶
+Define a region of an operation
+
+Syntax:
+
+operation ::= `irdl.region` ``(`(` $entryBlockArgs $constrainedArguments^ `)`)?
+              ``(` ` `with` `size` $numberOfBlocks^)? attr-dict
+The irdl.region construct defines a set of characteristics that a region of an operation should satify.
+
+These characteristics include constraints for the entry block arguments of the region and the total number of blocks it contains. The number of blocks must be a non-zero and non-negative integer, and it is optional by default. The set of constraints for the entry block arguments may be optional or empty. If no parentheses are provided, the set is assumed to be optional, and the arguments are not constrained in any way. If parentheses are provided with no arguments, it means that the region must have no entry block arguments
+
+Example:
+
+irdl.dialect @example {
+  irdl.operation @op_with_regions {
+      %r0 = irdl.region
+      %r1 = irdl.region()
+      %v0 = irdl.is i32
+      %v1 = irdl.is i64
+      %r2 = irdl.region(%v0, %v1)
+      %r3 = irdl.region with size 3
+
+      irdl.regions(%r0, %r1, %r2, %r3)
+  }
+}
+The above snippet demonstrates an operation named @op_with_regions, which is constrained to have four regions.
+
+Region %r0 doesn’t have any constraints on the arguments or the number of blocks.
+Region %r1 should have an empty set of arguments.
+Region %r2 should have two arguments of types i32 and i64.
+Region %r3 should contain exactly three blocks.
+Traits: HasParent<OperationOp>
+
+Interfaces: InferTypeOpInterface, VerifyRegionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+numberOfBlocks	::mlir::IntegerAttr	32-bit signless integer attribute
+constrainedArguments	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+entryBlockArgs	variadic of IRDL handle to an mlir::Attribute
+Results: ¶
+Result	Description
+output	IRDL handle to a region definition

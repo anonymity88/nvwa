@@ -1,0 +1,34 @@
+amdgpu.raw_buffer_atomic_cmpswap (amdgpu::RawBufferAtomicCmpswapOp) ¶
+Raw Buffer Atomic compare-and-swap
+
+Syntax:
+
+operation ::= `amdgpu.raw_buffer_atomic_cmpswap` attr-dict $src `,` $cmp `->` $memref `[` $indices `]`
+              (`sgprOffset` $sgprOffset^)? `:`
+              type($value) `->` type($memref) `,` type($indices)
+The amdgpu.raw_buffer_atomic_cmpswap op is a wrapper around the buffer-based atomic compare-and-swap min available on AMD GPUs.
+
+The index into the buffer is computed as for memref.store with the addition of indexOffset (which is used to aid in emitting vectorized code) and, if present sgprOffset (which is added after bounds checks and includes any non-zero offset on the memref type).
+
+All indexing components are given in terms of the memref’s element size, not the byte lengths required by the intrinsic.
+
+Out of bounds atomic operations are ignored in hardware.
+
+See amdgpu.raw_buffer_load for a description of how the underlying instruction is constructed.
+
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+boundsCheck	::mlir::BoolAttr	bool attribute
+indexOffset	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+src	any type
+cmp	any type
+memref	memref of any type values
+indices	variadic of 32-bit signless integer
+sgprOffset	32-bit signless integer
+Results: ¶
+Result	Description
+value	any type

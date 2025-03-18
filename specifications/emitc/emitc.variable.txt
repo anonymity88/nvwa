@@ -1,0 +1,27 @@
+emitc.variable (emitc::VariableOp) ¶
+Variable operation
+
+The emitc.variable operation produces an SSA value equal to some value specified by an attribute. This can be used to form simple integer and floating point variables, as well as more exotic things like tensor variables. The emitc.variable operation also supports the EmitC opaque attribute and the EmitC opaque type. If further supports the EmitC pointer type, whereas folding is not supported. The emitc.variable is emitted as a C/C++ local variable.
+
+Example:
+
+// Integer variable
+%0 = "emitc.variable"(){value = 42 : i32} : () -> !emitc.lvalue<i32>
+
+// Variable emitted as `int32_t* = NULL;`
+%1 = "emitc.variable"() {value = #emitc.opaque<"NULL">} 
+  : () -> !emitc.lvalue<!emitc.ptr<!emitc.opaque<"int32_t">>>
+Since folding is not supported, it can be used with pointers. As an example, it is valid to create pointers to variable operations by using apply operations and pass these to a call operation.
+
+%0 = "emitc.variable"() {value = 0 : i32} : () -> !emitc.lvalue<i32>
+%1 = "emitc.variable"() {value = 0 : i32} : () -> !emitc.lvalue<i32>
+%2 = emitc.apply "&"(%0) : (!emitc.lvalue<i32>) -> !emitc.ptr<i32>
+%3 = emitc.apply "&"(%1) : (!emitc.lvalue<i32>) -> !emitc.ptr<i32>
+emitc.call_opaque "write"(%2, %3)
+  : (!emitc.ptr<i32>, !emitc.ptr<i32>) -> ()
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	An opaque attribute or TypedAttr instance
+Results: ¶
+Result	Description
+«unnamed»	EmitC array type or EmitC lvalue type

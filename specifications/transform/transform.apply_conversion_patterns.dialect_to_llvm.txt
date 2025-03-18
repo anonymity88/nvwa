@@ -1,0 +1,13 @@
+transform.apply_conversion_patterns.dialect_to_llvm (transform::ApplyToLLVMConversionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.dialect_to_llvm` $dialect_name attr-dict
+Collects patterns that convert ops from the specified dialect to LLVM dialect ops. These patterns require an “LLVMTypeConverter”.
+
+Note: Only dialects that implement the ConvertToLLVMPatternInterface are supported. Any conversion target modifications by interface implementations are currently ignored. The conversion target is fully specified by the enclosing “apply_conversion_patterns” op.
+
+Interfaces: ConversionPatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dialect_name	::mlir::StringAttr	string attribute

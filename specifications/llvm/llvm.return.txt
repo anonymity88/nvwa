@@ -1,0 +1,13 @@
+llvm.return (LLVM::ReturnOp) ¶
+Syntax:
+
+operation ::= `llvm.return` attr-dict ($arg^ `:` type($arg))?
+Traits: AlwaysSpeculatableImplTrait, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	LLVM dialect-compatible type

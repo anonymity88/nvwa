@@ -1,0 +1,17 @@
+affine.yield (affine::AffineYieldOp) ¶
+Yield values to parent operation
+
+Syntax:
+
+operation ::= `affine.yield` attr-dict ($operands^ `:` type($operands))?
+The affine.yield yields zero or more SSA values from an affine op region and terminates the region. The semantics of how the values yielded are used is defined by the parent operation. If affine.yield has any operands, the operands must match the parent operation’s results. If the parent operation defines no values, then the affine.yield may be left out in the custom syntax and the builders will insert one implicitly. Otherwise, it has to be present in the syntax to indicate which values are yielded.
+
+Traits: AlwaysSpeculatableImplTrait, MemRefsNormalizable, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

@@ -1,0 +1,65 @@
+mesh.scatter (mesh::ScatterOp) ¶
+Scatter over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.scatter` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              `scatter_axis` `=` $scatter_axis
+              `root` `=` custom<DynamicIndexList>($root_dynamic, $root)
+              attr-dict `:` functional-type(operands, results)
+For each device group split the input tensor on the root device along axis scatter_axis and scatter the parts across the group devices.
+
+Example:
+
+mesh.mesh @mesh0(shape = 2x2)
+%1 = mesh.scatter %0 on @mesh0 mesh_axes = [0]
+  scatter_axis = 0
+  root = [1]
+  : (tensor<2x2xi8>) -> tensor<1x2xi8>
+Input:
+
+                          device
+                          (0, 1)
+                             ↓
+                 +-------+-------+  | scatter tensor
+device (0, 0) -> |       |       |  | axis 0
+                 |       |       |  ↓
+                 +-------+-------+
+device (1, 0) -> |  1  2 |  5  6 |
+                 |  3  4 |  7  8 |
+                 +-------+-------+
+                            ↑
+                          device
+                          (1, 1)
+Result:
+
+                          device
+                          (0, 1)
+                             ↓
+                 +-------+-------+
+device (0, 0) -> |  1  2 |  5  6 |
+                 +-------+-------+ 
+device (1, 0) -> |  3  4 |  7  8 |
+                 +-------+-------+
+                            ↑
+                          device
+                          (1, 1)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+scatter_axis	::mlir::IntegerAttr	index attribute
+root	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+input	non-0-ranked.tensor of any type values
+root_dynamic	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

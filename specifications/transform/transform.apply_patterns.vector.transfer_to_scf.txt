@@ -1,0 +1,18 @@
+transform.apply_patterns.vector.transfer_to_scf (transform::ApplyTransferToScfPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.transfer_to_scf` oilist (
+              `max_transfer_rank` `=` $max_transfer_rank
+              | `full_unroll` `=` $full_unroll
+              )
+              attr-dict
+Indicates that vector transfer operations should be rewritten with scf.for loops over finer-grained vector primitives.
+
+This is usually a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+max_transfer_rank	::mlir::IntegerAttr	64-bit signless integer attribute
+full_unroll	::mlir::BoolAttr	bool attribute

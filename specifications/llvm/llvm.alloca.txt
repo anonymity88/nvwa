@@ -1,0 +1,14 @@
+llvm.alloca (LLVM::AllocaOp) ¶
+Interfaces: DestructurableAllocationOpInterface, PromotableAllocationOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+elem_type	::mlir::TypeAttr	any type attribute
+inalloca	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+arraySize	signless integer
+Results: ¶
+Result	Description
+res	LLVM pointer type

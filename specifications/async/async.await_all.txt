@@ -1,0 +1,22 @@
+async.await_all (async::AwaitAllOp) ¶
+Waits for the all async tokens or values in the group to become ready
+
+Syntax:
+
+operation ::= `async.await_all` $operand attr-dict
+The async.await_all operation waits until all the tokens or values in the group become ready.
+
+Example:
+
+%0 = async.create_group %size : !async.group
+
+%1 = ... : !async.token
+%2 = async.add_to_group %1, %0 : !async.token
+
+%3 = ... : !async.token
+%4 = async.add_to_group %2, %0 : !async.token
+
+async.await_all %0
+Operands: ¶
+Operand	Description
+operand	async group type

@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// Operator: pow
+//===----------------------------------------------------------------------===//
+def Tosa_PowOp : Tosa_ElementwiseOp<"pow", [SameOperandsAndResultElementType]> {
+  let summary = "Computes the power of one value to another.";
+
+  let description = [{
+    Elementwise input1 raised to the power of input2.
+    Axis of size 1 will be broadcast, as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$z
+  );
+}
+

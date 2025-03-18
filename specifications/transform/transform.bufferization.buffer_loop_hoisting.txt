@@ -1,0 +1,15 @@
+transform.bufferization.buffer_loop_hoisting (transform::BufferLoopHoistingOp) ¶
+Syntax:
+
+operation ::= `transform.bufferization.buffer_loop_hoisting` $target attr-dict `:` type($target)
+Hoist buffer allocations (“memref.alloc” and “memref.alloca”) from loops within the targeted op. This transform assumes that there are no buffer deallocation ops in the IR.
+
+This transform reads the target handle and modifies the payload.
+
+Traits: TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

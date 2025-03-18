@@ -1,0 +1,34 @@
+linalg.winograd_output_transform (linalg::WinogradOutputTransformOp)
+Winograd output transform operator
+
+Syntax:
+
+operation ::= `linalg.winograd_output_transform` attr-dict
+              `m` `(` $m `)`
+              `r` `(` $r `)`
+              `ins` `(` $value `:` type($value) `)`
+              `outs` `(` $output `:` type($output) `)`
+              `->` type($result)
+Winograd Conv2D algorithm will convert linalg Conv2D operator into batched matrix multiply. Before the matrix multiply, it will convert filter and input into a format suitable for batched matrix multiply. After the matrix multiply, it will convert output to the final result tensor.
+
+The algorithm F(m x m, r x r) is
+
+Y = A^T x [(G x g x G^T) @ (B^T x d x B)] x A
+
+The size of output Y is m x m. The size of filter g is r x r. The size of input d is (m + r - 1) x (m + r - 1). A^T, A, G^T, G, B^T, and B are transformation matrices.
+
+This operator is defined to represent the high level concept of output transformation (A^T x y x A) in the Winograd Conv2D algorithm.
+
+Interfaces: TilingInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+m	::mlir::IntegerAttr	64-bit signless integer attribute
+r	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands:
+Operand	Description
+value	6D tensor of any type values
+output	4D tensor of any type values
+Results:
+Result	Description
+result	4D tensor of any type values

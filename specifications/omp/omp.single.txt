@@ -1,0 +1,41 @@
+omp.single (omp::SingleOp) ¶
+Single directive
+
+Syntax:
+
+operation ::= `omp.single` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              |
+              `copyprivate` `(`
+              custom<Copyprivate>($copyprivate_vars, type($copyprivate_vars),
+              $copyprivate_syms) `)`
+              |
+              `nowait` $nowait
+              )
+              custom<PrivateRegion>($region, $private_vars, type($private_vars),
+              $private_syms) attr-dict
+The single construct specifies that the associated structured block is executed by only one of the threads in the team (not necessarily the master thread), in the context of its implicit task. The other threads in the team, which do not execute the block, wait at an implicit barrier at the end of the single construct.
+
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+If copyprivate variables and functions are specified, then each thread variable is updated with the variable value of the thread that executed the single region, using the specified copy functions.
+
+The optional nowait attribute, when present, eliminates the implicit barrier at the end of the construct, so the parent operation can make progress even if the child operation has not completed yet.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: BlockArgOpenMPOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+copyprivate_syms	::mlir::ArrayAttr	symbol ref array attribute
+nowait	::mlir::UnitAttr	unit attribute
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+copyprivate_vars	variadic of OpenMP-compatible variable type
+private_vars	variadic of any type

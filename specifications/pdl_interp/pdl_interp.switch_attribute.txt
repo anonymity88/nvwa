@@ -1,0 +1,27 @@
+pdl_interp.switch_attribute (pdl_interp::SwitchAttributeOp) ¶
+Switch on the value of an Attribute
+
+Syntax:
+
+operation ::= `pdl_interp.switch_attribute` $attribute `to` $caseValues `(` $cases `)` attr-dict `->` $defaultDest
+pdl_interp.switch_attribute operations compare the value of a given attribute with a set of constant attributes. If the value matches one of the provided case values the destination for that case value is taken, otherwise the default destination is taken.
+
+Example:
+
+pdl_interp.switch_attribute %attr to [10, true](^10Dest, ^trueDest) -> ^defaultDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+caseValues	::mlir::ArrayAttr	array attribute
+Operands: ¶
+Operand	Description
+attribute	PDL handle to an mlir::Attribute
+Successors: ¶
+Successor	Description
+defaultDest	any successor
+cases	any successor

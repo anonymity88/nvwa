@@ -1,0 +1,44 @@
+//===----------------------------------------------------------------------===//
+// FromElementsOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_FromElementsOp : Tensor_Op<"from_elements", [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    Pure,
+    TypesMatchWith<"operand types match result element type",
+                   "result", "elements", "SmallVector<Type, 2>("
+                   "::llvm::cast<RankedTensorType>($_self).getNumElements(), "
+                   "::llvm::cast<RankedTensorType>($_self).getElementType())">
+  ]> {
+  let summary = "tensor from elements operation.";
+  let description = [{
+    Create a N-D tensor from a range of same-type arguments. The number of
+    provided `elements` should equal to the number of the elements in the
+    result type. The `elements` correspond to a flattened tensor.
+
+    Example:
+
+    ```mlir
+    tensor.from_elements %a, %b, %c, %d, %e, %f :  tensor<2x3xindex>
+    ```
+
+    will result in a tensor
+
+    [[%a, %b, %c]
+     [%d, %e, %f]]
+  }];
+
+  let arguments = (ins Variadic<AnyType>:$elements);
+  let results = (outs AnyStaticShapeTensor:$result);
+
+  let assemblyFormat = "$elements attr-dict `:` type($result)";
+
+  let builders = [
+    // Special case builder for when `elements` has size >=1.
+    OpBuilder<(ins "ValueRange":$elements)>
+  ];
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+}
+

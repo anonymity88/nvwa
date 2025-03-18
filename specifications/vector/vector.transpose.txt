@@ -1,0 +1,37 @@
+vector.transpose (vector::TransposeOp) ¶
+Vector transpose operation
+
+Syntax:
+
+operation ::= `vector.transpose` $vector `,` $permutation attr-dict `:` type($vector) `to` type($result)
+Takes a n-D vector and returns the transposed n-D vector defined by the permutation of ranks in the n-sized integer array attribute (in case of 0-D vectors the array attribute must be empty).
+
+In the operation
+
+%1 = vector.transpose %0, [i_1, .., i_n]
+  : vector<d_1 x .. x d_n x f32>
+  to vector<d_trans[0] x .. x d_trans[n-1] x f32>
+the permutation array [i_1, .., i_n] must be a permutation of [0, .., n-1].
+
+Example:
+
+%1 = vector.transpose %0, [1, 0] : vector<2x3xf32> to vector<3x2xf32>
+
+ [ [a, b, c],       [ [a, d],
+   [d, e, f] ]  ->    [b, e],
+                      [c, f] ]
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+permutation	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+vector	vector of any type values
+Results: ¶
+Result	Description
+result	vector of any type values

@@ -1,0 +1,23 @@
+emitc.subscript (emitc::SubscriptOp) ¶
+Subscript operation
+
+Syntax:
+
+operation ::= `emitc.subscript` $value `[` $indices `]` attr-dict `:` functional-type(operands, results)
+With the emitc.subscript operation the subscript operator [] can be applied to variables or arguments of array, pointer and opaque type.
+
+Example:
+
+%i = index.constant 1
+%j = index.constant 7
+%0 = emitc.subscript %arg0[%i, %j] : (!emitc.array<4x8xf32>, index, index)
+       -> !emitc.lvalue<f32>
+%1 = emitc.subscript %arg1[%i] : (!emitc.ptr<i32>, index)
+       -> !emitc.lvalue<i32>
+Operands: ¶
+Operand	Description
+value	EmitC array type or EmitC opaque type or EmitC pointer type
+indices	variadic of type supported by EmitC
+Results: ¶
+Result	Description
+result	EmitC lvalue type

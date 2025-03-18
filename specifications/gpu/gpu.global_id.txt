@@ -1,0 +1,26 @@
+gpu.global_id (gpu::GlobalIdOp) ¶
+Syntax:
+
+operation ::= `gpu.global_id` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the unique global workitem/thread id, i.e., the unique index of the current workitem/thread within all workgroups / grid along the x, y, or z dimension.
+
+Example:
+
+%gidX = gpu.global_id x
+%gidX = gpu.global_id x upper_bound 65536
+The upper_bound attribute defines an upper bound analogously to the ones on thread_id and block_id. If one is not set, the bound may be inferred from a combination of known_block_size and known_grid_size-type annotations.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

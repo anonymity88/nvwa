@@ -1,0 +1,21 @@
+nvgpu.mbarrier.test.wait (nvgpu::MBarrierTestWaitOp) ¶
+Checks if the nvgpu.mbarrier has completed its current phase.
+
+Syntax:
+
+operation ::= `nvgpu.mbarrier.test.wait` $barriers `[` $mbarId `]` `,` $token attr-dict `:` type($barriers) `,` type($token)
+Checks whether the mbarrier object has completed the phase. It is is a non-blocking instruction which tests for the completion of the phase.
+
+Example:
+
+  %isComplete = nvgpu.mbarrier.test.wait %barrier, %token : !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>>, !nvgpu.mbarrier.token
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+barriers	mbarrier barrier type
+token	
+mbarId	index
+Results: ¶
+Result	Description
+waitComplete	1-bit signless integer

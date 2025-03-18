@@ -1,0 +1,17 @@
+ml_program.return (ml_program::ReturnOp) ¶
+Returns values from a func function
+
+Syntax:
+
+operation ::= `ml_program.return` attr-dict ($operands^ `:` type($operands))?
+The return operation terminates a func function by yielding values to the caller. The operation takes variable number of operands and produces no results. The operand number and types must match the signature of the function that contains the operation.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<FuncOp>, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

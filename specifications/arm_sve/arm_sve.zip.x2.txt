@@ -1,0 +1,32 @@
+arm_sve.zip.x2 (arm_sve::ZipX2Op) ¶
+Multi-vector two-way zip op
+
+Syntax:
+
+operation ::= `arm_sve.zip.x2` $sourceV1 `,` $sourceV2 attr-dict `:` type($sourceV1)
+This operation interleaves elements from two input SVE vectors, returning two new SVE vectors (resultV1 and resultV2), which contain the low and high halves of the result respectively.
+
+Example:
+
+// sourceV1 = [ A1, A2, A3, ... An ]
+// sourceV2 = [ B1, B2, B3, ... Bn ]
+// (resultV1, resultV2) = [ A1, B1, A2, B2, A3, B3, ... An, Bn ]
+%resultV1, %resultV2 = arm_sve.zip.x2 %sourceV1, %sourceV2 : vector<[16]xi8>
+Note: This requires SME 2 (+sme2 in LLVM target features)
+
+Source
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+sourceV1	an SVE vector with element size <= 64-bit
+sourceV2	an SVE vector with element size <= 64-bit
+Results: ¶
+Result	Description
+resultV1	an SVE vector with element size <= 64-bit
+resultV2	an SVE vector with element size <= 64-bit

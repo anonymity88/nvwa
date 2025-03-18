@@ -1,0 +1,19 @@
+omp.workshare (omp::WorkshareOp) ¶
+Workshare directive
+
+Syntax:
+
+operation ::= `omp.workshare` oilist(
+              `nowait` $nowait
+              ) $region attr-dict
+The workshare construct divides the execution of the enclosed structured block into separate units of work, and causes the threads of the team to share the work such that each unit is executed only once by one thread, in the context of its implicit task
+
+This operation is used for the intermediate representation of the workshare block before the work gets divided between the threads. See the flang LowerWorkshare pass for details.
+
+The optional nowait attribute, when present, eliminates the implicit barrier at the end of the construct, so the parent operation can make progress even if the child operation has not completed yet.
+
+Traits: RecursiveMemoryEffects
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+nowait	::mlir::UnitAttr	unit attribute

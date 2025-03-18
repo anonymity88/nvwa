@@ -1,0 +1,17 @@
+vector.vscale (vector::VectorScaleOp) ¶
+Load vector scale size
+
+Syntax:
+
+operation ::= `vector.vscale` attr-dict
+The vscale op returns the scale of the scalable vectors, a positive integer value that is constant at runtime but unknown at compile-time. The scale of the vector indicates the multiplicity of the vectors and vector operations. For example, a vector<[4]xi32> is equivalent to vscale consecutive vector<4xi32>; and an operation on a vector<[4]xi32> is equivalent to performing that operation vscale times, once on each <4xi32> segment of the scalable vector. The vscale op can be used to calculate the step in vector-length agnostic (VLA) loops. Right now we only support one contiguous set of scalable dimensions, all of them grouped and scaled with the value returned by ‘vscale’.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+res	index

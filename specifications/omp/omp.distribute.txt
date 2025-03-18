@@ -1,0 +1,57 @@
+omp.distribute (omp::DistributeOp) ¶
+Distribute construct
+
+Syntax:
+
+operation ::= `omp.distribute` oilist(
+              `allocate` `(`
+              custom<AllocateAndAllocator>($allocate_vars, type($allocate_vars),
+              $allocator_vars, type($allocator_vars)) `)`
+              |
+              `dist_schedule_static` $dist_schedule_static
+              | `dist_schedule_chunk_size` `(` $dist_schedule_chunk_size `:`
+              type($dist_schedule_chunk_size) `)`
+              |
+              `order` `(` custom<OrderClause>($order, $order_mod) `)`
+              )
+              custom<PrivateRegion>($region, $private_vars, type($private_vars),
+              $private_syms) attr-dict
+The distribute construct specifies that the iterations of one or more loops (optionally specified using collapse clause) will be executed by the initial teams in the context of their implicit tasks. The loops that the distribute op is associated with starts with the outermost loop enclosed by the distribute op region and going down the loop nest toward the innermost loop. The iterations are distributed across the initial threads of all initial teams that execute the teams region to which the distribute region binds.
+
+The distribute loop construct specifies that the iterations of the loop(s) will be executed in parallel by threads in the current context. These iterations are spread across threads that already exist in the enclosing region.
+
+The body region can only contain a single block which must contain a single operation. This operation must be another compatible loop wrapper or an omp.loop_nest.
+
+omp.distribute <clauses> {
+  omp.loop_nest (%i1, %i2) : index = (%c0, %c0) to (%c10, %c10) step (%c1, %c1) {
+    %a = load %arrA[%i1, %i2] : memref<?x?xf32>
+    %b = load %arrB[%i1, %i2] : memref<?x?xf32>
+    %sum = arith.addf %a, %b : f32
+    store %sum, %arrC[%i1, %i2] : memref<?x?xf32>
+    omp.yield
+  }
+}
+The allocator_vars and allocate_vars parameters are a variadic list of values that specify the memory allocator to be used to obtain storage for private values.
+
+The dist_schedule_static attribute specifies the schedule for this loop, determining how the loop is distributed across the various teams. The optional dist_schedule_chunk_size associated with this determines further controls this distribution.
+
+The optional order attribute specifies which order the iterations of the associated loops are executed in. Currently the only option for this attribute is “concurrent”.
+
+Traits: AttrSizedOperandSegments, NoTerminator, RecursiveMemoryEffects, SingleBlock
+
+Interfaces: BlockArgOpenMPOpInterface, ComposableOpInterface, LoopWrapperInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dist_schedule_static	::mlir::UnitAttr	unit attribute
+order	::mlir::omp::ClauseOrderKindAttr	
+OrderKind Clause
+order_mod	::mlir::omp::OrderModifierAttr	
+OpenMP Order Modifier
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+Operands: ¶
+Operand	Description
+allocate_vars	variadic of any type
+allocator_vars	variadic of any type
+dist_schedule_chunk_size	integer or index
+private_vars	variadic of any type

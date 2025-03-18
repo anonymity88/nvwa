@@ -1,0 +1,33 @@
+gpu.subgroup_mma_load_matrix (gpu::SubgroupMmaLoadMatrixOp) ¶
+GPU warp synchronous matrix load
+
+Syntax:
+
+operation ::= `gpu.subgroup_mma_load_matrix` $srcMemref`[`$indices`]` attr-dict `:` type($srcMemref) `->` type($res)
+The gpu.subgroup_mma_load_matrix operation loads a matrix collectively using all the threads in a subgroup.
+
+This operation takes a memref as its first operand: it is the source matrix from which data is to be loaded. The op returns a !gpu.mma_matrix. The source memref can be in global memory or shared memory. The load address is determined using indices. The matrix being loaded into is the result. The leadDimension attribute specifies the leading dimension size of the source matrix which eventually allows the lowering to determine the size of each row. If the transpose attribute is present then the op does a transposed load.
+
+For integer types, the resulting !gpu.mma_matrix type needs to specify the signedness of the data if the matrix type is an A or B operand for gpu.subgroup_mma_compute.
+
+This op is often meant to be used along with gpu.subgroup_mma_store_matrix and gpu.subgroup_mma_compute.
+
+Example:
+
+ %0 = gpu.subgroup_mma_load_matrix src[%i,%j] : {leadDimension = 32 : i32}
+      : memref<32x32xf16, 3>, !gpu.mma_matrix<16x16xf16, "AOp">
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Read on ::mlir::SideEffects::DefaultResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+leadDimension	::mlir::IntegerAttr	index attribute
+transpose	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+srcMemref	memref of 8-bit signless integer or 32-bit signless integer or 16-bit float or 32-bit float or vector of 8-bit signless integer or 32-bit signless integer or 16-bit float or 32-bit float values of ranks 1 values
+indices	variadic of index
+Results: ¶
+Result	Description
+res	MMAMatrix type

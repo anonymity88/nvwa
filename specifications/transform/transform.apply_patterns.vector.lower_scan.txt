@@ -1,0 +1,7 @@
+transform.apply_patterns.vector.lower_scan (transform::ApplyLowerScanPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_scan` attr-dict
+Indicates that vector.scan operations should be lowered to finer-grained vector primitives.
+
+Interfaces: PatternDescriptorOpInterface

@@ -1,0 +1,47 @@
+//===----------------------------------------------------------------------===//
+// CloneOp
+//===----------------------------------------------------------------------===//
+
+def Bufferization_CloneOp : Bufferization_Op<"clone", [
+    CopyOpInterface,
+    MemoryEffectsOpInterface,
+    DeclareOpInterfaceMethods<AllocationOpInterface, ["buildDealloc", "buildClone"]>
+  ]> {
+  let builders = [
+    OpBuilder<(ins "Value":$value), [{
+      return build($_builder, $_state, value.getType(), value);
+    }]>];
+
+  let summary = "clone a memref";
+  let description = [{
+    Clones the data in the input view into an implicitly defined output view.
+
+    Usage:
+
+    ```mlir
+    %arg1 = bufferization.clone %arg0 : memref<?xf32> to memref<?xf32>
+    ```
+
+    Valid implementations of this operation may alias the input and output
+    views or create an actual copy. Mutating the source or result
+    of the clone operation after the clone operation thus leads to undefined
+    behavior.
+  }];
+
+  let arguments = (ins Arg<AnyRankedOrUnrankedMemRef, "",
+                           [MemRead<DefaultResource>]>:$input);
+  let results = (outs Res<AnyRankedOrUnrankedMemRef, "",
+                          [MemWrite<DefaultResource>,
+                           MemAlloc<DefaultResource>]>:$output);
+
+  let extraClassDeclaration = [{
+    Value getSource() { return getInput(); }
+    Value getTarget() { return getOutput(); }
+  }];
+
+  let assemblyFormat = "$input attr-dict `:` type($input) `to` type($output)";
+
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

@@ -1,0 +1,20 @@
+transform.num_associations (transform::NumAssociationsOp) ¶
+Returns the number of payload objects associated with the argument
+
+Syntax:
+
+operation ::= `transform.num_associations` $handle attr-dict `:` functional-type(operands, results)
+Given an argument, handle or parameter, returns a new parameter associated with a single 64-bit number that corresponds to the number of payload objects (operations or values for a handle, attributes for a parameter) associated with the argument.
+
+Always succeeds.
+
+Traits: ParamProducerTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+handle	any transform handle or parameter
+Results: ¶
+Result	Description
+num	TransformParamTypeInterface instance

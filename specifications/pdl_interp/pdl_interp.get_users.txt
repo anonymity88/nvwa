@@ -1,0 +1,27 @@
+pdl_interp.get_users (pdl_interp::GetUsersOp) ¶
+Get the users of a Value
+
+Syntax:
+
+operation ::= `pdl_interp.get_users` `of` $value `:` type($value) attr-dict
+pdl_interp.get_users extracts the users that accept this value. In the case of a range, the union of users of the all the values are returned, similarly to ResultRange::getUsers.
+
+Example:
+
+// Get all the users of a single value.
+%ops = pdl_interp.get_users of %value : !pdl.value
+
+// Get all the users of the first value in a range.
+%ops = pdl_interp.get_users of %values : !pdl.range<value>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	single element or range of PDL handle for an mlir::Value
+Results: ¶
+Result	Description
+operations	range of PDL handle to an mlir::Operation * values

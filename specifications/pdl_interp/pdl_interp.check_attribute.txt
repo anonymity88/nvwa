@@ -1,0 +1,27 @@
+pdl_interp.check_attribute (pdl_interp::CheckAttributeOp) ¶
+Check the value of an Attribute
+
+Syntax:
+
+operation ::= `pdl_interp.check_attribute` $attribute `is` $constantValue attr-dict `->` successors
+pdl_interp.check_attribute operations compare the value of a given attribute with a constant value. On success, this operation branches to the true destination, otherwise the false destination is taken.
+
+Example:
+
+pdl_interp.check_attribute %attr is 10 -> ^matchDest, ^failureDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+constantValue	::mlir::Attribute	any attribute
+Operands: ¶
+Operand	Description
+attribute	PDL handle to an mlir::Attribute
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

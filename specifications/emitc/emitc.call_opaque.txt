@@ -1,0 +1,30 @@
+emitc.call_opaque (emitc::CallOpaqueOp) ¶
+Opaque call operation
+
+Syntax:
+
+operation ::= `emitc.call_opaque` $callee `(` $operands `)` attr-dict `:` functional-type($operands, results)
+The emitc.call_opaque operation represents a C++ function call. The callee can be an arbitrary non-empty string. The call allows specifying order of operands and attributes in the call as follows:
+
+integer value of index type refers to an operand;
+attribute which will get lowered to constant value in call;
+Example:
+
+// Custom form defining a call to `foo()`.
+%0 = emitc.call_opaque "foo" () : () -> i32
+
+// Generic form of the same operation.
+%0 = "emitc.call_opaque"() {callee = "foo"} : () -> i32
+Traits: CExpression
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+callee	::mlir::StringAttr	string attribute
+args	::mlir::ArrayAttr	array attribute
+template_args	::mlir::ArrayAttr	array attribute
+Operands: ¶
+Operand	Description
+operands	variadic of type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	variadic of type supported by EmitC

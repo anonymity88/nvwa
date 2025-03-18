@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// RsqrtOp
+//===----------------------------------------------------------------------===//
+
+def Math_RsqrtOp : Math_FloatUnaryOp<"rsqrt"> {
+  let summary = "reciprocal of sqrt (1 / sqrt of the specified value)";
+  let description = [{
+    The `rsqrt` operation computes the reciprocal of the square root. It takes
+    one operand of floating point type (i.e., scalar, tensor or vector) and returns
+    one result of the same type. It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar reciprocal square root value.
+    %a = math.rsqrt %b : f64
+    ```
+  }];
+}
+

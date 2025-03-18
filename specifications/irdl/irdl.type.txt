@@ -1,0 +1,108 @@
+irdl.type (irdl::TypeOp) ¶
+Define a new type
+
+Syntax:
+
+operation ::= `irdl.type` $sym_name attr-dict-with-keyword custom<SingleBlockRegion>($body)
+irdl.type defines a new type belonging to the irdl.dialect parent.
+
+The type parameters can be defined with an irdl.parameters operation in the optional region.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex {
+    %0 = irdl.is i32
+    %1 = irdl.is i64
+    %2 = irdl.any_of(%0, %1)
+    irdl.parameters(%2)
+  }
+}
+The above program defines a type complex inside the dialect cmath. The type has a single parameter that should be either i32 or i64.
+
+Traits: AtMostOneChildOf<ParametersOp>, HasParent<DialectOp>, NoRegionArguments, NoTerminator
+
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+Attributes ¶
+VariadicityArrayAttr ¶
+Syntax:
+
+#irdl.variadicity_array<
+  ::llvm::ArrayRef<VariadicityAttr>   # value
+>
+Parameters: ¶
+Parameter	C++ type	Description
+value	::llvm::ArrayRef<VariadicityAttr>	
+VariadicityAttr ¶
+A variadicity kind. Can be either ‘single’, ‘optional’, or ‘variadic’
+
+Syntax:
+
+#irdl.variadicity<
+  ::mlir::irdl::Variadicity   # value
+>
+A irdl.variadicity attribute specifies that the associated operand or result definition is either a single definition (the default), an optional definition, or a variadic definition.
+
+For instance:
+
+irdl.operands (%arg1, single %arg2, optional %arg3, variadic %arg4)
+In this example, both %arg1 and %arg2 are single operands, %arg3 is an optional operand, and %arg4 is a variadic operand.
+
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::irdl::Variadicity	an enum of type Variadicity
+Types ¶
+AttributeType ¶
+IRDL handle to an mlir::Attribute
+
+Syntax: !irdl.attribute
+
+This type represents a handle to an instance of an mlir::Attribute, so it can be used in an IRDL operation, type, or attribute definition. This type can also represent a handle to an instance of an mlir::Type, by wrapping it in a mlir::TypeAttr.
+
+Example:
+
+irdl.dialect @cmath {
+
+  irdl.type @complex { /* ... */ }
+
+  irdl.operation @norm {
+    %0 = irdl.any
+    %1 = irdl.parametric @cmath::@complex<%0>
+    irdl.operands(%1)
+    irdl.results(%0)
+  }
+}
+Here, %0 and %1 are both of type !irdl.attribute. Note that in particular, %1 will be a handle to a mlir::TypeAttr wrapping an instance of a cmath.complex type.
+
+RegionType ¶
+IRDL handle to a region definition
+
+Syntax: !irdl.region
+
+This type represents a region constraint. It is produced by the irdl.region operation and consumed by the irdl.regions operation. The region can be constrained on the number of arguments and the number of blocks.
+
+Example:
+
+irdl.dialect @example {
+  irdl.operation @op_with_regions {
+    %r1 = irdl.region with size 3
+    %0 = irdl.any
+    %r2 = irdl.region(%0)
+    irdl.regions(%r1, %r2)
+  }
+}
+Here we have %r1 and %r2, both of which have the type !irdl.region.
+
+Enums ¶
+Variadicity ¶
+variadicity kind
+
+Cases: ¶
+Symbol	Value	String
+single	0	single
+optional	1	optional
+variadic	2	variadic

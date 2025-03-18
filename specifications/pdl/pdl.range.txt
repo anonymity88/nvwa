@@ -1,0 +1,34 @@
+pdl.range (pdl::RangeOp) ¶
+Construct a range of pdl entities
+
+Syntax:
+
+operation ::= `pdl.range` ($arguments^ `:` type($arguments))?
+              custom<RangeType>(ref(type($arguments)), type($result))
+              attr-dict
+pdl.range operations construct a range from a given set of PDL entities, which all share the same underlying element type. For example, a !pdl.range<value> may be constructed from a list of !pdl.value or !pdl.range<value> entities.
+
+Example:
+
+// Construct a range of values.
+%valueRange = pdl.range %inputValue, %inputRange : !pdl.value, !pdl.range<value>
+
+// Construct a range of types.
+%typeRange = pdl.range %inputType, %inputRange : !pdl.type, !pdl.range<type>
+
+// Construct an empty range of types.
+%valueRange = pdl.range : !pdl.range<type>
+TODO: Range construction is currently limited to rewrites, but it could be extended to constraints under certain circustances; i.e., if we can determine how to extract the underlying elements. If we can’t, e.g. if there are multiple sub ranges used for construction, we won’t be able to determine their sizes during constraint time.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<pdl::RewriteOp>
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arguments	variadic of pdl type
+Results: ¶
+Result	Description
+result	range of PDL handle to an mlir::Type or PDL handle for an mlir::Value values

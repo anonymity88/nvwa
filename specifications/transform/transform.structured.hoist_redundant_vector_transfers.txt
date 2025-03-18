@@ -1,0 +1,27 @@
+transform.structured.hoist_redundant_vector_transfers (transform::HoistRedundantVectorTransfersOp) ¶
+Syntax:
+
+operation ::= `transform.structured.hoist_redundant_vector_transfers` $target attr-dict `:` functional-type(operands, results)
+Hoist vector.transfer_read / vector.transfer_write pairs out of immediately enclosing scf::ForOp iteratively, if the following conditions are true:
+
+The 2 ops access the same memref with the same indices.
+All operands are invariant under the enclosing scf::ForOp.
+No uses of the memref either dominate the transfer_read or are dominated by the transfer_write (i.e. no aliasing between the write and the read across the loop)
+WARNING: This hoisting does not model parallelism and is generally incorrect when used on distributed loops with memref semantics! TODO: obsolete and should be retired.
+
+Return modes: ¶
+The operation always succeeds and returns a handle to the transformed function op.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+verify_non_zero_trip	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

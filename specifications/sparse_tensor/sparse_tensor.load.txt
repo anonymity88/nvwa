@@ -1,0 +1,30 @@
+sparse_tensor.load (sparse_tensor::LoadOp) ¶
+Rematerializes tensor from underlying sparse storage format
+
+Syntax:
+
+operation ::= `sparse_tensor.load` $tensor (`hasInserts` $hasInserts^)? attr-dict `:` type($tensor)
+Rematerializes a tensor from the underlying sparse storage format of the given tensor. This is similar to the bufferization.to_tensor operation in the sense that it provides a bridge between a bufferized world view and a tensor world view. Unlike the bufferization.to_tensor operation, however, this sparse operation is used only temporarily to maintain a correctly typed intermediate representation during progressive bufferization.
+
+The hasInserts attribute denote whether insertions to the underlying sparse storage format may have occurred, in which case the underlying sparse storage format needs to be finalized. Otherwise, the operation simply folds away.
+
+Note that this operation is “impure” in the sense that even though the result is modeled through an SSA value, the operation relies on a proper context of materializing and inserting the tensor value.
+
+Examples:
+
+%result = sparse_tensor.load %tensor : tensor<8xf64, #SV>
+
+%1 = sparse_tensor.load %0 hasInserts : tensor<16x32xf32, #CSR>
+Traits: SameOperandsAndResultType
+
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+hasInserts	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+tensor	sparse tensor of any type values
+Results: ¶
+Result	Description
+result	tensor of any type values

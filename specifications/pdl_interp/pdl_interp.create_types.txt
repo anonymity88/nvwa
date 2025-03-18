@@ -1,0 +1,23 @@
+pdl_interp.create_types (pdl_interp::CreateTypesOp) ¶
+Create an interpreter handle to a range of constant Types
+
+Syntax:
+
+operation ::= `pdl_interp.create_types` $value attr-dict
+pdl_interp.create_types operations generate a handle within the interpreter for a specific range of constant type values.
+
+Example:
+
+pdl_interp.create_types [i64, i64]
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::ArrayAttr	type array attribute
+Results: ¶
+Result	Description
+result	range of PDL handle to an mlir::Type values

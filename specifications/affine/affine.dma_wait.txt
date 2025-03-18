@@ -1,0 +1,13 @@
+affine.dma_wait (mlir::AffineDmaWaitOp) ¶
+Syntax:
+
+operation ::= `affine.dma_wait` ssa-use `[` multi-dim-affine-map-of-ssa-ids `]`, ssa-use `:` memref-type
+The affine.dma_wait op blocks until the completion of a DMA operation associated with the tag element %tag[%index]. %tag is a memref, and %index has to be an index with the same restrictions as any load/store index. In particular, index for each memref dimension must be an affine expression of loop induction variables and symbols. %num_elements is the number of elements associated with the DMA operation.
+
+Example:
+
+affine.dma_start %src[%i, %j], %dst[%k, %l], %tag[%index], %num_elements :
+  memref<2048xf32, 0>, memref<256xf32, 1>, memref<1xi32, 2>
+...
+...
+affine.dma_wait %tag[%index], %num_elements : memref<1xi32, 2>

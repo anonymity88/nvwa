@@ -1,0 +1,46 @@
+sparse_tensor.iterate (sparse_tensor::IterateOp) ¶
+Iterates over a sparse iteration space
+
+The sparse_tensor.iterate operation represents a loop (nest) over the provided iteration space extracted from a specific sparse tensor. The operation defines an SSA value for a sparse iterator that points to the current stored element in the sparse tensor and SSA values for coordinates of the stored element. The coordinates are always converted to index type despite of the underlying sparse tensor storage. When coordinates are not used, the SSA values can be skipped by _ symbols, which usually leads to simpler generated code after sparsification. For example:
+
+// The coordinate for level 0 is not used when iterating over a 2-D
+// iteration space.
+%sparse_tensor.iterate %iterator in %space at(_, %crd_1)
+  : !sparse_tensor.iter_space<#CSR, lvls = 0 to 2>
+sparse_tensor.iterate can also operate on loop-carried variables. It returns the final values after loop termination. The initial values of the variables are passed as additional SSA operands to the iterator SSA value and used coordinate SSA values mentioned above. The operation region has an argument for the iterator, variadic arguments for specified (used) coordiates and followed by one argument for each loop-carried variable, representing the value of the variable at the current iteration. The body region must contain exactly one block that terminates with sparse_tensor.yield.
+
+The results of an sparse_tensor.iterate hold the final values after the last iteration. If the sparse_tensor.iterate defines any values, a yield must be explicitly present. The number and types of the sparse_tensor.iterate results must match the initial values in the iter_args binding and the yield operands.
+
+A nested sparse_tensor.iterate example that prints all the coordinates stored in the sparse input:
+
+func.func @nested_iterate(%sp : tensor<4x8xf32, #COO>) {
+  // Iterates over the first level of %sp
+  %l1 = sparse_tensor.extract_iteration_space %sp lvls = 0
+      : tensor<4x8xf32, #COO> -> !sparse_tensor.iter_space<#COO, lvls = 0 to 1>
+  %r1 = sparse_tensor.iterate %it1 in %l1 at (%coord0)
+      : !sparse_tensor.iter_space<#COO, lvls = 0 to 1>  {
+    // Iterates over the second level of %sp
+    %l2 = sparse_tensor.extract_iteration_space %sp at %it1 lvls = 1
+        : tensor<4x8xf32, #COO>, !sparse_tensor.iterator<#COO, lvls = 0 to 1>
+       -> !sparse_tensor.iter_space<#COO, lvls = 1 to 2>
+    %r2 = sparse_tensor.iterate %it2 in %l2 at (coord1)
+        : !sparse_tensor.iter_space<#COO, lvls = 1 to 2>  {
+       vector.print %coord0 : index
+       vector.print %coord1 : index
+    }
+  }
+}
+Traits: RecursiveMemoryEffects, RecursivelySpeculatableImplTrait, SingleBlockImplicitTerminator<sparse_tensor::YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, LoopLikeOpInterface, RegionBranchOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+crdUsedLvls	::mlir::IntegerAttr	LevelSet attribute
+Operands: ¶
+Operand	Description
+iterSpace	sparse iteration space
+initArgs	variadic of any type
+Results: ¶
+Result	Description
+results	variadic of any type

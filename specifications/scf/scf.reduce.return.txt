@@ -1,0 +1,20 @@
+scf.reduce.return (scf::ReduceReturnOp) ¶
+Terminator for reduce operation
+
+Syntax:
+
+operation ::= `scf.reduce.return` $result attr-dict `:` type($result)
+The scf.reduce.return operation is a special terminator operation for the block inside scf.reduce regions. It terminates the region. It should have the same operand type as the corresponding operand of the enclosing scf.reduce op.
+
+Example:
+
+scf.reduce.return %res : f32
+Traits: AlwaysSpeculatableImplTrait, HasParent<ReduceOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+result	any type

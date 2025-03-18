@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// ReplaceOp
+//===----------------------------------------------------------------------===//
+
+def ReplaceOp : Op<Transform_Dialect, "structured.replace",
+    [IsolatedFromAbove, DeclareOpInterfaceMethods<TransformOpInterface>,
+     DeclareOpInterfaceMethods<MemoryEffectsOpInterface>,
+     ReportTrackingListenerFailuresOpTrait] # GraphRegionNoTerminator.traits> {
+  let description = [{
+    Replace all `target` payload ops with the single op that is contained in
+    this op's region. All targets must have zero arguments and must be isolated
+    from above.
+
+    This op is for debugging/experiments only.
+
+    #### Return modes
+
+    This operation consumes the `target` handle.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target);
+  let results = (outs TransformHandleTypeInterface:$replacement);
+  let regions = (region SizedRegion<1>:$bodyRegion);
+  let assemblyFormat =
+      "$target attr-dict-with-keyword regions `:` "
+      "custom<SemiFunctionType>(type($target), type($replacement))";
+  let hasVerifier = 1;
+}
+

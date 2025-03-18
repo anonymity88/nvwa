@@ -1,0 +1,23 @@
+pdl_interp.get_attribute_type (pdl_interp::GetAttributeTypeOp) ¶
+Get the result type of a specified Attribute
+
+Syntax:
+
+operation ::= `pdl_interp.get_attribute_type` `of` $value attr-dict
+pdl_interp.get_attribute_type operations get the resulting type of a specific attribute.
+
+Example:
+
+%type = pdl_interp.get_attribute_type of %attr
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	PDL handle to an mlir::Attribute
+Results: ¶
+Result	Description
+result	PDL handle to an mlir::Type

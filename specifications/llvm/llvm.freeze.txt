@@ -1,0 +1,16 @@
+llvm.freeze (LLVM::FreezeOp) ¶
+Syntax:
+
+operation ::= `llvm.freeze` $val attr-dict `:` type($val)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+val	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// XorOp
+//===----------------------------------------------------------------------===//
+
+def Index_XOrOp : IndexBinaryOp<"xor", [Commutative, Pure]> {
+  let summary = "index bitwise xor";
+  let description = [{
+    The `index.xor` operation takes two index values and computes their bitwise
+    xor.
+
+    Example:
+
+    ```mlir
+    // c = a ^ b
+    %c = index.xor %a, %b
+    ```
+  }];
+}
+

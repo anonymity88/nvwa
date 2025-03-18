@@ -1,0 +1,26 @@
+transform.structured.transpose_matmul (transform::TransposeMatmulOp) ¶
+Syntax:
+
+operation ::= `transform.structured.transpose_matmul` $target (`<` $inputToTranspose^ `>`)?
+              attr-dict `:` functional-type($target, results)
+Convert Linalg matmul ops to transposed variants.
+
+By default the LHS matrix is transposed. Specify <rhs> to instead transpose RHS matrix.
+
+Return modes: ¶
+This operation fails if target is unsupported, i.e., not a linalg.matmul or linalg.batch_matmul. Otherwise, the operation succeeds and returns a handle to the transposed matmul op.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+inputToTranspose	mlir::transform::TransposeMatmulInputAttr	
+Input to transpose when converting matmul ops to transposed variants
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

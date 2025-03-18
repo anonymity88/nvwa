@@ -1,0 +1,28 @@
+spirv.Store (spirv::StoreOp) ¶
+Store through a pointer.
+
+Pointer is the pointer to store through. Its type must be an OpTypePointer whose Type operand is the same as the type of Object.
+
+Object is the object to store.
+
+If present, any Memory Operands must begin with a memory operand literal. If not present, it is the same as specifying the memory operand None.
+
+store-op ::= `spirv.Store ` storage-class ssa-use `, ` ssa-use `, `
+              (`[` memory-access `]`)? `:` spirv-element-type
+Example: ¶
+%0 = spirv.Variable : !spirv.ptr<f32, Function>
+%1 = spirv.FMul ... : f32
+spirv.Store "Function" %0, %1 : f32
+spirv.Store "Function" %0, %1 ["Volatile"] : f32
+spirv.Store "Function" %0, %1 ["Aligned", 4] : f32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+memory_access	::mlir::spirv::MemoryAccessAttr	
+valid SPIR-V MemoryAccess
+alignment	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+ptr	any SPIR-V pointer type
+value	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

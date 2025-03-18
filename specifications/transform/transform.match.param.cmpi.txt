@@ -1,0 +1,20 @@
+transform.match.param.cmpi (transform::MatchParamCmpIOp) ¶
+Matches if two parameter lists are associated with the same value
+
+Syntax:
+
+operation ::= `transform.match.param.cmpi` $predicate $param `,` $reference attr-dict `:` type($param)
+Succeeds if all of the co-indexed values associated with the given parameters relate as specified by the predicate (greater than, less than, equal to, or their combinations). Comparison treats all values as signed. Produces a silenceable failure otherwise.
+
+Traits: SameTypeOperands
+
+Interfaces: MatchOpInterface, MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+predicate	::mlir::transform::MatchCmpIPredicateAttr	
+allowed 32-bit signless integer cases: 0, 1, 2, 3, 4, 5
+Operands: ¶
+Operand	Description
+param	TransformParamTypeInterface instance
+reference	TransformParamTypeInterface instance

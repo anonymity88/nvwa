@@ -1,0 +1,30 @@
+polynomial.monomial (polynomial::MonomialOp) ¶
+Create a polynomial that consists of a single monomial.
+
+Syntax:
+
+operation ::= `polynomial.monomial` operands attr-dict `:` functional-type(operands, results)
+Construct a polynomial that consists of a single monomial term, from its degree and coefficient as dynamic inputs.
+
+The coefficient type of the output polynomial’s ring attribute must match the coefficient input type.
+
+Example:
+
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%deg = arith.constant 1023 : index
+%five = arith.constant 5 : i32
+%0 = polynomial.monomial %five, %deg : (i32, index) -> !polynomial.polynomial<#ring>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+coefficient	integer
+degree	index
+Results: ¶
+Result	Description
+output	An element of a polynomial ring.

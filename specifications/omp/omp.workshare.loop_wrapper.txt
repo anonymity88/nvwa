@@ -1,0 +1,11 @@
+omp.workshare.loop_wrapper (omp::WorkshareLoopWrapperOp) ¶
+Contains loop nests to be parallelized by workshare
+
+Syntax:
+
+operation ::= `omp.workshare.loop_wrapper` $region attr-dict
+This operation wraps a loop nest that is marked for dividing into units of work by an encompassing omp.workshare operation.
+
+Traits: NoTerminator, RecursiveMemoryEffects, SingleBlock
+
+Interfaces: LoopWrapperInterface

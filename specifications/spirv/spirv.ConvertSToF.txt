@@ -1,0 +1,27 @@
+spirv.ConvertSToF (spirv::ConvertSToFOp) ¶
+Convert value numerically from signed integer to floating point.
+
+Syntax:
+
+operation ::= `spirv.ConvertSToF` $operand attr-dict `:` type($operand) `to` type($result)
+Result Type must be a scalar or vector of floating-point type.
+
+Signed Value must be a scalar or vector of integer type. It must have the same number of components as Result Type.
+
+Results are computed per component.
+
+Example: ¶
+%1 = spirv.ConvertSToF %0 : i32 to f32
+%3 = spirv.ConvertSToF %2 : vector<3xi32> to vector<3xf32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultShape, SignedOp
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values
+Results: ¶
+Result	Description
+result	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16 or Cooperative Matrix of 16/32/64-bit float values

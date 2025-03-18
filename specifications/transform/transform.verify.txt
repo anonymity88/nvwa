@@ -1,0 +1,19 @@
+transform.verify (transform::VerifyOp) ¶
+Verifies the targeted ops
+
+Syntax:
+
+operation ::= `transform.verify` $target attr-dict `:` type($target)
+This transform verifies the targeted ops. If at least one op fails to verify, the transform produces a definite failure.
+
+Note: This op was designed for debugging purposes and should be used like an assertion. It is intentional that this op produces a definite failure and not a silenceable one. Correctness of the program should not depend on this op.
+
+This transform reads the target handle.
+
+Traits: ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

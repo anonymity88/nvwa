@@ -1,0 +1,9 @@
+transform.apply_patterns.memref.expand_ops (transform::ApplyExpandOpsPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.memref.expand_ops` attr-dict
+Collects patterns to rewrite ops within the memref dialect.
+
+Converts atomic_rmw that cannot be lowered to a simple atomic op with AtomicRMWOpLowering pattern, e.g. with “minf” or “maxf” attributes, to memref.generic_atomic_rmw with the expanded code.
+Converts memref.reshape that has a target shape of a statically-known size to memref.reinterpret_cast.
+Interfaces: PatternDescriptorOpInterface

@@ -1,0 +1,11 @@
+nvgpu.warpgroup.mma.init.accumulator (nvgpu::WarpgroupMmaInitAccumulatorOp) ¶
+Initializes the accumulator matrix
+
+Syntax:
+
+operation ::= `nvgpu.warpgroup.mma.init.accumulator` attr-dict `->` type($matrixC)
+This Op generates and initializes the accumulator matrix for nvgpu.warpgroup.mma op to perform matrix-multiply-and-accumulate.
+
+Results: ¶
+Result	Description
+matrixC

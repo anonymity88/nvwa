@@ -1,0 +1,43 @@
+vector.print (vector::PrintOp) ¶
+Print operation (for testing and debugging)
+
+Syntax:
+
+operation ::= `vector.print` ($source^ `:` type($source))?
+              oilist(
+              `str` $stringLiteral
+              | `punctuation` $punctuation)
+              attr-dict
+Prints the source vector (or scalar) to stdout in a human-readable format (for testing and debugging). No return value.
+
+Example:
+
+%v = arith.constant dense<0.0> : vector<4xf32>
+vector.print %v : vector<4xf32>
+When lowered to LLVM, the vector print is decomposed into elementary printing method calls that at runtime will yield:
+
+( 0.0, 0.0, 0.0, 0.0 )
+This is printed to stdout via a small runtime support library, which only needs to provide a few printing methods (single value for all data types, opening/closing bracket, comma, newline).
+
+By default vector.print adds a newline after the vector, but this can be controlled by the punctuation attribute. For example, to print a comma after instead do:
+
+vector.print %v : vector<4xf32> punctuation <comma>
+Note that it is possible to use the punctuation attribute alone. The following will print a single newline:
+
+vector.print punctuation <newline>
+Additionally, to aid with debugging and testing vector.print can also print constant strings:
+
+vector.print str "Hello, World!"
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::SideEffects::DefaultResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+punctuation	::mlir::vector::PrintPunctuationAttr	
+Punctuation for separating vectors or vector elements
+stringLiteral	::mlir::StringAttr	
+An Attribute containing a string
+Operands: ¶
+Operand	Description
+source

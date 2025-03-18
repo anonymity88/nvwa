@@ -1,0 +1,23 @@
+pdl_interp.create_type (pdl_interp::CreateTypeOp) ¶
+Create an interpreter handle to a constant Type
+
+Syntax:
+
+operation ::= `pdl_interp.create_type` $value attr-dict
+pdl_interp.create_type operations generate a handle within the interpreter for a specific constant type value.
+
+Example:
+
+pdl_interp.create_type i64
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::TypeAttr	any type attribute
+Results: ¶
+Result	Description
+result	PDL handle to an mlir::Type

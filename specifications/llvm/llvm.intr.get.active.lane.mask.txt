@@ -1,0 +1,17 @@
+llvm.intr.get.active.lane.mask (LLVM::GetActiveLaneMaskOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.get.active.lane.mask` $base `,` $n attr-dict `:` type($base) `,` type($n) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+base	signless integer
+n	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

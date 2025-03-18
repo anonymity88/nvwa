@@ -1,0 +1,18 @@
+mpi.retval_check (mpi::RetvalCheckOp) ¶
+Check an MPI return value against an error class
+
+Syntax:
+
+operation ::= `mpi.retval_check` $val `=` $errclass attr-dict `:` type($res)
+This operation compares MPI status codes to known error class constants such as MPI_SUCCESS, or MPI_ERR_COMM.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+errclass	::mlir::mpi::MPI_ErrorClassEnumAttr	
+MPI error class name
+Operands: ¶
+Operand	Description
+val	MPI function call return value
+Results: ¶
+Result	Description
+res	1-bit signless integer

@@ -1,0 +1,22 @@
+polynomial.constant (polynomial::ConstantOp) ¶
+Define a constant polynomial via an attribute.
+
+Example:
+
+!int_poly_ty = !polynomial.polynomial<ring=<coefficientType=i32>>
+%0 = polynomial.constant int<1 + x**2> : !int_poly_ty
+
+!float_poly_ty = !polynomial.polynomial<ring=<coefficientType=f32>>
+%1 = polynomial.constant float<0.5 + 1.3e06 x**2> : !float_poly_ty
+Traits: AlwaysSpeculatableImplTrait, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	a typed float_polynomial or a typed int_polynomial
+Results: ¶
+Result	Description
+output	An element of a polynomial ring.

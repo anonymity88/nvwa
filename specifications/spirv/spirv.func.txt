@@ -1,0 +1,46 @@
+spirv.func (spirv::FuncOp) ¶
+Declare or define a function
+
+This op declares or defines a SPIR-V function using one region, which contains one or more blocks.
+
+Different from the SPIR-V binary format, this op is not allowed to implicitly capture global values, and all external references must use function arguments or symbol references. This op itself defines a symbol that is unique in the enclosing module op.
+
+This op itself takes no operands and generates no results. Its region can take zero or more arguments and return zero or one values.
+
+From SPV_KHR_physical_storage_buffer: If a parameter of function is
+
+a pointer (or contains a pointer) in the PhysicalStorageBuffer storage class, the function parameter must be decorated with exactly one of Aliased or Restrict.
+a pointer (or contains a pointer) and the type it points to is a pointer in the PhysicalStorageBuffer storage class, the function parameter must be decorated with exactly one of AliasedPointer or RestrictPointer.
+spv-function-control ::= "None" | "Inline" | "DontInline" | ...
+spv-function-op ::= `spirv.func` function-signature
+                     spv-function-control region
+Example: ¶
+spirv.func @foo() -> () "None" { ... }
+spirv.func @bar() -> () "Inline|Pure" { ... }
+
+spirv.func @aliased_pointer(%arg0: !spirv.ptr<i32, PhysicalStorageBuffer>,
+    { spirv.decoration = #spirv.decoration<Aliased> }) -> () "None" { ... }
+
+spirv.func @restrict_pointer(%arg0: !spirv.ptr<i32, PhysicalStorageBuffer>,
+    { spirv.decoration = #spirv.decoration<Restrict> }) -> () "None" { ... }
+
+spirv.func @aliased_pointee(%arg0: !spirv.ptr<!spirv.ptr<i32,
+    PhysicalStorageBuffer>, Generic> { spirv.decoration =
+    #spirv.decoration<AliasedPointer> }) -> () "None" { ... }
+
+spirv.func @restrict_pointee(%arg0: !spirv.ptr<!spirv.ptr<i32,
+    PhysicalStorageBuffer>, Generic> { spirv.decoration =
+    #spirv.decoration<RestrictPointer> }) -> () "None" { ... }
+Traits: AutomaticAllocationScope, IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+function_type	::mlir::TypeAttr	type attribute of function type
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+sym_name	::mlir::StringAttr	string attribute
+function_control	::mlir::spirv::FunctionControlAttr	
+valid SPIR-V FunctionControl
+linkage_attributes	::mlir::spirv::LinkageAttributesAttr

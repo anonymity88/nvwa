@@ -1,0 +1,49 @@
+//===----------------------------------------------------------------------===//
+// AllocOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_AllocOp : AllocLikeOp<"alloc", DefaultResource, [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>]> {
+  let summary = "memory allocation operation";
+  let description = [{
+    The `alloc` operation allocates a region of memory, as specified by its
+    memref type.
+
+    Example:
+
+    ```mlir
+    %0 = memref.alloc() : memref<8x64xf32, 1>
+    ```
+
+    The optional list of dimension operands are bound to the dynamic dimensions
+    specified in its memref type. In the example below, the ssa value '%d' is
+    bound to the second dimension of the memref (which is dynamic).
+
+    ```mlir
+    %0 = memref.alloc(%d) : memref<8x?xf32, 1>
+    ```
+
+    The optional list of symbol operands are bound to the symbols of the
+    memrefs affine map. In the example below, the ssa value '%s' is bound to
+    the symbol 's0' in the affine map specified in the allocs memref type.
+
+    ```mlir
+    %0 = memref.alloc()[%s] : memref<8x64xf32,
+                              affine_map<(d0, d1)[s0] -> ((d0 + s0), d1)>, 1>
+    ```
+
+    This operation returns a single ssa value of memref type, which can be used
+    by subsequent load and store operations.
+
+    The optional `alignment` attribute may be specified to ensure that the
+    region of memory that will be indexed is aligned at the specified byte
+    boundary.
+
+    ```mlir
+    %0 = memref.alloc()[%s] {alignment = 8} :
+      memref<8x64xf32, affine_map<(d0, d1)[s0] -> ((d0 + s0), d1)>, 1>
+    ```
+  }];
+  let hasVerifier = 1;
+}
+

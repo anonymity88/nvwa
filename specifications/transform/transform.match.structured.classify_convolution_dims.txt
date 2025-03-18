@@ -1,0 +1,46 @@
+transform.match.structured.classify_convolution_dims (transform::MatchStructuredClassifyConvolutionDimsOp) ¶
+Checks if an operation has convolution-like dimensions and returns them
+
+Syntax:
+
+operation ::= `transform.match.structured.classify_convolution_dims` $operand_handle attr-dict `:` functional-type(operands, results)
+Checks if the structured payload op has convolution-like dimensions as follows:
+
+C(batch, depth, oi, oc) += A(batch, depth, oi, ic) * B(fl, depth, ic, oc)
+
+That is:
+
+‘batch’ are parallel dimensions used in the input and result;
+‘output_image’ (‘oi’) are parallel dimensions used in the input and result;
+‘output_channel’ (‘oc’) are parallel dimensions used in the filter and result;
+‘filter_loop’ (‘fl’) are reduction dimensions representing the dimensions of the sliding window;
+‘input_channel’ (‘ic’) are reduction dimensions present only in the input and filter.
+‘depth’ (‘ic’) are parallel dimensions present in the input, filter, and output.
+Additionally this will match stride and dilation information for the convolution:
+
+‘strides’ are the static strides per convolution window dimension;
+‘dilations’ are the static dilations per convolution window dimension.
+Note that this doesn’t check the operation in the body.
+
+This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the operation has the convolution-like dimensions, produces a silenceable failure otherwise.
+
+Traits: SingleOpMatcher, StructuredPredicate
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+batch	TransformParamTypeInterface instance
+output_image	TransformParamTypeInterface instance
+output_channel	TransformParamTypeInterface instance
+filter_loop	TransformParamTypeInterface instance
+input_channel	TransformParamTypeInterface instance
+depth	TransformParamTypeInterface instance
+strides	TransformParamTypeInterface instance
+dilations	TransformParamTypeInterface instance

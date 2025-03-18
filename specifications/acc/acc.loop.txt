@@ -1,0 +1,85 @@
+acc.loop (acc::LoopOp) ¶
+Loop construct
+
+Syntax:
+
+operation ::= `acc.loop` custom<CombinedConstructsLoop>($combined)
+              oilist(
+              `gang` `` custom<GangClause>($gangOperands, type($gangOperands),
+              $gangOperandsArgType, $gangOperandsDeviceType,
+              $gangOperandsSegments, $gang)
+              | `worker` `` custom<DeviceTypeOperandsWithKeywordOnly>(
+              $workerNumOperands, type($workerNumOperands),
+              $workerNumOperandsDeviceType, $worker)
+              | `vector` `` custom<DeviceTypeOperandsWithKeywordOnly>($vectorOperands,
+              type($vectorOperands), $vectorOperandsDeviceType, $vector)
+              | `private` `(` custom<SymOperandList>(
+              $privateOperands, type($privateOperands), $privatizations) `)`
+              | `tile` `(` custom<DeviceTypeOperandsWithSegment>($tileOperands,
+              type($tileOperands), $tileOperandsDeviceType, $tileOperandsSegments)
+              `)`
+              | `reduction` `(` custom<SymOperandList>(
+              $reductionOperands, type($reductionOperands), $reductionRecipes)
+              `)`
+              | `cache` `(` $cacheOperands `:` type($cacheOperands) `)`
+              )
+              custom<LoopControl>($region, $lowerbound, type($lowerbound), $upperbound,
+              type($upperbound), $step, type($step))
+              ( `(` type($results)^ `)` )?
+              attr-dict-with-keyword
+The “acc.loop” operation represents the OpenACC loop construct. The lower and upper bounds specify a half-open range: the range includes the lower bound but does not include the upper bound. If the inclusive attribute is set then the upper bound is included.
+
+Example:
+
+acc.loop gang() vector() (%arg3 : index, %arg4 : index, %arg5 : index) = 
+    (%c0, %c0, %c0 : index, index, index) to 
+    (%c10, %c10, %c10 : index, index, index) step 
+    (%c1, %c1, %c1 : index, index, index) {
+  // Loop body
+  acc.yield
+} attributes { collapse = [3] }
+collapse, gang, worker, vector, seq, independent, auto and tile operands are supported with device_type information. They should only be accessed by the extra provided getters. If modified, the corresponding device_type attributes must be modified as well.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, RecursiveMemoryEffects
+
+Interfaces: ComputeRegionOpInterface, LoopLikeOpInterface, MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+inclusiveUpperbound	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+collapse	::mlir::ArrayAttr	64-bit integer array attribute
+collapseDeviceType	::mlir::ArrayAttr	device type array attribute
+gangOperandsArgType	::mlir::ArrayAttr	gang arg type array attribute
+gangOperandsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+gangOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+workerNumOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+vectorOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+seq	::mlir::ArrayAttr	device type array attribute
+independent	::mlir::ArrayAttr	device type array attribute
+auto_	::mlir::ArrayAttr	device type array attribute
+gang	::mlir::ArrayAttr	device type array attribute
+worker	::mlir::ArrayAttr	device type array attribute
+vector	::mlir::ArrayAttr	device type array attribute
+tileOperandsSegments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+tileOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+privatizations	::mlir::ArrayAttr	symbol ref array attribute
+reductionRecipes	::mlir::ArrayAttr	symbol ref array attribute
+combined	::mlir::acc::CombinedConstructsTypeAttr	
+Differentiate between combined constructs
+Operands: ¶
+Operand	Description
+lowerbound	variadic of integer or index
+upperbound	variadic of integer or index
+step	variadic of integer or index
+gangOperands	variadic of integer or index
+workerNumOperands	variadic of integer or index
+vectorOperands	variadic of integer or index
+tileOperands	variadic of integer or index
+cacheOperands	variadic of PointerLikeType instance
+privateOperands	variadic of PointerLikeType instance
+reductionOperands	variadic of any type
+Results: ¶
+Result	Description
+results	variadic of any type

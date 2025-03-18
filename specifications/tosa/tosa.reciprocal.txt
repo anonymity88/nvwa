@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+// Operator: reciprocal
+//===----------------------------------------------------------------------===//
+def Tosa_ReciprocalOp : Tosa_ElementwiseOp<"reciprocal",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise reciprocal op";
+
+  let description = [{
+    Elementwise reciprocal operation. For integer operation, a TABLE should be
+    used with the appropriate ranges.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let extraClassDeclaration = [{
+    /// Return the reciprocal result on the operand.
+    static inline APFloat calcOneElement(const APFloat &operand) {
+      APFloat recip = APFloat(operand.getSemantics(), 1);
+      recip.divide(operand, APFloat::rmNearestTiesToEven);
+      return recip;
+    }
+  }];
+
+  let hasFolder = 1;
+}
+

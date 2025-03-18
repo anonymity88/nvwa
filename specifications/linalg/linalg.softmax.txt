@@ -1,0 +1,34 @@
+linalg.softmax (linalg::SoftmaxOp)
+Softmax operator
+
+Syntax:
+
+operation ::= `linalg.softmax` attr-dict
+              `dimension` `(` $dimension `)`
+              `ins` `(` $input `:` type($input) `)`
+              `outs` `(` $output `:` type($output) `)`
+              (`->` type($result)^)?
+linalg.softmax computes a numerically stable version of softmax.
+
+For a given input tensor and a specified dimension d, compute:
+
+the max m along that dimension d
+f(x) = exp(x - m)
+sum f(x) along dimension d to get l(x).
+compute the final result f(x) / l(x).
+This is an aggregate linalg operation that further reduces to a small DAG of structured operations.
+
+Warning: Regarding the tiling capabilities, the implementation doesn’t check that the provided dimensions make sense. This is the responsability of the transformation calling the tiling to ensure that the provided sizes for each dimension make sense with respect to the semantic of softmax.
+
+Interfaces: AggregatedOpInterface, DestinationStyleOpInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface, TilingInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+dimension	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands:
+Operand	Description
+input	shaped of any type values
+output	shaped of any type values
+Results:
+Result	Description
+result	variadic of ranked tensor of any type values

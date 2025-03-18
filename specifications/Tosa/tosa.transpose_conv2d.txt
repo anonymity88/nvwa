@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// Operator: transpose_conv2d
+//===----------------------------------------------------------------------===//
+def Tosa_TransposeConv2DOp : Tosa_InferShapedTypeOp<"transpose_conv2d"> {
+  let summary = "Transpose 2D Convolution operator.";
+
+  let description = [{
+    Performs a 2D transposed convolution over the given tensor input, using the
+    weights tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor4D:$input,
+    TosaTensorRankOf<[Tosa_Weight], [4]>:$filter,
+    Tosa_Tensor1D:$bias,
+    Tosa_IntArrayAttr4:$out_pad,
+    Tosa_IntArrayAttr2:$stride,
+    Tosa_IntArrayAttr4:$out_shape,
+    OptionalAttr<Tosa_ConvOpQuantizationAttr>:$quantization_info,
+    DefaultValuedOptionalAttr<BoolAttr, "false">:$local_bound
+  );
+
+  let results = (outs
+    Tosa_Tensor4D:$output
+  );
+
+  let builders = [Tosa_TransConvOpQuantInfoBuilder];
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.3
+// Operator Class: Activation Functions.
+//===----------------------------------------------------------------------===//
+

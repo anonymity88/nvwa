@@ -1,0 +1,30 @@
+gpu.subgroup_mma_constant_matrix (gpu::SubgroupMmaConstantMatrixOp) ¶
+GPU warp synchronous constant matrix
+
+Syntax:
+
+operation ::= `gpu.subgroup_mma_constant_matrix` $value attr-dict `:` type($res)
+The gpu.subgroup_mma_constant_matrix creates a !gpu.mma_matrix with constant elements.
+
+The operation takes a scalar input and return a !gpu.mma_matrix where each element of is equal to the operand constant. The destination mma_matrix type must have elememt type equal to the constant type. Since the layout of !gpu.mma_matrix is opaque this only support setting all the elements to the same value.
+
+This op is meant to be used along with gpu.subgroup_mma_compute.
+
+Example:
+
+ %0 = gpu.subgroup_mma_constant_matrix %a :
+   !gpu.mma_matrix<16x16xf16, "AOp">
+ %1 = gpu.subgroup_mma_constant_matrix %b :
+   !gpu.mma_matrix<16x16xf32, "COp">
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+value	8-bit signed integer or 8-bit unsigned integer or 32-bit signless integer or 16-bit float or 32-bit float
+Results: ¶
+Result	Description
+res	MMAMatrix type

@@ -1,0 +1,41 @@
+memref.view (memref::ViewOp) ¶
+Memref view operation
+
+Syntax:
+
+operation ::= `memref.view` $source `[` $byte_shift `]` `` `[` $sizes `]` attr-dict
+              `:` type($source) `to` type(results)
+The “view” operation extracts an N-D contiguous memref with empty layout map with arbitrary element type from a 1-D contiguous memref with empty layout map of i8 element type. The ViewOp supports the following arguments:
+
+A single dynamic byte-shift operand must be specified which represents a a shift of the base 1-D memref pointer from which to create the resulting contiguous memref view with identity layout.
+A dynamic size operand that must be specified for each dynamic dimension in the resulting view memref type.
+The “view” operation gives a structured indexing form to a flat 1-D buffer. Unlike “subview” it can perform a type change. The type change behavior requires the op to have special semantics because, e.g. a byte shift of 3 cannot be represented as an offset on f64. For now, a “view” op:
+
+Only takes a contiguous source memref with 0 offset and empty layout.
+Must specify a byte_shift operand (in the future, a special integer attribute may be added to support the folded case).
+Returns a contiguous memref with 0 offset and empty layout.
+Example:
+
+// Allocate a flat 1D/i8 memref.
+%0 = memref.alloc() : memref<2048xi8>
+
+// ViewOp with dynamic offset and static sizes.
+%1 = memref.view %0[%offset_1024][] : memref<2048xi8> to memref<64x4xf32>
+
+// ViewOp with dynamic offset and two dynamic size.
+%2 = memref.view %0[%offset_1024][%size0, %size1] :
+  memref<2048xi8> to memref<?x4x?xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	1D memref of 8-bit signless integer values
+byte_shift	index
+sizes	variadic of index
+Results: ¶
+Result	Description
+«unnamed»	memref of any type values

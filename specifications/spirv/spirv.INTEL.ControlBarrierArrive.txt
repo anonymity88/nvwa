@@ -1,0 +1,24 @@
+spirv.INTEL.ControlBarrierArrive (spirv::INTELControlBarrierArriveOp) ¶
+See extension SPV_INTEL_split_barrier
+
+Syntax:
+
+operation ::= `spirv.INTEL.ControlBarrierArrive` $execution_scope $memory_scope $memory_semantics attr-dict
+Indicates that an invocation has arrived at a split control barrier. This may allow other invocations waiting on the split control barrier to continue executing.
+
+When Execution is Workgroup or larger, behavior is undefined unless all invocations within Execution execute the same dynamic instance of this instruction. When Execution is Subgroup or Invocation, the behavior of this instruction in non-uniform control flow is defined by the client API.
+
+If Semantics is not None, this instruction also serves as the start of a memory barrier similar to an OpMemoryBarrier instruction with the same Memory and Semantics operands. This allows atomically specifying both a control barrier and a memory barrier (that is, without needing two instructions). If Semantics is None, Memory is ignored.
+
+Example: ¶
+spirv.ControlBarrierArrive <Workgroup> <Device> <Acquire|UniformMemory>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+memory_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+memory_semantics	::mlir::spirv::MemorySemanticsAttr	
+valid SPIR-V MemorySemantics

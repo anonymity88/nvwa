@@ -1,0 +1,39 @@
+//===----------------------------------------------------------------------===//
+// Operator: fft2d
+//===----------------------------------------------------------------------===//
+def Tosa_FFT2dOp : Tosa_InferShapedTypeOp<"fft2d"> {
+  let summary = "Performs FFT2D operation on the input.";
+
+  let description = [{
+    Performs a batched complex 2D Fast Fourier Transform over the input. The
+    complex input values are constructed from the corresponding values in the
+    input_real and input_imag tensors. The resulting values in the output are
+    split into the output_real and output_imag tensors. No normalization is
+    applied on either the forward or inverse versions of the operation.
+
+    Example:
+
+    ```mlir
+     %out_real, %out_imag = tosa.fft2d %in_real, %in_imag : (tensor<8x9xf32>, tensor<8x9xf32>) -> (tensor<8x9xf32>, tensor<8x9xf32>)
+    ```
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor3D:$input_real,
+    Tosa_Tensor3D:$input_imag,
+
+    BoolAttr:$inverse,
+    DefaultValuedOptionalAttr<BoolAttr, "false">:$local_bound
+  );
+
+  let results = (outs
+    Tosa_Tensor3D:$output_real,
+    Tosa_Tensor3D:$output_imag
+  );
+
+  let assemblyFormat = [{
+    $input_real `,` $input_imag attr-dict `:` `(` type($input_real) `,`
+    type($input_imag) `)` `->` `(` type($output_real) `,` type($output_imag) `)`
+  }];
+}
+

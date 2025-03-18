@@ -1,0 +1,8 @@
+llvm.intr.var.annotation (LLVM::VarAnnotation) ¶
+Operands: ¶
+Operand	Description
+val	LLVM pointer type
+annotation	LLVM pointer type
+fileName	LLVM pointer type
+line	32-bit signless integer
+attr	LLVM pointer type

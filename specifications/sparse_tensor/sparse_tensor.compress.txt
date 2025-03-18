@@ -1,0 +1,27 @@
+sparse_tensor.compress (sparse_tensor::CompressOp) ¶
+Compressed an access pattern for insertion
+
+Syntax:
+
+operation ::= `sparse_tensor.compress` $values `,` $filled `,` $added `,` $count `into` $tensor `[` $lvlCoords `]` attr-dict `:` type($values) `,` type($filled) `,` type($added) `,` type($tensor)
+Finishes a single access pattern expansion by moving inserted elements into the sparse storage scheme of the given tensor with the given level-coordinates. The arity of lvlCoords is one less than the level-rank of the tensor, with the coordinate of the innermost level defined through the added array. The values and filled arrays are reset in a sparse fashion by only iterating over set elements through an indirection using the added array, so that the operations are kept proportional to the number of nonzeros. See the sparse_tensor.expand operation for more details.
+
+Note that this operation is “impure” in the sense that even though the result is modeled through an SSA value, the insertion is eventually done “in place”, and referencing the old SSA value is undefined behavior.
+
+Example:
+
+%result = sparse_tensor.compress %values, %filled, %added, %count into %tensor[%i]
+  : memref<?xf64>, memref<?xi1>, memref<?xindex>, tensor<4x4xf64, #CSR>
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+values	strided memref of any type values of rank 1
+filled	1D memref of 1-bit signless integer values
+added	1D memref of index values
+count	index
+tensor	sparse tensor of any type values
+lvlCoords	variadic of index
+Results: ¶
+Result	Description
+result	sparse tensor of any type values

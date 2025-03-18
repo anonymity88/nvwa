@@ -1,0 +1,11 @@
+async.runtime.resume (async::RuntimeResumeOp) ¶
+Resumes the coroutine on a thread managed by the runtime
+
+Syntax:
+
+operation ::= `async.runtime.resume` $handle attr-dict
+The async.runtime.resume operation resumes the coroutine on a thread managed by the runtime.
+
+Operands: ¶
+Operand	Description
+handle	coroutine handle

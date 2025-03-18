@@ -1,0 +1,16 @@
+async.coro.begin (async::CoroBeginOp) ¶
+Returns a handle to the coroutine
+
+Syntax:
+
+operation ::= `async.coro.begin` $id attr-dict
+The async.coro.begin allocates a coroutine frame and returns a handle to the coroutine.
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+id	switched-resume coroutine identifier
+Results: ¶
+Result	Description
+handle	coroutine handle

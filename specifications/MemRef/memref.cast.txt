@@ -1,0 +1,76 @@
+//===----------------------------------------------------------------------===//
+// CastOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_CastOp : MemRef_Op<"cast", [
+      DeclareOpInterfaceMethods<CastOpInterface>,
+      DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+      MemRefsNormalizable,
+      Pure,
+      SameOperandsAndResultShape,
+      ViewLikeOpInterface
+    ]> {
+  let summary = "memref cast operation";
+  let description = [{
+    The `memref.cast` operation converts a memref from one type to an equivalent
+    type with a compatible shape. The source and destination types are
+    compatible if:
+
+    a. Both are ranked memref types with the same element type, address space,
+    and rank and:
+      1. Both have the same layout or both have compatible strided layouts.
+      2. The individual sizes (resp. offset and strides in the case of strided
+         memrefs) may convert constant dimensions to dynamic dimensions and
+         vice-versa.
+
+    If the cast converts any dimensions from an unknown to a known size, then it
+    acts as an assertion that fails at runtime if the dynamic dimensions
+    disagree with resultant destination size.
+
+    Example:
+
+    ```mlir
+    // Assert that the input dynamic shape matches the destination static shape.
+    %2 = memref.cast %1 : memref<?x?xf32> to memref<4x4xf32>
+    // Erase static shape information, replacing it with dynamic information.
+    %3 = memref.cast %1 : memref<4xf32> to memref<?xf32>
+
+    // The same holds true for offsets and strides.
+
+    // Assert that the input dynamic shape matches the destination static stride.
+    %4 = memref.cast %1 : memref<12x4xf32, strided<[?, ?], offset: ?>> to
+                          memref<12x4xf32, strided<[4, 1], offset: 5>>
+    // Erase static offset and stride information, replacing it with
+    // dynamic information.
+    %5 = memref.cast %1 : memref<12x4xf32, strided<[4, 1], offset: 5>> to
+                          memref<12x4xf32, strided<[?, ?], offset: ?>>
+    ```
+
+    b. Either or both memref types are unranked with the same element type, and
+    address space.
+
+    Example:
+
+    ```mlir
+    Cast to concrete shape.
+        %4 = memref.cast %1 : memref<*xf32> to memref<4x?xf32>
+
+    Erase rank information.
+        %5 = memref.cast %1 : memref<4x?xf32> to memref<*xf32>
+    ```
+  }];
+
+  let arguments = (ins AnyRankedOrUnrankedMemRef:$source);
+  let results = (outs AnyRankedOrUnrankedMemRef:$dest);
+  let assemblyFormat = "$source attr-dict `:` type($source) `to` type($dest)";
+
+  let extraClassDeclaration = [{
+    /// Fold the given CastOp into consumer op.
+    static bool canFoldIntoConsumerOp(CastOp castOp);
+
+    Value getViewSource() { return getSource(); }
+  }];
+
+  let hasFolder = 1;
+}
+

@@ -1,0 +1,7 @@
+transform.apply_patterns.memref.expand_strided_metadata (transform::ApplyExpandStridedMetadataPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.memref.expand_strided_metadata` attr-dict
+Collects patterns for expanding memref operations that modify the metadata (sizes, offset, strides) of a memref into easier to analyze constructs.
+
+Interfaces: PatternDescriptorOpInterface

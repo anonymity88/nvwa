@@ -1,0 +1,9 @@
+//===----------------------------------------------------------------------===//
+// MinSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MinSIOp : Arith_TotalIntBinaryOp<"minsi", [Commutative]> {
+  let summary = "signed integer minimum operation";
+  let hasFolder = 1;
+}
+

@@ -1,0 +1,23 @@
+arm_sme.copy_tile (arm_sme::CopyTileOp) ¶
+Copies an SME tile value
+
+Syntax:
+
+operation ::= `arm_sme.copy_tile` $tile attr-dict `:` type($result)
+Copies an SME “virtual tile” value to a new SSA value. This operation is primarily intended to be used to normalize the IR prior to tile allocation.
+
+Example:
+
+%copy = arm_sme.copy_tile %tile : vector<[4]x[4]xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+tile	a vector type that fits into a SME tile
+Results: ¶
+Result	Description
+result	a vector type that fits into a SME tile

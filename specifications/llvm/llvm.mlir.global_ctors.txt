@@ -1,0 +1,22 @@
+llvm.mlir.global_ctors (LLVM::GlobalCtorsOp) ¶
+LLVM dialect global_ctors.
+
+Syntax:
+
+operation ::= `llvm.mlir.global_ctors` attr-dict
+Specifies a list of constructor functions and priorities. The functions referenced by this array will be called in ascending order of priority (i.e. lowest first) when the module is loaded. The order of functions with the same priority is not defined. This operation is translated to LLVM’s global_ctors global variable. The initializer functions are run at load time. The data field present in LLVM’s global_ctors variable is not modeled here.
+
+Examples:
+
+llvm.mlir.global_ctors {@ctor}
+
+llvm.func @ctor() {
+  ...
+  llvm.return
+}
+Interfaces: SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+ctors	::mlir::ArrayAttr	flat symbol ref array attribute
+priorities	::mlir::ArrayAttr	32-bit integer array attribute

@@ -1,0 +1,32 @@
+affine.vector_load (affine::AffineVectorLoadOp) ¶
+Affine vector load operation
+
+The affine.vector_load is the vector counterpart of affine.load. It reads a slice from a MemRef, supplied as its first operand, into a vector of the same base elemental type. The index for each memref dimension is an affine expression of loop induction variables and symbols. These indices determine the start position of the read within the memref. The shape of the return vector type determines the shape of the slice read from the memref. This slice is contiguous along the respective dimensions of the shape. Strided vector loads will be supported in the future. An affine expression of loop IVs and symbols must be specified for each dimension of the memref. The keyword symbol can be used to indicate SSA identifiers which are symbolic.
+
+Example 1: 8-wide f32 vector load.
+
+%1 = affine.vector_load %0[%i0 + 3, %i1 + 7] : memref<100x100xf32>, vector<8xf32>
+Example 2: 4-wide f32 vector load. Uses symbol keyword for symbols %n and %m.
+
+%1 = affine.vector_load %0[%i0 + symbol(%n), %i1 + symbol(%m)] : memref<100x100xf32>, vector<4xf32>
+Example 3: 2-dim f32 vector load.
+
+%1 = affine.vector_load %0[%i0, %i1] : memref<100x100xf32>, vector<2x8xf32>
+TODOs:
+
+Add support for strided vector loads.
+Consider adding a permutation map to permute the slice that is read from memory (see vector.transfer_read).
+Traits: MemRefsNormalizable
+
+Interfaces: AffineMapAccessInterface, AffineReadOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+map	::mlir::AffineMapAttr	AffineMap attribute
+Operands: ¶
+Operand	Description
+memref	memref of any type values
+indices	variadic of index
+Results: ¶
+Result	Description
+result	vector of any type values

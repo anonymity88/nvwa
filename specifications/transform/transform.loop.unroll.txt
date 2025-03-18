@@ -1,0 +1,23 @@
+transform.loop.unroll (transform::LoopUnrollOp) ¶
+Unrolls the given loop with the given unroll factor
+
+Syntax:
+
+operation ::= `transform.loop.unroll` $target attr-dict `:` type($target)
+Unrolls each loop associated with the given handle to have up to the given number of loop body copies per iteration. If the unroll factor is larger than the loop trip count, the latter is used as the unroll factor instead.
+
+Return modes ¶
+This operation ignores non-scf.for, non-affine.for ops and drops them in the return. If all the operations referred to by the target operand unroll properly, the transform succeeds. Otherwise the transform produces a silenceable failure.
+
+Does not return handles as the operation may result in the loop being removed after a full unrolling.
+
+Traits: FunctionalStyleTransformOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+factor	::mlir::IntegerAttr	64-bit signless integer attribute whose value is positive
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

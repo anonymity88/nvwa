@@ -1,0 +1,34 @@
+tensor.dim (tensor::DimOp) ¶
+Dimension index operation
+
+Syntax:
+
+operation ::= `tensor.dim` attr-dict $source `,` $index `:` type($source)
+The tensor.dim operation takes a tensor and a dimension operand of type index. It returns the size of the requested dimension of the given tensor. If the dimension index is out of bounds, the behavior is undefined.
+
+The specified tensor type is that of the first operand.
+
+Example:
+
+// Always returns 4, can be constant folded:
+%c0 = arith.constant 0 : index
+%x = tensor.dim %A, %c0 : tensor<4x?xf32>
+
+// Return the dynamic dimension of %A.
+%c1 = arith.constant 1 : index
+%y = tensor.dim %A, %c1 : tensor<4x?xf32>
+
+// Equivalent generic form:
+%x = "tensor.dim"(%A, %c0) : (tensor<4x?xf32>, index) -> index
+%y = "tensor.dim"(%A, %c1) : (tensor<4x?xf32>, index) -> index
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ShapedDimOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	non-0-ranked or unranked tensor
+index	index
+Results: ¶
+Result	Description
+result	index

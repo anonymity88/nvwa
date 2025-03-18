@@ -1,0 +1,18 @@
+//===----------------------------------------------------------------------===//
+// AddOp
+//===----------------------------------------------------------------------===//
+
+def Index_AddOp : IndexBinaryOp<"add", [Commutative, Pure]> {
+  let summary = "index addition";
+  let description = [{
+    The `index.add` operation takes two index values and computes their sum.
+
+    Example:
+
+    ```mlir
+    // c = a + b
+    %c = index.add %a, %b
+    ```
+  }];
+}
+

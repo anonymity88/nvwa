@@ -1,0 +1,10 @@
+rocdl.raw.buffer.load (ROCDL::RawBufferLoadOp) ¶
+Operands: ¶
+Operand	Description
+rsrc	LLVM dialect-compatible type
+offset	LLVM dialect-compatible type
+soffset	LLVM dialect-compatible type
+aux	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

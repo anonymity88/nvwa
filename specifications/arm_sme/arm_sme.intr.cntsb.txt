@@ -1,0 +1,4 @@
+arm_sme.intr.cntsb (arm_sme::aarch64_sme_cntsb) ¶
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

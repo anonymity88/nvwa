@@ -1,0 +1,23 @@
+shape.concat (shape::ConcatOp) ¶
+Concatenates two shapes
+
+Syntax:
+
+operation ::= `shape.concat` $lhs `,` $rhs attr-dict `:` type($lhs) `,` type($rhs) `->` type($result)
+Creates a shape whose dimensions consist of first the dimensions from lhs followed by the dimensions of rhs.
+
+Example: concat([2,3], [4,5]) -> [2,3,4,5] concat([], []) -> [] concat([], [4,5,6]) -> [4,5,6]
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	shape or extent tensor
+rhs	shape or extent tensor
+Results: ¶
+Result	Description
+result	shape or extent tensor

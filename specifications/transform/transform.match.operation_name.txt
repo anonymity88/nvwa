@@ -1,0 +1,20 @@
+transform.match.operation_name (transform::MatchOperationNameOp) ¶
+Matches a single operation of one of the given kinds
+
+Syntax:
+
+operation ::= `transform.match.operation_name` $operand_handle $op_names attr-dict `:` type($operand_handle)
+Succeeds if the operation associated with the operand handle has one of the given operation names. Produces a silenceable failure otherwise.
+
+If more than one payload operation is associated with the operand handle, produces a definite failure.
+
+Traits: SingleOpMatcher
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+op_names	::mlir::ArrayAttr	string array attribute
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance

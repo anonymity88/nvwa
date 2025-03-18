@@ -1,0 +1,13 @@
+transform.apply_patterns.vector.lower_transfer (transform::ApplyLowerTransferPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_transfer` (`max_transfer_rank` `=` $max_transfer_rank^)? attr-dict
+Indicates that vector transfer operations should be lowered to finer-grained vector primitives.
+
+This is usually a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+max_transfer_rank	::mlir::IntegerAttr	64-bit signless integer attribute

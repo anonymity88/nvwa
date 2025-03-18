@@ -1,0 +1,33 @@
+vector.bitcast (vector::BitCastOp) ¶
+Bitcast casts between vectors
+
+Syntax:
+
+operation ::= `vector.bitcast` $source attr-dict `:` type($source) `to` type($result)
+The bitcast operation casts between vectors of the same rank, the minor 1-D vector size is casted to a vector with a different element type but same bitwidth. In case of 0-D vectors, the bitwidth of element types must be equal.
+
+Example:
+
+// Example casting to a smaller element type.
+%1 = vector.bitcast %0 : vector<5x1x4x3xf32> to vector<5x1x4x6xi16>
+
+// Example casting to a bigger element type.
+%3 = vector.bitcast %2 : vector<10x12x8xi8> to vector<10x12x2xi32>
+
+// Example casting to an element type of the same size.
+%5 = vector.bitcast %4 : vector<5x1x4x3xf32> to vector<5x1x4x3xi32>
+
+// Example casting of 0-D vectors.
+%7 = vector.bitcast %6 : vector<f32> to vector<i32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	vector of any type values
+Results: ¶
+Result	Description
+result	vector of any type values

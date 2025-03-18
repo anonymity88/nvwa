@@ -1,0 +1,29 @@
+scf.reduce (scf::ReduceOp) ¶
+Reduce operation for scf.parallel
+
+Syntax:
+
+operation ::= `scf.reduce` (`(` $operands^ `:` type($operands) `)`)? $reductions attr-dict
+The scf.reduce operation is the terminator for scf.parallel operations. It can model an arbitrary number of reductions. It has one region per reduction. Each region has one block with two arguments which have the same type as the corresponding operand of scf.reduce. The operands of the op are the values that should be reduce; one value per reduction.
+
+The i-th reduction (i.e., the i-th region and the i-th operand) corresponds the i-th initial value and the i-th result of the enclosing scf.parallel op.
+
+The scf.reduce operation contains regions whose entry blocks expect two arguments of the same type as the corresponding operand. As the iteration order of the enclosing parallel loop and hence reduction order is unspecified, the results of the reductions may be non-deterministic unless the reductions are associative and commutative.
+
+The result of a reduction region (scf.reduce.return operand) must have the same type as the corresponding scf.reduce operand and the corresponding scf.parallel initial value.
+
+Example:
+
+%operand = arith.constant 1.0 : f32
+scf.reduce(%operand : f32) {
+  ^bb0(%lhs : f32, %rhs: f32):
+    %res = arith.addf %lhs, %rhs : f32
+    scf.reduce.return %res : f32
+}
+Traits: HasParent<ParallelOp>, RecursiveMemoryEffects, Terminator
+
+Interfaces: RegionBranchTerminatorOpInterface
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

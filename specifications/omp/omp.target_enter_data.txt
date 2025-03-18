@@ -1,0 +1,43 @@
+omp.target_enter_data (omp::TargetEnterDataOp) ¶
+Target enter data construct
+
+Syntax:
+
+operation ::= `omp.target_enter_data` oilist(
+              `depend` `(`
+              custom<DependVarList>($depend_vars, type($depend_vars), $depend_kinds) `)`
+              |
+              `device` `(` $device `:` type($device) `)`
+              |
+              `if` `(` $if_expr `)`
+              |
+              `map_entries` `(` $map_vars `:` type($map_vars) `)`
+              |
+              `nowait` $nowait
+              ) attr-dict
+The target enter data directive specifies that variables are mapped to a device data environment. The target enter data directive is a stand-alone directive.
+
+The optional if_expr parameter specifies a boolean result of a conditional check. If this value is 1 or is not provided then the target region runs on a device, if it is 0 then the target region is executed on the host device.
+
+The depend_kinds and depend_vars arguments are variadic lists of values that specify the dependencies of this particular task in relation to other tasks.
+
+The optional device parameter specifies the device number for the target region.
+
+The optional map_vars maps data from the current task’s data environment to the device data environment.
+
+The optional nowait attribute, when present, eliminates the implicit barrier at the end of the construct, so the parent operation can make progress even if the child operation has not completed yet.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: MapClauseOwningOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+depend_kinds	::mlir::ArrayAttr	depend clause in a target or task construct array
+nowait	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+depend_vars	variadic of OpenMP-compatible variable type
+device	integer
+if_expr	1-bit signless integer
+map_vars	variadic of OpenMP-compatible variable type

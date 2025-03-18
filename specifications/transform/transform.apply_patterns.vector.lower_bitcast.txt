@@ -1,0 +1,9 @@
+transform.apply_patterns.vector.lower_bitcast (transform::ApplyLowerBitCastPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_bitcast` attr-dict
+Indicates that vector bitcast operations should be lowered to finer-grained vector primitives.
+
+This is usally a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface

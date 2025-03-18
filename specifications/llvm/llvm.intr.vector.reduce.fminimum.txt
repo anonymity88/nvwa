@@ -1,0 +1,20 @@
+llvm.intr.vector.reduce.fminimum (LLVM::vector_reduce_fminimum) ¶
+Syntax:
+
+operation ::= `llvm.intr.vector.reduce.fminimum` `(` operands `)` attr-dict `:` functional-type(operands, results)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultElementType
+
+Interfaces: ConditionallySpeculatable, FastmathFlagsInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmathFlags	::mlir::LLVM::FastmathFlagsAttr	
+LLVM fastmath flags
+Operands: ¶
+Operand	Description
+in	LLVM dialect-compatible vector of floating-point
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

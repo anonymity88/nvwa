@@ -1,0 +1,35 @@
+acc.enter_data (acc::EnterDataOp) ¶
+Enter data operation
+
+Syntax:
+
+operation ::= `acc.enter_data` oilist(
+              `if` `(` $ifCond `)`
+              | `async` `(` $asyncOperand `:` type($asyncOperand) `)`
+              | `wait_devnum` `(` $waitDevnum `:` type($waitDevnum) `)`
+              | `wait` `(` $waitOperands `:` type($waitOperands) `)`
+              | `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              )
+              attr-dict-with-keyword
+The “acc.enter_data” operation represents the OpenACC enter data directive.
+
+Example:
+
+acc.enter_data create(%d1 : memref<10xf32>) attributes {async}
+Traits: AttrSizedOperandSegments
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+async	::mlir::UnitAttr	unit attribute
+wait	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+ifCond	1-bit signless integer
+asyncOperand	integer or index
+waitDevnum	integer or index
+waitOperands	variadic of integer or index
+dataClauseOperands	variadic of PointerLikeType instance

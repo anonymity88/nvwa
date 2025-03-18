@@ -1,0 +1,34 @@
+emitc.expression (emitc::ExpressionOp) ¶
+Expression operation
+
+Syntax:
+
+operation ::= `emitc.expression` attr-dict (`noinline` $do_not_inline^)? `:` type($result) $region
+The emitc.expression operation returns a single SSA value which is yielded by its single-basic-block region. The operation doesn’t take any arguments.
+
+As the operation is to be emitted as a C expression, the operations within its body must form a single Def-Use tree of emitc ops whose result is yielded by a terminating emitc.yield.
+
+Example:
+
+%r = emitc.expression : i32 {
+  %0 = emitc.add %a, %b : (i32, i32) -> i32
+  %1 = emitc.call_opaque "foo"(%0) : (i32) -> i32
+  %2 = emitc.add %c, %d : (i32, i32) -> i32
+  %3 = emitc.mul %1, %2 : (i32, i32) -> i32
+  emitc.yield %3 : i32
+}
+May be emitted as
+
+int32_t v7 = foo(v1 + v2) * (v3 + v4);
+The operations allowed within expression body are EmitC operations with the CExpression trait.
+
+When specified, the optional do_not_inline indicates that the expression is to be emitted as seen above, i.e. as the rhs of an EmitC SSA value definition. Otherwise, the expression may be emitted inline, i.e. directly at its use.
+
+Traits: HasOnlyGraphRegion, NoRegionArguments, SingleBlockImplicitTerminator<emitc::YieldOp>, SingleBlock
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+do_not_inline	::mlir::UnitAttr	unit attribute
+Results: ¶
+Result	Description
+result	type supported by EmitC

@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// Operator: tanh
+//===----------------------------------------------------------------------===//
+def Tosa_TanhOp : Tosa_ElementwiseOp<"tanh", [SameOperandsAndResultElementType]> {
+  let summary = "Computes elementwise hyperbolic tangent of input";
+
+  let description = [{
+    Parameterized hyperbolic tangent.
+    For quantized integer data types, the TABLE operator should be used instead
+    with the following definition.  The tanh_table has 513 entries each of
+    16-bit precision and covering the input range -8.0 to +8.0 in steps of 1/32.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

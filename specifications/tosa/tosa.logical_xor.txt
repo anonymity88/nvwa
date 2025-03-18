@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: logical_xor
+//===----------------------------------------------------------------------===//
+def Tosa_LogicalXorOp : Tosa_ElementwiseOp<"logical_xor", [
+    Commutative,
+    SameOperandsAndResultElementType]> {
+  let summary = "Returns the truth value of x XOR y element-wise.";
+
+  let description = [{
+    Elementwise logical XOR of input1 and input2.  Axis of size 1 will be
+    broadcast as necessary.
+  }];
+
+  let arguments = (ins
+    I1Tensor:$input1,
+    I1Tensor:$input2
+  );
+
+  let results = (outs
+    I1Tensor:$z
+  );
+}
+

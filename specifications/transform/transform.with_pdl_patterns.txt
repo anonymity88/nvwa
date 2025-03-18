@@ -1,0 +1,35 @@
+transform.with_pdl_patterns (transform::WithPDLPatternsOp) ¶
+Contains PDL patterns available for use in transforms
+
+Syntax:
+
+operation ::= `transform.with_pdl_patterns` ($root^ `:` type($root))? attr-dict-with-keyword regions
+This op contains a set of named PDL patterns that are available for the Transform dialect operations to be used for pattern matching. For example, PDLMatchOp can be used to produce a Transform IR value associated with all Payload IR operations that match the pattern as follows:
+
+transform.with_pdl_patterns {
+^bb0(%arg0: !transform.any_op):
+  pdl.pattern @my_pattern : benefit(1) {
+    %0 = pdl.operation //...
+    // Regular PDL goes here.
+    pdl.rewrite %0 with "transform.dialect"
+  }
+
+  sequence %arg0 failures(propagate) {
+  ^bb0(%arg1: !transform.any_op):
+    %1 = pdl_match @my_pattern in %arg1
+    // Use %1 as handle
+  }
+}
+Note that the pattern is expected to finish with a pdl.rewrite terminator that points to the custom rewriter named “transform.dialect”. The rewriter actually does nothing, but the transform application will keep track of the operations that matched the pattern.
+
+This op is expected to contain pdl.pattern operations and exactly one another Transform dialect operation that gets executed with all patterns available. This op is a possible top-level Transform IR op, the argument of its entry block corresponds to either the root op of the payload IR or the ops associated with its operand when provided.
+
+Traits: NoTerminator, PossibleTopLevelTransformOpTrait, SymbolTable
+
+Interfaces: MemoryEffectOpInterface, OpAsmOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+root	TransformHandleTypeInterface instance
+Structured (Linalg) Match Operations ¶
+source

@@ -1,0 +1,30 @@
+transform.scf.take_assumed_branch (transform::TakeAssumedBranchOp) ¶
+Syntax:
+
+operation ::= `transform.scf.take_assumed_branch` $target
+              (`take_else_branch` $take_else_branch^)?
+              attr-dict
+              `:` functional-type(operands, results)
+Given an scf.if conditional, inject user-defined information that it is always safe to execute only the if or else branch.
+
+This is achieved by just replacing the scf.if by the content of one of its branches.
+
+This is particularly useful for user-controlled rewriting of conditionals that exist solely to guard against out-of-bounds behavior.
+
+At the moment, no assume or assert operation is emitted as it is not always desirable. In the future, this may be controlled by a dedicated attribute.
+
+Return modes ¶
+The transform only consumes its operand and does not produce any result. The transform definitely fails if take_else_branch is specified and the else region is empty.
+
+Traits: TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+take_else_branch	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+MemRef Transform Operations ¶
+source

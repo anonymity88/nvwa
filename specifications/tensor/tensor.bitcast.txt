@@ -1,0 +1,24 @@
+tensor.bitcast (tensor::BitcastOp) ¶
+Tensor bitcast operation
+
+Syntax:
+
+operation ::= `tensor.bitcast` $source attr-dict `:` type($source) `to` type($dest)
+Bitcast a tensor from one type to another type of equivalent element width. If both are ranked, then the rank should be the same and static dimensions should match.
+
+Example:
+
+// Bitcast from unsigned to signed or signless integer.
+%2 = tensor.bitcast %1 : tensor<4xui32> to tensor<4xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: CastOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	tensor of any type values
+Results: ¶
+Result	Description
+dest	tensor of any type values

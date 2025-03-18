@@ -1,0 +1,7 @@
+transform.apply_patterns.linalg.decompose_pack_unpack (transform::ApplyDecomposeTensorPackUnpackPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.linalg.decompose_pack_unpack` attr-dict
+Collect patterns to decompose tensor.pack and tensor.unpack into e.g. tensor::PadOp, linalg::transposeOp Ops. Requires all outer dims to be unit.
+
+Interfaces: PatternDescriptorOpInterface

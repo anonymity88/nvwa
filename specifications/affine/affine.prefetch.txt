@@ -1,0 +1,22 @@
+affine.prefetch (affine::AffinePrefetchOp) ¶
+Affine prefetch operation
+
+The affine.prefetch op prefetches data from a memref location described with an affine subscript similar to affine.load, and has three attributes: a read/write specifier, a locality hint, and a cache type specifier as shown below:
+
+affine.prefetch %0[%i, %j + 5], read, locality<3>, data : memref<400x400xi32>
+The read/write specifier is either ‘read’ or ‘write’, the locality hint specifier ranges from locality<0> (no locality) to locality<3> (extremely local keep in cache). The cache type specifier is either ‘data’ or ‘instr’ and specifies whether the prefetch is performed on data cache or on instruction cache.
+
+Traits: MemRefsNormalizable
+
+Interfaces: AffineMapAccessInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+isWrite	::mlir::BoolAttr	bool attribute
+localityHint	::mlir::IntegerAttr	32-bit signless integer attribute whose minimum value is 0 whose maximum value is 3
+isDataCache	::mlir::BoolAttr	bool attribute
+map	::mlir::AffineMapAttr	AffineMap attribute
+Operands: ¶
+Operand	Description
+memref	memref of any type values
+indices	variadic of index

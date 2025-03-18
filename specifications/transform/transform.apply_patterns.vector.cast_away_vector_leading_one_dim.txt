@@ -1,0 +1,9 @@
+transform.apply_patterns.vector.cast_away_vector_leading_one_dim (transform::ApplyCastAwayVectorLeadingOneDimPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.cast_away_vector_leading_one_dim` attr-dict
+Collect a set of leading one dimension removal patterns.
+
+These patterns insert vector.shape_cast to remove leading one dimensions to expose more canonical forms of read/write/insert/extract operations. With them, there are more chances that we can cancel out extract-insert pairs or forward write-read pairs.
+
+Interfaces: PatternDescriptorOpInterface

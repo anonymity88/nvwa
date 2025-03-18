@@ -1,0 +1,24 @@
+spirv.BitFieldUExtract (spirv::BitFieldUExtractOp) ¶
+Extract a bit field from an object, without sign extension.
+
+Syntax:
+
+operation ::= `spirv.BitFieldUExtract` operands attr-dict `:` type($base) `,` type($offset) `,` type($count)
+The semantics are the same as with OpBitFieldSExtract with the exception that there is no sign extension. The remaining bits of the result will all be 0.
+
+Example: ¶
+%0 = spirv.BitFieldUExtract %base, %offset, %count : vector<3xi32>, i8, i8
+Traits: AlwaysSpeculatableImplTrait, UnsignedOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+base	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+offset	8/16/32/64-bit integer
+count	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

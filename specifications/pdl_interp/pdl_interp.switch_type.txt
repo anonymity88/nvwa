@@ -1,0 +1,27 @@
+pdl_interp.switch_type (pdl_interp::SwitchTypeOp) ¶
+Switch on a Type value
+
+Syntax:
+
+operation ::= `pdl_interp.switch_type` $value `to` $caseValues `(` $cases `)` attr-dict `->` $defaultDest
+pdl_interp.switch_type operations compare a type with a set of statically known types. If the value matches one of the provided case values the destination for that case value is taken, otherwise the default destination is taken.
+
+Example:
+
+pdl_interp.switch_type %type to [i32, i64] -> ^i32Dest, ^i64Dest, ^defaultDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+caseValues	::mlir::ArrayAttr	type array attribute
+Operands: ¶
+Operand	Description
+value	PDL handle to an mlir::Type
+Successors: ¶
+Successor	Description
+defaultDest	any successor
+cases	any successor

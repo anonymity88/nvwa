@@ -1,0 +1,14 @@
+omp.cancellation_point (omp::CancellationPointOp) ¶
+Cancellation point directive
+
+Syntax:
+
+operation ::= `omp.cancellation_point` `cancellation_construct_type` `(`
+              custom<ClauseAttr>($cancel_directive) `)`
+              attr-dict
+The cancellation point construct introduces a user-defined cancellation point at which implicit or explicit tasks check if cancellation of the innermost enclosing region of the type specified has been activated.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+cancel_directive	::mlir::omp::ClauseCancellationConstructTypeAttr	
+CancellationConstructType Clause

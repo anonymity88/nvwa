@@ -1,0 +1,25 @@
+omp.ordered (omp::OrderedOp) ¶
+Ordered construct without region
+
+Syntax:
+
+operation ::= `omp.ordered` ( `depend_type` `` $doacross_depend_type^ )?
+              ( `depend_vec` `(` $doacross_depend_vars^ `:` type($doacross_depend_vars)
+              `)` )?
+              attr-dict
+The ordered construct without region is a stand-alone directive that specifies cross-iteration dependencies in a doacross loop nest.
+
+The doacross_depend_type attribute refers to either the DEPEND(SOURCE) clause or the DEPEND(SINK: vec) clause.
+
+The doacross_num_loops attribute specifies the number of loops in the doacross nest.
+
+The doacross_depend_vars is a variadic list of operands that specifies the index of the loop iterator in the doacross nest for the DEPEND(SOURCE) clause or the index of the element of “vec” for the DEPEND(SINK: vec) clause. It contains the operands in multiple “vec” when multiple DEPEND(SINK: vec) clauses exist in one ORDERED directive.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+doacross_depend_type	::mlir::omp::ClauseDependAttr	
+depend clause
+doacross_num_loops	::mlir::IntegerAttr	64-bit signless integer attribute whose minimum value is 0
+Operands: ¶
+Operand	Description
+doacross_depend_vars	variadic of any type

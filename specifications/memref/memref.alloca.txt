@@ -1,0 +1,32 @@
+memref.alloca (memref::AllocaOp) ¶
+Stack memory allocation operation
+
+Syntax:
+
+operation ::= `memref.alloca` `(`$dynamicSizes`)` (`` `[` $symbolOperands^ `]`)? attr-dict `:` type($memref)
+The alloca operation allocates memory on the stack, to be automatically released when control transfers back from the region of its closest surrounding operation with an AutomaticAllocationScope trait. The amount of memory allocated is specified by its memref and additional operands. For example:
+
+%0 = memref.alloca() : memref<8x64xf32>
+The optional list of dimension operands are bound to the dynamic dimensions specified in its memref type. In the example below, the SSA value ‘%d’ is bound to the second dimension of the memref (which is dynamic).
+
+%0 = memref.alloca(%d) : memref<8x?xf32>
+The optional list of symbol operands are bound to the symbols of the memref’s affine map. In the example below, the SSA value ‘%s’ is bound to the symbol ‘s0’ in the affine map specified in the allocs memref type.
+
+%0 = memref.alloca()[%s] : memref<8x64xf32,
+                           affine_map<(d0, d1)[s0] -> ((d0 + s0), d1)>>
+This operation returns a single SSA value of memref type, which can be used by subsequent load and store operations. An optional alignment attribute, if specified, guarantees alignment at least to that boundary. If not specified, an alignment on any convenient boundary compatible with the type will be chosen.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: DestructurableAllocationOpInterface, OpAsmOpInterface, PromotableAllocationOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute whose minimum value is 0
+Operands: ¶
+Operand	Description
+dynamicSizes	variadic of index
+symbolOperands	variadic of index
+Results: ¶
+Result	Description
+memref	memref of any type values

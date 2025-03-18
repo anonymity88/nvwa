@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+// Operator: const
+//===----------------------------------------------------------------------===//
+def Tosa_ConstOp : Tosa_Op<"const", [ConstantLike, Pure,
+                                     AllShapesMatch<["value", "output"]>,
+                                     FirstAttrDerivedResultType]> {
+  let summary = "Constant op.";
+
+  let description = [{
+    A node containing constant data for use as the input to an operation. May
+    hold data in any of the supported data formats.
+
+    Example:
+
+    ```mlir
+    // Generic form
+    %out = "tosa.const"() {value = dense<0> : tensor<2x3xi32>} : () -> tensor<2x3xi32>
+    ```
+  }];
+
+  let arguments = (ins
+    ElementsAttr:$value
+  );
+
+  let results = (outs
+    TosaTensorOf<[AnyTypeOf<[Tosa_AnyNumber]>]>:$output
+  );
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+

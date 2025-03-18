@@ -1,0 +1,27 @@
+gpu.cluster_dim (gpu::ClusterDimOp) ¶
+Syntax:
+
+operation ::= `gpu.cluster_dim` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the number of cluster identifiers per grid along the x, y, or z dimension.
+
+Example:
+
+%cDimX = gpu.cluster_dim x
+If upper_bound is set, then executing (a lowering of) this operation in an environment where the clusters per grid is greater than upper_bound causes undefined behavior.
+
+There is an implicit upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

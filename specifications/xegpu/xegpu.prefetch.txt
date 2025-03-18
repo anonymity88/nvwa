@@ -1,0 +1,25 @@
+xegpu.prefetch (xegpu::PrefetchOp) ¶
+Prefetches a set of scattered data points to cache
+
+Syntax:
+
+operation ::= `xegpu.prefetch` $TensorDesc prop-dict attr-dict `:` qualified(type($TensorDesc))
+It issues instructions to prefetch a set of scattered data points from memory to each level of the cache based on their cache policy. As compared to prefetch_nd, which works on non-scattered TensorDesc, it works on scattered TensorDesc instead.
+
+Example:
+
+  xegpu.prefetch %tdesc {l1_hint = #xegpu.cache_hint<cached>,
+                         l2_hint = #xegpu.cache_hint<cached>,
+                         l3_hint = #xegpu.cache_hint<cached>}
+    : !xegpu.tensor_desc<16xf16>
+Attributes: ¶
+Attribute	MLIR Type	Description
+l1_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l2_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l3_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+Operands: ¶
+Operand	Description
+TensorDesc	TensorDesc describing regions of interested data.

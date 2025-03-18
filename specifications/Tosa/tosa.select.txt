@@ -1,0 +1,33 @@
+//===----------------------------------------------------------------------===//
+// Operator: select
+//===----------------------------------------------------------------------===//
+def Tosa_SelectOp : Tosa_ElementwiseOp<"select"> {
+  let summary = "Elementwise select operator";
+
+  let description = [{
+    Elementwise select of the output based on a condition.
+  }];
+
+  let arguments = (ins
+    Tosa_I1Tensor:$pred,
+    Tosa_Tensor:$on_true,
+    Tosa_Tensor:$on_false
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+  let hasCanonicalizeMethod = 1;
+  let hasFolder = 1;
+
+  let assemblyFormat = [{
+    operands attr-dict `:` `(` type($pred) `,` type($on_true) `,` type($on_false)
+    `)` `->` type($output)
+  }];
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.7
+// Operator Class: Logical Operations.
+//===----------------------------------------------------------------------===//
+

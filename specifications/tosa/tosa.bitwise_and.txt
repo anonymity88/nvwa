@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: bitwise_and
+//===----------------------------------------------------------------------===//
+def Tosa_BitwiseAndOp : Tosa_ElementwiseOp<"bitwise_and", [
+    Commutative,
+    SameOperandsAndResultElementType]> {
+  let summary = "Bitwise AND operator";
+
+  let description = [{
+    Elementwise bitwise AND of input1 and input2. Axis of size 1
+    will be broadcast as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

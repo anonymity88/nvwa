@@ -1,0 +1,41 @@
+llvm.mlir.constant (LLVM::ConstantOp) ¶
+Defines a constant of LLVM type.
+
+Syntax:
+
+operation ::= `llvm.mlir.constant` `(` $value `)` attr-dict `:` type($res)
+Unlike LLVM IR, MLIR does not have first-class constant values. Therefore, all constants must be created as SSA values before being used in other operations. llvm.mlir.constant creates such values for scalars, vectors, strings, and structs. It has a mandatory value attribute whose type depends on the type of the constant value. The type of the constant value must correspond to the attribute type converted to LLVM IR type.
+
+When creating constant scalars, the value attribute must be either an integer attribute or a floating point attribute. The type of the attribute may be omitted for i64 and f64 types that are implied.
+
+When creating constant vectors, the value attribute must be either an array attribute, a dense attribute, or a sparse attribute that contains integers or floats. The number of elements in the result vector must match the number of elements in the attribute.
+
+When creating constant strings, the value attribute must be a string attribute. The type of the constant must be an LLVM array of i8s, and the length of the array must match the length of the attribute.
+
+When creating constant structs, the value attribute must be an array attribute that contains integers or floats. The type of the constant must be an LLVM struct type. The number of fields in the struct must match the number of elements in the attribute, and the type of each LLVM struct field must correspond to the type of the corresponding attribute element converted to LLVM IR.
+
+Examples:
+
+// Integer constant, internal i32 is mandatory
+%0 = llvm.mlir.constant(42 : i32) : i32
+
+// It's okay to omit i64.
+%1 = llvm.mlir.constant(42) : i64
+
+// Floating point constant.
+%2 = llvm.mlir.constant(42.0 : f32) : f32
+
+// Splat dense vector constant.
+%3 = llvm.mlir.constant(dense<1.0> : vector<4xf32>) : vector<4xf32>
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	any attribute
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,30 @@
+//===----------------------------------------------------------------------===//
+// Operator: argmax
+//===----------------------------------------------------------------------===//
+def Tosa_ArgMaxOp : Tosa_InferShapedTypeOp<"argmax"> {
+  let summary = "Perform argmax on the input.";
+
+  let description = [{
+    This returns the index with the largest value across the given axis of the
+    input tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor: $input,
+    I32Attr: $axis
+  );
+
+  let results = (outs
+    Tosa_Tensor: $output
+  );
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+
+//===----------------------------------------------------------------------===//
+// Accumulator types.
+//===----------------------------------------------------------------------===//
+
+def Tosa_AccType : AnyTypeOf<[I<32>, SI<32>, F16, F32]>;
+

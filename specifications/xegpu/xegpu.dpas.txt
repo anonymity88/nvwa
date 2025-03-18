@@ -1,0 +1,31 @@
+xegpu.dpas (xegpu::DpasOp) ¶
+It performs mma computation
+
+Syntax:
+
+operation ::= `xegpu.dpas` $lhs `,` $rhs (`,` $acc^)? attr-dict `:` type($lhs)`,` type($rhs) (`,` type($acc)^)?  `->` type($result)
+DPAS performs matrix multiplication on matrix A of mxk size, B of kxn size, and accumulate on matrix C of mxn to the same size matrix , m=8, n=16 and k=8 * 32/bit_width_of_elem_type. So for fp16 data type, the matrices are A: vector<8x16xf16>, B: vector<16x16xf16>, and C/D: vector<8x16xf32>. Besides the matrix size requirements, DPAS also requires A and B to be loaded with the required data layout. Specially,
+
+VNNI layout is required for B operand. It is achieved via adding `packed`
+attribute to the `load_nd` operator.  Due to the VNNI transformation, B operands
+can be represented as a 3D vector, with the last dimension representing the VNNI
+factor, which is computed as `32/bit_width_of_elem_type`. Thus, `B: vector<16x16xf16>`
+can be represented as `B: vector<8x16x2xf16>`.
+
+Note: on PVC, the hardware can perform load with VNNI transformation when data
+      element type is 16-bit or lower precision, taking 2 or 4 elements from
+      the first dimension and inserted into the newly added innermost dimension.
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 2/3
+rhs	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 2/3
+acc	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 2
+Results: ¶
+Result	Description
+result	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 2

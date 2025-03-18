@@ -1,0 +1,31 @@
+acc.host_data (acc::HostDataOp) ¶
+Host_data construct
+
+Syntax:
+
+operation ::= `acc.host_data` oilist(
+              `if` `(` $ifCond `)`
+              | `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              )
+              $region attr-dict-with-keyword
+The “acc.host_data” operation represents the OpenACC host_data construct.
+
+Example:
+
+%0 = acc.use_device varPtr(%a : !llvm.ptr) -> !llvm.ptr
+acc.host_data dataOperands(%0 : !llvm.ptr) {
+
+}
+Traits: AttrSizedOperandSegments
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource, MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+ifPresent	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+ifCond	1-bit signless integer
+dataClauseOperands	variadic of PointerLikeType instance

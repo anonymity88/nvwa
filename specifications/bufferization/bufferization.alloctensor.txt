@@ -1,0 +1,142 @@
+//===----------------------------------------------------------------------===//
+// AllocTensorOp
+//===----------------------------------------------------------------------===//
+
+def Bufferization_AllocTensorOp : Bufferization_Op<"alloc_tensor",
+    [AttrSizedOperandSegments, BufferizableOpInterface,
+     DeclareOpInterfaceMethods<ReifyRankedShapedTypeOpInterface>]> {
+  let summary = "allocate buffer for a tensor";
+
+  let description = [{
+    `bufferization.alloc_tensor` materializes an uninitialized tensor with a
+    given shape (dynamic or static). It always bufferizes to a new buffer
+    allocation of the given shape. The optional `copy` operand specifies the
+    contents of the tensors. If no `copy` operand is specified, reading from the
+    result of an `alloc_tensor` op yields an undefined value.
+
+    If `copy` is specified, no dynamic sizes should be passed, since they are
+    the same as the dynamic sizes of the `copy` operand.
+
+    `alloc_tensor` is a helper op for bufferization. The operation is provided
+    as an anchor that marks the beginning of a new tensor SSA use-def chain. It
+    can be used to control in-place bufferization decisions during One-Shot
+    Bufferize: The bufferized result of a `bufferization.alloc_tensor` does not
+    alias with any other buffer, so it can be used to resolve read-after-write
+    conflicts that would have been introduced by the in-place bufferization of
+    another op.
+
+    The optional `memory_space` attribute specifies the memory space when
+    bufferizing this op. The memory space is inferred from `copy` if specified.
+    If neither `copy` nor `memory_space` is specified, the default memory space
+    is used during bufferization.
+
+    The optional `size_hint` operand specifies the number of non-zero elements
+    for sparse tensors. The value of `size_hint` should be not less than 1 and
+    not larger than the linear size of the corresponding dense tensor type. If
+    this requirement is not met, the behavior of the operator is undefined.
+
+    Both dense and sparse tensor types are supported. The result of a
+    `bufferization.alloc_tensor` is a tensor value that can be used like any
+    other tensor value. In practice, it is often used as the "out" operand of
+    another op. Sparse tensor allocations should always be used in a local
+    construction operation and never escape the function boundary directly.
+
+    Example:
+
+    ```mlir
+    %c = bufferization.alloc_tensor(%d1, %d2) : tensor<?x?xf32, #SparseMatrix>
+    %0 = linalg.matmul
+      ins(%a, %b: tensor<?x?xf32, #SparseMatrix>, tensor<?x?xf32, #SparseMatrix>)
+      outs(%c: tensor<?x?xf32, #SparseMatrix>) -> tensor<?x?xf32, #SparseMatrix>
+    return %0 : tensor<?x?xf32, #SparseMatrix>
+    ```
+
+    ```mlir
+    %c = bufferization.alloc_tensor(%d1, %d2) size_hint = %noe
+      : tensor<?x?xf32, #SparseMatrix>
+    ```
+
+    Note: An `alloc_tensor` with a `copy` should also be expressed as an
+    `alloc_tensor` without `copy`, followed by a `copy_tensor`.
+  }];
+
+  let arguments = (ins Variadic<Index>:$dynamic_sizes,
+                       Optional<AnyTensor>:$copy,
+                       Optional<Index>:$size_hint,
+                       OptionalAttr<AnyAttr>:$memory_space);
+
+  let results = (outs AnyTensor:$result);
+
+  let extraClassDeclaration = [{
+    LogicalResult bufferize(RewriterBase &rewriter,
+                            const BufferizationOptions &options);
+
+    bool resultBufferizesToMemoryWrite(OpResult opResult,
+                                       const AnalysisState &state);
+
+    bool bufferizesToAllocation(Value value) { return true; }
+
+    bool bufferizesToMemoryRead(OpOperand &opOperand,
+                                const AnalysisState &state);
+
+    bool bufferizesToMemoryWrite(OpOperand &opOperand,
+                                 const AnalysisState &state);
+
+    AliasingValueList getAliasingValues(
+        OpOperand &opOperand, const AnalysisState &state);
+
+    FailureOr<BaseMemRefType> getBufferType(
+        Value value, const BufferizationOptions &options,
+        SmallVector<Value> &invocationStack);
+
+    RankedTensorType getType() {
+      return ::llvm::cast<RankedTensorType>(getResult().getType());
+    }
+
+    // Return true if the size of the tensor is dynamic at `idx`
+    bool isDynamicDim(unsigned idx) {
+      return getType().isDynamicDim(idx);
+    }
+
+    // Return the argument position that contains the dynamic size of
+    // the tensor at dimension `idx`. Asserts that the shape is
+    // dynamic at that `idx`.
+    unsigned getIndexOfDynamicSize(unsigned idx) {
+      assert(!getCopy() && "no dim sizes specified when copying a tensor");
+      assert(isDynamicDim(idx) && "expected dynamic size");
+      ArrayRef<int64_t> shape = getType().getShape();
+      return std::count_if(
+          shape.begin(), shape.begin() + idx,
+          [&](int64_t size) { return ShapedType::isDynamic(size); });
+    }
+
+    // Return the Value of the dynamic size of the tensor at dimension
+    // `idx`. Asserts that the shape is dynamic at that `idx.
+    Value getDynamicSize(OpBuilder &b, unsigned idx);
+
+    // Assert that the size of the result tensor is static at `idx`
+    // and return the shape.
+    int64_t getStaticSize(unsigned idx) {
+      assert(!isDynamicDim(idx) && "expected static size");
+      return getType().getShape()[idx];
+    }
+  }];
+
+  let builders = [
+    // Build an op without `copy` or `memory_space` or `size_hint`.
+    OpBuilder<(ins "RankedTensorType":$type, "ValueRange":$dynamicSizes)>,
+
+    // Build an op without `memory_space` or `size_hint`.
+    OpBuilder<(ins "RankedTensorType":$type, "ValueRange":$dynamicSizes,
+                   "Value":$copy)>,
+
+    // Build an op without `size_hint`.
+    OpBuilder<(ins "TensorType":$type, "ValueRange":$dynamicSizes,
+                   "Value":$copy, "IntegerAttr":$memory_space)>,
+  ];
+
+  let hasCanonicalizer = 1;
+  let hasCustomAssemblyFormat = 1;
+  let hasVerifier = 1;
+}
+

@@ -1,0 +1,25 @@
+index.minu (index::MinUOp) ¶
+Index unsigned minimum
+
+Syntax:
+
+operation ::= `index.minu` $lhs `,` $rhs attr-dict
+The index.minu operation takes two index values and computes their unsigned minimum value. Treats the leading bit as the most significant, i.e. min(15, 6) = 6 or min(-2, 6) = 6.
+
+Example:
+
+// c = min(a, b)
+%c = index.minu %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

@@ -1,0 +1,28 @@
+amdgpu.raw_buffer_store (amdgpu::RawBufferStoreOp) ¶
+Raw Buffer Store, exposing GCN features
+
+Syntax:
+
+operation ::= `amdgpu.raw_buffer_store` attr-dict $value `->` $memref `[` $indices `]`
+              (`sgprOffset` $sgprOffset^)? `:`
+              type($value) `->` type($memref) (`,` type($indices)^)?
+The amdgpu.raw_buffer_store op is a wrapper around the buffer store intrinsics available on AMD GPUs, including extensions in newer GPUs.
+
+The store index is computed as in memref.store with the addition of indexOffset (which is included for uniformity with atomics and may be useful when writing vectorized code) and sgprOffset (which is added after bounds checks and implicitly includes the offset of the memref type if non-zero). All index components are in terms of the elements of the memref, not bytes, and are scaled up appropriately.
+
+Out of bounds stores are ignored in hardware. Wthether a vector write that includes some in-bounds and soeme out-of-bounds components is partically completed is chipset-dependent.
+
+See amdgpu.raw_buffer_load for a description of how the underlying instruction is constructed.
+
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+boundsCheck	::mlir::BoolAttr	bool attribute
+indexOffset	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+value	any type
+memref	memref of any type values
+indices	variadic of 32-bit signless integer
+sgprOffset	32-bit signless integer

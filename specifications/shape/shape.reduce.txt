@@ -1,0 +1,32 @@
+shape.reduce (shape::ReduceOp) ¶
+Returns an expression reduced over a shape or extent tensor
+
+An operation that takes as input a shape or extent tensor, and a number of initial values. This operation has a region that is applied repeatedly for every extent of the input. Starting with the initial values, the individual extents are then aggregated as defined by the associated region.
+
+Conceptually this op performs the following reduction:
+
+res[] = init;
+for (int i = 0, i < shape.rank(); i++) {
+  res = reduce(i, shape[i], res[0], ..., res[n]);
+}
+Where reduce represents the region attached and the result of the reduce op is the last computed output of the reduce region. As an example, the number of elements can be computed as follows:
+
+func.func @reduce(%shape : !shape.shape, %init : !shape.size) ->
+    !shape.size {
+  %num_elements = shape.reduce(%shape, %init) -> !shape.size  {
+    ^bb0(%index: index, %dim: !shape.size, %acc: !shape.size):
+      %updated_acc = "shape.mul"(%acc, %dim) :
+        (!shape.size, !shape.size) -> !shape.size
+      shape.yield %updated_acc : !shape.size
+  }
+  return %num_elements : !shape.size
+}
+Traits: SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Operands: ¶
+Operand	Description
+shape	shape or extent tensor
+initVals	variadic of any type
+Results: ¶
+Result	Description
+result	variadic of any type

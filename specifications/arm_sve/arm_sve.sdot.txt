@@ -1,0 +1,26 @@
+arm_sve.sdot (arm_sve::SdotOp) ¶
+Vector-vector dot product and accumulate op
+
+Syntax:
+
+operation ::= `arm_sve.sdot` $acc `,` $src1 `,` $src2 attr-dict `:` type($src1) `to` type($dst)
+SDOT: Signed integer addition of dot product.
+
+This function maps to the SDOT instruction, and it takes signless integer operands that the operation interprets as signed. It partitions the second and third vector inputs into groups of four elements. They calculate the dot product of each group (without loss of precision) and then add each result to the overlapping element of the first vector input.
+
+Source: https://developer.arm.com/documentation/100987/0000
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+acc	scalable vector of 32-bit signless integer or 64-bit signless integer values of length 4/2
+src1	scalable vector of 8-bit signless integer or 16-bit signless integer values of length 16/8
+src2	scalable vector of 8-bit signless integer or 16-bit signless integer values of length 16/8
+Results: ¶
+Result	Description
+dst	scalable vector of 32-bit signless integer or 64-bit signless integer values of length 4/2

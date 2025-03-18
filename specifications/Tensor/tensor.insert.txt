@@ -1,0 +1,49 @@
+//===----------------------------------------------------------------------===//
+// InsertOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_InsertOp : Tensor_Op<"insert", [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    DestinationStyleOpInterface,
+    Pure,
+    TypesMatchWith<"result type matches type of dest",
+                   "dest", "result",
+                   "$_self">,
+    TypesMatchWith<"scalar type matches element type of dest",
+                   "dest", "scalar",
+                   "::llvm::cast<TensorType>($_self).getElementType()">]> {
+  let summary = "element insertion operation";
+  let description = [{
+    The `tensor.insert` op inserts a scalar into a ranked tensor `dest` as
+    specified by the operation's indices.
+
+    It returns a copy of `dest` with the indexed position updated to the value
+    of `scalar`.
+
+    The arity of `indices `must match the rank of the tensor `dest`. All
+    indices should be of `index` type.
+
+    Example:
+
+    ```mlir
+    %4 = tensor.insert %t into %dest[%1, %2] : tensor<4x4xi32>
+    %5 = tensor.insert %rt into %dest[%1, %2] : tensor<?x?xi32>
+    ```
+  }];
+
+  let arguments = (ins AnyType:$scalar,
+                       AnyRankedTensor:$dest,
+                       Variadic<Index>:$indices);
+  let results = (outs AnyRankedTensor:$result);
+  let assemblyFormat = [{
+    $scalar `into` $dest `[` $indices `]` attr-dict `:` type($dest)
+  }];
+
+  let extraClassDeclaration = [{
+    MutableOperandRange getDpsInitsMutable() { return getDestMutable(); }
+  }];
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+

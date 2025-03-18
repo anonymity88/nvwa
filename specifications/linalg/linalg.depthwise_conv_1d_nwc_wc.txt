@@ -1,0 +1,18 @@
+linalg.depthwise_conv_1d_nwc_wc (linalg::DepthwiseConv1DNwcWcOp)
+Performs depth-wise 1-D convolution.
+
+Numeric casting is performed on the operands to the inner multiply, promoting them to the same data type as the accumulator/output. Multiplier is set to 1 which is a special case for most depthwise convolutions. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgConvolutionOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+strides	::mlir::DenseIntElementsAttr	64-bit signless int elements attribute of shape [1]
+dilations	::mlir::DenseIntElementsAttr	64-bit signless int elements attribute of shape [1]
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

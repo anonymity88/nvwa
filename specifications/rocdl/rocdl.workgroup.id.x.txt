@@ -1,0 +1,17 @@
+rocdl.workgroup.id.x (ROCDL::BlockIdXOp) ¶
+Syntax:
+
+operation ::= `rocdl.workgroup.id.x` (`range` $range^)? attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+range	::mlir::LLVM::ConstantRangeAttr	
+A range of two integers, corresponding to LLVM's ConstantRange
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

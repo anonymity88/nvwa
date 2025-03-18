@@ -1,0 +1,57 @@
+nvgpu.device_async_copy (nvgpu::DeviceAsyncCopyOp) ¶
+Device-side asynchronous copy
+
+Syntax:
+
+operation ::= `nvgpu.device_async_copy` $src `[` $srcIndices `]` `,` $dst `[` $dstIndices `]` `,` $dstElements (`,` $srcElements^)?
+              attr-dict `:` type($src) `to` type($dst)
+The nvgpu.device_async_copy op initiates an asynchronous copy operation of elements from source (global memory) to the destination (shared memory) without blocking the thread. The async copy is added to a group.
+
+This op is meant to be used with nvgpu.device_async_create_group and nvgpu.device_async_wait to synchronize copies as explained in those ops descriptions.
+
+bypassL1 attribute is hint to the hardware to bypass the L1 cache during async copy, this hint may be ignored by the hardware.
+
+dstElements attribute is the total number of elements written to destination (shared memory).
+
+srcElements argument is the total number of elements read from source (global memory).
+
+srcElements is an optional argument and when present the op only reads srcElements number of elements from the source (global memory) and zero fills the rest of the elements in the destination (shared memory).
+
+In order to do a copy and wait for the result we need the following combination:
+
+// copy 1.
+%cp1 = nvgpu.device_async_copy %A[%c0], %B[%c0], 4 :memref<16xf32> to memref<16xf32, 3>
+// copy 2.
+%cp2 = nvgpu.device_async_copy %C[%c0], %D[%c0], 4 : memref<16xf32> to memref<16xf32, 3>
+// group 1 contains copy 1 and copy 2.
+%token1 = nvgpu.device_async_create_group %cp1, %cp2
+// copy 3.
+%cp3 = nvgpu.device_async_copy %E[%c0], %F[%c0], 4 : memref<16xf32> to memref<16xf32, 3>
+// group 2 contains copy 3.
+%token2 = nvgpu.device_async_create_group %cp3
+// after the wait copy 1 and copy 2 are complete.
+nvgpu.device_async_wait %token1
+// after the wait copy 3 is complete.
+nvgpu.device_async_wait %token2
+Example:
+
+%0 = nvgpu.device_async_copy %src[%c0, %c0], %dst[%c0, %c0, %c0], 4 :
+  memref<4x5xf32> to memref<2x7x5xf32, 3>
+Traits: AttrSizedOperandSegments
+
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dstElements	::mlir::IntegerAttr	index attribute
+bypassL1	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+dst	memref of any type values
+dstIndices	variadic of index
+src	memref of any type values
+srcIndices	variadic of index
+srcElements	index
+Results: ¶
+Result	Description
+asyncToken	device async token type

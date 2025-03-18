@@ -1,0 +1,8 @@
+rocdl.raw.buffer.atomic.umin (ROCDL::RawBufferAtomicUMinOp) ¶
+Operands: ¶
+Operand	Description
+vdata	LLVM dialect-compatible type
+rsrc	LLVM dialect-compatible type
+offset	LLVM dialect-compatible type
+soffset	LLVM dialect-compatible type
+aux	LLVM dialect-compatible type

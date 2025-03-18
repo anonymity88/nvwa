@@ -1,0 +1,21 @@
+transform.get_type (transform::GetTypeOp) ¶
+Get a parameter containing the type of the given value
+
+Syntax:
+
+operation ::= `transform.get_type` (`elemental` $elemental^)? $value attr-dict `:`functional-type(operands, results)
+This operation creates a new Transform parameter containing the type(s) of the value(s) associated with the operand handle.
+
+This transform never fails.
+
+Interfaces: MatchOpInterface, MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+elemental	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+value	TransformValueHandleTypeInterface instance
+Results: ¶
+Result	Description
+type_param	TransformParamTypeInterface instance

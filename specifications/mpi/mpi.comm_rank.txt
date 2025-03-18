@@ -1,0 +1,14 @@
+mpi.comm_rank (mpi::CommRankOp) ¶
+Get the current rank, equivalent to MPI_Comm_rank(MPI_COMM_WORLD, &rank)
+
+Syntax:
+
+operation ::= `mpi.comm_rank` attr-dict `:` type(results)
+Communicators other than MPI_COMM_WORLD are not supported for now.
+
+This operation can optionally return an !mpi.retval value that can be used to check for errors.
+
+Results: ¶
+Result	Description
+retval	MPI function call return value
+rank	32-bit signless integer

@@ -1,0 +1,31 @@
+irdl.attributes (irdl::AttributesOp) ¶
+Define the attributes of an operation
+
+Syntax:
+
+operation ::= `irdl.attributes` custom<AttributesOp>($attributeValues, $attributeValueNames) attr-dict
+irdl.attributes defines the attributes of the irdl.operation parent operation definition.
+
+In the following example, irdl.attributes defines the attributes of the attr_op operation:
+
+irdl.dialect @example {
+
+  irdl.operation @attr_op {
+    %0 = irdl.any
+    %1 = irdl.is i64
+    irdl.attibutes {
+      "attr1" = %0,
+      "attr2" = %1
+    }
+  }
+}
+The operation will expect an arbitrary attribute “attr1” and an attribute “attr2” with value i64.
+
+Traits: HasParent<OperationOp>
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+attributeValueNames	::mlir::ArrayAttr	string array attribute
+Operands: ¶
+Operand	Description
+attributeValues	variadic of IRDL handle to an mlir::Attribute

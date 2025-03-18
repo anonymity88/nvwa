@@ -1,0 +1,22 @@
+llvm.select (LLVM::SelectOp) ¶
+Syntax:
+
+operation ::= `llvm.select` operands attr-dict `:` type($condition) `,` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, FastmathFlagsInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), SelectLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmathFlags	::mlir::LLVM::FastmathFlagsAttr	
+LLVM fastmath flags
+Operands: ¶
+Operand	Description
+condition	1-bit signless integer or LLVM dialect-compatible vector of 1-bit signless integer
+trueValue	LLVM dialect-compatible type
+falseValue	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

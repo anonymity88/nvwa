@@ -1,0 +1,45 @@
+quant.scast (quant::StorageCastOp) ¶
+Storage cast operation
+
+Syntax:
+
+operation ::= `quant.scast` $input attr-dict `:` type($input) `to` type($result)
+Convert a value from a quantized type to the corresponding signless integer storage type, or vice versa. This conversion simply involves a reinterpretation of the input bits and does not involve any data manipulation.
+
+The following syntactic restrictions must be met:
+
+Operand input must be a scalar or tensor of a signless integer or !quant.uniform type.
+
+The result must be a scalar or tensor of a signless integer or !quant.uniform type.
+
+If the operand is a scalar or tensor of type integer, the result must be a scalar or tensor of type !quant.uniform, and vice versa.
+
+The operand and result must be both scalars or both tensors. If tensors, they must be both ranked or both unranked. If ranked, both must have the same shape, including matching static and dynamic dimensions.
+
+The width of the storageType parameter of the quantized type of the operand or result must match the width of the signless integer type of the operand or result.
+
+If the operand or result uses per-channel quantization, its !quant.uniform type must adhere to the Per-axis quantization integrity guidelines.
+
+Examples:
+
+// Cast a scalar quantized value into its storage type
+%result = quant.scast %input : !quant.uniform<i8:f32, 2.0> to i8
+
+// Cast a dynamically shaped tensor of quantized values into their storage type
+%result = quant.scast %input : tensor<?x!quant.uniform<i8:f32, 2.0>> to tensor<?xi8>
+
+// Cast an unranked tensor of signless integers into a quantized type using
+// per-channel quantization
+%result = quant.scast %input : tensor<*xi8> to tensor<*x!quant.uniform<i8:f32:1, {2.0, 3.0}>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	scalar or tensor of signless integer or quantized type
+Results: ¶
+Result	Description
+result	scalar or tensor of signless integer or quantized type

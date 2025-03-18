@@ -1,0 +1,35 @@
+sparse_tensor.assemble (sparse_tensor::AssembleOp) ¶
+Returns a sparse tensor assembled from the given levels and values
+
+Syntax:
+
+operation ::= `sparse_tensor.assemble` ` ` `(` $levels       `)` `,` $values attr-dict `:`    `(` type($levels) `)` `,` type($values) `to` type($result)
+Assembles the per-level position and coordinate arrays together with the values arrays into a sparse tensor. The order and types of the provided levels must be consistent with the actual storage layout of the returned sparse tensor described below.
+
+levels: [tensor<? x iType>, ...] supplies the sparse tensor position and coordinate arrays of the sparse tensor for the corresponding level as specifed by sparse_tensor::StorageLayout.
+values : tensor<? x V> supplies the values array for the stored elements in the sparse tensor.
+This operation can be used to assemble a sparse tensor from an external source; e.g., by passing numpy arrays from Python. It is the user’s responsibility to provide input that can be correctly interpreted by the sparsifier, which does not perform any sanity test to verify data integrity.
+
+Example:
+
+%pos    = arith.constant dense<[0, 3]>                : tensor<2xindex>
+%index  = arith.constant dense<[[0,0], [1,2], [1,3]]> : tensor<3x2xindex>
+%values = arith.constant dense<[ 1.1,   2.2,   3.3 ]> : tensor<3xf64>
+%s = sparse_tensor.assemble (%pos, %index), %values
+   : (tensor<2xindex>, tensor<3x2xindex>), tensor<3xf64> to tensor<3x4xf64, #COO>
+// yields COO format |1.1, 0.0, 0.0, 0.0|
+//     of 3x4 matrix |0.0, 0.0, 2.2, 3.3|
+//                   |0.0, 0.0, 0.0, 0.0|
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+levels	variadic of ranked tensor of signless integer or index values
+values	ranked tensor of any type values
+Results: ¶
+Result	Description
+result	sparse tensor of any type values

@@ -1,0 +1,39 @@
+arm_sme.load_tile_slice (arm_sme::LoadTileSliceOp) ¶
+Tile slice load and update operation
+
+Syntax:
+
+operation ::= `arm_sme.load_tile_slice` $base `[` $indices `]` `,` $mask `,` $tile `,` $tile_slice_index
+              (`layout` `` $layout^)? attr-dict `:` type($base) `,` type($mask) `,`
+              type($result)
+Loads a 1D tile slice from memory into a 2D SME “virtual tile”. The tile slice is defined by the dimension of the 2D scalable vector type pointed by the index. A tile slice index describes where in the input tile the tile slice is loaded to. An optional tile slice layout attribute specifies whether the tile slice being loaded at the given index is horizontal (default) or vertical. The updated tile is returned as the result.
+
+The slice of memory read is defined by a base and indices and must be contiguous. The memref must be either rank 1 or rank 2, have dynamic dimensions since the operation is scalable, and the element type must be a scalar that matches the element type of the result.
+
+The provided mask is used to specify which elements of the tile slice will be loaded.
+
+Example 1: Load a vector<[16]xi8> tile slice from memory into tile horizontally (default) at given index.
+
+%tile_update = arm_sme.load_tile_slice %base[%c0], %mask, %tile, %tile_slice_index : memref<?x?xi8>, vector<[16]xi1>, vector<[16]x[16]xi8>
+Example 2: Load a vector<[4]xf32> tile slice from memory into tile vertically at given index.
+
+%tile_update = arm_sme.load_tile_slice %base[%c0], %mask, %tile, %tile_slice_index layout<vertical> : memref<?x?xf32>, vector<[4]xi1>, vector<[4]x[4]xf32>
+Example 3: Load a vector<[1]xi128> tile slice from memory into tile vertically at given index.
+
+%tile_update = arm_sme.load_tile_slice %base[%c0], %mask, %tile, %tile_slice_index layout<vertical> : memref<?x?xi128>, vector<[1]xi1>, vector<[1]x[1]xi128>
+Interfaces: ArmSMETileOpInterface, InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+layout	::mlir::arm_sme::TileSliceLayoutAttr	
+Layout of a tile slice
+Operands: ¶
+Operand	Description
+base	memref of any type values
+mask	a vector type that matches the size of a SVE predicate
+tile	a vector type that fits into a SME tile
+indices	variadic of index
+tile_slice_index	index
+Results: ¶
+Result	Description
+result	a vector type that fits into a SME tile

@@ -1,0 +1,7 @@
+rocdl.s.barrier.signal (ROCDL::BarrierSignalOp) ¶
+Syntax:
+
+operation ::= `rocdl.s.barrier.signal` $id attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+id	::mlir::IntegerAttr	32-bit signless integer attribute

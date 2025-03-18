@@ -1,0 +1,23 @@
+rocdl.cvt.sr.bf8.f32 (ROCDL::CvtSrBf8F32Op) ¶
+Convert f32 to bf8, stochiastic rounding
+
+Syntax:
+
+operation ::= `rocdl.cvt.sr.bf8.f32` attr-dict $srcA `,` $srcB `->` $old `[` $byteSel `]` `:` type($res)
+Convert srcA to bf8, adding the rounding factor from srcB, and store into the byteSelth byte of old, preserving the others.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+srcA	32-bit float
+srcB	32-bit signless integer
+old	32-bit signless integer
+byteSel	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

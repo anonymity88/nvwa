@@ -1,0 +1,35 @@
+spirv.BranchConditional (spirv::BranchConditionalOp) ¶
+If Condition is true, branch to true block, otherwise branch to false block.
+
+Condition must be a Boolean type scalar.
+
+Branch weights are unsigned 32-bit integer literals. There must be either no Branch Weights or exactly two branch weights. If present, the first is the weight for branching to True Label, and the second is the weight for branching to False Label. The implied probability that a branch is taken is its weight divided by the sum of the two Branch weights. At least one weight must be non-zero. A weight of zero does not imply a branch is dead or permit its removal; branch weights are only hints. The two weights must not overflow a 32-bit unsigned integer when added together.
+
+This instruction must be the last instruction in a block.
+
+branch-conditional-op ::= `spirv.BranchConditional` ssa-use
+                          (`[` integer-literal, integer-literal `]`)?
+                          `,` successor `,` successor
+successor ::= bb-id branch-use-list?
+branch-use-list ::= `(` ssa-use-list `:` type-list-no-parens `)`
+Example: ¶
+spirv.BranchConditional %condition, ^true_branch, ^false_branch
+spirv.BranchConditional %condition, ^true_branch(%0: i32), ^false_branch(%1: i32)
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, Terminator
+
+Interfaces: BranchOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+branch_weights	::mlir::ArrayAttr	32-bit integer array attribute
+Operands: ¶
+Operand	Description
+condition	bool
+trueTargetOperands	variadic of void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type
+falseTargetOperands	variadic of void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type
+Successors: ¶
+Successor	Description
+trueTarget	any successor
+falseTarget	any successor

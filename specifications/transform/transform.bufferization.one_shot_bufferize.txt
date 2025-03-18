@@ -1,0 +1,38 @@
+transform.bufferization.one_shot_bufferize (transform::OneShotBufferizeOp) ¶
+Syntax:
+
+operation ::= `transform.bufferization.one_shot_bufferize` (`layout` `{` $function_boundary_type_conversion^ `}`)?
+              $target attr-dict `:` functional-type($target, results)
+Indicates that the given target op should be bufferized with One-Shot Bufferize. The bufferization can be configured with various attributes that corresponding to options in BufferizationOptions and the one-shot-bufferize pass. More information can be found in the pass documentation.
+
+The targeted ops must be modules or functions. This is because there is always a single, bufferized replacement op for such targets.
+
+Note: Only ops that implement BufferizableOpInterface are bufferized. All other ops are ignored if allow_unknown_ops. If allow_unknown_ops is unset, this transform fails when an unknown/non-bufferizable op is found. Many ops implement BufferizableOpInterface via an external model. These external models must be registered when applying this transform op; otherwise, said ops would be considered non-bufferizable.
+
+Return modes ¶
+This operation consumes the target handle and produces the transformed handle.
+
+Traits: FunctionalStyleTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+function_boundary_type_conversion	::mlir::bufferization::LayoutMapOptionAttr	
+option for map layout
+allow_return_allocs_from_loops	::mlir::BoolAttr	bool attribute
+allow_unknown_ops	::mlir::BoolAttr	bool attribute
+bufferize_function_boundaries	::mlir::BoolAttr	bool attribute
+dump_alias_sets	::mlir::BoolAttr	bool attribute
+test_analysis_only	::mlir::BoolAttr	bool attribute
+print_conflicts	::mlir::BoolAttr	bool attribute
+check_parallel_regions	::mlir::BoolAttr	bool attribute
+memcpy_op	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance
+Debug Transform Operations ¶
+source

@@ -1,0 +1,28 @@
+spirv.GroupNonUniformBallot (spirv::GroupNonUniformBallotOp) ¶
+Result is a bitfield value combining the Predicate value from all invocations in the group that execute the same dynamic instance of this instruction. The bit is set to one if the corresponding invocation is active and the Predicate for that invocation evaluated to true; otherwise, it is set to zero.
+
+Syntax:
+
+operation ::= `spirv.GroupNonUniformBallot` $execution_scope $predicate attr-dict `:` type($result)
+Result Type must be a vector of four components of integer type scalar, whose Signedness operand is 0.
+
+Result is a set of bitfields where the first invocation is represented in the lowest bit of the first vector component and the last (up to the size of the group) is the higher bit number of the last bitmask needed to represent all bits of the group invocations.
+
+Execution must be Workgroup or Subgroup Scope.
+
+Predicate must be a Boolean type.
+
+Example: ¶
+%0 = spirv.GroupNonUniformBallot <Subgroup> %predicate : vector<4xi32>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+Operands: ¶
+Operand	Description
+predicate	bool
+Results: ¶
+Result	Description
+result	vector of 8/16/32/64-bit signless/unsigned integer values of length 4

@@ -1,0 +1,75 @@
+tensor.pack (tensor::PackOp) ¶
+Tensor pack operation
+
+Syntax:
+
+operation ::= `tensor.pack` $source
+              (`padding_value` `(` $padding_value^ `:` type($padding_value) `)`)?
+              (`outer_dims_perm` `=` $outer_dims_perm^)?
+              `inner_dims_pos` `=` $inner_dims_pos
+              `inner_tiles` `=`
+              custom<DynamicIndexList>($inner_tiles, $static_inner_tiles)
+              `into` $dest attr-dict `:` type($source) `->` type($dest)
+The “pack” operation converts a source tensor of rank n into a result tensor of rank n + k with a tiled and packed layout (maybe with padding) and optionally transposes the tiled source tensor dimensions.
+
+inner_dims_pos (mandatory) specifies k source tensor dimensions that are being tiled, where 0 < k <= n. The order of the dimensions matters:
+
+The tiled dimensions (of size inner_tiles) are added to the end of the result tensor in the order in which they appear in inner_dims_pos.
+inner_dims_pos[i] specifies the source tensor dimension tiled by inner_tiles[i].
+inner_tiles (mandatory) specifies k tile sizes. These tile sizes correspond to the least significant (“inner”) result tensor dimension sizes, in the same order. Tile sizes can be static or dynamic.
+
+Example: If inner_tiles = [16, 32], the result tensor has a shape of ...x16x32. If inner_dims_pos = [0, 1], the 0th source dimension is tiled by 16 and the 1st source dimension is tiled by 32. Other source dimensions (if any) are not tiled. If inner_dims_pos = [1, 0], the 1st dimension is tiled by 16 and the 0th dimension is tiled by 32.
+
+Example:
+
+// NC to NCnc
+%0 = tensor.pack %source inner_dims_pos = [0, 1] inner_tiles = [8, 32]
+    into %dest : tensor<128x256xf32> -> tensor<16x8 x 8x32 xf32>
+//                                             \  /   \  /
+//                                       outer dims  inner dims
+outer_dims_perm (optional) specifies a permutation for the outer dimensions. If specified, it must have n elements.
+
+Example:
+
+// CK to KCck
+%0 = tensor.pack %source outer_dims_perm = [1, 0] inner_dims_pos = [0, 1]
+    inner_tiles = [8, 32] into %dest
+    : tensor<128x256xf32> -> tensor<8x16 x 8x32 xf32>
+//                                  \  /
+//            compare with "NC to NCnc": outer dims are transposed
+padding_value specifies a padding value at the boundary on non-perfectly divisible dimensions. Padding is optional:
+
+If absent, it is UB if the tile does not perfectly divide the dimension.
+If present, it will pad along high dimensions (high-padding) to make the tile complete.
+Example:
+
+%0 = tensor.pack %arg0 padding_value(%pad : f32) outer_dims_perm = [2, 1, 0]
+    inner_dims_pos = [1] inner_tiles = [2] into %arg1
+    : tensor<200x127x256xf32> -> tensor<256x64x200x2xf32>
+//                 \
+//                padded and tiled dim
+//
+// Source dimension 1 is tiled. 64 does not divide 127 evenly, so 1 padded
+// element is added at the end.
+//
+// Note: Only tiled dimensions can be padded.
+Traits: AttrSizedOperandSegments
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+outer_dims_perm	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+inner_dims_pos	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+static_inner_tiles	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+source	ranked tensor of any type values
+dest	ranked tensor of any type values
+padding_value	any type
+inner_tiles	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

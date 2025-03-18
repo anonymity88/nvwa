@@ -1,0 +1,16 @@
+llvm.intr.lrint (LLVM::LrintOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.lrint` `(` operands `)` attr-dict `:` functional-type(operands, results)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+val	floating point LLVM type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,21 @@
+transform.structured.lower_pack (transform::LowerPackOp) ¶
+Syntax:
+
+operation ::= `transform.structured.lower_pack` $target attr-dict `:` functional-type(operands, results)
+Rewrite a tensor.pack into tensor.pad + tensor.expand_shape + linalg.transpose.
+
+Return modes ¶
+This operation ignores non-pack ops and drops them in the return. This operation produces a silenceable failure if the rewrite fails for any reason. If all the operations referred to by the target are rewritten, the transform succeeds. Return handles to the newly produced pad, expand_shape and transpose ops.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	Transform IR handle to tensor.pack operations
+Results: ¶
+Result	Description
+pad_op	Transform IR handle to tensor.pad operations
+expand_shape_op	Transform IR handle to tensor.expand_shape operations
+transpose_op	Transform IR handle to linalg.transpose operations

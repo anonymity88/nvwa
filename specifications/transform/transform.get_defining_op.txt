@@ -1,0 +1,20 @@
+transform.get_defining_op (transform::GetDefiningOp) ¶
+Get handle to the defining op of a value
+
+Syntax:
+
+operation ::= `transform.get_defining_op` $target attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op corresponds to the defining op of the targeted value.
+
+This transform produces a silenceable failure if the targeted value is a block argument.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformValueHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformHandleTypeInterface instance

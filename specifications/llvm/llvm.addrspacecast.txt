@@ -1,0 +1,16 @@
+llvm.addrspacecast (LLVM::AddrSpaceCastOp) ¶
+Syntax:
+
+operation ::= `llvm.addrspacecast` $arg attr-dict `:` type($arg) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), PromotableOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	LLVM pointer type or LLVM dialect-compatible vector of LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM pointer type or LLVM dialect-compatible vector of LLVM pointer type

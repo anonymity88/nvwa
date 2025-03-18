@@ -1,0 +1,7 @@
+transform.apply_patterns.memref.fold_memref_alias_ops (transform::ApplyFoldMemrefAliasOpsPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.memref.fold_memref_alias_ops` attr-dict
+Collects patterns for folding memref aliasing ops (memref.subview) into consumer load/store ops (affine.load, memref.load, nvgpu.ldmatrix, vector.load, vector.transfer_read, affine.store, memref.store, etc.) and other ops (e.g., memref.subview).
+
+Interfaces: PatternDescriptorOpInterface

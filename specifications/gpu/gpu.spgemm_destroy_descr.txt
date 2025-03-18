@@ -1,0 +1,23 @@
+gpu.spgemm_destroy_descr (gpu::SpGEMMDestroyDescrOp) ¶
+SpGEMM Destroy Descr operation
+
+Syntax:
+
+operation ::= `gpu.spgemm_destroy_descr` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $desc attr-dict
+The gpu.spgemm_destroy_descr destroys the SpGEMM operation descriptor.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%token = gpu.spgemm_destroy_descr async [%dep] %desc
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+desc	SpGEMM operation handle type
+Results: ¶
+Result	Description
+asyncToken	async token type

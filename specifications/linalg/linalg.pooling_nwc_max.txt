@@ -1,0 +1,18 @@
+linalg.pooling_nwc_max (linalg::PoolingNwcMaxOp)
+Performs max pooling.
+
+Numeric casting is performed on the input operand, promoting it to the same data type as the accumulator/output. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgConvolutionOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+strides	::mlir::DenseIntElementsAttr	64-bit signless int elements attribute of shape [1]
+dilations	::mlir::DenseIntElementsAttr	64-bit signless int elements attribute of shape [1]
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

@@ -1,0 +1,20 @@
+llvm.intr.vector.insert (LLVM::vector_insert) ¶
+Syntax:
+
+operation ::= `llvm.intr.vector.insert` $srcvec `,` $dstvec `[` $pos `]` attr-dict `:` type($srcvec) `into` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pos	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+dstvec	LLVM dialect-compatible vector type
+srcvec	LLVM dialect-compatible vector type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

@@ -1,0 +1,105 @@
+//===----------------------------------------------------------------------===//
+// ToTensorOp
+//===----------------------------------------------------------------------===//
+
+def Bufferization_ToTensorOp : Bufferization_Op<"to_tensor", [
+    BufferizableOpInterface,
+    SameOperandsAndResultShape,
+    SameOperandsAndResultElementType,
+    TypesMatchWith<"result type matches tensor equivalent of 'memref'",
+                   "memref", "result",
+                   "memref::getTensorTypeFromMemRefType($_self)">
+  ]> {
+  let summary = "create a tensor from a `memref`";
+  let description = [{
+    An operation that creates a tensor from a `memref`. The result value is a
+    tensor whose shape and element type match the memref operand.
+
+    The opposite of this op is `to_memref`. Together, these two ops are
+    useful for source/target materializations when doing type conversions
+    involving tensors and memrefs.
+
+    Example:
+
+    ```mlir
+    // Produces a value of tensor<4x?xf32> type.
+    %t = bufferization.to_tensor %m : memref<4x?xf32, #layout, 0>
+    ```
+
+    If the `writable` unit attribute is set, the produced tensor is considered
+    "writable" during bufferization. Otherwise, every OpOperand that bufferizes
+    to a write to the future buffer of the resulting tensor (or an alias
+    thereof) will bufferize out-of-place to prevent emitting any writes to
+    `memref` during bufferization.
+
+    The `restrict` unit attribute (similar to the C `restrict` keyword)
+    indicates that the produced tensor result is the only way for the tensor
+    IR to gain access to the `memref` operand (or an alias thereof). E.g.,
+    there must be no other `to_tensor` op with the same or with an aliasing
+    `memref` operand.
+
+    Note: Only `to_tensor` ops with the `restrict` unit attribute are supported
+    by One-Shot Bufferize. Other IR is rejected. (To support `to_tensor`
+    without `restrict`, One-Shot Bufferize would have to analyze memref IR.)
+    Ops that have incorrect usage of `restrict` may bufferize incorrectly.
+
+    Example:
+
+    ```
+    %t = bufferization.to_tensor %m restrict writable : memref<4xf32>
+
+    // %t is writable, so the tensor.insert may bufferize in-place in the
+    // absence of other conflicts.
+    %r = tensor.insert %f into %t[%idx] : tensor<4xf32>
+    ```
+
+    `to_tensor` ops are not bufferized. They are expected to fold away after
+    bufferization. If there are non-bufferizable ops in the IR and
+    `allowUnknownOps` is set, they may be part of the resulting IR and not fold
+    away. However, such IR is no longer bufferizable with One-Shot Bufferize.
+  }];
+
+  let arguments = (ins Arg<AnyRankedOrUnrankedMemRef,
+                           "the reference to load from",
+                           [MemReadAt<0, FullEffect>]>:$memref,
+                       UnitAttr:$restrict, UnitAttr:$writable);
+  let results = (outs AnyTensor:$result);
+
+  let extraClassDeclaration = [{
+    /// The result of a to_tensor is always a tensor.
+    TensorType getType() {
+      Type resultType = getResult().getType();
+      if (::llvm::isa<TensorType>(resultType))
+        return ::llvm::cast<TensorType>(resultType);
+      return {};
+    }
+
+    //===------------------------------------------------------------------===//
+    // BufferizableOpInterface implementation
+    //===------------------------------------------------------------------===//
+
+    LogicalResult bufferize(RewriterBase &rewriter,
+                            const BufferizationOptions &options) const {
+      // to_tensor/to_memref pairs fold away after bufferization.
+      return success();
+    }
+
+    bool isWritable(Value value, const AnalysisState &state);
+
+    FailureOr<BaseMemRefType> getBufferType(
+        Value value, const BufferizationOptions &options,
+        SmallVector<Value> &invocationStack) {
+      return ::llvm::cast<BaseMemRefType>(getMemref().getType());
+    }
+  }];
+
+  let assemblyFormat = [{
+    $memref (`restrict` $restrict^)? (`writable` $writable^)? attr-dict
+      `:` type($memref)
+  }];
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+}
+
+

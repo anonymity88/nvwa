@@ -1,0 +1,31 @@
+polynomial.sub (polynomial::SubOp) ¶
+Subtraction operation between polynomials.
+
+Syntax:
+
+operation ::= `polynomial.sub` operands attr-dict `:` type($result)
+Performs polynomial subtraction on the operands. The operands may be single polynomials or containers of identically-typed polynomials, i.e., polynomials from the same underlying ring with the same coefficient types.
+
+Subtraction is defined to occur in the ring defined by the ring attribute of the two operands, meaning the subtraction is taken modulo the coefficientModulus and the polynomialModulus of the ring.
+
+Example:
+
+// subtract two polynomials modulo x^1024 - 1
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%0 = polynomial.constant int<1 + x**2> : !polynomial.polynomial<#ring>
+%1 = polynomial.constant int<x**5 - x + 1> : !polynomial.polynomial<#ring>
+%2 = polynomial.sub %0, %1 : !polynomial.polynomial<#ring>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	polynomial-like
+rhs	polynomial-like
+Results: ¶
+Result	Description
+result	polynomial-like

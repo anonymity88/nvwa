@@ -1,0 +1,25 @@
+ml_program.global_load_const (ml_program::GlobalLoadConstOp) ¶
+Direct load a constant value from a global
+
+Syntax:
+
+operation ::= `ml_program.global_load_const` $global `:` type($result) attr-dict
+Loads a constant (immutable) value from a global directly by symbol.
+
+This op is only legal for globals that are not mutable and exists because such a load can be considered to have no side effects.
+
+Example:
+
+%0 = ml_program.global_load_const @foobar : tensor<?xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+global	::mlir::SymbolRefAttr	symbol reference attribute
+Results: ¶
+Result	Description
+result	any type

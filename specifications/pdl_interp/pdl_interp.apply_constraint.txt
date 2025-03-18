@@ -1,0 +1,30 @@
+pdl_interp.apply_constraint (pdl_interp::ApplyConstraintOp) ¶
+Apply a constraint to a set of positional values
+
+Syntax:
+
+operation ::= `pdl_interp.apply_constraint` $name `(` $args `:` type($args) `)` (`:` type($results)^)? attr-dict
+              `->` successors
+pdl_interp.apply_constraint operations apply a generic constraint, that has been registered with the interpreter, with a given set of positional values. The constraint function may return any number of results. On success, this operation branches to the true destination, otherwise the false destination is taken. This behavior can be reversed by setting the attribute isNegated to true.
+
+Example:
+
+// Apply `myConstraint` to the entities defined by `input`, `attr`, and
+// `op`.
+pdl_interp.apply_constraint "myConstraint"(%input, %attr, %op : !pdl.value, !pdl.attribute, !pdl.operation) -> ^matchDest, ^failureDest
+Traits: Terminator
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+isNegated	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+args	variadic of pdl type
+Results: ¶
+Result	Description
+results	variadic of pdl type
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

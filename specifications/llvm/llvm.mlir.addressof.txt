@@ -1,0 +1,38 @@
+llvm.mlir.addressof (LLVM::AddressOfOp) ¶
+Creates a pointer pointing to a global or a function
+
+Syntax:
+
+operation ::= `llvm.mlir.addressof` $global_name attr-dict `:` qualified(type($res))
+Creates an SSA value containing a pointer to a global variable or constant defined by llvm.mlir.global. The global value can be defined after its first referenced. If the global value is a constant, storing into it is not allowed.
+
+Examples:
+
+func @foo() {
+  // Get the address of a global variable.
+  %0 = llvm.mlir.addressof @const : !llvm.ptr
+
+  // Use it as a regular pointer.
+  %1 = llvm.load %0 : !llvm.ptr -> i32
+
+  // Get the address of a function.
+  %2 = llvm.mlir.addressof @foo : !llvm.ptr
+
+  // The function address can be used for indirect calls.
+  llvm.call %2() : !llvm.ptr, () -> ()
+}
+
+// Define the global.
+llvm.mlir.global @const(42 : i32) : i32
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+global_name	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+res	LLVM pointer type

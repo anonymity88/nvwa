@@ -1,0 +1,15 @@
+spirv.Return (spirv::ReturnOp) ¶
+Return with no value from a function with void return type.
+
+Syntax:
+
+operation ::= `spirv.Return` attr-dict
+This instruction must be the last instruction in a block.
+
+Example: ¶
+spirv.Return
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}

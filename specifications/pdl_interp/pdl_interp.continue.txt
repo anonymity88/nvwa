@@ -1,0 +1,16 @@
+pdl_interp.continue (pdl_interp::ContinueOp) ¶
+Breaks the current iteration
+
+Syntax:
+
+operation ::= `pdl_interp.continue` attr-dict
+pdl_interp.continue operation breaks the current iteration within the pdl_interp.foreach region and continues with the next iteration from the beginning of the region.
+
+Example:
+
+pdl_interp.continue
+Traits: AlwaysSpeculatableImplTrait, HasParent<ForEachOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}

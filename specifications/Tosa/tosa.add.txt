@@ -1,0 +1,35 @@
+//===----------------------------------------------------------------------===//
+// Operator: add
+//===----------------------------------------------------------------------===//
+def Tosa_AddOp : Tosa_ElementwiseOp<"add", [
+    Commutative,
+    SameOperandsAndResultElementType]> {
+  let summary = "Elementwise addition operator";
+
+  let description = [{
+    Elementwise addition of input1 and input2. Axis of size 1 will be broadcast,
+    as necessary.
+
+    Example:
+
+    ```mlir
+    // Elementwise addition.
+    %out = tosa.add %in1, %in2 : tensor<12x6xf32>, tensor<12x6xf32> -> tensor<12x6xf32>
+
+    // Elementwise addition with broadcasting.
+    %out = tosa.add %in1, %in2 : tensor<12x6xsi32>, tensor<1x1xsi32> -> tensor<12x6xsi32>
+    ```
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+

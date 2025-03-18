@@ -1,0 +1,7 @@
+llvm.intr.coro.align (LLVM::CoroAlignOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.coro.align` attr-dict `:` type($res)
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

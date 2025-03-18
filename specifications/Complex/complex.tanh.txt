@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// TanhOp
+//===----------------------------------------------------------------------===//
+
+def TanhOp : ComplexUnaryOp<"tanh", [SameOperandsAndResultType]> {
+  let summary = "complex hyperbolic tangent";
+  let description = [{
+    The `tanh` operation takes a complex number and returns its hyperbolic
+    tangent.
+
+    Example:
+
+    ```mlir
+    %a = complex.tanh %b : complex<f32>
+    ```
+  }];
+
+  let results = (outs Complex<AnyFloat>:$result);
+}
+

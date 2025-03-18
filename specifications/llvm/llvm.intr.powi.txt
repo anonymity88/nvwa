@@ -1,0 +1,21 @@
+llvm.intr.powi (LLVM::PowIOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.powi` `(` operands `)` attr-dict `:` functional-type(operands, results)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, FastmathFlagsInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmathFlags	::mlir::LLVM::FastmathFlagsAttr	
+LLVM fastmath flags
+Operands: ¶
+Operand	Description
+val	floating point LLVM type or LLVM dialect-compatible vector of floating point LLVM type
+power	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

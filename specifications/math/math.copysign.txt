@@ -1,0 +1,30 @@
+math.copysign (math::CopySignOp) ¶
+A copysign operation
+
+Syntax:
+
+operation ::= `math.copysign` $lhs `,` $rhs (`fastmath` `` $fastmath^)?
+              attr-dict `:` type($result)
+The copysign returns a value with the magnitude of the first operand and the sign of the second operand. It takes two operands and returns one result of the same type. The operands must be of floating point type (i.e., scalar, tensor or vector). It has no standard attributes.
+
+Example:
+
+// Scalar copysign value.
+%a = math.copysign %b, %c : f64
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	floating-point-like
+rhs	floating-point-like
+Results: ¶
+Result	Description
+result	floating-point-like

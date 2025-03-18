@@ -1,0 +1,149 @@
+//===----------------------------------------------------------------------===//
+// MapCopyToThreadsOp
+//===----------------------------------------------------------------------===//
+
+def MapCopyToThreadsOp :
+  Op<Transform_Dialect, "structured.gpu.map_copy_to_threads",
+    [FunctionalStyleTransformOpTrait,
+     MemoryEffectsOpInterface,
+     TransformEachOpTrait,
+     TransformOpInterface]> {
+  let description = [{
+    Targeted mapping of a linalg.copy / tensor.pad operation on tensors to a GPU
+    thread mapping.
+
+    This operation implements a greedy heuristic that determines a good
+    distribution of threads to break down the copy/pad operation into.
+    The heuristic is driven by considerations related to the underlying
+    architecture for which good high-level decisions are needed assuming certain
+    hardware features. Relevant features are exposed via first-class attributes
+    to control the behavior of the transformation at a high level.
+
+    For now, a single heuristic is implemented and can be extended on a per-need
+    basis.
+
+    #### Return modes
+
+    This operation fails definitely if there is an unsupported op (i.e., not
+    linalg.copy / tensor.pad) among the targeted op. Otherwise, the operation
+    always succeeds and returns a handle to the relevant tiled linalg.copy /
+    tensor.pad op and the enclosing scf.forall op.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target,
+                       I64Attr:$total_num_threads,
+                       I64Attr:$desired_bit_alignment);
+  let results = (outs TransformHandleTypeInterface:$forall_op,
+                      TransformHandleTypeInterface:$tiled_op);
+
+  let assemblyFormat = [{
+    $target
+    `total_num_threads` `=` $total_num_threads
+    `desired_bit_alignment` `=` $desired_bit_alignment
+    attr-dict
+    `:` functional-type(operands, results)
+  }];
+
+  let builders = [
+    OpBuilder<(ins "Value":$target)>,
+  ];
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::Operation *target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+
+    ::llvm::SmallVector<::mlir::OpFoldResult> getMixedNumThreads();
+  }];
+}
+
+//===----------------------------------------------------------------------===//
+// Winograd Conv2D
+//===----------------------------------------------------------------------===//
+
+def WinogradConv2DOp : Op<Transform_Dialect,
+    "structured.winograd_conv2d",
+    [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+     TransformOpInterface, TransformEachOpTrait,
+     ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Winograd Conv2D algorithm will convert linalg Conv2D operation into batched
+    matrix multiply. Before the matrix multiply, it will convert filter and
+    input into a format suitable for batched matrix multiply. After the matrix
+    multiply, it will convert output to the final result tensor.
+
+    The algorithm F(m x m, r x r) is
+
+    Y = A^T x [(G x g x G^T) @ (B^T x d x B)] x A
+
+    The size of output Y is m x m. The size of filter g is r x r. The size of
+    input d is (m + r - 1) x (m + r - 1). A^T, A, G^T, G, B^T, and B are
+    transformation matrices.
+
+    #### Return modes:
+
+    This operation produces a silenceable failure if `target` is unsupported.
+    Otherwise, the operation succeeds and returns a handle of the sequence that
+    replaces the original convolution.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target,
+                       I64Attr:$m,
+                       I64Attr:$r);
+  let results = (outs TransformHandleTypeInterface:$transformed);
+
+  let assemblyFormat =
+    "$target attr-dict `:` functional-type($target, results)";
+
+  let builders = [
+    OpBuilder<(ins "Value":$target)>
+  ];
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::linalg::LinalgOp target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+
+def DecomposeWinogradOp : Op<Transform_Dialect,
+    "structured.decompose_winograd_op",
+    [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+     TransformOpInterface, TransformEachOpTrait,
+     ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Decompose winograd operations. It will convert filter, input and output
+    transform operations into a combination of scf, tensor, and linalg
+    equivalent operations. Before applying this transform operations, users
+    need to tile winograd transform operations into supported sizes.
+
+    #### Return modes:
+
+    This operation fails if `target` is unsupported. Otherwise, the operation
+    succeeds and returns a handle of the sequence that replaces the original
+    operations.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target);
+  let results = (outs TransformHandleTypeInterface:$transformed);
+
+  let assemblyFormat =
+    "$target attr-dict `:` functional-type($target, results)";
+
+  let builders = [
+    OpBuilder<(ins "Value":$target)>
+  ];
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::Operation *target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+
+#endif // LINALG_TRANSFORM_OPS

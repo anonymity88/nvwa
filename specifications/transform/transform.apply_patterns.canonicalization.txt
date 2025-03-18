@@ -1,0 +1,9 @@
+transform.apply_patterns.canonicalization (transform::ApplyCanonicalizationPatternsOp) ¶
+Populates canonicalization patterns
+
+Syntax:
+
+operation ::= `transform.apply_patterns.canonicalization` attr-dict
+This op populates all canonicalization patterns of all loaded dialects in an apply_patterns transform.
+
+Interfaces: PatternDescriptorOpInterface

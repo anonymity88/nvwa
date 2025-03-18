@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// ExtFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_ExtFOp : Arith_FToFCastOp<"extf", [DeclareOpInterfaceMethods<ArithFastMathInterface>]> {
+  let summary = "cast from floating-point to wider floating-point";
+  let description = [{
+    Cast a floating-point value to a larger floating-point-typed value.
+    The destination type must to be strictly wider than the source type.
+    When operating on vectors, casts elementwise.
+  }];
+  let hasVerifier = 1;
+  let hasFolder = 1;
+
+  let arguments = (ins FloatLike:$in,
+                       OptionalAttr<Arith_FastMathAttr>:$fastmath);
+  let results = (outs FloatLike:$out);
+
+  let assemblyFormat = [{ $in (`fastmath` `` $fastmath^)?
+                          attr-dict `:` type($in) `to` type($out) }];
+}
+

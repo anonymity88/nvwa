@@ -1,0 +1,20 @@
+shape.value_of (shape::ValueOfOp) ¶
+Returns value of a !shape.value_shape operand
+
+Syntax:
+
+operation ::= `shape.value_of` $arg attr-dict `:` type($result)
+The operation takes !shape.value_shape, a.k.a. (value, shape) tuple as an argument, and returns its value. The behavior is undefined for unknown and invalid arguments.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	
+Results: ¶
+Result	Description
+result	shaped of any type values

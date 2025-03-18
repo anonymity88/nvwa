@@ -1,0 +1,20 @@
+pdl_interp.foreach (pdl_interp::ForEachOp) ¶
+Iterates over a range of values or ranges
+
+pdl_interp.foreach iteratively selects an element from a range of values and executes the region until pdl.continue is reached.
+
+In the bytecode interpreter, this operation is implemented by looping over the values and, for each selection, running the bytecode until we reach pdl.continue. This may result in multiple matches being reported. Note that the input range is mutated (popped from).
+
+Example:
+
+pdl_interp.foreach %op : !pdl.operation in %ops {
+  pdl_interp.continue
+} -> ^next
+Traits: Terminator
+
+Operands: ¶
+Operand	Description
+values	range of pdl type values
+Successors: ¶
+Successor	Description
+successor	any successor

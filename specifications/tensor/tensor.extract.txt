@@ -1,0 +1,25 @@
+tensor.extract (tensor::ExtractOp) ¶
+Element extraction operation
+
+Syntax:
+
+operation ::= `tensor.extract` $tensor `[` $indices `]` attr-dict `:` type($tensor)
+The tensor.extract op reads a ranked tensor and returns one element as specified by the given indices. The result of the op is a value with the same type as the elements of the tensor. The arity of indices must match the rank of the accessed value. All indices should all be of index type.
+
+Example:
+
+%4 = tensor.extract %t[%1, %2] : tensor<4x4xi32>
+%5 = tensor.extract %rt[%1, %2] : tensor<?x?xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+tensor	ranked tensor of any type values
+indices	variadic of index
+Results: ¶
+Result	Description
+result	any type

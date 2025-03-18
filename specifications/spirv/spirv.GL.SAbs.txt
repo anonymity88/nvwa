@@ -1,0 +1,25 @@
+spirv.GL.SAbs (spirv::GLSAbsOp) ¶
+Absolute value of operand
+
+Syntax:
+
+operation ::= `spirv.GL.SAbs` $operand `:` type($operand) attr-dict
+Result is x if x ≥ 0; otherwise result is -x, where x is interpreted as a signed integer.
+
+Result Type and the type of x must both be integer scalar or integer vector types. Result Type and operand types must have the same number of components with the same component width. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.SAbs %0 : i32
+%3 = spirv.GL.SAbs %1 : vector<3xi16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

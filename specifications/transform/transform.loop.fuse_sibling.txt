@@ -1,0 +1,26 @@
+transform.loop.fuse_sibling (transform::LoopFuseSiblingOp) ¶
+Fuse a loop into another loop, assuming the fusion is legal.
+
+Syntax:
+
+operation ::= `transform.loop.fuse_sibling` $target `into` $source attr-dict  `:` functional-type(operands, results)
+Fuses the target loop into the source loop assuming they are independent of each other. In the fused loop, the arguments, body and results of target are placed before those of source.
+
+For fusion of two scf.for loops, the bounds and step size must match. For fusion of two scf.forall loops, the bounds and the mapping must match. Otherwise a silencable failure is produced.
+
+The target and source handles must refer to exactly one operation, otherwise a definite failure is produced. It is the responsibility of the user to ensure that the target and source loops are independent of each other – this op will only perform rudimentary legality checks.
+
+Return modes ¶
+This operation consumes the target and source handles and produces the fused_loop handle, which points to the fused loop.
+
+Traits: FunctionalStyleTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+source	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+fused_loop	TransformHandleTypeInterface instance

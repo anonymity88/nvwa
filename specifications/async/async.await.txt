@@ -1,0 +1,23 @@
+async.await (async::AwaitOp) ¶
+Waits for the argument to become ready
+
+Syntax:
+
+operation ::= `async.await` $operand `:` custom<AwaitResultType>(
+              type($operand), type($result)
+              ) attr-dict
+The async.await operation waits until the argument becomes ready, and for the async.value arguments it unwraps the underlying value
+
+Example:
+
+%0 = ... : !async.token
+async.await %0 : !async.token
+
+%1 = ... : !async.value<f32>
+%2 = async.await %1 : !async.value<f32>
+Operands: ¶
+Operand	Description
+operand	async value type or async token type
+Results: ¶
+Result	Description
+result	any type

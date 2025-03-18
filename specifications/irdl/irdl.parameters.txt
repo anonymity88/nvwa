@@ -1,0 +1,25 @@
+irdl.parameters (irdl::ParametersOp) ¶
+Define the constraints on parameters of a type/attribute definition
+
+Syntax:
+
+operation ::= `irdl.parameters` `(` $args `)` attr-dict
+irdl.parameters defines the constraints on parameters of a type or attribute definition.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex {
+    %0 = irdl.is i32
+    %1 = irdl.is i64
+    %2 = irdl.any_of(%0, %1)
+    irdl.parameters(%2)
+  }
+}
+The above program defines a type complex inside the dialect cmath. The type has a single parameter that should be either i32 or i64.
+
+Traits: HasParent<AttributeOp, TypeOp>
+
+Operands: ¶
+Operand	Description
+args	variadic of IRDL handle to an mlir::Attribute

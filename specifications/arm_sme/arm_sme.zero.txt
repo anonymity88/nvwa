@@ -1,0 +1,25 @@
+arm_sme.zero (arm_sme::ZeroOp) ¶
+Creates a zero-initialized value of SME virtual tile type
+
+Syntax:
+
+operation ::= `arm_sme.zero` attr-dict `:` type($res)
+Creates a new SME “virtual tile” value within a function. The contents of the tile returned from this operation are zero-initialized.
+
+Example 1: Zero an 8-bit element ZA tile.
+
+%0 = arm_sme.zero : vector<[16]x[16]xi8>
+Example 2: Zero a 64-bit element ZA tile.
+
+%0 = arm_sme.zero : vector<[2]x[2]xi64>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Results: ¶
+Result	Description
+res	a vector type that fits into a SME tile
+Operations for LLVM IR Intrinsics ¶
+source

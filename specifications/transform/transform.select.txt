@@ -1,0 +1,24 @@
+transform.select (transform::SelectOp) ¶
+Select payload ops by name
+
+Syntax:
+
+operation ::= `transform.select` $op_name `in` $target attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op corresponds to all operations among target that have the specified properties. Currently the following properties are supported:
+
+op_name: The op must have the specified name.
+The result payload ops are in the same relative order as the targeted ops. This transform op reads the target handle and produces the result handle. It reads the payload, but does not modify it.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+op_name	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformHandleTypeInterface instance

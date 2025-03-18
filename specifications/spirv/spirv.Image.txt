@@ -1,0 +1,24 @@
+spirv.Image (spirv::ImageOp) ¶
+Extract the image from a sampled image.
+
+Syntax:
+
+operation ::= `spirv.Image` attr-dict $sampledimage `:` type($sampledimage)
+Result Type must be OpTypeImage.
+
+Sampled Image must have type OpTypeSampledImage whose Image Type is the same as Result Type.
+
+Example: ¶
+%0 = spirv.Image %1 : !spirv.sampled_image<!spirv.image<f32, Cube, NoDepth, NonArrayed, SingleSampled, NoSampler, Unknown>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+sampledimage	any SPIR-V sampled image type
+Results: ¶
+Result	Description
+result	any SPIR-V image type

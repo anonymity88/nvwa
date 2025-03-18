@@ -1,0 +1,25 @@
+irdl.any (irdl::AnyOp) ¶
+Accept any type or attribute
+
+Syntax:
+
+operation ::= `irdl.any` attr-dict
+irdl.any defines a constraint that accepts any type or attribute.
+
+Example:
+
+irdl.dialect @cmath {
+  irdl.type @complex_flexible {
+    %0 = irdl.any
+    irdl.parameters(%0)
+  }
+}
+The above program defines a type complex_flexible inside the dialect cmath that has a single parameter that can be any attribute.
+
+Traits: HasParent<TypeOp, AttributeOp, OperationOp>
+
+Interfaces: InferTypeOpInterface, VerifyConstraintInterface
+
+Results: ¶
+Result	Description
+output	IRDL handle to an mlir::Attribute

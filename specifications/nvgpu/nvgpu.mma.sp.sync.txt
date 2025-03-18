@@ -1,0 +1,35 @@
+nvgpu.mma.sp.sync (nvgpu::MmaSparseSyncOp) ¶
+Syntax:
+
+operation ::= `nvgpu.mma.sp.sync` `(` $matrixA`,` $matrixB`,` $matrixC `)` `metadata` `(` $sparseMetadata `)` attr-dict
+              `:` `(` type($matrixA) `,` type($matrixB) `,` type($matrixC) `)` `->` type($res)
+The nvgu.mma.sp.sync operation performs a warp-distributed MMA operation where operand A is “structured sparse”. In this case, the matrixA operand represents the (warp-distributed) non-zero values of operand A, and the sparse_metadata operand provides the indices.
+
+The full description of the sparsity storage format and distribution scheme is described in the PTX docs. This operation is meant to follow the semantic described in the PTX documentation here: https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-instructions-for-sparse-mma
+
+The way the indices are distributed among the threads in a warp is controlled by the optional sparsity_selector operand, which is 0 by default. For more information, please consult the PTX documentation linked above.
+
+Example (targetingthe f16 16x8x32 mma.sp PTX instruction):
+
+nvgpu.mma.sp.sync (%a, %b, %c) metadata (%meta) {mmaShape = [16, 8, 32]} :
+  (vector<4x2xf16>, vector<2x2xf16>, vector<2x2xf16>) -> vector<2x2xf16>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mmaShape	::mlir::ArrayAttr	64-bit integer array attribute
+sparsitySelector	::mlir::IntegerAttr	32-bit signless integer attribute
+tf32Enabled	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+matrixA	vector of any type values
+matrixB	vector of any type values
+matrixC	vector of any type values
+sparseMetadata	fixed-length vector of 16-bit signless integer values of length 2
+Results: ¶
+Result	Description
+res	vector of any type values

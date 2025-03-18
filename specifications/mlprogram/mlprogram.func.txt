@@ -1,0 +1,70 @@
+//===----------------------------------------------------------------------===//
+// FuncOp
+//===----------------------------------------------------------------------===//
+
+def MLProgram_FuncOp : MLProgram_Op<"func", [
+    FunctionOpInterface, IsolatedFromAbove,
+    RegionKindInterface, Symbol
+  ]> {
+  let summary = "Function containing a single `SSACFG` region";
+  let description = [{
+    This simple function container represents callables in an ML program where
+    the body is an `SSACFG` region. It must be terminated by a `return` op which
+    yields values with the same arity and types as the `FunctionType` results
+    of the containing `func`.
+
+    This op is a `Symbol` but does not introduce a new `SymbolTable`. As such,
+    it cannot represent nested symbols.
+
+    Example:
+
+    ```mlir
+    ml_program.func private @some_extern(i32) -> i32
+    ml_program.func @compute(%arg0 : i32) -> i32 {
+      ml_program.return %arg0 : i32
+    }
+    ```
+  }];
+
+  let arguments = (ins SymbolNameAttr:$sym_name,
+                       TypeAttrOf<FunctionType>:$function_type,
+                       OptionalAttr<DictArrayAttr>:$arg_attrs,
+                       OptionalAttr<DictArrayAttr>:$res_attrs,
+                       OptionalAttr<StrAttr>:$sym_visibility);
+  let regions = (region AnyRegion:$body);
+
+  let extraClassDeclaration = [{
+    //===------------------------------------------------------------------===//
+    // FunctionOpInterface Methods
+    //===------------------------------------------------------------------===//
+
+    /// Returns the region on the current operation that is callable. This may
+    /// return null in the case of an external callable object, e.g. an external
+    /// function.
+    ::mlir::Region *getCallableRegion() {
+      return isExternal() ? nullptr : &getBody();
+    }
+
+    /// Returns the argument types of this function.
+    ArrayRef<Type> getArgumentTypes() { return getFunctionType().getInputs(); }
+
+    /// Returns the result types of this function.
+    ArrayRef<Type> getResultTypes() { return getFunctionType().getResults(); }
+
+    //===------------------------------------------------------------------===//
+    // RegionKindInterface Methods
+    //===------------------------------------------------------------------===//
+    static ::mlir::RegionKind getRegionKind(unsigned index) {
+      return ::mlir::RegionKind::SSACFG;
+    }
+
+    //===------------------------------------------------------------------===//
+    // SymbolOpInterface Methods
+    //===------------------------------------------------------------------===//
+
+    bool isDeclaration() { return isExternal(); }
+  }];
+
+  let hasCustomAssemblyFormat = 1;
+}
+

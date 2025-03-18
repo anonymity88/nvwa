@@ -1,0 +1,27 @@
+pdl_interp.switch_operand_count (pdl_interp::SwitchOperandCountOp) ¶
+Switch on the operand count of an Operation
+
+Syntax:
+
+operation ::= `pdl_interp.switch_operand_count` `of` $inputOp `to` $caseValues `(` $cases `)` attr-dict `->` $defaultDest
+pdl_interp.switch_operand_count operations compare the operand count of a given operation with a set of potential counts. If the value matches one of the provided case values the destination for that case value is taken, otherwise the default destination is taken.
+
+Example:
+
+pdl_interp.switch_operand_count of %op to [10, 2] -> ^10Dest, ^2Dest, ^defaultDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+caseValues	::mlir::DenseIntElementsAttr	32-bit signless integer elements attribute
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *
+Successors: ¶
+Successor	Description
+defaultDest	any successor
+cases	any successor

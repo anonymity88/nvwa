@@ -1,0 +1,29 @@
+spirv.BitReverse (spirv::BitReverseOp) ¶
+Reverse the bits in an object.
+
+Syntax:
+
+operation ::= `spirv.BitReverse` $operand `:` type($operand) attr-dict
+Results are computed per component.
+
+Result Type must be a scalar or vector of integer type.
+
+The type of Base must be the same as Result Type.
+
+The bit-number n of the result will be taken from bit-number Width - 1 - n of Base, where Width is the OpTypeInt operand of the Result Type.
+
+Example: ¶
+%2 = spirv.BitReverse %0 : i32
+%3 = spirv.BitReverse %1 : vector<4xi32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

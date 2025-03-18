@@ -1,0 +1,32 @@
+spirv.CompositeConstruct (spirv::CompositeConstructOp) ¶
+Construct a new composite object from a set of constituent objects.
+
+Syntax:
+
+operation ::= `spirv.CompositeConstruct` $constituents attr-dict `:` `(` type(operands) `)` `->` type($result)
+Result Type must be a composite type, whose top-level members/elements/components/columns have the same type as the types of the operands, with one exception. The exception is that for constructing a vector, the operands may also be vectors with the same component type as the Result Type component type. When constructing a vector, the total number of components in all the operands must equal the number of components in Result Type.
+
+Constituents will become members of a structure, or elements of an array, or components of a vector, or columns of a matrix. There must be exactly one Constituent for each top-level member/element/component/column of the result, with one exception. The exception is that for constructing a vector, a contiguous subset of the scalars consumed can be represented by a vector operand instead. The Constituents must appear in the order needed by the definition of the type of the result. When constructing a vector, there must be at least two Constituent operands.
+
+Example: ¶
+%a = spirv.CompositeConstruct %1, %2, %3 : vector<3xf32>
+%b = spirv.CompositeConstruct %a, %1 : (vector<3xf32>, f32) -> vector<4xf32>
+
+%c = spirv.CompositeConstruct %1 :
+  (f32) -> !spirv.coopmatrix<4x4xf32, Subgroup, MatrixA>
+
+%d = spirv.CompositeConstruct %a, %4, %5 :
+  (vector<3xf32>, !spirv.array<4xf32>, !spirv.struct<(f32)>) ->
+    !spirv.struct<(vector<3xf32>, !spirv.array<4xf32>, !spirv.struct<(f32)>)>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+constituents	variadic of void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type
+Results: ¶
+Result	Description
+result	vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type

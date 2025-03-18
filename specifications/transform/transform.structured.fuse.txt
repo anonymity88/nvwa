@@ -1,0 +1,26 @@
+transform.structured.fuse (transform::FuseOp) ¶
+Syntax:
+
+operation ::= `transform.structured.fuse` $target ($tile_sizes^)? (`interchange` $tile_interchange^)?
+              (`apply_cleanup` `=` $apply_cleanup^)? attr-dict
+              `:` functional-type(operands, results)
+Tiles the operations pointed to by the target handle and fuses their producers greedily using the options provided as attributes.
+
+If apply_cleanup is true then slice canonicalization is applied between fusion steps.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+tile_sizes	::mlir::ArrayAttr	64-bit integer array attribute
+tile_interchange	::mlir::ArrayAttr	64-bit integer array attribute
+apply_cleanup	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance
+loops	variadic of TransformHandleTypeInterface instance

@@ -1,0 +1,29 @@
+math.roundeven (math::RoundEvenOp) ¶
+Round of the specified value with halfway cases to even
+
+Syntax:
+
+operation ::= `math.roundeven` $operand (`fastmath` `` $fastmath^)?
+              attr-dict `:` type($result)
+The roundeven operation returns the operand rounded to the nearest integer value in floating-point format. It takes one operand of floating point type (i.e., scalar, tensor or vector) and produces one result of the same type. The operation rounds the argument to the nearest integer value in floating-point format, rounding halfway cases to even, regardless of the current rounding direction.
+
+Example:
+
+// Scalar round operation.
+%a = math.roundeven %b : f64
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+operand	floating-point-like
+Results: ¶
+Result	Description
+result	floating-point-like

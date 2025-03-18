@@ -1,0 +1,37 @@
+linalg.reduce (linalg::ReduceOp)
+Reduce operator
+
+Executes combiner on the dimensions of inputs and returns the reduced result. The dimensions attribute needs to list the reduction dimensions in increasing order.
+
+Example:
+
+  %reduce = linalg.reduce
+      ins(%input:tensor<16x32x64xf32>)
+      outs(%init:tensor<16x64xf32>)
+      dimensions = [1]
+      (%in: f32, %out: f32) {
+        %0 = arith.addf %out, %in: f32
+        linalg.yield %0: f32
+      }
+Shortened print form is available. Applies to simple (not variadic) reduces with one non-yield operation inside the body. Applies only if the operation takes %out as the first argument.
+
+The example above will be printed as:
+
+      %reduce = linalg.reduce { arith.addf }
+      ins(%input:tensor<16x32x64xf32>)
+      outs(%init:tensor<16x64xf32>)
+      dimensions = [1]
+Traits: SameVariadicOperandSize, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, OpAsmOpInterface, ReifyRankedShapedTypeOpInterface
+
+Attributes:
+Attribute	MLIR Type	Description
+dimensions	::mlir::DenseI64ArrayAttr	i64 dense array attribute should be in increasing order
+Operands:
+Operand	Description
+inputs	variadic of memref of any type values or ranked tensor of any type values
+inits	variadic of memref of any type values or ranked tensor of any type values
+Results:
+Result	Description
+«unnamed»	variadic of tensor of any type values

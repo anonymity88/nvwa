@@ -1,0 +1,197 @@
+//===----------------------------------------------------------------------===//
+// ExtractSliceOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_ExtractSliceOp : Tensor_OpWithOffsetSizesAndStrides<"extract_slice", [
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    DeclareOpInterfaceMethods<ReifyRankedShapedTypeOpInterface>,
+    AttrSizedOperandSegments,
+    Pure,
+    OffsetSizeAndStrideOpInterface
+  ]> {
+  let summary = "extract slice operation";
+  let description = [{
+    The "extract_slice" operation extract a tensor from another tensor as
+    specified by the operation's offsets, sizes and strides arguments.
+
+    The extract_slice operation supports the following arguments:
+
+    * source: the "base" tensor from which to extract a slice.
+    * offsets: tensor-rank number of offsets into the "base" tensor from which
+               to extract the slice.
+    * sizes: tensor-rank number of sizes which specify the sizes of the result
+             tensor type.
+    * strides: tensor-rank number of strides specifying subsampling in each
+               dimension.
+
+    The representation based on offsets, sizes and strides support a
+    partially-static specification via attributes specified through the
+    `static_offsets`, `static_sizes` and `static_strides` arguments. A special
+    sentinel value ShapedType::kDynamic encodes that the corresponding entry has
+    a dynamic value.
+
+    After buffer allocation, the "extract_slice" op is expected to lower into a
+    memref.subview op.
+
+    An extract_slice operation may additionally reduce the rank of the resulting
+    tensor by removing dimensions that are statically known to be of size 1.
+    This rank-reduction behavior is not required by the op semantics: this
+    flexibility allows to progressively drop unit dimensions while lowering
+    between different flavors of ops on that operate on tensors.
+
+    #### Verification vs Inference in the rank-reduced case
+
+    Note that there may be multiple ways to infer a resulting rank-reduced type.
+      e.g. 1x6x1 could potentially rank-reduce to either 1x6 or 6x1 2-D shapes.
+
+    To disambiguate, the inference helpers `inferCanonicalRankReducedResultType`
+    only drop the first unit dimensions, in order:
+      e.g. 1x6x1 rank-reduced to 2-D will infer the 6x1 2-D shape, but not 1x6.
+
+    Verification however has access to result type and does not need to infer.
+    The verifier calls `isRankReducedType(getSource(), getResult())` to
+    determine whether the result type is rank-reduced from the source type.
+    This computes a so-called rank-reduction mask, consisting of dropped unit
+    dims, to map the rank-reduced type to the source type by dropping ones:
+      e.g. 1x6 is a rank-reduced version of 1x6x1 by mask {2}
+           6x1 is a rank-reduced version of 1x6x1 by mask {0}
+           1x2x1x4 is a rank-reduced version of 1x1x2x1x1x4x1 by mask {1, 4, 6}
+             (remaining common 1 dimensions are matched eagerly)
+
+    Example:
+
+    ```mlir
+    // Rank-reducing extract_slice.
+    %1 = tensor.extract_slice %0[0, 0, 0][1, 16, 4][1, 1, 1] :
+      tensor<8x16x4xf32> to tensor<16x4xf32>
+    %3 = tensor.extract_slice %2[%o0, 4, %o2][1, %sz1, 1][1, %st1, 1] :
+      tensor<8x16x4xf32> to tensor<1x?xf32>
+    ```
+  }];
+
+  let arguments = (ins
+    AnyRankedTensor:$source,
+    Variadic<Index>:$offsets,
+    Variadic<Index>:$sizes,
+    Variadic<Index>:$strides,
+    DenseI64ArrayAttr:$static_offsets,
+    DenseI64ArrayAttr:$static_sizes,
+    DenseI64ArrayAttr:$static_strides
+  );
+  let results = (outs AnyRankedTensor:$result);
+
+  let assemblyFormat = [{
+    $source ``
+    custom<DynamicIndexList>($offsets, $static_offsets)
+    custom<DynamicIndexList>($sizes, $static_sizes)
+    custom<DynamicIndexList>($strides, $static_strides)
+    attr-dict `:` type($source) `to` type($result)
+  }];
+
+  let builders = [
+    // Build an ExtractSliceOp with mixed static and dynamic entries and
+    // inferred result type.
+    OpBuilder<(ins "Value":$source, "ArrayRef<OpFoldResult>":$offsets,
+      "ArrayRef<OpFoldResult>":$sizes, "ArrayRef<OpFoldResult>":$strides,
+      CArg<"ArrayRef<NamedAttribute>", "{}">:$attrs)>,
+    // Build an ExtractSliceOp with mixed static and dynamic entries and custom
+    // result type. If the type passed is nullptr, it is inferred.
+    OpBuilder<(ins "RankedTensorType":$resultType, "Value":$source,
+      "ArrayRef<OpFoldResult>":$offsets, "ArrayRef<OpFoldResult>":$sizes,
+      "ArrayRef<OpFoldResult>":$strides,
+      CArg<"ArrayRef<NamedAttribute>", "{}">:$attrs)>,
+    // Build an ExtractSliceOp with dynamic entries and custom result type. If
+    // the type passed is nullptr, it is inferred.
+    OpBuilder<(ins "Value":$source, "ValueRange":$offsets,
+      "ValueRange":$sizes, "ValueRange":$strides,
+      CArg<"ArrayRef<NamedAttribute>", "{}">:$attrs)>,
+    // Build an ExtractSliceOp with dynamic entries and inferred result type.
+    OpBuilder<(ins "RankedTensorType":$resultType, "Value":$source,
+      "ValueRange":$offsets, "ValueRange":$sizes, "ValueRange":$strides,
+      CArg<"ArrayRef<NamedAttribute>", "{}">:$attrs)>,
+    // Build an ExtractSliceOp with mixed static and dynamic entries packed in
+    // a Range vector.
+    OpBuilder<(ins "Value":$source, "ArrayRef<Range>":$ranges,
+      CArg<"ArrayRef<NamedAttribute>", "{}">:$attrs)>,
+  ];
+
+  let extraClassDeclaration = extraBaseClassDeclaration # [{
+    /// The result of an extract_slice is always a tensor.
+    // TODO: deprecate
+    RankedTensorType getType() {
+      return getResultType();
+    }
+
+    /// Compute the rank-reduction mask that can be applied to map the source
+    /// tensor type to the result tensor type by dropping unit dims.
+    std::optional<llvm::SmallDenseSet<unsigned>>
+    computeRankReductionMask() {
+      return ::mlir::computeRankReductionMask(getSourceType().getShape(),
+                                              getType().getShape());
+    };
+
+    /// An extract_slice result type can be inferred, when it is not
+    /// rank-reduced, from the source type and the static representation of
+    /// offsets, sizes and strides. Special sentinels encode the dynamic case.
+    static RankedTensorType inferResultType(
+      RankedTensorType sourceTensorType,
+      ArrayRef<int64_t> staticOffsets,
+      ArrayRef<int64_t> staticSizes,
+      ArrayRef<int64_t> staticStrides);
+    static RankedTensorType inferResultType(
+      RankedTensorType sourceTensorType,
+      ArrayRef<OpFoldResult> staticOffsets,
+      ArrayRef<OpFoldResult> staticSizes,
+      ArrayRef<OpFoldResult> staticStrides);
+
+    /// If the rank is reduced (i.e. the desiredResultRank is smaller than the
+    /// number of sizes), drop as many size 1 as needed to produce an inferred type
+    /// with the desired rank.
+    ///
+    /// Note that there may be multiple ways to compute this rank-reduced type:
+    ///   e.g. 1x6x1 can rank-reduce to either 1x6 or 6x1 2-D tensors.
+    ///
+    /// To disambiguate, this function always drops the first 1 sizes occurrences.
+    static RankedTensorType inferCanonicalRankReducedResultType(
+      unsigned resultRank,
+      RankedTensorType sourceRankedTensorType,
+      ArrayRef<int64_t> staticOffsets,
+      ArrayRef<int64_t> staticSizes,
+      ArrayRef<int64_t> staticStrides);
+    static RankedTensorType inferCanonicalRankReducedResultType(
+      unsigned resultRank,
+      RankedTensorType sourceRankedTensorType,
+      ArrayRef<OpFoldResult> staticOffsets,
+      ArrayRef<OpFoldResult> staticSizes,
+      ArrayRef<OpFoldResult> staticStrides);
+
+    /// Return the expected rank of each of the`static_offsets`, `static_sizes`
+    /// and `static_strides` attributes.
+    std::array<unsigned, 3> getArrayAttrMaxRanks() {
+      unsigned rank = getSourceType().getRank();
+      return {rank, rank, rank};
+    }
+
+    /// Return the number of leading operands before the `offsets`, `sizes` and
+    /// and `strides` operands.
+    static unsigned getOffsetSizeAndStrideStartOperandIndex() { return 1; }
+
+    /// Return the dimensions of the source that are dropped in the
+    /// result when the result is rank-reduced.
+    llvm::SmallBitVector getDroppedDims();
+
+    /// Given a `value`, asserted to be of RankedTensorType, build an
+    /// ExtractSliceOp that results in a rank-reducing extract to the desired
+    /// tensor shape and return the new value created.
+    /// If the shape of `value` is already the `desiredShape`, just return
+    /// `value`.
+    /// If the shape of `value` cannot be rank-reduced to `desiredShape`, fail.
+    static FailureOr<Value> rankReduceIfNeeded(
+      OpBuilder &b, Location loc, Value value, ArrayRef<int64_t> desiredShape);
+  }];
+
+  let hasCanonicalizer = 1;
+  let hasFolder = 1;
+  let hasVerifier = 1;
+}
+

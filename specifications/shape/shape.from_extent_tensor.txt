@@ -1,0 +1,20 @@
+shape.from_extent_tensor (shape::FromExtentTensorOp) ¶
+Creates a shape from a tensor of extents
+
+Syntax:
+
+operation ::= `shape.from_extent_tensor` $input attr-dict `:` type($input)
+Creates a shape from a 1D integral tensor of extents. The rank of the resulting shape equals the number of elements in the tensor, and the extents match the values of the elements.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	1D tensor of index values
+Results: ¶
+Result	Description
+result

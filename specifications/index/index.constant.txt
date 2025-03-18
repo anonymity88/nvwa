@@ -1,0 +1,23 @@
+index.constant (index::ConstantOp) ¶
+Index constant
+
+Syntax:
+
+operation ::= `index.constant` attr-dict $value
+The index.constant operation produces an index-typed SSA value equal to some index-typed integer constant.
+
+Example:
+
+%0 = index.constant 42
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+result	index

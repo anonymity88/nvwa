@@ -1,0 +1,30 @@
+gpu.binary (gpu::BinaryOp) ¶
+An Op for storing serialized GPU binary objects.
+
+Syntax:
+
+operation ::= `gpu.binary` $sym_name custom<OffloadingHandler>($offloadingHandler) attr-dict $objects
+GPU binaries provide a semantic mechanism for storing GPU objects, e.g. the result of compiling a GPU module to an object file.
+
+This operation has 3 arguments:
+
+The name of the binary.
+An optional attribute implementing the offloading LLVM translation interface.
+An array of GPU object attributes.
+During translation, the offloading attribute will be called for translating GPU binary and launch_func operations. The default offloading handler is: #gpu.select_object, this handler selects the first object from the array and embeds it as a string.
+
+Examples:
+
+  // Selects the first object.
+  gpu.binary @myobject [#gpu.object<...>, #gpu.object<...>]
+  // Uses the `#foo.my_handler` for handling the binary during translation.
+  gpu.binary @myobject <#foo.my_handler> [#gpu.object<...>, #gpu.object<...>]
+  // Selects the object with the `#rocdl.target` target attribute.
+  gpu.binary @myobject <#gpu.select_object<#rocdl.target>> [#gpu.object<...>, #gpu.object<#rocdl.target, ...>]
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+offloadingHandler	::mlir::Attribute	any attribute with the `OffloadingTranslationAttrTrait` trait.
+objects	::mlir::ArrayAttr	an array of GPU object attributes with at least 1 elements

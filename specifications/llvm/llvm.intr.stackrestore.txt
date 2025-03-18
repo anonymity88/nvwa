@@ -1,0 +1,7 @@
+llvm.intr.stackrestore (LLVM::StackRestoreOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.stackrestore` $ptr attr-dict `:` qualified(type($ptr))
+Operands: ¶
+Operand	Description
+ptr	LLVM pointer type

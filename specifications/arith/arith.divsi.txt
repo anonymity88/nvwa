@@ -1,0 +1,37 @@
+//===----------------------------------------------------------------------===//
+// DivSIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_DivSIOp : Arith_IntBinaryOp<"divsi", [ConditionallySpeculatable]> {
+  let summary = "signed integer division operation";
+  let description = [{
+    Signed integer division. Rounds towards zero. Treats the leading bit as
+    sign, i.e. `6 / -2 = -3`.
+
+    Divison by zero, or signed division overflow (minimum value divided by -1) 
+    is undefined behavior. When applied to `vector` and `tensor` values, the 
+    behavior is undefined if _any_ of its elements are divided by zero or has a 
+    signed division overflow.
+
+    Example:
+
+    ```mlir
+    // Scalar signed integer division.
+    %a = arith.divsi %b, %c : i64
+
+    // SIMD vector element-wise division.
+    %f = arith.divsi %g, %h : vector<4xi32>
+
+    // Tensor element-wise integer division.
+    %x = arith.divsi %y, %z : tensor<4x?xi8>
+    ```
+  }];
+
+  let extraClassDeclaration = [{
+    /// Interface method for ConditionallySpeculatable.
+    Speculation::Speculatability getSpeculatability();
+  }];
+
+  let hasFolder = 1;
+}
+

@@ -1,0 +1,24 @@
+arm_neon.intr.sdot (arm_neon::SdotOp) ¶
+Sdot op
+
+Syntax:
+
+operation ::= `arm_neon.intr.sdot` $a `,` $b `,` $c attr-dict `:` type($b) `,` type($c) `to` type($res)
+Signed integer addition of dot product (vector). This instruction performs the following operation on signed integer vectors: res = dot(b, c) + a, where vector operands are partitioned into groups of four elements.
+
+Source: https://developer.arm.com/architectures/instruction-sets/simd-isas/neon/intrinsics
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit signless integer values of length 4/2
+b	vector of 8-bit signless integer values of length 16/8
+c	vector of 8-bit signless integer values of length 16/8
+Results: ¶
+Result	Description
+res	vector of 32-bit signless integer values of length 4/2

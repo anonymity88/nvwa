@@ -1,0 +1,23 @@
+llvm.shufflevector (LLVM::ShuffleVectorOp) ¶
+Construct a permutation of two vectors.
+
+Syntax:
+
+operation ::= `llvm.shufflevector` $v1 `,` $v2 $mask attr-dict `:` type($v1)
+              custom<ShuffleType>(ref(type($v1)), type($res), ref($mask))
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mask	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+Operands: ¶
+Operand	Description
+v1	LLVM dialect-compatible vector type
+v2	LLVM dialect-compatible vector type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

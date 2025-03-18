@@ -1,0 +1,28 @@
+ml_program.global_load_graph (ml_program::GlobalLoadGraphOp) ¶
+Direct load of a mutable value from a global in Graph region
+
+Syntax:
+
+operation ::= `ml_program.global_load_graph` $global `` custom<TokenOrdering>($consumeTokens, type($produceToken)) `:` type($result) attr-dict
+Performs a non-atomic, non-volatile, non-synchronized load from a global that may be mutable.
+
+It is fully expected that these constraints are not suitable for all situations, and alternative ops should be defined and used for more advanced cases.
+
+This op is side effecting and may not be valid to use in graph regions without additional consideration to evaluation order constraints.
+
+Example:
+
+%0, %cstr = ml_program.global_load_graph @foobar
+  ordering (%token -> !ml_program.token) : tensor<?xi32>
+Interfaces: SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+global	::mlir::SymbolRefAttr	symbol reference attribute
+Operands: ¶
+Operand	Description
+consumeTokens	variadic of Token for establishing execution ordering in a graph
+Results: ¶
+Result	Description
+result	any type
+produceToken	Token for establishing execution ordering in a graph

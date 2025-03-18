@@ -1,0 +1,12 @@
+async.runtime.store (async::RuntimeStoreOp) ¶
+Stores the value into the runtime async.value
+
+Syntax:
+
+operation ::= `async.runtime.store` $value `,` $storage attr-dict `:` type($storage)
+The async.runtime.store operation stores the value into the runtime async.value storage.
+
+Operands: ¶
+Operand	Description
+value	any type
+storage	async value type

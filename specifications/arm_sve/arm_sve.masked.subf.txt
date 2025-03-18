@@ -1,0 +1,16 @@
+arm_sve.masked.subf (arm_sve::ScalableMaskedSubFOp) ¶
+Masked subtraction for scalable vectors of floats
+
+Syntax:
+
+operation ::= `arm_sve.masked.subf` $mask `,` $src1 `,` $src2 attr-dict `:` type($mask) `,` type($res)
+The arm_sve.masked.subf operation takes one scalable vector mask and two scalable vector operands, and perform floating point subtraction on active lanes. Inactive lanes will keep the value of the first operand.
+
+Operands: ¶
+Operand	Description
+mask	scalable vector of 1-bit signless integer values
+src1	scalable vector of floating-point values
+src2	scalable vector of floating-point values
+Results: ¶
+Result	Description
+res	scalable vector of floating-point values

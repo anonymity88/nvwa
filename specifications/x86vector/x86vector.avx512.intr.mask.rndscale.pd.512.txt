@@ -1,0 +1,17 @@
+x86vector.avx512.intr.mask.rndscale.pd.512 (x86vector::MaskRndScalePDIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+src	vector of 64-bit float values of length 8
+k	32-bit signless integer
+a	vector of 64-bit float values of length 8
+imm	8-bit signless integer
+rounding	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

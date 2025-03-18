@@ -1,0 +1,34 @@
+gpu.alloc (gpu::AllocOp) ¶
+GPU memory allocation operation.
+
+Syntax:
+
+operation ::= `gpu.alloc` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies) (` ` `host_shared` $hostShared^)? ` `
+              `(` $dynamicSizes `)` (`` `[` $symbolOperands^ `]`)? attr-dict `:` type($memref)
+The gpu.alloc operation allocates a region of memory on the GPU. It is similar to the memref.alloc op, but supports asynchronous GPU execution.
+
+The op does not execute before all async dependencies have finished executing.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it also returns a !gpu.async.token.
+
+If the host_shared keyword is present, the memory will be allocated in a memory accessible both on host and on device.
+
+Example:
+
+%memref, %token = gpu.alloc async [%dep] host_shared (%width) : memref<64x?xf32, 1>
+Traits: AttrSizedOperandSegments
+
+Interfaces: GPU_AsyncOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+hostShared	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+dynamicSizes	variadic of index
+symbolOperands	variadic of index
+Results: ¶
+Result	Description
+memref	memref of any type values
+asyncToken	async token type

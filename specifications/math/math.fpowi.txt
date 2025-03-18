@@ -1,0 +1,34 @@
+math.fpowi (math::FPowIOp) ¶
+Floating point raised to the signed integer power
+
+Syntax:
+
+operation ::= `math.fpowi` $lhs `,` $rhs (`fastmath` `` $fastmath^)?
+              attr-dict `:` type($lhs) `,` type($rhs)
+The fpowi operation takes a base operand of floating point type (i.e. scalar, tensor or vector) and a power operand of integer type (also scalar, tensor or vector) and returns one result of the same type as base. The result is base raised to the power of power. The operation is elementwise for non-scalars, e.g.:
+
+%v = math.fpowi %base, %power : vector<2xf32>, vector<2xi32
+The result is a vector of:
+
+[<math.fpowi %base[0], %power[0]>, <math.fpowi %base[1], %power[1]>]
+Example:
+
+// Scalar exponentiation.
+%a = math.fpowi %base, %power : f64, i32
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultShape, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	floating-point-like
+rhs	signless-integer-like
+Results: ¶
+Result	Description
+result	floating-point-like

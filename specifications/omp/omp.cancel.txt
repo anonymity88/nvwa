@@ -1,0 +1,19 @@
+omp.cancel (omp::CancelOp) ¶
+Cancel directive
+
+Syntax:
+
+operation ::= `omp.cancel` `cancellation_construct_type` `(`
+              custom<ClauseAttr>($cancel_directive) `)`
+              oilist(
+              `if` `(` $if_expr `)`
+              ) attr-dict
+The cancel construct activates cancellation of the innermost enclosing region of the type specified.
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+cancel_directive	::mlir::omp::ClauseCancellationConstructTypeAttr	
+CancellationConstructType Clause
+Operands: ¶
+Operand	Description
+if_expr	1-bit signless integer

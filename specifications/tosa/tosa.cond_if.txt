@@ -1,0 +1,34 @@
+//===----------------------------------------------------------------------===//
+// Operator: cond_if
+//===----------------------------------------------------------------------===//
+//===----------------------------------------------------------------------===//
+// Further described in docs/Rationale/RationaleTOSADialect.md .
+//===----------------------------------------------------------------------===//
+def Tosa_IfOp : Tosa_Op<"cond_if",
+       [InferShapedTypeOpAdaptor,
+       SingleBlockImplicitTerminator<"YieldOp">,
+       RecursiveMemoryEffects]> {
+  let summary = "Conditional if operator";
+
+  let description = [{
+    Evaluates a Boolean condition and then takes one of two distinct execution
+    paths. This implements the semantic If-then-else structure.
+  }];
+
+  let arguments = (ins
+    I1Tensor:$cond,
+    Variadic<Tosa_Tensor>:$inputs
+  );
+
+  let results = (outs
+    Variadic<Tosa_Tensor>:$output
+  );
+
+  let regions = (region
+    SizedRegion<1>:$then_branch,
+    SizedRegion<1>:$else_branch
+  );
+
+  let hasCustomAssemblyFormat = 1;
+}
+

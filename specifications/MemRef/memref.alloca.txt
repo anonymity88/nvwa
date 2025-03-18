@@ -1,0 +1,47 @@
+//===----------------------------------------------------------------------===//
+// AllocaOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_AllocaOp : AllocLikeOp<"alloca", AutomaticAllocationScopeResource,[
+    DeclareOpInterfaceMethods<OpAsmOpInterface, ["getAsmResultNames"]>,
+    DeclareOpInterfaceMethods<PromotableAllocationOpInterface>,
+    DeclareOpInterfaceMethods<DestructurableAllocationOpInterface>]> {
+  let summary = "stack memory allocation operation";
+  let description = [{
+    The `alloca` operation allocates memory on the stack, to be automatically
+    released when control transfers back from the region of its closest
+    surrounding operation with an
+    [`AutomaticAllocationScope`](../Traits.md/#automaticallocationscope) trait.
+    The amount of memory allocated is specified by its memref and additional
+    operands. For example:
+
+    ```mlir
+    %0 = memref.alloca() : memref<8x64xf32>
+    ```
+
+    The optional list of dimension operands are bound to the dynamic dimensions
+    specified in its memref type. In the example below, the SSA value '%d' is
+    bound to the second dimension of the memref (which is dynamic).
+
+    ```mlir
+    %0 = memref.alloca(%d) : memref<8x?xf32>
+    ```
+
+    The optional list of symbol operands are bound to the symbols of the
+    memref's affine map. In the example below, the SSA value '%s' is bound to
+    the symbol 's0' in the affine map specified in the allocs memref type.
+
+    ```mlir
+    %0 = memref.alloca()[%s] : memref<8x64xf32,
+                               affine_map<(d0, d1)[s0] -> ((d0 + s0), d1)>>
+    ```
+
+    This operation returns a single SSA value of memref type, which can be used
+    by subsequent load and store operations. An optional alignment attribute, if
+    specified, guarantees alignment at least to that boundary. If not specified,
+    an alignment on any convenient boundary compatible with the type will be
+    chosen.
+  }];
+  let hasVerifier = 1;
+}
+

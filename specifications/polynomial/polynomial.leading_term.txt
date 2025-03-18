@@ -1,0 +1,28 @@
+polynomial.leading_term (polynomial::LeadingTermOp) ¶
+Compute the leading term of the polynomial.
+
+Syntax:
+
+operation ::= `polynomial.leading_term` operands attr-dict `:` type($input) `->` `(` type($degree) `,` type($coefficient) `)`
+The degree of a polynomial is the largest k
+ for which the coefficient a_k of x^k is nonzero. The leading term is the term a_k * x^k, which this op represents as a pair of results. The first is the degree k as an index, and the second is the coefficient, whose type matches the coefficient type of the polynomial’s ring attribute.
+
+Example:
+
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%0 = polynomial.constant int<1 + x**2> : !polynomial.polynomial<#ring>
+%1, %2 = polynomial.leading_term %0 : !polynomial.polynomial<#ring> -> (index, i32)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	An element of a polynomial ring.
+Results: ¶
+Result	Description
+degree	index
+coefficient	integer

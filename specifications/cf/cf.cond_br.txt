@@ -1,0 +1,39 @@
+cf.cond_br (cf::CondBranchOp) ¶
+Conditional branch operation
+
+Syntax:
+
+operation ::= `cf.cond_br` $condition `,`
+              $trueDest (`(` $trueDestOperands^ `:` type($trueDestOperands) `)`)? `,`
+              $falseDest (`(` $falseDestOperands^ `:` type($falseDestOperands) `)`)?
+              attr-dict
+The cf.cond_br terminator operation represents a conditional branch on a boolean (1-bit integer) value. If the bit is set, then the first destination is jumped to; if it is false, the second destination is chosen. The count and types of operands must align with the arguments in the corresponding target blocks.
+
+The MLIR conditional branch operation is not allowed to target the entry block for a region. The two destinations of the conditional branch operation are allowed to be the same.
+
+The following example illustrates a function with a conditional branch operation that targets the same block.
+
+Example:
+
+func.func @select(%a: i32, %b: i32, %flag: i1) -> i32 {
+  // Both targets are the same, operands differ
+  cf.cond_br %flag, ^bb1(%a : i32), ^bb1(%b : i32)
+
+^bb1(%x : i32) :
+  return %x : i32
+}
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, Terminator
+
+Interfaces: BranchOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+condition	1-bit signless integer
+trueDestOperands	variadic of any type
+falseDestOperands	variadic of any type
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

@@ -1,0 +1,9 @@
+llvm.intr.dbg.label (LLVM::DbgLabelOp) ¶
+Relates the program to a debug information label.
+
+Syntax:
+
+operation ::= `llvm.intr.dbg.label` $label attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+label	::mlir::LLVM::DILabelAttr

@@ -1,0 +1,27 @@
+index.castu (index::CastUOp) ¶
+Index unsigned cast
+
+Syntax:
+
+operation ::= `index.castu` $input attr-dict `:` type($input) `to` type($output)
+The index.castu operation enables conversions between values of index type and concrete fixed-width integer types. If casting to a wider integer, the value is zero-extended. If casting to a narrower integer, the value is truncated.
+
+Example:
+
+// Cast to i32
+%0 = index.castu %a : index to i32
+
+// Cast from i64
+%1 = index.castu %b : i64 to index
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: CastOpInterface, ConditionallySpeculatable, InferIntRangeInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	integer or index
+Results: ¶
+Result	Description
+output	integer or index

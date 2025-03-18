@@ -1,0 +1,7 @@
+transform.apply_patterns.memref.resolve_ranked_shaped_type_result_dims (transform::ApplyResolveRankedShapedTypeResultDimsPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.memref.resolve_ranked_shaped_type_result_dims` attr-dict
+Collects patterns that resolve memref.dim operations with values that are defined by operations that implement the ReifyRankedShapedTypeOpInterface, in terms of shapes of its input operands.
+
+Interfaces: PatternDescriptorOpInterface

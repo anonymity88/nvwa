@@ -1,0 +1,16 @@
+shape.func (shape::FuncOp) ¶
+Shape function
+
+An operation with a name containing a single SSACFG region which represents a shape transfer function or helper function for shape transfer function.
+
+Traits: AffineScope, AutomaticAllocationScope, IsolatedFromAbove
+
+Interfaces: CallableOpInterface, FunctionOpInterface, OpAsmOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+function_type	::mlir::TypeAttr	type attribute of function type
+arg_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+res_attrs	::mlir::ArrayAttr	Array of dictionary attributes
+sym_visibility	::mlir::StringAttr	string attribute

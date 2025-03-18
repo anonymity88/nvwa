@@ -1,0 +1,72 @@
+scf.for (scf::ForOp) ¶
+For operation
+
+The scf.for operation represents a loop taking 3 SSA value as operands that represent the lower bound, upper bound and step respectively. The operation defines an SSA value for its induction variable. It has one region capturing the loop body. The induction variable is represented as an argument of this region. This SSA value is a signless integer or index. The step is a value of same type but required to be positive. The lower and upper bounds specify a half-open range: the range includes the lower bound but does not include the upper bound.
+
+The body region must contain exactly one block that terminates with scf.yield. Calling ForOp::build will create such a region and insert the terminator implicitly if none is defined, so will the parsing even in cases when it is absent from the custom format. For example:
+
+// Index case.
+scf.for %iv = %lb to %ub step %step {
+  ... // body
+}
+...
+// Integer case.
+scf.for %iv_32 = %lb_32 to %ub_32 step %step_32 : i32 {
+  ... // body
+}
+scf.for can also operate on loop-carried variables and returns the final values after loop termination. The initial values of the variables are passed as additional SSA operands to the scf.for following the 3 loop control SSA values mentioned above (lower bound, upper bound and step). The operation region has an argument for the induction variable, followed by one argument for each loop-carried variable, representing the value of the variable at the current iteration.
+
+The region must terminate with a scf.yield that passes the current values of all loop-carried variables to the next iteration, or to the scf.for result, if at the last iteration. The static type of a loop-carried variable may not change with iterations; its runtime type is allowed to change. Note, that when the loop-carried variables are present, calling ForOp::build will not insert the terminator implicitly. The caller must insert scf.yield in that case.
+
+scf.for results hold the final values after the last iteration. For example, to sum-reduce a memref:
+
+func.func @reduce(%buffer: memref<1024xf32>, %lb: index,
+                  %ub: index, %step: index) -> (f32) {
+  // Initial sum set to 0.
+  %sum_0 = arith.constant 0.0 : f32
+  // iter_args binds initial values to the loop's region arguments.
+  %sum = scf.for %iv = %lb to %ub step %step
+      iter_args(%sum_iter = %sum_0) -> (f32) {
+    %t = load %buffer[%iv] : memref<1024xf32>
+    %sum_next = arith.addf %sum_iter, %t : f32
+    // Yield current iteration sum to next iteration %sum_iter or to %sum
+    // if final iteration.
+    scf.yield %sum_next : f32
+  }
+  return %sum : f32
+}
+If the scf.for defines any values, a yield must be explicitly present. The number and types of the scf.for results must match the initial values in the iter_args binding and the yield operands.
+
+Another example with a nested scf.if (see scf.if for details) to perform conditional reduction:
+
+func.func @conditional_reduce(%buffer: memref<1024xf32>, %lb: index,
+                              %ub: index, %step: index) -> (f32) {
+  %sum_0 = arith.constant 0.0 : f32
+  %c0 = arith.constant 0.0 : f32
+  %sum = scf.for %iv = %lb to %ub step %step
+      iter_args(%sum_iter = %sum_0) -> (f32) {
+    %t = load %buffer[%iv] : memref<1024xf32>
+    %cond = arith.cmpf "ugt", %t, %c0 : f32
+    %sum_next = scf.if %cond -> (f32) {
+      %new_sum = arith.addf %sum_iter, %t : f32
+      scf.yield %new_sum : f32
+    } else {
+      scf.yield %sum_iter : f32
+    }
+    scf.yield %sum_next : f32
+  }
+  return %sum : f32
+}
+Traits: AutomaticAllocationScope, RecursiveMemoryEffects, SingleBlockImplicitTerminator<scf::YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, LoopLikeOpInterface, RegionBranchOpInterface
+
+Operands: ¶
+Operand	Description
+lowerBound	signless integer or index
+upperBound	signless integer or index
+step	signless integer or index
+initArgs	variadic of any type
+Results: ¶
+Result	Description
+results	variadic of any type

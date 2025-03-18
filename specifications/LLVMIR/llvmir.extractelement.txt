@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+// ExtractElementOp
+//===----------------------------------------------------------------------===//
+
+def LLVM_ExtractElementOp : LLVM_Op<"extractelement", [Pure,
+    TypesMatchWith<"result type matches vector element type", "vector", "res",
+                   "LLVM::getVectorElementType($_self)">]> {
+  let summary = "Extract an element from an LLVM vector.";
+
+  let arguments = (ins LLVM_AnyVector:$vector, AnySignlessInteger:$position);
+  let results = (outs LLVM_Type:$res);
+
+  let assemblyFormat = [{
+    $vector `[` $position `:` type($position) `]` attr-dict `:` type($vector)
+  }];
+
+  string llvmInstName = "ExtractElement";
+  string llvmBuilder = [{
+    $res = builder.CreateExtractElement($vector, $position);
+  }];
+  string mlirBuilder = [{
+    $res = $_builder.create<LLVM::ExtractElementOp>(
+      $_location, $vector, $position);
+  }];
+}
+

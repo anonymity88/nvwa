@@ -1,0 +1,29 @@
+bufferization.to_memref (bufferization::ToMemrefOp) ¶
+Cast a tensor to memref
+
+Syntax:
+
+operation ::= `bufferization.to_memref` $tensor (`read_only` $read_only^)? attr-dict `:` type($tensor) `to` type($memref)
+An operation that returns the future buffer of a tensor.
+
+// Result type is memref<4x?xf32, #layout, 0>
+%m = bufferization.to_memref %t : tensor<4x?xf32> to memref<4x?xf32, #layout, 0>
+This operation is a specialized variant of the built-in unrealized_conversion_cast and is used to make sure that the IR stays valid at any point during the bufferization.
+
+The read_only attribute can optionally be set, indicating to the bufferization that the buffer returned by this op (or an alias created from the returned buffer) will not be written to.
+
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultElementType, SameOperandsAndResultShape
+
+Interfaces: BufferizableOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+read_only	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+tensor	tensor of any type values
+Results: ¶
+Result	Description
+memref	ranked or unranked memref of any type values

@@ -1,0 +1,9 @@
+//===----------------------------------------------------------------------===//
+// MaxUIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_MaxUIOp : Arith_TotalIntBinaryOp<"maxui", [Commutative]> {
+  let summary = "unsigned integer maximum operation";
+  let hasFolder = 1;
+}
+

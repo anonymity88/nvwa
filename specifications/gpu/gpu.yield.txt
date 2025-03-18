@@ -1,0 +1,20 @@
+gpu.yield (gpu::YieldOp) ¶
+GPU yield operation
+
+Syntax:
+
+operation ::= `gpu.yield` attr-dict ($values^ `:` type($values))?
+gpu.yield` is a special terminator operation for blocks inside regions in gpu ops. It returns values to the immediately enclosing gpu op.
+
+Example:
+
+gpu.yield %f0, %f1 : f32, f32
+Traits: AlwaysSpeculatableImplTrait, ReturnLike, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), RegionBranchTerminatorOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+values	variadic of any type

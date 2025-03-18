@@ -1,0 +1,19 @@
+llvm.intr.vector.extract (LLVM::vector_extract) ¶
+Syntax:
+
+operation ::= `llvm.intr.vector.extract` $srcvec `[` $pos `]` attr-dict `:` type($res) `from` type($srcvec)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pos	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+srcvec	LLVM dialect-compatible vector type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

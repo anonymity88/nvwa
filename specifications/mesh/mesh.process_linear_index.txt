@@ -1,0 +1,23 @@
+mesh.process_linear_index (mesh::ProcessLinearIndexOp) ¶
+Get the linear index of the current device.
+
+Syntax:
+
+operation ::= `mesh.process_linear_index` `on` $mesh attr-dict `:` type($result)
+Example:
+
+%idx = mesh.process_linear_index on @mesh : index
+if @mesh has shape (10, 20, 30), a device with multi index (1, 2, 3) will have linear index 3 + 30*2 + 20*30*1.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+result	index

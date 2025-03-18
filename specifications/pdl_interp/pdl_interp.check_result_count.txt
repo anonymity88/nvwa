@@ -1,0 +1,33 @@
+pdl_interp.check_result_count (pdl_interp::CheckResultCountOp) ¶
+Check the number of results of an Operation
+
+Syntax:
+
+operation ::= `pdl_interp.check_result_count` `of` $inputOp `is` (`at_least` $compareAtLeast^)? $count attr-dict
+              `->` successors
+pdl_interp.check_result_count operations compare the number of results of a given operation value with a constant. The comparison is either exact or at_least, with the latter used to compare against a minimum number of expected results. On success, this operation branches to the true destination, otherwise the false destination is taken.
+
+Example:
+
+// Check for exact equality.
+pdl_interp.check_result_count of %op is 2 -> ^matchDest, ^failureDest
+
+// Check for at least N results.
+pdl_interp.check_result_count of %op is at_least 2 -> ^matchDest, ^failureDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+count	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative
+compareAtLeast	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

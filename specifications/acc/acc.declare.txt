@@ -1,0 +1,24 @@
+acc.declare (acc::DeclareOp) ¶
+Declare implicit region
+
+Syntax:
+
+operation ::= `acc.declare` `dataOperands` `(` $dataClauseOperands `:` type($dataClauseOperands) `)`
+              $region attr-dict-with-keyword
+The “acc.declare” operation represents an implicit declare region in function (and subroutine in Fortran).
+
+Example:
+
+%pa = acc.present varPtr(%a : memref<10x10xf32>) -> memref<10x10xf32>
+acc.declare dataOperands(%pa: memref<10x10xf32>) {
+  // implicit region
+}
+Traits: RecursiveMemoryEffects
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::acc::ConstructResource}
+
+Operands: ¶
+Operand	Description
+dataClauseOperands	variadic of PointerLikeType instance

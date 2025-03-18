@@ -1,0 +1,21 @@
+transform.merge_handles (transform::MergeHandlesOp) ¶
+Merges handles into one pointing to the union of payload ops
+
+Syntax:
+
+operation ::= `transform.merge_handles` (`deduplicate` $deduplicate^)? $handles attr-dict `:` type($result)
+Creates a new Transform IR handle value that points to the same Payload IR operations/values/parameters as the operand handles. The Payload IR elements are listed in the same order as they are in the operand handles, grouped by operand handle, e.g., all Payload IR associated with the first handle comes first, then all Payload IR associated with the second handle and so on. If deduplicate is set, do not add the given Payload IR operation, value, or parameter more than once to the final list regardless of it coming from the same or different handles. Consumes the operands and produces a new handle.
+
+Traits: SameOperandsAndResultType
+
+Interfaces: MatchOpInterface, MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+deduplicate	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+handles	variadic of any transform handle or parameter
+Results: ¶
+Result	Description
+result	any transform handle or parameter

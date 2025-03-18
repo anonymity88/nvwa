@@ -1,0 +1,21 @@
+transform.match.structured.elemental_bitwidth (transform::MatchStructuredElementalBitwidthOp) ¶
+Captures the bitwidth of the value’s elemental type as a parameter
+
+Syntax:
+
+operation ::= `transform.match.structured.elemental_bitwidth` $operand_handle attr-dict `:` functional-type(operands, results)
+Produces a transform dialect parameter associated with the bitwidth of the elemental type of the payload value passed as the operand. This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the operand is associated with exactly one payload value of ShapedType. Produces a silenceable failure otherwise.
+
+Traits: SingleValueMatcher
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+operand_handle	TransformValueHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformParamTypeInterface instance

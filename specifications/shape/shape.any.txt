@@ -1,0 +1,26 @@
+shape.any (shape::AnyOp) ¶
+Return any combination of the input shapes
+
+Syntax:
+
+operation ::= `shape.any` $inputs attr-dict `:` type($inputs) `->` type($result)
+This operation takes multiple input shapes or extent tensors and returns some combination of their dimensions. This can be best seen with examples below.
+
+The result is undefined, but still side-effect free, in cases where the inputs have differing ranks or differ in extents of shared dimensions.
+
+Example:
+
+%s0 = shape.any [2,?], [?,3] // [2,3]
+%s1 = shape.any [?,?], [1,2] // [1,2]
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+inputs	variadic of shape or extent tensor
+Results: ¶
+Result	Description
+result	shape or extent tensor

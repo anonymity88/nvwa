@@ -1,0 +1,11 @@
+omp.flush (omp::FlushOp) ¶
+Flush construct
+
+Syntax:
+
+operation ::= `omp.flush` ( `(` $varList^ `:` type($varList) `)` )? attr-dict
+The flush construct executes the OpenMP flush operation. This operation makes a thread’s temporary view of memory consistent with memory and enforces an order on the memory operations of the variables explicitly specified or implied.
+
+Operands: ¶
+Operand	Description
+varList	variadic of OpenMP-compatible variable type

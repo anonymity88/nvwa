@@ -1,0 +1,28 @@
+spirv.MatrixTimesScalar (spirv::MatrixTimesScalarOp) ¶
+Scale a floating-point matrix.
+
+Syntax:
+
+operation ::= `spirv.MatrixTimesScalar` operands attr-dict `:` type($matrix) `,` type($scalar)
+Result Type must be a matrix type with a float component type.
+
+The type of Matrix must be the same as Result Type. Each component in each column in Matrix is multiplied by Scalar.
+
+Scalar must have the same type as the Component Type in Result Type.
+
+Example: ¶
+%0 = spirv.MatrixTimesScalar %matrix, %scalar :
+!spirv.matrix<3 x vector<3xf32>>, f32 -> !spirv.matrix<3 x vector<3xf32>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+matrix	any SPIR-V matrix type or Cooperative Matrix of 16/32/64-bit float values
+scalar	16/32/64-bit float
+Results: ¶
+Result	Description
+result	any SPIR-V matrix type or Cooperative Matrix of 16/32/64-bit float values

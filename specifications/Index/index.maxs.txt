@@ -1,0 +1,19 @@
+//===----------------------------------------------------------------------===//
+// MaxSOp
+//===----------------------------------------------------------------------===//
+
+def Index_MaxSOp : IndexBinaryOp<"maxs", [Commutative, Pure]> {
+  let summary = "index signed maximum";
+  let description = [{
+    The `index.maxs` operation takes two index values and computes their signed
+    maximum value. Treats the leading bit as the sign, i.e. `max(-2, 6) = 6`.
+
+    Example:
+
+    ```mlir
+    // c = max(a, b)
+    %c = index.maxs %a, %b
+    ```
+  }];
+}
+

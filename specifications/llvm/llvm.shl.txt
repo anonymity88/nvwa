@@ -1,0 +1,17 @@
+llvm.shl (LLVM::ShlOp) ¶
+Syntax:
+
+operation ::= `llvm.shl` $lhs `,` $rhs `` custom<OverflowFlags>($overflowFlags) attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, IntegerOverflowFlagsInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	signless integer or LLVM dialect-compatible vector of signless integer
+rhs	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	signless integer or LLVM dialect-compatible vector of signless integer

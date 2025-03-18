@@ -1,0 +1,22 @@
+llvm.intr.experimental.constrained.fptrunc (LLVM::ConstrainedFPTruncIntr) ¶
+Syntax:
+
+operation ::= `llvm.intr.experimental.constrained.fptrunc` $arg_0 $roundingmode $fpExceptionBehavior attr-dict `:` type($arg_0) `to` type(results)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, FPExceptionBehaviorOpInterface, NoMemoryEffect (MemoryEffectOpInterface), RoundingModeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+roundingmode	::mlir::LLVM::RoundingModeAttr	
+LLVM Rounding Mode whose minimum value is 0
+fpExceptionBehavior	::mlir::LLVM::FPExceptionBehaviorAttr	
+LLVM Exception Behavior
+Operands: ¶
+Operand	Description
+arg_0	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

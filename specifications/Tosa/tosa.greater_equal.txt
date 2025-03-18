@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// Operator: greater_equal
+//===----------------------------------------------------------------------===//
+def Tosa_GreaterEqualOp : Tosa_ElementwiseOp<"greater_equal",
+    [SameOperandsElementType]> {
+  let summary = "Returns the truth value of (x >= y) element-wise.";
+
+  let description = [{
+    Elementwise comparison operation
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1,
+    Tosa_Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_I1Tensor:$output
+  );
+
+  let hasFolder = 1;
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.8
+// Operator Class: Reduction Ops.
+//===----------------------------------------------------------------------===//
+

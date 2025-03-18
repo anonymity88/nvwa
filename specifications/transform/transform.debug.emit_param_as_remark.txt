@@ -1,0 +1,23 @@
+transform.debug.emit_param_as_remark (transform::DebugEmitParamAsRemarkOp) ¶
+Prints the parameter as a diagnostic remark
+
+Syntax:
+
+operation ::= `transform.debug.emit_param_as_remark` $param (`,` $message^)?  (`at` $anchor^)?attr-dict `:` type($param) (`,` type($anchor)^)?
+This operation emits a diagnostic remark containing the string form of the attributes associated with the parameter provided as attribute. It takes as optional arguments:
+
+an additional message text to prepend;
+a handle pointing to operations the location of which will be used to emit the diagnostic; if multiple operations are associated, the diagnostic is emitted for all of their respective locations.
+This operation always succeeds.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+message	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+param	TransformParamTypeInterface instance
+anchor	TransformHandleTypeInterface instance

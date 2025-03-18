@@ -1,0 +1,35 @@
+pdl_interp.create_operation (pdl_interp::CreateOperationOp) ¶
+Create an instance of a specific Operation
+
+Syntax:
+
+operation ::= `pdl_interp.create_operation` $name (`(` $inputOperands^ `:` type($inputOperands) `)`)? ``
+              custom<CreateOperationOpAttributes>($inputAttributes, $inputAttributeNames)
+              custom<CreateOperationOpResults>($inputResultTypes, type($inputResultTypes),
+              $inferredResultTypes)
+              attr-dict
+pdl_interp.create_operation operations create an Operation instance with the specified attributes, operands, and result types. See pdl.operation for a more detailed description on the general interpretation of the arguments to this operation.
+
+Example:
+
+// Create an instance of a `foo.op` operation.
+%op = pdl_interp.create_operation "foo.op"(%arg0 : !pdl.value) {"attrA" = %attr0} -> (%type : !pdl.type)
+
+// Create an instance of a `foo.op` operation that has inferred result types
+// (using the InferTypeOpInterface).
+%op = pdl_interp.create_operation "foo.op"(%arg0 : !pdl.value) {"attrA" = %attr0} -> <inferred>
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+inputAttributeNames	::mlir::ArrayAttr	string array attribute
+inferredResultTypes	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+inputOperands	variadic of single element or range of PDL handle for an mlir::Value
+inputAttributes	variadic of PDL handle to an mlir::Attribute
+inputResultTypes	variadic of single element or range of PDL handle to an mlir::Type
+Results: ¶
+Result	Description
+resultOp	PDL handle to an mlir::Operation *

@@ -1,0 +1,9 @@
+arm_sme.intr.write.vert (arm_sme::aarch64_sme_write_vert) ¶
+Attributes: ¶
+Attribute	MLIR Type	Description
+tile_id	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+tile_slice_index	32-bit signless integer
+predicate	a vector type that matches the size of a SVE predicate
+vector	a vector type that matches the size of a SVE vector

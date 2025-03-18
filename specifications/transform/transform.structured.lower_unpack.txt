@@ -1,0 +1,22 @@
+transform.structured.lower_unpack (transform::LowerUnPackOp) ¶
+Syntax:
+
+operation ::= `transform.structured.lower_unpack` $target attr-dict `:` functional-type(operands, results)
+Lower a tensor.unpack into empty + linalg.transpose + tensor.collapse_shape + tensor.extract_slice.
+
+Return modes ¶
+This operation ignores non-unpack ops and drops them in the return. This operation produces a silenceable failure if the rewrite fails for any reason. If all the operations referred to by the target are rewritten, the transform succeeds. Return handles to the newly produced empty, transpose, collapse_shape and extract_slice ops.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	Transform IR handle to tensor.unpack operations
+Results: ¶
+Result	Description
+empty_op	Transform IR handle to tensor.empty operations
+transpose_op	Transform IR handle to linalg.transpose operations
+collapse_shape_op	Transform IR handle to tensor.collapse_shape operations
+extract_slice_op	Transform IR handle to tensor.extract_slice operations

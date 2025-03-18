@@ -1,0 +1,24 @@
+transform.apply_conversion_patterns.memref.memref_to_llvm_type_converter (transform::MemrefToLLVMTypeConverterOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.memref.memref_to_llvm_type_converter` attr-dict
+This operation provides an “LLVMTypeConverter” that lowers memref types to LLVM types.
+
+The type converter can be customized as follows:
+
+use_aligned_alloc: Use aligned_alloc in place of malloc for heap allocations.
+index_bitwidth: Bitwidth of the index type, “0” indicates the size of a machine word.
+use_generic_functions: Use generic allocation and deallocation functions instead of the classic “malloc”, “aligned_alloc” and “free” functions. // TODO: the following two options don’t really make sense for // memref_to_llvm_type_converter specifically. // We should have a single to_llvm_type_converter.
+use_bare_ptr_call_conv: Replace FuncOp’s MemRef arguments with bare pointers to the MemRef element types.
+data-layout: String description (LLVM format) of the data layout that is expected on the produced module.
+Interfaces: TypeConverterBuilderOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+use_aligned_alloc	::mlir::BoolAttr	bool attribute
+index_bitwidth	::mlir::IntegerAttr	64-bit signless integer attribute
+use_generic_functions	::mlir::BoolAttr	bool attribute
+use_bare_ptr_call_conv	::mlir::BoolAttr	bool attribute
+data_layout	::mlir::StringAttr	string attribute
+PDL (extension) Transform Operations ¶
+source

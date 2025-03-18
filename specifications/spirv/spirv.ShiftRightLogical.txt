@@ -1,0 +1,30 @@
+spirv.ShiftRightLogical (spirv::ShiftRightLogicalOp) ¶
+Shift the bits in Base right by the number of bits specified in Shift. The most-significant bits are zero filled.
+
+Syntax:
+
+operation ::= `spirv.ShiftRightLogical` operands attr-dict `:` type($operand1) `,` type($operand2)
+Result Type must be a scalar or vector of integer type.
+
+The type of each Base and Shift must be a scalar or vector of integer type. Base and Shift must have the same number of components. The number of components and bit width of the type of Base must be the same as in Result Type.
+
+Shift is consumed as an unsigned integer. The result is undefined if Shift is greater than or equal to the bit width of the components of Base.
+
+Results are computed per component.
+
+Example: ¶
+%2 = spirv.ShiftRightLogical %0, %1 : i32, i16
+%5 = spirv.ShiftRightLogical %3, %4 : vector<3xi32>, vector<3xi16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultShape, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+operand2	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

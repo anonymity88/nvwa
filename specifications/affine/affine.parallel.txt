@@ -1,0 +1,52 @@
+affine.parallel (affine::AffineParallelOp) ¶
+Multi-index parallel band operation
+
+The affine.parallel operation represents a hyper-rectangular affine parallel band, defining zero or more SSA values for its induction variables. It has one region capturing the parallel band body. The induction variables are represented as arguments of this region. These SSA values always have type index, which is the size of the machine word. The strides, represented by steps, are positive constant integers which defaults to “1” if not present. The lower and upper bounds specify a half-open range: the range includes the lower bound but does not include the upper bound. The body region must contain exactly one block that terminates with affine.yield.
+
+The lower and upper bounds of a parallel operation are represented as an application of an affine mapping to a list of SSA values passed to the map. The same restrictions hold for these SSA values as for all bindings of SSA values to dimensions and symbols. The list of expressions in each map is interpreted according to the respective bounds group attribute. If a single expression belongs to the group, then the result of this expression is taken as a lower(upper) bound of the corresponding loop induction variable. If multiple expressions belong to the group, then the lower(upper) bound is the max(min) of these values obtained from these expressions. The loop band has as many loops as elements in the group bounds attributes.
+
+Each value yielded by affine.yield will be accumulated/reduced via one of the reduction methods defined in the AtomicRMWKind enum. The order of reduction is unspecified, and lowering may produce any valid ordering. Loops with a 0 trip count will produce as a result the identity value associated with each reduction (i.e. 0.0 for addf, 1.0 for mulf). Assign reductions for loops with a trip count != 1 produces undefined results.
+
+Note: Calling AffineParallelOp::build will create the required region and block, and insert the required terminator if it is trivial (i.e. no values are yielded). Parsing will also create the required region, block, and terminator, even when they are missing from the textual representation.
+
+Example (3x3 valid convolution):
+
+func.func @conv_2d(%D : memref<100x100xf32>, %K : memref<3x3xf32>) -> (memref<98x98xf32>) {
+  %O = memref.alloc() : memref<98x98xf32>
+  affine.parallel (%x, %y) = (0, 0) to (98, 98) {
+    %0 = affine.parallel (%kx, %ky) = (0, 0) to (2, 2) reduce ("addf") -> f32 {
+      %1 = affine.load %D[%x + %kx, %y + %ky] : memref<100x100xf32>
+      %2 = affine.load %K[%kx, %ky] : memref<3x3xf32>
+      %3 = arith.mulf %1, %2 : f32
+      affine.yield %3 : f32
+    }
+    affine.store %0, %O[%x, %y] : memref<98x98xf32>
+  }
+  return %O : memref<98x98xf32>
+}
+Example (tiling by potentially imperfectly dividing sizes):
+
+affine.parallel (%ii, %jj) = (0, 0) to (%N, %M) step (32, 32) {
+  affine.parallel (%i, %j) = (%ii, %jj)
+                          to (min(%ii + 32, %N), min(%jj + 32, %M)) {
+    call @f(%i, %j) : (index, index) -> ()
+  }
+}
+Traits: AutomaticAllocationScope, MemRefsNormalizable, RecursiveMemoryEffects, RecursivelySpeculatableImplTrait, SingleBlockImplicitTerminator<AffineYieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, LoopLikeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reductions	::mlir::ArrayAttr	Reduction ops
+lowerBoundsMap	::mlir::AffineMapAttr	AffineMap attribute
+lowerBoundsGroups	::mlir::DenseIntElementsAttr	32-bit signless integer elements attribute
+upperBoundsMap	::mlir::AffineMapAttr	AffineMap attribute
+upperBoundsGroups	::mlir::DenseIntElementsAttr	32-bit signless integer elements attribute
+steps	::mlir::ArrayAttr	64-bit integer array attribute
+Operands: ¶
+Operand	Description
+mapOperands	variadic of index
+Results: ¶
+Result	Description
+results	variadic of any type

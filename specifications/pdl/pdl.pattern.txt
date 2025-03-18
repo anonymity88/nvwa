@@ -1,0 +1,28 @@
+pdl.pattern (pdl::PatternOp) ¶
+Define a rewrite pattern
+
+Syntax:
+
+operation ::= `pdl.pattern` ($sym_name^)? `:` `benefit` `(` $benefit `)` attr-dict-with-keyword $bodyRegion
+pdl.pattern operations provide a transformable representation for a RewritePattern. The attributes on this operation correspond to the various metadata on a RewritePattern, such as the benefit. The match section of the pattern is specified within the region body, with the rewrite provided by a terminating pdl.rewrite.
+
+Example:
+
+// Provide a pattern matching "foo.op" that replaces the root with its
+// operand.
+pdl.pattern : benefit(1) {
+  %resultType = pdl.type
+  %inputOperand = pdl.operand
+  %root = pdl.operation "foo.op"(%inputOperand) -> (%resultType)
+  pdl.rewrite %root {
+    pdl.replace %root with (%inputOperand)
+  }
+}
+Traits: IsolatedFromAbove, SingleBlock
+
+Interfaces: OpAsmOpInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+benefit	::mlir::IntegerAttr	16-bit signless integer attribute whose value is non-negative
+sym_name	::mlir::StringAttr	string attribute

@@ -1,0 +1,30 @@
+spirv.LogicalNotEqual (spirv::LogicalNotEqualOp) ¶
+Result is true if Operand 1 and Operand 2 have different values. Result is false if Operand 1 and Operand 2 have the same value.
+
+Syntax:
+
+operation ::= `spirv.LogicalNotEqual` $operand1 `,` $operand2 `:` type($operand1) attr-dict
+Result Type must be a scalar or vector of Boolean type.
+
+The type of Operand 1 must be the same as Result Type.
+
+The type of Operand 2 must be the same as Result Type.
+
+Results are computed per component.
+
+Example: ¶
+%2 = spirv.LogicalNotEqual %0, %1 : i1
+%2 = spirv.LogicalNotEqual %0, %1 : vector<4xi1>
+Traits: AlwaysSpeculatableImplTrait, Commutative, SameOperandsAndResultShape, SameTypeOperands, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	bool or vector of bool values of length 2/3/4/8/16
+operand2	bool or vector of bool values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	bool or vector of bool values of length 2/3/4/8/16

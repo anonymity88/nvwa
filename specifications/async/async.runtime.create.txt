@@ -1,0 +1,11 @@
+async.runtime.create (async::RuntimeCreateOp) ¶
+Creates an async runtime token or value
+
+Syntax:
+
+operation ::= `async.runtime.create` attr-dict `:` type($result)
+The async.runtime.create operation creates an async dialect token or value. Tokens and values are created in the non-ready state.
+
+Results: ¶
+Result	Description
+result	async value type or async token type

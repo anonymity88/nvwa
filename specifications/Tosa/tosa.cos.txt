@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// Operator: cos
+//===----------------------------------------------------------------------===//
+def Tosa_CosOp : Tosa_ElementwiseOp<"cos",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise cos op";
+
+  let description = [{
+    Elementwise cosine operation for values given in radians.
+  }];
+
+  let arguments = (ins
+    Tosa_FloatTensor:$input1
+  );
+
+  let results = (outs
+    Tosa_FloatTensor:$output
+  );
+}
+

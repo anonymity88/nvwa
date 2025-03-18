@@ -1,0 +1,16 @@
+transform.structured.convert_to_loops (transform::ConvertToLoopsOp) ¶
+Syntax:
+
+operation ::= `transform.structured.convert_to_loops` $target attr-dict `:` functional-type(operands, results)
+For operations that implement the TilingInterface, and implement the generateScalarImplementation method, lowers the operation to loops. The return handle points to all generated loops. Fails if the payload ops cannot be lowered to loops.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformHandleTypeInterface instance

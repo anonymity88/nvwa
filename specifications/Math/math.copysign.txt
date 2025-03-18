@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// CopySignOp
+//===----------------------------------------------------------------------===//
+
+def Math_CopySignOp : Math_FloatBinaryOp<"copysign"> {
+  let summary = "A copysign operation";
+  let description = [{
+    The `copysign` returns a value with the magnitude of the first operand and
+    the sign of the second operand. It takes two operands and returns one result of
+    the same type. The operands must be of floating point type (i.e., scalar,
+    tensor or vector). It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar copysign value.
+    %a = math.copysign %b, %c : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

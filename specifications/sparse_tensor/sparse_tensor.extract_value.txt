@@ -1,0 +1,25 @@
+sparse_tensor.extract_value (sparse_tensor::ExtractValOp) ¶
+Extracts a value from a sparse tensor using an iterator.
+
+Syntax:
+
+operation ::= `sparse_tensor.extract_value` $tensor `at` $iterator attr-dict `:` type($tensor)`,` qualified(type($iterator))
+The sparse_tensor.extract_value operation extracts the value pointed to by a sparse iterator from a sparse tensor.
+
+Example:
+
+%val = sparse_tensor.extract_value %sp at %it
+     : tensor<?x?xf32, #CSR>, !sparse_tensor.iterator<#CSR, lvl = 1>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+tensor	sparse tensor of any type values
+iterator	sparse iterator
+Results: ¶
+Result	Description
+result	any type

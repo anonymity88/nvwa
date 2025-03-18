@@ -1,0 +1,34 @@
+pdl_interp.get_operands (pdl_interp::GetOperandsOp) ¶
+Get a specified operand group from an Operation
+
+Syntax:
+
+operation ::= `pdl_interp.get_operands` ($index^)? `of` $inputOp `:` type($value) attr-dict
+pdl_interp.get_operands operations try to get a specific operand group from an operation. If the expected result is a single Value, null is returned if the operand group is not of size 1. If a range is expected, null is returned if the operand group is invalid. If no index is provided, the returned operand group corresponds to all operands of the operation.
+
+Example:
+
+// Get the first group of operands from an operation, and expect a single
+// element.
+%operand = pdl_interp.get_operands 0 of %op : !pdl.value
+
+// Get the first group of operands from an operation.
+%operands = pdl_interp.get_operands 0 of %op : !pdl.range<value>
+
+// Get all of the operands from an operation.
+%operands = pdl_interp.get_operands of %op : !pdl.range<value>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+index	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative
+Operands: ¶
+Operand	Description
+inputOp	PDL handle to an mlir::Operation *
+Results: ¶
+Result	Description
+value	single element or range of PDL handle for an mlir::Value

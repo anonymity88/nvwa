@@ -1,0 +1,28 @@
+ml_program.global_store_graph (ml_program::GlobalStoreGraphOp) ¶
+Direct store of a value into a mutable global
+
+Syntax:
+
+operation ::= `ml_program.global_store_graph` $global `=` $value `` custom<TokenOrdering>($consumeTokens, type($produceToken)) `:` type($value) attr-dict
+Performs a non-atomic, non-volatile, non-synchronized store to a mutable global.
+
+It is fully expected that these constraints are not suitable for all situations, and alternative ops should be defined and used for more advanced cases.
+
+This op is side effecting and may not be valid to use in graph regions without additional consideration to evaluation order constraints.
+
+Example:
+
+%token = ml_program.global_store @foobar = %0 : tensor<?xi32>
+  ordering (%in_token -> !ml_program.token) : tensor<?xi32>
+Interfaces: SymbolUserOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+global	::mlir::SymbolRefAttr	symbol reference attribute
+Operands: ¶
+Operand	Description
+value	any type
+consumeTokens	variadic of Token for establishing execution ordering in a graph
+Results: ¶
+Result	Description
+produceToken	Token for establishing execution ordering in a graph

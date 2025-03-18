@@ -1,0 +1,79 @@
+vector.transfer_write (vector::TransferWriteOp) ¶
+The vector.transfer_write op writes a supervector to memory.
+
+The vector.transfer_write op performs a write from a vector, supplied as its first operand, into a slice within a MemRef or a Ranked Tensor of the same base elemental type, supplied as its second operand.
+
+A vector memref/tensor operand must have its vector element type match a suffix (shape and element type) of the vector (e.g. memref<3x2x6x4x3xf32>, vector<1x1x4x3xf32>). If the operand is a tensor, the operation returns a new tensor of the same type.
+
+The slice is further defined by a full-rank index within the MemRef/Tensor, supplied as the operands [2 .. 2 + rank(memref/tensor)) that defines the starting point of the transfer (e.g. %A[%i0, %i1, %i2, %i3]).
+
+The permutation_map attribute is an affine-map which specifies the transposition on the slice to match the vector shape. The permutation map may be implicit and omitted from parsing and printing if it is the canonical minor identity map (i.e. if it does not permute any dimension). In contrast to transfer_read, write ops cannot have broadcast dimensions.
+
+The size of the slice is specified by the size of the vector.
+
+An optional SSA value mask may be specified to mask out elements written to the MemRef/Tensor. The mask type is an i1 vector with a shape that matches how elements are written into the MemRef/Tensor, after applying any permutation. Elements whose corresponding mask element is 0 are masked out.
+
+For every vector dimension, the boolean array attribute in_bounds specifies if the transfer is guaranteed to be within the source bounds. If set to “false”, accesses (including the starting point) may run out-of-bounds along the respective vector dimension as the index increases. Non-vector dimensions must always be in-bounds. The in_bounds array length has to be equal to the vector rank. This attribute has a default value: false (i.e. “out-of-bounds”). When skipped in the textual IR, the default value is assumed. Similarly, the OP printer will omit this attribute when all dimensions are out-of-bounds (i.e. the default value is used).
+
+A vector.transfer_write can be lowered to a simple store if all dimensions are specified to be within bounds and no mask was specified.
+
+This operation is called ‘write’ by opposition to ‘store’ because the super-vector granularity is generally not representable with a single hardware register. A vector.transfer_write is thus a mid-level abstraction that supports super-vectorization with non-effecting padding for full-tile-only code. It is the responsibility of vector.transfer_write’s implementation to ensure the memory writes are valid. Different lowerings may be pertinent depending on the hardware support.
+
+Example:
+
+// write vector<16x32x64xf32> into the slice
+//   `%A[%i0, %i1:%i1+32, %i2:%i2+64, %i3:%i3+16]`:
+for %i0 = 0 to %0 {
+  affine.for %i1 = 0 to %1 step 32 {
+    affine.for %i2 = 0 to %2 step 64 {
+      affine.for %i3 = 0 to %3 step 16 {
+        %val = `ssa-value` : vector<16x32x64xf32>
+        vector.transfer_write %val, %A[%i0, %i1, %i2, %i3]
+          {permutation_map: (d0, d1, d2, d3) -> (d3, d1, d2)} :
+          vector<16x32x64xf32>, memref<?x?x?x?xf32>
+}}}}
+
+// or equivalently (rewrite with vector.transpose)
+for %i0 = 0 to %0 {
+  affine.for %i1 = 0 to %1 step 32 {
+    affine.for %i2 = 0 to %2 step 64 {
+      affine.for %i3 = 0 to %3 step 16 {
+        %val = `ssa-value` : vector<16x32x64xf32>
+        %valt = vector.transpose %val, [1, 2, 0] :
+              vector<16x32x64xf32> -> vector<32x64x16xf32>
+        vector.transfer_write %valt, %A[%i0, %i1, %i2, %i3]
+          {permutation_map: (d0, d1, d2, d3) -> (d1, d2, d3)} :
+          vector<32x64x16xf32>, memref<?x?x?x?xf32>
+}}}}
+
+// write to a memref with vector element type.
+vector.transfer_write %4, %arg1[%c3, %c3]
+  {permutation_map = (d0, d1)->(d0, d1)}
+    : vector<1x1x4x3xf32>, memref<?x?xvector<4x3xf32>>
+
+// return a tensor where the vector is inserted into the source tensor.
+%5 = vector.transfer_write %4, %arg1[%c3, %c3]
+  {permutation_map = (d0, d1)->(d0, d1)}
+    : vector<1x1x4x3xf32>, tensor<?x?xvector<4x3xf32>>
+
+// Special encoding for 0-d transfer with 0-d tensor/memref, vector shape
+// {1} and permutation_map () -> (0).
+%1 = vector.transfer_write %0, %arg0[] {permutation_map = affine_map<()->(0)>} :
+  vector<1xf32>, tensor<f32>
+Traits: AttrSizedOperandSegments
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, MaskableOpInterface, MemoryEffectOpInterface, VectorTransferOpInterface, VectorUnrollOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+permutation_map	::mlir::AffineMapAttr	AffineMap attribute
+in_bounds	::mlir::ArrayAttr	1-bit boolean array attribute
+Operands: ¶
+Operand	Description
+vector	vector of any type values
+source	shaped of any type values
+indices	variadic of index
+mask	vector of 1-bit signless integer values
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

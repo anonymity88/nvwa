@@ -1,0 +1,30 @@
+amdgpu.raw_buffer_atomic_fadd (amdgpu::RawBufferAtomicFaddOp) ¶
+Raw Buffer Floating-point Atomic Add (MI-* only)
+
+Syntax:
+
+operation ::= `amdgpu.raw_buffer_atomic_fadd` attr-dict $value `->` $memref `[` $indices `]`
+              (`sgprOffset` $sgprOffset^)? `:`
+              type($value) `->` type($memref) `,` type($indices)
+The amdgpu.raw_buffer_atomic_fadd op is a wrapper around the buffer-based atomic floating point addition available on the MI-* series of AMD GPUs.
+
+The index into the buffer is computed as for memref.store with the addition of indexOffset (which is used to aid in emitting vectorized code) and, if present sgprOffset (which is added after bounds checks and includes any non-zero offset on the memref type).
+
+All indexing components are given in terms of the memref’s element size, not the byte lengths required by the intrinsic.
+
+Out of bounds atomic operations are ignored in hardware.
+
+See amdgpu.raw_buffer_load for a description of how the underlying instruction is constructed.
+
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+boundsCheck	::mlir::BoolAttr	bool attribute
+indexOffset	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+value	32-bit float or vector of 16-bit float or bfloat16 type values of length 2
+memref	memref of any type values
+indices	variadic of 32-bit signless integer
+sgprOffset	32-bit signless integer

@@ -1,0 +1,20 @@
+llvm.or (LLVM::OrOp) ¶
+Syntax:
+
+operation ::= `llvm.or` (`disjoint` $isDisjoint^)? $lhs `,` $rhs attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, DisjointFlagInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+isDisjoint	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+lhs	signless integer or LLVM dialect-compatible vector of signless integer
+rhs	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	signless integer or LLVM dialect-compatible vector of signless integer

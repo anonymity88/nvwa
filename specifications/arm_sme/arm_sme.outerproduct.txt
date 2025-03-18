@@ -1,0 +1,49 @@
+arm_sme.outerproduct (arm_sme::OuterProductOp) ¶
+Outer product with optional fused add/sub
+
+Syntax:
+
+operation ::= `arm_sme.outerproduct` $lhs `,` $rhs
+              oilist(
+              `kind` `` $kind
+              | `acc` `` `(` $acc `)`
+              | `masks` `` `(` $lhsMask `,` $rhsMask `)`
+              ) attr-dict `:` type($lhs) `,` type($rhs)
+This operation represents an outer product that fits within an SME tile. All operands must be SVE vectors and the result a SME tile. Unlike vector.outerproduct masking is on the operands (rather than the result), which mirrors the SME instructions.
+
+Example 1: Unmasked outerproduct (without accumulator)
+
+// Not specifying an accumulator implicitly zeros the destination tile.
+%result = arm_sme.outerproduct $lhs, $rhs : vector<[4]xf32>, vector<[4]xf32>
+Example 2: Unmasked outerproduct (with accumulator)
+
+%result = arm_sme.outerproduct $lhs, $rhs acc($accumulator)
+            : vector<[4]xf32>, vector<[4]xf32>
+Example 3: Masked outerproduct
+
+%result = arm_sme.outerproduct $lhs, $rhs masks($lhsMask, $rhsMask)
+            : vector<[4]xf32>, vector<[4]xf32>
+Example 4: Masked outerproduct (with accumulator)
+
+%result = arm_sme.outerproduct $lhs, $rhs acc($accumulator) masks($lhsMask, $rhsMask)
+            : vector<[4]xf32>, vector<[4]xf32>
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::arm_sme::CombiningKindAttr	
+Kind of combining function
+Operands: ¶
+Operand	Description
+lhs	a vector type that matches the size of a SVE vector
+rhs	a vector type that matches the size of a SVE vector
+lhsMask	a vector type that matches the size of a SVE predicate
+rhsMask	a vector type that matches the size of a SVE predicate
+acc	a vector type that fits into a SME tile
+Results: ¶
+Result	Description
+result	a vector type that fits into a SME tile

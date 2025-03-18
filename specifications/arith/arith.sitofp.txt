@@ -1,0 +1,15 @@
+//===----------------------------------------------------------------------===//
+// SIToFPOp
+//===----------------------------------------------------------------------===//
+
+def Arith_SIToFPOp : Arith_IToFCastOp<"sitofp"> {
+  let summary = "cast from integer type to floating-point";
+  let description = [{
+    Cast from a value interpreted as a signed integer to the corresponding
+    floating-point value. If the value cannot be exactly represented, it is
+    rounded using the default rounding mode. When operating on vectors, casts
+    elementwise.
+  }];
+  let hasFolder = 1;
+}
+

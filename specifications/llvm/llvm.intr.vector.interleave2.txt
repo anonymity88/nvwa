@@ -1,0 +1,14 @@
+llvm.intr.vector.interleave2 (LLVM::vector_interleave2) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+vec1	LLVM dialect-compatible vector type
+vec2	LLVM dialect-compatible vector type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,7 @@
+transform.apply_patterns.vector.lower_create_mask (transform::ApplyLowerCreateMaskPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_create_mask` attr-dict
+Indicates that vector create_mask-like operations should be lowered to finer-grained vector primitives.
+
+Interfaces: PatternDescriptorOpInterface

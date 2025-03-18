@@ -1,0 +1,17 @@
+async.runtime.add_to_group (async::RuntimeAddToGroupOp) ¶
+Adds and async token or value to the group
+
+Syntax:
+
+operation ::= `async.runtime.add_to_group` $operand `,` $group attr-dict `:` type($operand)
+The async.runtime.add_to_group adds an async token or value to the async group. Returns the rank of the added element in the group.
+
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+operand	async value type or async token type
+group	async group type
+Results: ¶
+Result	Description
+rank	index

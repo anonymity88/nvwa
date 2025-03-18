@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// AbsFOp
+//===----------------------------------------------------------------------===//
+
+def Math_AbsFOp : Math_FloatUnaryOp<"absf"> {
+  let summary = "floating point absolute-value operation";
+  let description = [{
+    The `absf` operation computes the absolute value. It takes one operand of
+    floating point type (i.e., scalar, tensor or vector) and returns one result
+    of the same type.
+
+    Example:
+
+    ```mlir
+    // Scalar absolute value.
+    %a = math.absf %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

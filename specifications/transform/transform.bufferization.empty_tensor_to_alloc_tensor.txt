@@ -1,0 +1,19 @@
+transform.bufferization.empty_tensor_to_alloc_tensor (transform::EmptyTensorToAllocTensorOp) ¶
+Syntax:
+
+operation ::= `transform.bufferization.empty_tensor_to_alloc_tensor` $target attr-dict `:` functional-type(operands, results)
+Replace a tensor.empty with a bufferization.tensor_alloc.
+
+Return modes ¶
+This operation consumes the target handle and produces the transformed handle. target is expected to be a tensor.empty operation. The transform always succeeds.
+
+Traits: FunctionalStyleTransformOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	Transform IR handle to tensor.empty operations
+Results: ¶
+Result	Description
+transformed	Transform IR handle to bufferization.alloc_tensor operations

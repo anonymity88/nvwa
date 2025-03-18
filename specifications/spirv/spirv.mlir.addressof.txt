@@ -1,0 +1,22 @@
+spirv.mlir.addressof (spirv::AddressOfOp) ¶
+Get the address of a global variable.
+
+Syntax:
+
+operation ::= `spirv.mlir.addressof` $variable attr-dict `:` type($pointer)
+Variables in module scope are defined using symbol names. This op generates an SSA value that can be used to refer to the symbol within function scope for use in ops that expect an SSA value. This operation has no corresponding SPIR-V instruction; it’s merely used for modelling purpose in the SPIR-V dialect. Since variables in module scope in SPIR-V dialect are of pointer type, this op returns a pointer type as well, and the type is the same as the variable referenced.
+
+Example: ¶
+%0 = spirv.mlir.addressof @global_var : !spirv.ptr<f32, Input>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+variable	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+pointer	any SPIR-V pointer type

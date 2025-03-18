@@ -1,0 +1,28 @@
+spirv.FOrdLessThanEqual (spirv::FOrdLessThanEqualOp) ¶
+Floating-point comparison if operands are ordered and Operand 1 is less than or equal to Operand 2.
+
+Syntax:
+
+operation ::= `spirv.FOrdLessThanEqual` $operand1 `,` $operand2 `:` type($operand1) attr-dict
+Result Type must be a scalar or vector of Boolean type.
+
+The type of Operand 1 and Operand 2 must be a scalar or vector of floating-point type. They must have the same type, and they must have the same number of components as Result Type.
+
+Results are computed per component.
+
+Example: ¶
+%4 = spirv.FOrdLessThanEqual %0, %1 : f32
+%5 = spirv.FOrdLessThanEqual %2, %3 : vector<4xf32>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultShape, SameTypeOperands
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16
+operand2	16/32/64-bit float or vector of 16/32/64-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	bool or vector of bool values of length 2/3/4/8/16

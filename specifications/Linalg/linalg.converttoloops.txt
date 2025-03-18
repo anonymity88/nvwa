@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// ConvertToLoopsOp
+//===----------------------------------------------------------------------===//
+
+def ConvertToLoopsOp : Op<Transform_Dialect, "structured.convert_to_loops",
+    [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+     DeclareOpInterfaceMethods<TransformOpInterface>,
+     ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    For operations that implement the `TilingInterface`, and implement
+    the `generateScalarImplementation` method, lowers the operation to
+    loops. The return handle points to all generated loops.
+    Fails if the payload ops cannot be lowered to loops.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target);
+  let results = (outs TransformHandleTypeInterface:$result);
+
+  let assemblyFormat = [{
+    $target attr-dict `:` functional-type(operands, results)
+  }];
+}
+

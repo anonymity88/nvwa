@@ -1,0 +1,26 @@
+async.create_group (async::CreateGroupOp) ¶
+Creates an empty async group
+
+Syntax:
+
+operation ::= `async.create_group` $size `:` type($result) attr-dict
+The async.create_group allocates an empty async group. Async tokens or values can be added to this group later. The size of the group must be specified at construction time, and await_all operation will first wait until the number of added tokens or values reaches the group size.
+
+Example:
+
+%size = ... : index
+%group = async.create_group %size : !async.group
+...
+async.await_all %group
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+size	index
+Results: ¶
+Result	Description
+result	async group type

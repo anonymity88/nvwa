@@ -1,0 +1,39 @@
+amdgpu.raw_buffer_load (amdgpu::RawBufferLoadOp) ¶
+Raw Buffer load, exposing GCN features
+
+Syntax:
+
+operation ::= `amdgpu.raw_buffer_load` attr-dict $memref `[` $indices `]`
+              (`sgprOffset` $sgprOffset^)? `:`
+              type($memref) (`,` type($indices)^)? `->` type($value)
+The amdgpu.raw_buffer_load op is a wrapper around the buffer load intrinsics available on AMD GPUs, including extensions in newer GPUs.
+
+The index into the buffer is computed as for memref.load with the additon of indexOffset and sgprOffset (which may or may not be considered in bounds checks and includes any offset present on the memref type if it’s non-zero).
+
+All indices and offsets are in units of the memref’s data type and are converted to bytes during lowering.
+
+When a load is out of bounds, the instruction returns zero. Partially-out of bounds have chipset-dependent behavior: whether reading 2 elements starting at index 7 of a memref<8xf32> returns the last element in the first vector component depends on the architecture.
+
+The memref struct is converted into a buffer resource (a V#) and the arguments are translated to intrinsic arguments as follows:
+
+The base address of the buffer is the base address of the memref
+The stride is 0 to enable raw mode
+The number of records is the size of the memref, in bytes In the case of dynamically-shaped memrefs, this is computed at runtime as max_d (size(d) * stride(d)) * sizeof(elementType(memref))
+The offset enable bit is 1, the index enable bit is 0.
+The thread ID addition bit is off
+If boundsCheck is false and the target chipset is RDNA, OOB_SELECT is set to 2 to disable bounds checks, otherwise it is 3
+The cache coherency bits are off
+Traits: AttrSizedOperandSegments
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+boundsCheck	::mlir::BoolAttr	bool attribute
+indexOffset	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+memref	memref of any type values
+indices	variadic of 32-bit signless integer
+sgprOffset	32-bit signless integer
+Results: ¶
+Result	Description
+value	any type

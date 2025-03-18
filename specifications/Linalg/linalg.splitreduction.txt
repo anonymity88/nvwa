@@ -1,0 +1,176 @@
+//===----------------------------------------------------------------------===//
+// SplitReductionOp
+//===----------------------------------------------------------------------===//
+
+def SplitReductionOp : Op<Transform_Dialect, "structured.split_reduction",
+       [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+        TransformEachOpTrait, TransformOpInterface,
+        ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Indicates that the given `target` op should be transformed with the
+    `splitReduction` transformation and split factor provided as attribute.
+
+    The `splitReduction` transformation splits the first single linalg op
+    reduction into a parallel and reduction dimension.
+    A new `linalg.generic` op is created to perform the rest of the reduction.
+
+    The transformation supports different configurations attributes:
+      - split_factor: the factor by which to split (i.e. the size of the
+        remaining reduction after splitting).
+      - insert_split_dimension: the dimension in the temporary tensor into
+        which the new parallel dimension is inserted.
+      - inner_parallel: specifies whether the parallel dimension is before or
+        after the reduction dimension in the splitting op.
+      - use_scaling_algorithm: whether to use a scaling based formulation that
+        does not create an ExpandShapeOp (default: do not use scaling)
+      - use_alloc: whether to use an alloc op to allocate the temporary
+        tensor (default: do not use alloc op)
+
+    #### Return modes
+
+    This operation ignores non-Linalg ops and drops them in the return.
+    This operation produces a definite failure if the splitting fails for any
+    reason.
+
+    If all the operations referred to by the `target` handle split
+    properly, the transform succeeds. Otherwise the transform produces a
+    silenceable failure.  The 4 returned handles points to only the subset of
+    successfully produced computational operations, which can all be empty.
+    This 4 returned handles point to:
+      - the init op (or tensor_alloc op if use_alloc = true),
+      - the fill op used to initialize the neutral element,
+      - the split op and
+      - the result-combining op.
+
+    #### Example (default: `use_scaling_algorithm = false, use_alloc = false`):
+
+    ```
+      %r = linalg.generic {indexing_maps = [affine_map<(d0) -> (d0)>,
+                                            affine_map<(d0) -> ()>],
+            iterator_types = ["reduction"]}
+      ins(%in : tensor<32xf32>)
+      outs(%out : tensor<f32>) {
+      ^bb0(%arg1: f32, %arg2: f32):
+        %y = arith.addf %arg1, %arg2 : f32
+        linalg.yield %y : f32
+      } -> tensor<f32>
+    ```
+
+    is split into:
+
+    ```
+      %cst = arith.constant 0.000000e+00 : f32
+      %0 = tensor.expand_shape %in [[0, 1]] : tensor<32xf32> into tensor<4x8xf32>
+      %1 = tensor.empty() : tensor<4xf32>
+      %2 = linalg.fill ins(%cst : f32) outs(%1 : tensor<4xf32>) -> tensor<4xf32>
+      %3 = linalg.generic {indexing_maps = [affine_map<(d0, d1) -> (d0, d1)>,
+                                            affine_map<(d0, d1) -> (d0)>],
+        iterator_types = ["parallel", "reduction"]}
+        ins(%0 : tensor<4x8xf32>) outs(%2 : tensor<4xf32>) {
+        ^bb0(%arg3: f32, %arg5: f32):
+        %5 = arith.addf %arg3, %arg4 : f32
+        linalg.yield %5 : f32
+      } -> tensor<4xf32>
+      %r = linalg.generic {indexing_maps = [affine_map<(d0) -> (d0)>,
+                                            affine_map<(d0) -> ()>],
+        iterator_types = ["reduction"]}
+        ins(%3 : tensor<4xf32>) outs(%out : tensor<f32>) {
+        ^bb0(%arg3: f32, %arg4: f32):
+        %5 = arith.addf %arg3, %arg4 : f32
+        linalg.yield %5 : f32
+      } -> tensor<f32>
+    ```
+
+    #### Example (`use_scaling_algorithm = true, use_alloc = true`):
+
+    Instead of introducing an ExpandShapeOp, this scaling-based implementation
+    rewrites a reduction dimension `k` into `k * split_factor + kk`.
+    The dimension `kk` is added as an extra parallel dimension to the
+    intermediate output tensor at position `insert_split_dimension`.
+
+    Consider a minimal example where `k` is reduced:
+        O(i, j) += I(i, j, k)
+    Assume i=3, j=5, k=128, split_factor=16 and insert_split_dimension=0.
+    The compute is rewritten as:
+      a. O_i(kk, i, j) += I(i, j, 16 * k + kk)
+      b. O(i, j) += O_i(kk, i, j)
+    The intermediate tensor O_i is of shape (128/16)x3x5 == 8x3x5.
+
+    #### Example:
+
+    ```
+     %0 = linalg.matmul ins(%A, %B: tensor<16x256xf32>, tensor<256x32xf32>)
+       outs(%C: tensor<16x32xf32>) -> tensor<16x32xf32>
+    ```
+
+    Is transformed to:
+
+    ```
+     #map0 = affine_map<(d0, d1, d2, d3) -> (d0, d2 * 4 + d3)>
+     #map1 = affine_map<(d0, d1, d2, d3) -> (d2 * 4 + d3, d1)>
+     #map2 = affine_map<(d0, d1, d2, d3) -> (d2, d3)>
+     #map3 = affine_map<(d0, d1, d2, d3) -> (d0, d1, d2)>
+     #map4 = affine_map<(d0, d1, d2) -> (d0, d1, d2)>
+     #map5 = affine_map<(d0, d1, d2) -> (d0, d1)>
+     %0 = tensor.empty() : tensor<16x32x64xf32>
+     %cst = arith.constant 0.000000e+00 : f32
+     %1 = linalg.fill ins(%cst : f32) outs(%0 : tensor<16x32x64xf32>) ->
+        tensor<16x32x64xf32>
+     %2 = tensor.empty() : tensor<64x4xi1>
+
+     %3 = linalg.generic {indexing_maps = [#map0, #map1, #map2, #map3],
+       iterator_types = ["parallel", "parallel", "parallel", "reduction"]}
+       ins(%A, %B, %2 : tensor<16x256xf32>, tensor<256x32xf32>, tensor<64x4xi1>)
+       outs(%1 : tensor<16x32x64xf32>) {
+         ^bb0(%arg3: f32, %arg4: f32, %arg5: i1, %arg6: f32):
+           %5 = arith.mulf %arg3, %arg4 : f32
+           %6 = arith.addf %arg6, %5 : f32
+           linalg.yield %6 : f32
+     } -> tensor<16x32x64xf32>
+
+     %4 = linalg.generic {indexing_maps = [#map4, #map5],
+       iterator_types = ["parallel", "parallel", "reduction"]}
+       ins(%3 : tensor<16x32x64xf32>)
+       outs(%C : tensor<16x32xf32>) {
+         ^bb0(%arg3: f32, %arg4: f32):
+           %5 = arith.addf %arg3, %arg4 : f32
+           linalg.yield %5 : f32
+     } -> tensor<16x32xf32>
+
+     return %4 : tensor<16x32xf32>
+    ```
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target,
+                   DefaultValuedAttr<I64Attr, "{}">:$split_factor,
+                   DefaultValuedAttr<I64Attr, "{}">:$insert_split_dimension,
+                   UnitAttr:$inner_parallel,
+                   UnitAttr:$use_scaling_algorithm,
+                   UnitAttr:$use_alloc);
+  let results = (outs TransformHandleTypeInterface:$init_or_alloc_op,
+                      TransformHandleTypeInterface:$fill_op,
+                      TransformHandleTypeInterface:$split_linalg_op,
+                      TransformHandleTypeInterface:$combining_linalg_op);
+
+  let assemblyFormat =
+      "$target attr-dict `:`"
+      "functional-type(operands, results)";
+
+  let builders = [
+    OpBuilder<(ins "Value":$target,
+                   "int64_t":$splitFactor,
+                   "int64_t":$insertSplitDimension,
+                   CArg<"bool", "false">:$innerParallel,
+                   CArg<"bool", "false">:$useScalingAlgorithm,
+                   CArg<"bool", "false">:$useAlloc)>
+  ];
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::linalg::LinalgOp target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+

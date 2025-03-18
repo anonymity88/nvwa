@@ -1,0 +1,22 @@
+gpu.destroy_sp_mat (gpu::DestroySpMatOp) ¶
+Destroy sparse matrix operation
+
+Syntax:
+
+operation ::= `gpu.destroy_sp_mat` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies) $spmat attr-dict
+The gpu.destroy_sp_mat operation releases all resources of a sparse matrix represented by a handle that was previously created by a one of the sparse matrix creation operations.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%token = gpu.destroy_sp_mat async [%dep] %spmat
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+spmat	sparse matrix handle type
+Results: ¶
+Result	Description
+asyncToken	async token type

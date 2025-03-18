@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// CeilDivUOp
+//===----------------------------------------------------------------------===//
+
+def Index_CeilDivUOp : IndexBinaryOp<"ceildivu", [NoMemoryEffect]> {
+  let summary = "index unsigned ceil division";
+  let description = [{
+    The `index.ceildivu` operation takes two index values and computes their
+    unsigned quotient. Treats the leading bit as the most significant and rounds
+    towards positive infinity, i.e. `6 / -2 = 1`.
+
+    Note: division by zero is undefined behaviour.
+
+    Example:
+
+    ```mlir
+    // c = ceil(a / b)
+    %c = index.ceildivu %a, %b
+    ```
+  }];
+}
+

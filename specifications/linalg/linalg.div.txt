@@ -1,0 +1,16 @@
+linalg.div (linalg::DivOp)
+Divides the first tensor by the second tensor, elementwise.
+
+The shapes and element types must be identical. The appropriate casts, broadcasts and reductions should be done previously to calling this op.
+
+This means reduction/broadcast/element cast semantics is explicit. Further passes can take that into account when lowering this code. For example, a linalg.broadcast + linalg.div sequence can be lowered to a linalg.generic with different affine maps for the two operands. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

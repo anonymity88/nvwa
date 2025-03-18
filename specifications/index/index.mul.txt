@@ -1,0 +1,25 @@
+index.mul (index::MulOp) ¶
+Index multiplication
+
+Syntax:
+
+operation ::= `index.mul` $lhs `,` $rhs attr-dict
+The index.mul operation takes two index values and computes their product.
+
+Example:
+
+// c = a * b
+%c = index.mul %a, %b
+Traits: AlwaysSpeculatableImplTrait, Commutative
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

@@ -1,0 +1,32 @@
+vector.scalable.extract (vector::ScalableExtractOp) ¶
+Extract subvector from scalable vector operation
+
+Syntax:
+
+operation ::= `vector.scalable.extract` $source `[` $pos `]` attr-dict `:` type($res) `from` type($source)
+Takes rank-1 source vector and a position pos within the source vector, and extracts a subvector starting from that position.
+
+The extraction position must be a multiple of the minimum size of the result vector. For the operation to be well defined, the destination vector must fit within the source vector from the specified position. Since the source vector is scalable and its runtime length is unknown, the validity of the operation can’t be verified nor guaranteed at compile time.
+
+Example:
+
+%1 = vector.scalable.extract %0[8] : vector<4xf32> from vector<[8]xf32>
+%3 = vector.scalable.extract %2[0] : vector<[4]xf32> from vector<[8]xf32>
+Invalid example:
+
+%1 = vector.scalable.extract %0[5] : vector<4xf32> from vector<[16]xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+pos	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+source	of ranks 1
+Results: ¶
+Result	Description
+res	of ranks 1

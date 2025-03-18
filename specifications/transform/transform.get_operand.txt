@@ -1,0 +1,28 @@
+transform.get_operand (transform::GetOperandOp) ¶
+Get a handle to the operand(s) of the targeted op
+
+Syntax:
+
+operation ::= `transform.get_operand` $target `[`custom<TransformMatchDims>($raw_position_list, $is_inverted, $is_all)`]` attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op corresponds to the operands of the given target operation specified by the given set of positions. There are three possible modes:
+
+Position list directly, i.e. %target[0, 1, 2]. This will return the operands at the specified positions.
+Inverted position list, i.e. %target[except(0, 1, 2)]. This will return all operands except those at the given positions.
+All, i.e. %target[all]. This will return all operands of the operation.
+This transform produces a silenceable failure if any of the operand indices exceeds the number of operands in the target. It reads the target handle and produces the result handle.
+
+Traits: NavigationTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+raw_position_list	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+is_inverted	::mlir::UnitAttr	unit attribute
+is_all	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformValueHandleTypeInterface instance

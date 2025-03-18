@@ -1,0 +1,13 @@
+llvm.intr.invariant.end (LLVM::InvariantEndOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.invariant.end` $start `,` $size `,` $ptr attr-dict `:` qualified(type($ptr))
+Interfaces: PromotableOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+size	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+start	LLVM pointer in address space 0
+ptr	LLVM pointer type

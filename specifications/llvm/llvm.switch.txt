@@ -1,0 +1,28 @@
+llvm.switch (LLVM::SwitchOp) ¶
+Syntax:
+
+operation ::= `llvm.switch` $value `:` type($value) `,`
+              $defaultDestination (`(` $defaultOperands^ `:` type($defaultOperands) `)`)?
+              custom<SwitchOpCases>(ref(type($value)), $case_values, $caseDestinations,
+              $caseOperands, type($caseOperands))
+              attr-dict
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, Terminator
+
+Interfaces: BranchOpInterface, BranchWeightOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+case_values	::mlir::DenseIntElementsAttr	integer elements attribute
+case_operand_segments	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+branch_weights	::mlir::DenseI32ArrayAttr	i32 dense array attribute
+Operands: ¶
+Operand	Description
+value	signless integer
+defaultOperands	variadic of any type
+caseOperands	variadic of any type
+Successors: ¶
+Successor	Description
+defaultDestination	any successor
+caseDestinations	any successor

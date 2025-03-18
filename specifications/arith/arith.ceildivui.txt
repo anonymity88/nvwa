@@ -1,0 +1,32 @@
+//===----------------------------------------------------------------------===//
+// CeilDivUIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_CeilDivUIOp : Arith_IntBinaryOp<"ceildivui",
+                                          [ConditionallySpeculatable]> {
+  let summary = "unsigned ceil integer division operation";
+  let description = [{
+    Unsigned integer division. Rounds towards positive infinity. Treats the
+    leading bit as the most significant, i.e. for `i16` given two's complement
+    representation, `6 / -2 = 6 / (2^16 - 2) = 1`. 
+
+    Division by zero is undefined behavior. When applied to `vector` and 
+    `tensor` values, the behavior is undefined if _any_ elements are divided by 
+    zero.
+
+    Example:
+
+    ```mlir
+    // Scalar unsigned integer division.
+    %a = arith.ceildivui %b, %c : i64
+    ```
+  }];
+
+  let extraClassDeclaration = [{
+    /// Interface method for ConditionallySpeculatable.
+    Speculation::Speculatability getSpeculatability();
+  }];
+
+  let hasFolder = 1;
+}
+

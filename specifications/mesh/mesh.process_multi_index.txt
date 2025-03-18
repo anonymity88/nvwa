@@ -1,0 +1,22 @@
+mesh.process_multi_index (mesh::ProcessMultiIndexOp) ¶
+Get the multi index of current device along specified mesh axes.
+
+Syntax:
+
+operation ::= `mesh.process_multi_index` `on` $mesh (`axes` `=` $axes^)?
+              attr-dict `:` type($result)
+It is used in the SPMD format of IR. The axes mush be non-negative and less than the total number of mesh axes. If the axes are empty then get the index along all axes.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+Results: ¶
+Result	Description
+result	variadic of index

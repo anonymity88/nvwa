@@ -1,0 +1,22 @@
+//===----------------------------------------------------------------------===//
+// FloorDivSOp
+//===----------------------------------------------------------------------===//
+
+def Index_FloorDivSOp : IndexBinaryOp<"floordivs", [NoMemoryEffect]> {
+  let summary = "index signed floor division";
+  let description = [{
+    The `index.floordivs` operation takes two index values and computes their
+    signed quotient. Treats the leading bit as the sign and rounds towards
+    negative infinity, i.e. `5 / -2 = -3`.
+
+    Note: division by zero and signed division overflow are undefined behaviour.
+
+    Example:
+
+    ```mlir
+    // c = floor(a / b)
+    %c = index.floordivs %a, %b
+    ```
+  }];
+}
+

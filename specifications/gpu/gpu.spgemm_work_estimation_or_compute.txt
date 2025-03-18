@@ -1,0 +1,45 @@
+gpu.spgemm_work_estimation_or_compute (gpu::SpGEMMWorkEstimationOrComputeOp) ¶
+SpGEMM work estimation operation
+
+Syntax:
+
+operation ::= `gpu.spgemm_work_estimation_or_compute` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              `{` $kind `}` $spmatA (`{` $modeA^ `}`)? `,` $spmatB (`{` $modeB^ `}`)? `,` $spmatC `,` $desc `,` $bufferSz `,` $buffer  attr-dict `:` $computeType `into` type($buffer)
+The gpu.spgemm_work_estimation_or_compute is used to call cusparseSpGEMM_workEstimation or cusparseSpGEMM_compute. Both of them are for both determining the buffer size and performing the actual computation. The operation expects handles returned by previous sparse operations to construct an environment and the operands for SpGEMM. The buffer must have been allocated on the device.
+
+C’ = alpha * op(A) * op(B) + beta * C
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%bufferSz, %token = gpu.spgemm_work_estimation_or_compute async [%dep] {COMPUTE}
+                      %desc, %spmatA{NON_TRANSPOSE}, %spmatB{NON_TRANSPOSE},
+                      %spmatC, %spgemmDesc, %c0, %alloc: f32 into
+                      memref<0xi8>
+The matrix arguments can also be associated with one of the following operators: NON_TRANSPOSE, TRANSPOSE, CONJUGATE_TRANSPOSE. The default value is NON_TRANSPOSE.
+
+Interfaces: GPU_AsyncOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+modeA	::mlir::gpu::TransposeModeAttr	
+transpose mode of sparse matrix supported by sparse tensor ops
+modeB	::mlir::gpu::TransposeModeAttr	
+transpose mode of sparse matrix supported by sparse tensor ops
+computeType	::mlir::TypeAttr	any type attribute
+kind	::mlir::gpu::SpGEMMWorkEstimationOrComputeKindAttr	
+choose whether spgemm_work_estimation_or_compute does work estimation or compute
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+desc	SpGEMM operation handle type
+spmatA	sparse matrix handle type
+spmatB	sparse matrix handle type
+spmatC	sparse matrix handle type
+bufferSz	index
+buffer	memref of any type values
+Results: ¶
+Result	Description
+bufferSzNew	index
+asyncToken	async token type

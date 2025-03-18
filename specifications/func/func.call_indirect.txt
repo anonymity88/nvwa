@@ -1,0 +1,23 @@
+func.call_indirect (func::CallIndirectOp) ¶
+Indirect call operation
+
+Syntax:
+
+operation ::= `func.call_indirect` $callee `(` $callee_operands `)` attr-dict `:` type($callee)
+The func.call_indirect operation represents an indirect call to a value of function type. The operands and result types of the call must match the specified function type.
+
+Function values can be created with the func.constant operation.
+
+Example:
+
+%func = func.constant @my_func : (tensor<16xf32>, tensor<16xf32>) -> tensor<16xf32>
+%result = func.call_indirect %func(%0, %1) : (tensor<16xf32>, tensor<16xf32>) -> tensor<16xf32>
+Interfaces: CallOpInterface
+
+Operands: ¶
+Operand	Description
+callee	function type
+callee_operands	variadic of any type
+Results: ¶
+Result	Description
+results	variadic of any type

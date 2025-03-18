@@ -1,0 +1,27 @@
+spirv.Transpose (spirv::TransposeOp) ¶
+Transpose a matrix.
+
+Syntax:
+
+operation ::= `spirv.Transpose` operands attr-dict `:` type($matrix) `->` type($result)
+Result Type must be an OpTypeMatrix.
+
+Matrix must be an object of type OpTypeMatrix. The number of columns and the column size of Matrix must be the reverse of those in Result Type. The types of the scalar components in Matrix and Result Type must be the same.
+
+Matrix must have of type of OpTypeMatrix.
+
+Example: ¶
+%0 = spirv.Transpose %matrix: !spirv.matrix<2 x vector<3xf32>> ->
+!spirv.matrix<3 x vector<2xf32>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+matrix	any SPIR-V matrix type
+Results: ¶
+Result	Description
+result	any SPIR-V matrix type

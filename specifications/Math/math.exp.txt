@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// ExpOp
+//===----------------------------------------------------------------------===//
+
+def Math_ExpOp : Math_FloatUnaryOp<"exp"> {
+  let summary = "base-e exponential of the specified value";
+  let description = [{
+    The `exp` operation takes one operand of floating point type (i.e., scalar,
+    tensor or vector) and returns one result of the same type. It has no standard
+    attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar natural exponential.
+    %a = math.exp %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

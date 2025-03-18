@@ -1,0 +1,29 @@
+//===----------------------------------------------------------------------===//
+// OrIOp
+//===----------------------------------------------------------------------===//
+
+def Arith_OrIOp : Arith_TotalIntBinaryOp<"ori", [Commutative, Idempotent]> {
+  let summary = "integer binary or";
+  let description = [{
+    The `ori` operation takes two operands and returns one result, each of these
+    is required to be the same type. This type may be an integer scalar type, a
+    vector whose element type is integer, or a tensor of integers. It has no
+    standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar integer bitwise or.
+    %a = arith.ori %b, %c : i64
+
+    // SIMD vector element-wise bitwise integer or.
+    %f = arith.ori %g, %h : vector<4xi32>
+
+    // Tensor element-wise bitwise integer or.
+    %x = arith.ori %y, %z : tensor<4x?xi8>
+    ```
+  }];
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

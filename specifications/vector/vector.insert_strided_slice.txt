@@ -1,0 +1,34 @@
+vector.insert_strided_slice (vector::InsertStridedSliceOp) ¶
+Strided_slice operation
+
+Syntax:
+
+operation ::= `vector.insert_strided_slice` $source `,` $dest attr-dict `:` type($source) `into` type($dest)
+Takes a k-D source vector, an n-D destination vector (n >= k), n-sized offsets integer array attribute, a k-sized strides integer array attribute and inserts the k-D source vector as a strided subvector at the proper offset into the n-D destination vector.
+
+At the moment strides must contain only 1s.
+
+Returns an n-D vector that is a copy of the n-D destination vector in which the last k-D dimensions contain the k-D source vector elements strided at the proper location as specified by the offsets.
+
+Example:
+
+%2 = vector.insert_strided_slice %0, %1
+    {offsets = [0, 0, 2], strides = [1, 1]}:
+  vector<2x4xf32> into vector<16x4x8xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+offsets	::mlir::ArrayAttr	64-bit integer array attribute
+strides	::mlir::ArrayAttr	64-bit integer array attribute
+Operands: ¶
+Operand	Description
+source	vector of any type values
+dest	vector of any type values
+Results: ¶
+Result	Description
+res	vector of any type values

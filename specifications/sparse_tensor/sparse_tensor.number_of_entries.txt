@@ -1,0 +1,23 @@
+sparse_tensor.number_of_entries (sparse_tensor::NumberOfEntriesOp) ¶
+Returns the number of entries that are stored in the tensor.
+
+Syntax:
+
+operation ::= `sparse_tensor.number_of_entries` $tensor attr-dict `:` type($tensor)
+Returns the number of entries that are stored in the given sparse tensor. Note that this is typically the number of nonzero elements in the tensor, but since explicit zeros may appear in the storage formats, the more accurate nomenclature is used.
+
+Example:
+
+%noe = sparse_tensor.number_of_entries %tensor : tensor<64x64xf64, #CSR>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+tensor	sparse tensor of any type values
+Results: ¶
+Result	Description
+result	index

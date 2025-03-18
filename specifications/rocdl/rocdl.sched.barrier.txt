@@ -1,0 +1,7 @@
+rocdl.sched.barrier (ROCDL::SchedBarrier) ¶
+Syntax:
+
+operation ::= `rocdl.sched.barrier` $mask attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+mask	::mlir::IntegerAttr	32-bit signless integer attribute

@@ -1,0 +1,27 @@
+pdl_interp.check_types (pdl_interp::CheckTypesOp) ¶
+Compare a range of types to a range of known values
+
+Syntax:
+
+operation ::= `pdl_interp.check_types` $value `are` $types attr-dict `->` successors
+pdl_interp.check_types operations compare a range of types with a statically known range of types. On success, this operation branches to the true destination, otherwise the false destination is taken.
+
+Example:
+
+pdl_interp.check_types %type are [i32, i64] -> ^matchDest, ^failureDest
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+types	::mlir::ArrayAttr	type array attribute
+Operands: ¶
+Operand	Description
+value	range of PDL handle to an mlir::Type values
+Successors: ¶
+Successor	Description
+trueDest	any successor
+falseDest	any successor

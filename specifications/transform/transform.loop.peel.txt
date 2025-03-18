@@ -1,0 +1,37 @@
+transform.loop.peel (transform::LoopPeelOp) ¶
+Peels the first or last iteration of the loop
+
+Syntax:
+
+operation ::= `transform.loop.peel` $target attr-dict `:` functional-type(operands, results)
+Rewrite the given loop with a main loop and a partial (first or last) loop. When the peelFront option is set to true, the first iteration is peeled off. Otherwise, updates the given loop so that its step evenly divides its range and puts the remaining iteration into a separate loop or a conditional.
+
+In the absence of sufficient static information, this op may peel a loop, even if the step always divides the range evenly at runtime.
+
+Return modes ¶
+This operation ignores non-scf::ForOp ops and drops them in the return. The op returns two loops, the peeled loop which has trip count divisible by the step, and the remainder loop.
+
+When peelFront is true, the first result (remainder loop) executes all but the first iteration of the target loop. The second result (peeled loop) corresponds to the first iteration of the loop which can be canonicalized away in the following optimizations.
+
+When peelFront is false, the first result (peeled loop) is the portion of the target loop with the highest upper bound that is divisible by the step. The second result (remainder loop) contains the remaining iterations.
+
+Note that even though the Payload IR modification may be performed in-place, this operation consumes the operand handle and produces a new one.
+
+Return Modes ¶
+Produces a definite failure if peeling fails.
+
+Traits: FunctionalStyleTransformOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+peel_front	::mlir::BoolAttr	bool attribute
+fail_if_already_divisible	::mlir::BoolAttr	bool attribute
+Operands: ¶
+Operand	Description
+target	Transform IR handle to scf.for operations
+Results: ¶
+Result	Description
+peeled_loop	TransformHandleTypeInterface instance
+remainder_loop	TransformHandleTypeInterface instance

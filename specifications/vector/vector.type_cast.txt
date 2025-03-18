@@ -1,0 +1,24 @@
+vector.type_cast (vector::TypeCastOp) ¶
+Type_cast op converts a scalar memref to a vector memref
+
+Syntax:
+
+operation ::= `vector.type_cast` $memref attr-dict `:` type($memref) `to` type($result)
+Performs a conversion from a memref with scalar element to a memref with a single vector element, copying the shape of the memref to the vector. This is the minimal viable operation that is required to makeke super-vectorization operational. It can be seen as a special case of the view operation but scoped in the super-vectorization context.
+
+Example:
+
+%A  = memref.alloc() : memref<5x4x3xf32>
+%VA = vector.type_cast %A : memref<5x4x3xf32> to memref<vector<5x4x3xf32>>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+memref	statically shaped memref of any type values
+Results: ¶
+Result	Description
+result	memref of any type values

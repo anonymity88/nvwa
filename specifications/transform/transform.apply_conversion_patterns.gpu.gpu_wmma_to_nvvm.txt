@@ -1,0 +1,7 @@
+transform.apply_conversion_patterns.gpu.gpu_wmma_to_nvvm (transform::ApplyGPUWwmaToNVVMConversionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.gpu.gpu_wmma_to_nvvm` attr-dict
+Collects patterns that convert GPU dialect ops related to wmma ops to NVVM dialect ops. These patterns require an “LLVMTypeConverter”.
+
+Interfaces: ConversionPatternDescriptorOpInterface

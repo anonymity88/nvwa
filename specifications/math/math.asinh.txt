@@ -1,0 +1,32 @@
+math.asinh (math::AsinhOp) ¶
+Hyperbolic arcus sine of the given value
+
+Syntax:
+
+operation ::= `math.asinh` $operand (`fastmath` `` $fastmath^)?
+              attr-dict `:` type($result)
+Syntax:
+
+operation ::= ssa-id `=` `math.asinh` ssa-use `:` type
+The asinh operation computes the hyperbolic arcus sine of a given value. It takes one operand of floating point type (i.e., scalar, tensor or vector) and returns one result of the same type. It has no standard attributes.
+
+Example:
+
+// Hyperbolic arcus sine of scalar value.
+%a = math.asinh %b : f64
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+operand	floating-point-like
+Results: ¶
+Result	Description
+result	floating-point-like

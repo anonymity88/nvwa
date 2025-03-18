@@ -1,0 +1,10 @@
+llvm.intr.vacopy (LLVM::VaCopyOp) ¶
+Copies the current argument position from src_list to dest_list.
+
+Syntax:
+
+operation ::= `llvm.intr.vacopy` $src_list `to` $dest_list attr-dict `:` type(operands)
+Operands: ¶
+Operand	Description
+dest_list	LLVM pointer type
+src_list	LLVM pointer type

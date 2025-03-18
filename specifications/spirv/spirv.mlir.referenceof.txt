@@ -1,0 +1,24 @@
+spirv.mlir.referenceof (spirv::ReferenceOfOp) ¶
+Reference a specialization constant.
+
+Syntax:
+
+operation ::= `spirv.mlir.referenceof` $spec_const attr-dict `:` type($reference)
+Specialization constants in module scope are defined using symbol names. This op generates an SSA value that can be used to refer to the symbol within function scope for use in ops that expect an SSA value. This operation has no corresponding SPIR-V instruction; it’s merely used for modelling purpose in the SPIR-V dialect. This op’s return type is the same as the specialization constant.
+
+Example: ¶
+%0 = spirv.mlir.referenceof @spec_const : f32
+TODO Add support for composite specialization constants.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+spec_const	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+reference	void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type

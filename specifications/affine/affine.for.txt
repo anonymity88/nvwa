@@ -1,0 +1,81 @@
+affine.for (affine::AffineForOp) ¶
+For operation
+
+Syntax:
+
+operation   ::= `affine.for` ssa-id `=` lower-bound `to` upper-bound
+                (`step` integer-literal)? `{` op* `}`
+
+lower-bound ::= `max`? affine-map-attribute dim-and-symbol-use-list | shorthand-bound
+upper-bound ::= `min`? affine-map-attribute dim-and-symbol-use-list | shorthand-bound
+shorthand-bound ::= ssa-id | `-`? integer-literal
+The affine.for operation represents an affine loop nest. It has one region containing its body. This region must contain one block that terminates with affine.yield. Note: when affine.for is printed in custom format, the terminator is omitted. The block has one argument of index type that represents the induction variable of the loop.
+
+The affine.for operation executes its body a number of times iterating from a lower bound to an upper bound by a stride. The stride, represented by step, is a positive constant integer which defaults to “1” if not present. The lower and upper bounds specify a half-open range: the range includes the lower bound but does not include the upper bound.
+
+The lower and upper bounds of a affine.for operation are represented as an application of an affine mapping to a list of SSA values passed to the map. The same restrictions hold for these SSA values as for all bindings of SSA values to dimensions and symbols.
+
+The affine mappings for the bounds may return multiple results, in which case the max/min keywords are required (for the lower/upper bound respectively), and the bound is the maximum/minimum of the returned values. There is no semantic ambiguity, but MLIR syntax requires the use of these keywords to make things more obvious to human readers.
+
+Many upper and lower bounds are simple, so MLIR accepts two custom form syntaxes: the form that accepts a single ‘ssa-id’ (e.g. %N) is shorthand for applying that SSA value to a function that maps a single symbol to itself, e.g., ()[s]->(s)()[%N]. The integer literal form (e.g. -42) is shorthand for a nullary mapping function that returns the constant value (e.g. ()->(-42)()).
+
+Example showing reverse iteration of the inner loop:
+
+#map57 = affine_map<(d0)[s0] -> (s0 - d0 - 1)>
+
+func.func @simple_example(%A: memref<?x?xf32>, %B: memref<?x?xf32>) {
+  %N = dim %A, 0 : memref<?x?xf32>
+  affine.for %i = 0 to %N step 1 {
+    affine.for %j = 0 to %N {   // implicitly steps by 1
+      %0 = affine.apply #map57(%j)[%N]
+      %tmp = call @F1(%A, %i, %0) : (memref<?x?xf32>, index, index)->(f32)
+      call @F2(%tmp, %B, %i, %0) : (f32, memref<?x?xf32>, index, index)->()
+    }
+  }
+  return
+}
+affine.for can also operate on loop-carried variables (iter_args) and return the final values after loop termination. The initial values of the variables are passed as additional SSA operands to the affine.for following the operands for the loop’s lower and upper bounds. The operation’s region has equivalent arguments for each variable representing the value of the variable at the current iteration.
+
+The region must terminate with an affine.yield that passes all the current iteration variables to the next iteration, or to the affine.for’s results if at the last iteration. For affine.for’s that execute zero iterations, the initial values of the loop-carried variables (corresponding to the SSA operands) will be the op’s results.
+
+For example, to sum-reduce a memref:
+
+func.func @reduce(%buffer: memref<1024xf32>) -> (f32) {
+ // Initial sum set to 0.
+ %sum_0 = arith.constant 0.0 : f32
+ // iter_args binds initial values to the loop's region arguments.
+ %sum = affine.for %i = 0 to 10 step 2
+     iter_args(%sum_iter = %sum_0) -> (f32) {
+   %t = affine.load %buffer[%i] : memref<1024xf32>
+   %sum_next = arith.addf %sum_iter, %t : f32
+   // Yield current iteration sum to next iteration %sum_iter or to %sum
+   // if final iteration.
+   affine.yield %sum_next : f32
+ }
+ return %sum : f32
+}
+%res:2 = affine.for %i = 0 to 128 iter_args(%arg0 = %init0, %arg1 = %init1)
+           -> (index, index) {
+  %y0 = arith.addi %arg0, %c1 : index
+  %y1 = arith.addi %arg1, %c2 : index
+  affine.yield %y0, %y1 : index, index
+}
+If the affine.for defines any values, a yield terminator must be explicitly present. The number and types of the “affine.for” results must match the initial values in the iter_args binding and the yield operands.
+
+Traits: AttrSizedOperandSegments, AutomaticAllocationScope, RecursiveMemoryEffects, SingleBlockImplicitTerminator<AffineYieldOp>, SingleBlock
+
+Interfaces: ConditionallySpeculatable, LoopLikeOpInterface, RegionBranchOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+lowerBoundMap	::mlir::AffineMapAttr	AffineMap attribute
+upperBoundMap	::mlir::AffineMapAttr	AffineMap attribute
+step	::mlir::IntegerAttr	index attribute
+Operands: ¶
+Operand	Description
+lowerBoundOperands	variadic of index
+upperBoundOperands	variadic of index
+inits	variadic of any type
+Results: ¶
+Result	Description
+results	variadic of any type

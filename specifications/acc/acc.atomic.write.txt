@@ -1,0 +1,18 @@
+acc.atomic.write (acc::AtomicWriteOp) ¶
+Performs an atomic write
+
+Syntax:
+
+operation ::= `acc.atomic.write` $x `=` $expr
+              `:` type($x) `,` type($expr)
+              attr-dict
+This operation performs an atomic write.
+
+The operand x is the address to where the expr is atomically written w.r.t. multiple threads. The evaluation of expr need not be atomic w.r.t. the write to address. In general, the type(x) must dereference to type(expr).
+
+Interfaces: AtomicWriteOpInterface
+
+Operands: ¶
+Operand	Description
+x	pointer-like type
+expr	any type

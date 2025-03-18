@@ -1,0 +1,27 @@
+complex.neg (complex::NegOp) ¶
+Negation operator
+
+Syntax:
+
+operation ::= `complex.neg` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The neg op takes a single complex number complex and returns -complex.
+
+Example:
+
+%a = complex.neg %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

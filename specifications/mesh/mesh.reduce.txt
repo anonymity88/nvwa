@@ -1,0 +1,38 @@
+mesh.reduce (mesh::ReduceOp) ¶
+Reduce over a device mesh.
+
+Syntax:
+
+operation ::= `mesh.reduce` $input `on` $mesh (`mesh_axes` `=` $mesh_axes^)?
+              (`reduction` `=` $reduction^)?
+              `root` `=` custom<DynamicIndexList>($root_dynamic, $root)
+              attr-dict `:` functional-type(operands, results)
+Reduces on device root within each device group. root specifies the coordinates of a device along mesh_axes. It uniquely identifies the root device within its device group. The accumulation element type is specified by the result type and it does not need to match the input element type. The input element is converted to the result element type before performing the reduction.
+
+Attributes: reduction: Indicates the reduction method.
+
+Example:
+
+%1 = mesh.reduce %0 on @mesh0 mesh_axes = [1, 0]
+  reduction = <max> root = [2, 3]
+  : (tensor<3x4xf32>) -> tensor<3x4xf64>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+mesh_axes	::mlir::DenseI16ArrayAttr	i16 dense array attribute
+reduction	::mlir::mesh::ReductionKindAttr	
+Reduction of an iterator/mesh dimension.
+root	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+input	ranked tensor of any type values
+root_dynamic	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

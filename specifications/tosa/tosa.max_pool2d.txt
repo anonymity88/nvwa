@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// Operator: max_pool2d
+//===----------------------------------------------------------------------===//
+def Tosa_MaxPool2dOp : Tosa_InferShapedTypeOp<"max_pool2d"> {
+  let summary = "Performs max pooling on the input.";
+
+  let description = [{
+    This performs a max pooling over the given input tensor. A sliding window of
+    size given by <kernel size> is passed over the input tensor, with the
+    maximum value being placed in the
+    output tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor4D:$input,
+
+    Tosa_IntArrayAttr2:$kernel,
+    Tosa_IntArrayAttr2:$stride,
+    Tosa_IntArrayAttr4:$pad
+  );
+
+  let results = (outs
+    Tosa_Tensor4D:$output
+  );
+
+  let hasCanonicalizer = 1;
+}
+

@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: sigmoid
+//===----------------------------------------------------------------------===//
+def Tosa_SigmoidOp : Tosa_ElementwiseOp<"sigmoid"> {
+  let summary = "Computes elementwise sigmoid of input.";
+
+  let description = [{
+    Sigmoid function: output = 1 / (1 + exp(-input))
+    For quantized integer data types, the TABLE operator should be used instead
+    with the following definition.  The sigmoid table has 513 entries each of
+    16-bit precision and covering the input range -16.0 to +16.0
+    in steps of 1/16.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

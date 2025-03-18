@@ -1,0 +1,12 @@
+amx.tdpbsud (amx::x86_amx_tdpbsud) ¶
+Operands: ¶
+Operand	Description
+«unnamed»	integer
+«unnamed»	integer
+«unnamed»	integer
+«unnamed»	LLVM dialect-compatible type
+«unnamed»	LLVM dialect-compatible type
+«unnamed»	LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

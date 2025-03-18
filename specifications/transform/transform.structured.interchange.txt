@@ -1,0 +1,24 @@
+transform.structured.interchange (transform::InterchangeOp) ¶
+Syntax:
+
+operation ::= `transform.structured.interchange` $target
+              (`iterator_interchange` `=` $iterator_interchange^)? attr-dict
+              `:` custom<SemiFunctionType>(type($target), type($transformed), "false")
+Interchanges the iterators of the operations pointed to by the target handle using the iterator interchange attribute.
+
+Return modes ¶
+This operation ignores non-linalg::Generic ops and drops them in the return. This operation fails if the interchange attribute is invalid. If all the operations referred to by the target handle interchange properly, the transform succeeds. If any interchange fails, the transform produces a definite failure. The return handle points to only the subset of successfully produced interchanged operations, which can be empty.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+iterator_interchange	::mlir::DenseI64ArrayAttr	i64 dense array attribute whose value is non-negative
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

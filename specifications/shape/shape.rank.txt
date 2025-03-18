@@ -1,0 +1,20 @@
+shape.rank (shape::RankOp) ¶
+Gets the rank of a shape
+
+Syntax:
+
+operation ::= `shape.rank` $shape attr-dict `:` type($shape) `->` type($rank)
+Returns the rank of the shape or extent tensor, i.e. the number of extents.
+
+Traits: AlwaysSpeculatableImplTrait, InferTypeOpAdaptor
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+shape	shape or extent tensor
+Results: ¶
+Result	Description
+rank	size or index

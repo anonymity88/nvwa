@@ -1,0 +1,42 @@
+//===----------------------------------------------------------------------===//
+// GlobalStoreOp
+//===----------------------------------------------------------------------===//
+
+def MLProgram_GlobalStoreOp : MLProgram_Op<"global_store", [
+    DeclareOpInterfaceMethods<SymbolUserOpInterface>
+  ]> {
+  let summary = "Direct store of a value into a mutable global";
+  let description = [{
+    Performs a non-atomic, non-volatile, non-synchronized store to a mutable
+    global.
+
+    It is fully expected that these constraints are not suitable for
+    all situations, and alternative ops should be defined and used for more
+    advanced cases.
+
+    This op is side effecting and may not be valid to use in graph regions
+    without additional consideration to evaluation order constraints. See
+    `global_store_graph` for op which allows for explicit ordering constraints.
+
+    Example:
+
+    ```mlir
+    ml_program.global_store @foobar = %0 : tensor<?xi32>
+    ```
+  }];
+
+  let arguments = (ins
+    Arg<SymbolRefAttr, "", [MemWrite]>:$global,
+    AnyType:$value
+  );
+
+  let assemblyFormat = [{
+    $global `=` $value `:` type($value) attr-dict
+  }];
+
+  let extraClassDeclaration = [{
+    /// Gets the corresponding GlobalOp (or nullptr).
+    GlobalOp getGlobalOp(SymbolTableCollection &symbolTable);
+  }];
+}
+

@@ -1,0 +1,11 @@
+rocdl.ds_swizzle (ROCDL::DsSwizzleOp) ¶
+Syntax:
+
+operation ::= `rocdl.ds_swizzle` $src `,` $offset  attr-dict `:` `(` type($src) `,` type($offset) `)` `->` type($res)
+Operands: ¶
+Operand	Description
+src	32-bit signless integer
+offset	32-bit signless integer
+Results: ¶
+Result	Description
+res	32-bit signless integer

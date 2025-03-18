@@ -1,0 +1,12 @@
+llvm.intr.lifetime.end (LLVM::LifetimeEndOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.lifetime.end` $size `,` $ptr attr-dict `:` qualified(type($ptr))
+Interfaces: PromotableOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+size	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+ptr	LLVM pointer type

@@ -1,0 +1,45 @@
+transform.match.structured.dim (transform::MatchStructuredDimOp) ¶
+Checks if the dimensions of the structured op satisfy some criteria
+
+Syntax:
+
+operation ::= `transform.match.structured.dim` $operand_handle `[`custom<TransformMatchDims>($raw_dim_list, $is_inverted, $is_all)`]` attr-dict `:` custom<SemiFunctionType>(type($operand_handle), type($result))
+Checks if the dimensions (loop ranges) of the structured payload op satisfy the criteria specified as attributes. May capture the numeric value of the dimension into a parameter that it returns.
+
+The following dimension specifications are supported:
+
+all: all dimensions are checked and captured;
+list of integers: the listed dimensions are checked and captured;
+except( list of integers ): all dimensions except the specified ones are checked and captured.
+Negative indexes are interpreted by counting values from the last one (similarly to Python). For example, -1 means the last dimension and except(-1) means all dimensions but the last. Indexes must be unique, including after interpretation of negative ones.
+
+Produces a silenceable failure in case of index overflow, including backward counting.
+
+The following mutually exclusive conditions are available as unit attributes:
+
+parallel: the dimension corresponds to a parallel loop;
+reduction: the dimension corresponds to a reduction loop.
+If the result type is specified, associates the parameter with the (static) values of dimensions in the same order as listed and preserving the natural order for all and except. Specifically, if -1, -2 are specified, the parameter will be associated with the value of the second-to-last dimension followed by the last dimension. If the dimension is dynamic, the parameter will contain a negative value corresponding to kDynamic in C++.
+
+This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the specified dimensions satisfy the specified criteria, produces a silenceable failure otherwise. Produces a definite failure if the operand is not associated with a single payload op.
+
+Traits: SingleOpMatcher, StructuredPredicate
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+raw_dim_list	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+is_inverted	::mlir::UnitAttr	unit attribute
+is_all	::mlir::UnitAttr	unit attribute
+parallel	::mlir::UnitAttr	unit attribute
+reduction	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+result	TransformParamTypeInterface instance

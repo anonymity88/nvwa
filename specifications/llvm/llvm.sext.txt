@@ -1,0 +1,16 @@
+llvm.sext (LLVM::SExtOp) ¶
+Syntax:
+
+operation ::= `llvm.sext` $arg attr-dict `:` type($arg) `to` type($res)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+arg	signless integer or LLVM dialect-compatible vector of signless integer
+Results: ¶
+Result	Description
+res	signless integer or LLVM dialect-compatible vector of signless integer

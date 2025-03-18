@@ -1,0 +1,37 @@
+transform.get_parent_op (transform::GetParentOp) ¶
+Gets handles to the closest parent ops
+
+Syntax:
+
+operation ::= `transform.get_parent_op` $target attr-dict `:` functional-type(operands, results)
+The handle defined by this Transform op corresponds to the parents of the targeted payload ops (in the same order).
+
+Requirements that parent ops must fulfill can be optionally specified. In that case for each target op, the closest parent op that fulfills all requirements, is returned.
+
+isolated_from_above: the parent op must be isolated from above
+allow_empty_results: get_parent_op is allowed to return an empty list and still succeeds. In such a case, if get_parent_op fails for any operation in the list, the entire transform returns an empty handle.
+op_name: the parent op must have the specified name
+nth_parent: get the n-th parent of that satisfies the above requirements
+If deduplicate is set, the result handle does not contain any duplicate ops. For example, given the list “(childof(A), childof(B), childof(B), childof(A), childof(B))”, the resulting list will be just “(A, B)”. Note that no other semantic ordering is applied, e.g., “B” may itself be a parent of “A”. This may have an impact on the further transformation applied to the handle produced here.
+
+If any of the given Payload IR ops has no such suitable parent, then:
+
+if allow_empty_results is set, the result handle is empty
+otherwise, the transformation produces a silenceable failure.
+Traits: NavigationTransformOpTrait
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+isolated_from_above	::mlir::UnitAttr	unit attribute
+allow_empty_results	::mlir::UnitAttr	unit attribute
+op_name	::mlir::StringAttr	string attribute
+deduplicate	::mlir::UnitAttr	unit attribute
+nth_parent	::mlir::IntegerAttr	64-bit signless integer attribute whose value is positive
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+parent	TransformHandleTypeInterface instance

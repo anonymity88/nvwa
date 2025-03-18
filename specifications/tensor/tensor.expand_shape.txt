@@ -1,0 +1,36 @@
+tensor.expand_shape (tensor::ExpandShapeOp) ¶
+Operation to produce a tensor with a higher rank
+
+Syntax:
+
+operation ::= `tensor.expand_shape` $src $reassociation `output_shape`
+              custom<DynamicIndexList>($output_shape, $static_output_shape) attr-dict `:`
+              type($src) `into` type($result)
+The tensor.expand_shape op produces a tensor of higher (or equal) rank than the operand src whose dimension sizes are a reassociation of src.
+
+A reassociation is defined as a continuous grouping of dimensions and is represented with an array of DenseI64ArrayAttr attribute. The reassociation maps applied to the result tensor with the higher rank must result in the operand tensor with the smaller rank.
+
+The representation for the output shape supports a partially-static specification via attributes specified through the static_output_shape argument. A special sentinel value ShapedType::kDynamic encodes that the corresponding entry has a dynamic value. There must be exactly as many SSA inputs in output_shape as there are ShapedType::kDynamic entries in static_output_shape.
+
+Example:
+
+// Dimension expansion i -> (i', j') and (k) -> (k')
+%b = tensor.expand_shape %a [[0, 1], [2]] output_shape [%sz0, %sz1, 32]
+    : tensor<?x32xf32> into tensor<?x?x32xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reassociation	::mlir::ArrayAttr	Array of 64-bit integer array attributes
+static_output_shape	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+src	tensor of any type values
+output_shape	variadic of index
+Results: ¶
+Result	Description
+result	tensor of any type values

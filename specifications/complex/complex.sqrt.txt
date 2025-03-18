@@ -1,0 +1,27 @@
+complex.sqrt (complex::SqrtOp) ¶
+Complex square root
+
+Syntax:
+
+operation ::= `complex.sqrt` $complex (`fastmath` `` $fastmath^)? attr-dict `:` type($complex)
+The sqrt operation takes a complex number and returns its square root.
+
+Example:
+
+%a = complex.sqrt %b : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+complex	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

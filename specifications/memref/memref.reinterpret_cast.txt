@@ -1,0 +1,60 @@
+memref.reinterpret_cast (memref::ReinterpretCastOp) ¶
+Memref reinterpret cast operation
+
+Syntax:
+
+operation ::= `memref.reinterpret_cast` $source `to` `offset` `` `:`
+              custom<DynamicIndexList>($offsets, $static_offsets)
+              `` `,` `sizes` `` `:`
+              custom<DynamicIndexList>($sizes, $static_sizes)
+              `` `,` `strides` `` `:`
+              custom<DynamicIndexList>($strides, $static_strides)
+              attr-dict `:` type($source) `to` type($result)
+Modify offset, sizes and strides of an unranked/ranked memref.
+
+Example:
+
+memref.reinterpret_cast %ranked to
+  offset: [0],
+  sizes: [%size0, 10],
+  strides: [1, %stride1]
+: memref<?x?xf32> to memref<?x10xf32, strided<[1, ?], offset: 0>>
+
+memref.reinterpret_cast %unranked to
+  offset: [%offset],
+  sizes: [%size0, %size1],
+  strides: [%stride0, %stride1]
+: memref<*xf32> to memref<?x?xf32, strided<[?, ?], offset: ?>>
+This operation creates a new memref descriptor using the base of the source and applying the input arguments to the other metadata. In other words:
+
+%dst = memref.reinterpret_cast %src to
+  offset: [%offset],
+  sizes: [%sizes],
+  strides: [%strides]
+means that %dst’s descriptor will be:
+
+%dst.base = %src.base
+%dst.aligned = %src.aligned
+%dst.offset = %offset
+%dst.sizes = %sizes
+%dst.strides = %strides
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments, MemRefsNormalizable
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OffsetSizeAndStrideOpInterface, OpAsmOpInterface, ViewLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+static_offsets	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+static_sizes	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+static_strides	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+source	ranked or unranked memref of any type values
+offsets	variadic of index
+sizes	variadic of index
+strides	variadic of index
+Results: ¶
+Result	Description
+result	memref of any type values

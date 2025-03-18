@@ -1,0 +1,13 @@
+omp.terminator (omp::TerminatorOp) ¶
+Terminator for OpenMP regions
+
+Syntax:
+
+operation ::= `omp.terminator` attr-dict
+A terminator operation for regions that appear in the body of OpenMP operation. These regions are not expected to return any value so the terminator takes no operands. The terminator op returns control to the enclosing op.
+
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}

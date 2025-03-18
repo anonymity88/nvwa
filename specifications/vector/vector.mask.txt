@@ -1,0 +1,28 @@
+vector.mask (vector::MaskOp) ¶
+Predicates a maskable vector operation
+
+The vector.mask is a MaskingOpInterface operation that predicates the execution of another operation. It takes an i1 vector mask and an optional passthru vector as arguments.
+
+A implicitly vector.yield-terminated region encloses the operation to be masked. Values used within the region are captured from above. Only one maskable operation can be masked with a vector.mask operation at a time. An operation is maskable if it implements the MaskableOpInterface. The terminator yields all results of the maskable operation to the result of this operation.
+
+The vector mask argument holds a bit for each vector lane and determines which vector lanes should execute the maskable operation and which ones should not. The vector.mask operation returns the value produced by the masked execution of the nested operation, if any. The masked-off lanes in the result vector are taken from the corresponding lanes of the pass-thru argument, if provided, or left unmodified, otherwise. At this point, 0-D vectors are not supported by vector.mask. They may be supported in the future.
+
+The vector.mask operation does not prescribe how a maskable operation should be masked or how a masked operation should be lowered. Masking constraints and some semantic details are provided by each maskable operation through the MaskableOpInterface. Lowering of masked operations is implementation defined. For instance, scalarizing the masked operation or executing the operation for the masked-off lanes are valid lowerings as long as the execution of masked-off lanes does not change the observable behavior of the program.
+
+Examples:
+
+  %0 = vector.mask %mask { vector.reduction <add>, %a : vector<8xi32> into i32 } : vector<8xi1> -> i32
+  %0 = vector.mask %mask, %passthru { arith.divsi %a, %b : vector<8xi32> } : vector<8xi1> -> vector<8xi32>
+  vector.mask %mask { vector.transfer_write %val, %t0[%idx] : vector<16xf32>, memref<?xf32> } : vector<16xi1>
+  vector.mask %mask { vector.transfer_write %val, %t0[%idx] : vector<16xf32>, tensor<?xf32> } : vector<16xi1> -> tensor<?xf32>
+Traits: NoRegionArguments, RecursiveMemoryEffects, SingleBlockImplicitTerminator<vector::YieldOp>, SingleBlock
+
+Interfaces: MaskingOpInterface
+
+Operands: ¶
+Operand	Description
+mask	vector of 1-bit signless integer values
+passthru	any type
+Results: ¶
+Result	Description
+results	variadic of any type

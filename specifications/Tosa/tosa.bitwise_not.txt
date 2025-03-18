@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// Operator: bitwise_not
+//===----------------------------------------------------------------------===//
+def Tosa_BitwiseNotOp : Tosa_ElementwiseOp<"bitwise_not",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Bitwise NOT operator";
+
+  let description = [{
+    Elementwise bitwise NOT of input tensor.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

@@ -1,0 +1,7 @@
+transform.apply_patterns.tensor.decompose_concat (transform::ApplyDecomposeTensorConcatPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.decompose_concat` attr-dict
+Indicates that tensor.concat ops should be decomposed into a chain of tensor.insert_slice operations inserting into a materialized destination.
+
+Interfaces: PatternDescriptorOpInterface

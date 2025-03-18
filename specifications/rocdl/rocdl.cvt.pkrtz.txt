@@ -1,0 +1,21 @@
+rocdl.cvt.pkrtz (ROCDL::CvtPkRtz) ¶
+Convert two f32 input into a vector<2xf16>
+
+Syntax:
+
+operation ::= `rocdl.cvt.pkrtz` attr-dict $srcA `,` $srcB `:` type($res)
+Convert two f32 values into a packed vector<2xf16>.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+srcA	32-bit float
+srcB	32-bit float
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

@@ -1,0 +1,27 @@
+spirv.LogicalNot (spirv::LogicalNotOp) ¶
+Result is true if Operand is false. Result is false if Operand is true.
+
+Syntax:
+
+operation ::= `spirv.LogicalNot` $operand `:` type($operand) attr-dict
+Result Type must be a scalar or vector of Boolean type.
+
+The type of Operand must be the same as Result Type.
+
+Results are computed per component.
+
+Example: ¶
+%2 = spirv.LogicalNot %0 : i1
+%2 = spirv.LogicalNot %0 : vector<4xi1>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultShape, SameTypeOperands, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand	bool or vector of bool values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	bool or vector of bool values of length 2/3/4/8/16

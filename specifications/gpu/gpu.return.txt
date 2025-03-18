@@ -1,0 +1,17 @@
+gpu.return (gpu::ReturnOp) ¶
+Terminator for GPU functions.
+
+Syntax:
+
+operation ::= `gpu.return` attr-dict ($operands^ `:` type($operands))?
+A terminator operation for regions that appear in the body of gpu.func functions. The operands to the gpu.return are the result values returned by an invocation of the gpu.func.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<GPUFuncOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operands	variadic of any type

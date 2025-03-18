@@ -1,0 +1,7 @@
+transform.apply_patterns.tensor.merge_consecutive_insert_extract_slice (transform::ApplyMergeConsecutiveInsertExtractSlicePatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.tensor.merge_consecutive_insert_extract_slice` attr-dict
+Indicates that consecutive tensor.extract_slice/tensor.insert_slice ops should be merged into a single op. These patterns are not canonicalizations because the bufferization is sensitive to IR structure.
+
+Interfaces: PatternDescriptorOpInterface

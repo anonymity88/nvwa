@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// Operator: rsqrt
+//===----------------------------------------------------------------------===//
+def Tosa_RsqrtOp : Tosa_ElementwiseOp<"rsqrt",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Elementwise 1/sqrt op";
+
+  let description = [{
+    Elementwise reciprocal square root operation. For integer operation, a TABLE
+    should be used with the appropriate ranges.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+}
+

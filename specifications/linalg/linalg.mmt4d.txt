@@ -1,0 +1,16 @@
+linalg.mmt4d (linalg::Mmt4DOp)
+Performs a matrix-matrix-transpose multiplication of two 4D inputs.
+
+Differences from linalg.matmul:
+
+The right hand side is transposed, whence the ’t’ in ‘mmt’.
+The input and output tensors have a 4D shape instead of a 2D shape. They are interpreted as 2D matrices with one level of 2D tile subdivision, whence the 2+2=4 dimensions. The inner tile dimensions are identified with ‘0’ suffixes below, for instance the LHS matrix shape (M, K, M0, K0) reads as: MxK tiles, each of shape M0xK0. Traits: AttrSizedOperandSegments, SingleBlockImplicitTerminator<YieldOp>, SingleBlock
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, LinalgContractionOpInterface, LinalgStructuredInterface, MemoryEffectOpInterface, ReifyRankedShapedTypeOpInterface
+
+Operands:
+Operand	Description
+inputs	variadic of any type
+outputs	variadic of shaped of any type values
+Results:
+Result	Description
+result_tensors	variadic of ranked tensor of any type values

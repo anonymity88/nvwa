@@ -1,0 +1,28 @@
+complex.sub (complex::SubOp) ¶
+Complex subtraction
+
+Syntax:
+
+operation ::= `complex.sub` $lhs `,` $rhs (`fastmath` `` $fastmath^)? attr-dict `:` type($result)
+The sub operation takes two complex numbers and returns their difference.
+
+Example:
+
+%a = complex.sub %b, %c : complex<f32>
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+lhs	complex type with floating-point elements
+rhs	complex type with floating-point elements
+Results: ¶
+Result	Description
+result	complex type with floating-point elements

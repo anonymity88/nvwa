@@ -1,0 +1,26 @@
+spirv.GL.SClamp (spirv::GLSClampOp) ¶
+Clamp x between min and max values.
+
+Result is min(max(x, minVal), maxVal), where x, minVal and maxVal are interpreted as signed integers. The resulting value is undefined if minVal > maxVal.
+
+Result Type and the type of the operands must both be integer scalar or integer vector types. Result Type and operand types must have the same number of components with the same component width. Results are computed per component.
+
+uclamp-op ::= ssa-id `=` `spirv.GL.UClamp` ssa-use, ssa-use, ssa-use `:`
+           sgined-scalar-vector-type
+Example: ¶
+%2 = spirv.GL.SClamp %x, %min, %max : si32
+%3 = spirv.GL.SClamp %x, %min, %max : vector<3xsi16>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+x	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+y	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+z	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16

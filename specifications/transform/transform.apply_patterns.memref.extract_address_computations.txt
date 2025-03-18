@@ -1,0 +1,14 @@
+transform.apply_patterns.memref.extract_address_computations (transform::ApplyExtractAddressComputationsPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.memref.extract_address_computations` attr-dict
+Collects patterns for extracting address computations from operations with memory accesses such that these memory accesses use only a base pointer.
+
+For instance,
+
+memref.load %base[%off0, ...]
+Will be rewritten in:
+
+%new_base = memref.subview %base[%off0,...][1,...][1,...]
+memref.load %new_base[%c0,...]
+Interfaces: PatternDescriptorOpInterface

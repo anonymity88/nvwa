@@ -1,0 +1,13 @@
+//===----------------------------------------------------------------------===//
+// IndexBinaryOp
+//===----------------------------------------------------------------------===//
+
+/// Base class for binary Index dialect operations.
+class IndexBinaryOp<string mnemonic, list<Trait> traits = []>
+    : IndexOp<mnemonic, traits> {
+  let arguments = (ins Index:$lhs, Index:$rhs);
+  let results = (outs Index:$result);
+  let assemblyFormat = "$lhs `,` $rhs attr-dict";
+  let hasFolder = 1;
+}
+

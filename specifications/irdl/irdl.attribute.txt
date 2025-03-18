@@ -1,0 +1,29 @@
+irdl.attribute (irdl::AttributeOp) ¶
+Define a new attribute
+
+Syntax:
+
+operation ::= `irdl.attribute` $sym_name attr-dict-with-keyword custom<SingleBlockRegion>($body)
+irdl.attribute defines a new attribute belonging to the irdl.dialect parent.
+
+The attribute parameters can be defined with an irdl.parameters operation in the optional region.
+
+Example:
+
+irdl.dialect @testd {
+  irdl.attribute @enum_attr {
+    %0 = irdl.is "foo"
+    %1 = irdl.is "bar"
+    %2 = irdl.any_of(%0, %1)
+    irdl.parameters(%2)
+  }
+}
+The above program defines an enum_attr attribute inside the testd dialect. The attribute has one StringAttr parameter that should be either a "foo" or a "bar".
+
+Traits: AtMostOneChildOf<ParametersOp>, HasParent<DialectOp>, NoRegionArguments, NoTerminator
+
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute

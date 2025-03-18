@@ -1,0 +1,230 @@
+nvgpu.warpgroup.mma.store (nvgpu::WarpgroupMmaStoreOp) ¶
+Syntax:
+
+operation ::= `nvgpu.warpgroup.mma.store` $matrixD `,` $dstMemref attr-dict `:` type($matrixD) `to` type($dstMemref)
+The nvgpu.warpgroup.mma.store op performs the store of fragmented result in $matrixD to given memref.
+
+[See the details of register fragment layout for accumulator matrix D] ( https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#wgmma-64n16-d)
+
+Note that, the op must be run with warp group.
+
+Operands: ¶
+Operand	Description
+matrixD	
+dstMemref	memref of any type values
+Attributes ¶
+RcpRoundingModeAttr ¶
+Rounding mode of rcp
+
+Syntax:
+
+#nvgpu.rcp_rounding_mode<
+  ::mlir::nvgpu::RcpRoundingMode   # value
+>
+Enum cases:
+
+approx (APPROX)
+rn (RN)
+rz (RZ)
+rm (RM)
+rp (RP)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::nvgpu::RcpRoundingMode	an enum of type RcpRoundingMode
+TensorMapInterleaveKindAttr ¶
+Tensor map interleave layout type
+
+Syntax:
+
+#nvgpu.interleave<
+  ::mlir::nvgpu::TensorMapInterleaveKind   # value
+>
+Enum cases:
+
+none (INTERLEAVE_NONE)
+interleave_16b (INTERLEAVE_16B)
+interleave_32b (INTERLEAVE_32B)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::nvgpu::TensorMapInterleaveKind	an enum of type TensorMapInterleaveKind
+TensorMapL2PromoKindAttr ¶
+Tensor map L2 promotion type
+
+Syntax:
+
+#nvgpu.l2promo<
+  ::mlir::nvgpu::TensorMapL2PromoKind   # value
+>
+Enum cases:
+
+none (L2PROMO_NONE)
+l2promo_64b (L2PROMO_64B)
+l2promo_128b (L2PROMO_128B)
+l2promo_256b (L2PROMO_256B)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::nvgpu::TensorMapL2PromoKind	an enum of type TensorMapL2PromoKind
+TensorMapOOBKindAttr ¶
+Tensor map out-of-bounds fill type
+
+Syntax:
+
+#nvgpu.oob<
+  ::mlir::nvgpu::TensorMapOOBKind   # value
+>
+Enum cases:
+
+zero (OOB_ZERO)
+nan (OOB_NAN)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::nvgpu::TensorMapOOBKind	an enum of type TensorMapOOBKind
+TensorMapSwizzleKindAttr ¶
+Tensor map swizzling mode of shared memory banks
+
+Syntax:
+
+#nvgpu.swizzle<
+  ::mlir::nvgpu::TensorMapSwizzleKind   # value
+>
+Enum cases:
+
+none (SWIZZLE_NONE)
+swizzle_32b (SWIZZLE_32B)
+swizzle_64b (SWIZZLE_64B)
+swizzle_128b (SWIZZLE_128B)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::nvgpu::TensorMapSwizzleKind	an enum of type TensorMapSwizzleKind
+Types ¶
+DeviceAsyncTokenType ¶
+device async token type
+
+Syntax: !nvgpu.device.async.token
+
+nvgpu.device.async.token is a type returned by an asynchronous operation that runs on the GPU (device). It is used to establish an SSA-based link between the async operation (e.g. DeviceAsyncCopy) and operations that group or synchronize the async operations (e.g. DeviceAsyncCreateGroupOp, DeviceAsyncWaitOp).
+
+MBarrierGroupType ¶
+mbarrier barrier type
+
+Syntax:
+
+!nvgpu.mbarrier.group<
+  Attribute,   # memorySpace
+  unsigned   # num_barriers
+>
+This is the type for one or more mbarrier object in shared memory that is used to synchronize a variable number of threads.
+
+If num_barriers is not set, the number of mbarrier objects is 1.
+
+A mbarrier object is 64 bit with 8 byte alignment. The mbarrier object can be initiated and invalidated.
+
+See for more details in PTX ISA
+
+Parameters: ¶
+Parameter	C++ type	Description
+memorySpace	Attribute	
+num_barriers	unsigned	
+MBarrierTokenType ¶
+Syntax: !nvgpu.mbarrier.token
+
+TensorMapDescriptorType ¶
+TensorMap descriptor
+
+Syntax:
+
+!nvgpu.tensormap.descriptor<
+  MemRefType,   # tensor
+  ::mlir::nvgpu::TensorMapSwizzleKind,   # swizzle
+  ::mlir::nvgpu::TensorMapL2PromoKind,   # l2promo
+  ::mlir::nvgpu::TensorMapOOBKind,   # oob
+  ::mlir::nvgpu::TensorMapInterleaveKind   # interleave
+>
+nvgpu.tma.descriptor is a type that represents a TMA descriptor. It is 128-byte object either in constant space or kernel paramater.
+
+Parameters: ¶
+Parameter	C++ type	Description
+tensor	MemRefType	
+swizzle	::mlir::nvgpu::TensorMapSwizzleKind	an enum of type TensorMapSwizzleKind
+l2promo	::mlir::nvgpu::TensorMapL2PromoKind	an enum of type TensorMapL2PromoKind
+oob	::mlir::nvgpu::TensorMapOOBKind	an enum of type TensorMapOOBKind
+interleave	::mlir::nvgpu::TensorMapInterleaveKind	an enum of type TensorMapInterleaveKind
+WarpgroupAccumulatorType ¶
+Syntax:
+
+!nvgpu.warpgroup.accumulator<
+  VectorType   # fragmented
+>
+This type represents the result matrix obtained from nvgpu.warpgroup.mma. The $fragmented type signifies the distributed or fragmented result vector that is collectively owned by all the threads in the warp-group that executed nvgpu.warpgroup.mma. [See the details of register fragment layout for accumulator matrix D] ( https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#wgmma-64n16-d)
+
+Parameters: ¶
+Parameter	C++ type	Description
+fragmented	VectorType	
+WarpgroupMatrixDescriptorType ¶
+Warpgroup matrix descriptor type
+
+Syntax:
+
+!nvgpu.warpgroup.descriptor<
+  MemRefType   # tensor
+>
+The descriptor specifies the properties of the matrix in shared memory that is a multiplicand in the matrix multiply and accumulate operation.
+
+The descriptor is a 64-bit value contained in a register with the following:
+
++---------+-----+-----------+-----+-----------+-----+-----+-----------+-----+
+|   0-13  |14-15|   16-29   |30-31|   32-45   |46-48|49-51|   52-61   |62-63|
++---------+-----+-----------+-----+-----------+-----+-----+-----------+-----+
+|  14bits |2bits|   14bits  |2bits|   14bits  |2bits|3bits|   10bits  |2bits|
++---------+-----+-----------+-----+-----------+-----+-----+-----------+-----+
+| BaseAddr|  0  | LeadingDim|  0  |   Stride  |  0  |Offst|     0     |Swzle|
++---------+-----+-----------+-----+-----------+-----+-----+-----------+-----+
+See for more details in PTX ISA
+
+Parameters: ¶
+Parameter	C++ type	Description
+tensor	MemRefType	
+Enums ¶
+RcpRoundingMode ¶
+Rounding mode of rcp
+
+Cases: ¶
+Symbol	Value	String
+APPROX	0	approx
+RN	1	rn
+RZ	2	rz
+RM	3	rm
+RP	4	rp
+TensorMapInterleaveKind ¶
+Tensor map interleave layout type
+
+Cases: ¶
+Symbol	Value	String
+INTERLEAVE_NONE	0	none
+INTERLEAVE_16B	1	interleave_16b
+INTERLEAVE_32B	2	interleave_32b
+TensorMapL2PromoKind ¶
+Tensor map L2 promotion type
+
+Cases: ¶
+Symbol	Value	String
+L2PROMO_NONE	0	none
+L2PROMO_64B	1	l2promo_64b
+L2PROMO_128B	2	l2promo_128b
+L2PROMO_256B	3	l2promo_256b
+TensorMapOOBKind ¶
+Tensor map out-of-bounds fill type
+
+Cases: ¶
+Symbol	Value	String
+OOB_ZERO	0	zero
+OOB_NAN	1	nan
+TensorMapSwizzleKind ¶
+Tensor map swizzling mode of shared memory banks
+
+Cases: ¶
+Symbol	Value	String
+SWIZZLE_NONE	0	none
+SWIZZLE_32B	1	swizzle_32b
+SWIZZLE_64B	2	swizzle_64b
+SWIZZLE_128B	3	swizzle_128b

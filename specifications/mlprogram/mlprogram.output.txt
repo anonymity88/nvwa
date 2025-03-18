@@ -1,0 +1,26 @@
+//===----------------------------------------------------------------------===//
+// OutputOp
+//===----------------------------------------------------------------------===//
+
+def MLProgram_OutputOp : MLProgram_Op<"output", [
+    Pure, HasParent<"SubgraphOp">, ReturnLike, Terminator
+  ]> {
+  let summary = "Outputs values from a subgraph function";
+  let description = [{
+    The `output` operation terminates a subgraph by yielding values
+    to the caller.
+    The operation takes variable number of operands and produces no results.
+    The operand number and types must match the signature of the function
+    that contains the operation.
+  }];
+
+  let arguments = (ins Variadic<AnyType>:$operands);
+
+  let builders = [OpBuilder<(ins), [{
+    build($_builder, $_state, std::nullopt);
+  }]>];
+
+  let assemblyFormat = "attr-dict ($operands^ `:` type($operands))?";
+  let hasVerifier = 1;
+}
+

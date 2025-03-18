@@ -1,0 +1,103 @@
+//===----------------------------------------------------------------------===//
+// ParallelOp
+//===----------------------------------------------------------------------===//
+
+def ParallelOp : SCF_Op<"parallel",
+    [AutomaticAllocationScope,
+     AttrSizedOperandSegments,
+     DeclareOpInterfaceMethods<LoopLikeOpInterface, ["getLoopInductionVars",
+          "getLoopLowerBounds", "getLoopUpperBounds", "getLoopSteps"]>,
+     RecursiveMemoryEffects,
+     DeclareOpInterfaceMethods<RegionBranchOpInterface>,
+     SingleBlockImplicitTerminator<"scf::ReduceOp">,
+     HasParallelRegion]> {
+  let summary = "parallel for operation";
+  let description = [{
+    The `scf.parallel` operation represents a loop nest taking 4 groups of SSA
+    values as operands that represent the lower bounds, upper bounds, steps and
+    initial values, respectively. The operation defines a variadic number of
+    SSA values for its induction variables. It has one region capturing the
+    loop body. The induction variables are represented as an argument of this
+    region. These SSA values always have type index, which is the size of the
+    machine word. The steps are values of type index, required to be positive.
+    The lower and upper bounds specify a half-open range: the range includes
+    the lower bound but does not include the upper bound. The initial values
+    have the same types as results of `scf.parallel`. If there are no results,
+    the keyword `init` can be omitted.
+
+    Semantically we require that the iteration space can be iterated in any
+    order, and the loop body can be executed in parallel. If there are data
+    races, the behavior is undefined.
+
+    The parallel loop operation supports reduction of values produced by
+    individual iterations into a single result. This is modeled using the
+    `scf.reduce` terminator operation (see `scf.reduce` for details). The i-th
+    result of an `scf.parallel` operation is associated with the i-th initial
+    value operand, the i-th operand of the `scf.reduce` operation (the value to
+    be reduced) and the i-th region of the `scf.reduce` operation (the reduction
+    function). Consequently, we require that the number of results of an
+    `scf.parallel` op matches the number of initial values and the the number of
+    reductions in the `scf.reduce` terminator.
+
+    The body region must contain exactly one block that terminates with a
+    `scf.reduce` operation. If an `scf.parallel` op has no reductions, the
+    terminator has no operands and no regions. The `scf.parallel` parser will
+    automatically insert the terminator for ops that have no reductions if it is
+    absent.
+
+    Example:
+
+    ```mlir
+    %init = arith.constant 0.0 : f32
+    %r:2 = scf.parallel (%iv) = (%lb) to (%ub) step (%step) init (%init, %init)
+        -> f32, f32 {
+      %elem_to_reduce1 = load %buffer1[%iv] : memref<100xf32>
+      %elem_to_reduce2 = load %buffer2[%iv] : memref<100xf32>
+      scf.reduce(%elem_to_reduce1, %elem_to_reduce2 : f32, f32) {
+        ^bb0(%lhs : f32, %rhs: f32):
+          %res = arith.addf %lhs, %rhs : f32
+          scf.reduce.return %res : f32
+      }, {
+        ^bb0(%lhs : f32, %rhs: f32):
+          %res = arith.mulf %lhs, %rhs : f32
+          scf.reduce.return %res : f32
+      }
+    }
+    ```
+  }];
+
+  let arguments = (ins Variadic<Index>:$lowerBound,
+                       Variadic<Index>:$upperBound,
+                       Variadic<Index>:$step,
+                       Variadic<AnyType>:$initVals);
+  let results = (outs Variadic<AnyType>:$results);
+  let regions = (region SizedRegion<1>:$region);
+
+  let skipDefaultBuilders = 1;
+  let builders = [
+    OpBuilder<(ins "ValueRange":$lowerBounds, "ValueRange":$upperBounds,
+      "ValueRange":$steps, "ValueRange":$initVals,
+      CArg<"function_ref<void (OpBuilder &, Location, ValueRange, ValueRange)>",
+           "nullptr">:$bodyBuilderFn)>,
+    OpBuilder<(ins "ValueRange":$lowerBounds, "ValueRange":$upperBounds,
+      "ValueRange":$steps,
+      CArg<"function_ref<void (OpBuilder &, Location, ValueRange)>",
+           "nullptr">:$bodyBuilderFn)>,
+  ];
+
+  let extraClassDeclaration = [{
+    /// Get induction variables.
+    SmallVector<Value> getInductionVars() {
+      std::optional<SmallVector<Value>> maybeInductionVars = getLoopInductionVars();;
+      assert(maybeInductionVars.has_value() && "expected values");
+      return *maybeInductionVars;
+    }
+    unsigned getNumLoops() { return getStep().size(); }
+    unsigned getNumReductions() { return getInitVals().size(); }
+  }];
+
+  let hasCanonicalizer = 1;
+  let hasCustomAssemblyFormat = 1;
+  let hasVerifier = 1;
+}
+

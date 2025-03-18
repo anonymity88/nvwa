@@ -1,0 +1,29 @@
+sparse_tensor.crd_translate (sparse_tensor::CrdTranslateOp) ¶
+Performs coordinate translation between level and dimension coordinate space.
+
+Syntax:
+
+operation ::= `sparse_tensor.crd_translate` $direction `[` $in_crds `]` `as` $encoder attr-dict `:` type($out_crds)
+Performs coordinate translation between level and dimension coordinate space according to the affine maps defined by $encoder.
+
+Example:
+
+%l0, %l1, %l2, %l3 = sparse_tensor.crd_translate dim_to_lvl [%d0, %d1] as #BSR
+                   : index, index, index, index
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+direction	::mlir::sparse_tensor::CrdTransDirectionKindAttr	
+sparse tensor coordinate translation direction
+encoder	::mlir::sparse_tensor::SparseTensorEncodingAttr	
+Operands: ¶
+Operand	Description
+in_crds	variadic of index
+Results: ¶
+Result	Description
+out_crds	variadic of index

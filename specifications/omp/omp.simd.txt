@@ -1,0 +1,80 @@
+omp.simd (omp::SimdOp) ¶
+Simd construct
+
+Syntax:
+
+operation ::= `omp.simd` oilist(
+              `aligned` `(` custom<AlignedClause>($aligned_vars, type($aligned_vars),
+              $alignments) `)`
+              |
+              `if` `(` $if_expr `)`
+              |
+              `linear` `(`
+              custom<LinearClause>($linear_vars, type($linear_vars),
+              $linear_step_vars) `)`
+              |
+              `nontemporal` `(`  $nontemporal_vars `:` type($nontemporal_vars) `)`
+              |
+              `order` `(` custom<OrderClause>($order, $order_mod) `)`
+              |
+              `safelen` `(` $safelen  `)`
+              |
+              `simdlen` `(` $simdlen  `)`
+              )
+              custom<PrivateReductionRegion>($region, $private_vars, type($private_vars),
+              $private_syms, $reduction_vars, type($reduction_vars), $reduction_byref,
+              $reduction_syms) attr-dict
+The simd construct can be applied to a loop to indicate that the loop can be transformed into a SIMD loop (that is, multiple iterations of the loop can be executed concurrently using SIMD instructions).
+
+The body region can only contain a single block which must contain a single operation. This operation must be another compatible loop wrapper or an omp.loop_nest.
+
+omp.simd <clauses> {
+  omp.loop_nest (%i1, %i2) : index = (%c0, %c0) to (%c10, %c10) step (%c1, %c1) {
+    %a = load %arrA[%i1, %i2] : memref<?x?xf32>
+    %b = load %arrB[%i1, %i2] : memref<?x?xf32>
+    %sum = arith.addf %a, %b : f32
+    store %sum, %arrC[%i1, %i2] : memref<?x?xf32>
+    omp.yield
+  }
+}
+When an if clause is present and evaluates to false, the preferred number of iterations to be executed concurrently is one, regardless of whether a simdlen clause is specified.
+
+The alignments attribute additionally specifies alignment of each corresponding aligned operand. Note that aligned_vars and alignments must contain the same number of elements.
+
+The linear_step_vars operand additionally specifies the step for each associated linear operand. Note that the linear_vars and linear_step_vars variadic lists should contain the same number of elements.
+
+The optional nontemporal attribute specifies variables which have low temporal locality across the iterations where they are accessed.
+
+The optional order attribute specifies which order the iterations of the associated loops are executed in. Currently the only option for this attribute is “concurrent”.
+
+Reductions can be performed by specifying reduction accumulator variables in reduction_vars, symbols referring to reduction declarations in the reduction_syms attribute, and whether the reduction variable should be passed into the reduction region by value or by reference in reduction_byref. Each reduction is identified by the accumulator it uses and accumulators must not be repeated in the same reduction. A private variable corresponding to the accumulator is used in place of the accumulator inside the body of the operation. The reduction declaration specifies how to combine the values from each iteration, section, team, thread or simd lane defined by the operation’s region into the final value, which is available in the accumulator after they all complete.
+
+The safelen clause specifies that no two concurrent iterations within a SIMD chunk can have a distance in the logical iteration space that is greater than or equal to the value given in the clause.
+
+When a simdlen clause is present, the preferred number of iterations to be executed concurrently is the value provided to the simdlen clause.
+
+Traits: AttrSizedOperandSegments, NoTerminator, RecursiveMemoryEffects, SingleBlock
+
+Interfaces: BlockArgOpenMPOpInterface, ComposableOpInterface, LoopWrapperInterface, ReductionClauseInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+alignments	::mlir::ArrayAttr	64-bit integer array attribute
+order	::mlir::omp::ClauseOrderKindAttr	
+OrderKind Clause
+order_mod	::mlir::omp::OrderModifierAttr	
+OpenMP Order Modifier
+private_syms	::mlir::ArrayAttr	symbol ref array attribute
+reduction_byref	::mlir::DenseBoolArrayAttr	i1 dense array attribute
+reduction_syms	::mlir::ArrayAttr	symbol ref array attribute
+safelen	::mlir::IntegerAttr	64-bit signless integer attribute whose value is positive
+simdlen	::mlir::IntegerAttr	64-bit signless integer attribute whose value is positive
+Operands: ¶
+Operand	Description
+aligned_vars	variadic of OpenMP-compatible variable type
+if_expr	1-bit signless integer
+linear_vars	variadic of any type
+linear_step_vars	variadic of 32-bit signless integer
+nontemporal_vars	variadic of OpenMP-compatible variable type
+private_vars	variadic of any type
+reduction_vars	variadic of OpenMP-compatible variable type

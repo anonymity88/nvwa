@@ -1,0 +1,27 @@
+gpu.cluster_id (gpu::ClusterIdOp) ¶
+Syntax:
+
+operation ::= `gpu.cluster_id` $dimension (`upper_bound` $upper_bound^)? attr-dict
+Returns the cluster id, i.e. the index of the current cluster within the grid along the x, y, or z dimension.
+
+Example:
+
+%cIdY = gpu.cluster_id y
+If upper_bound is set, then executing (a lowering of) this operation in an environment where the number of clusters in the grid along dimension is greater than upper_bound causes undefined behavior.
+
+There is an implicit upper bound of kMaxDim (currently uint32_t::max).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+dimension	::mlir::gpu::DimensionAttr	
+a dimension, either 'x', 'y', or 'z'
+upper_bound	::mlir::IntegerAttr	index attribute
+Results: ¶
+Result	Description
+«unnamed»	index

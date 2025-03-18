@@ -1,0 +1,35 @@
+transform.structured.promote (transform::PromoteOp) ¶
+Syntax:
+
+operation ::= `transform.structured.promote` $target attr-dict `:`
+              custom<SemiFunctionType>(type($target), type($transformed), "false")
+Promotes the specified operands of the target into a separate memory buffer.
+
+At this point, this transform does not allow customizing alloc/dealloc functions nor the behavior on copy in/out operations.
+
+Return modes ¶
+This operation applies to a single Linalg op that satisfies the promoteSubviewsPrecondition, otherwise it fails.
+
+If the operations referred to by the target handle promote properly, the transform succeeds.
+
+When successful, the return handle points to the $target operation that was modified inplace.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+operands_to_promote	::mlir::ArrayAttr	64-bit integer array attribute
+use_full_tile_buffers	::mlir::ArrayAttr	1-bit boolean array attribute
+use_full_tiles_by_default	::mlir::UnitAttr	unit attribute
+use_alloca	::mlir::UnitAttr	unit attribute
+memory_space	::mlir::Attribute	any attribute
+mapping	::mlir::ArrayAttr	Device Mapping array attribute
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

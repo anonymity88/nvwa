@@ -1,0 +1,15 @@
+x86vector.avx512.intr.mask.compress (x86vector::MaskCompressIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit float or 32-bit signless integer or 64-bit float or 64-bit signless integer values of length 16/8
+src	vector of 32-bit float or 32-bit signless integer or 64-bit float or 64-bit signless integer values of length 16/8
+k	vector of 1-bit signless integer values of length 16/8
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

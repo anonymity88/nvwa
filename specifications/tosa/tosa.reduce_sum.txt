@@ -1,0 +1,39 @@
+//===----------------------------------------------------------------------===//
+// Operator: reduce_sum
+//===----------------------------------------------------------------------===//
+def Tosa_ReduceSumOp : Tosa_InferTensorTypeOp<"reduce_sum"> {
+  let summary = "Reduce Sum operator";
+
+  let description = [{
+    Reduce a tensor along the given axis by computing the sum of the axis.
+  }];
+
+  let arguments = (ins
+    Tosa_Tensor:$input,
+    I32Attr:$axis
+  );
+
+  let results = (outs
+    Tosa_Tensor:$output
+  );
+
+  let hasFolder = 1;
+  let hasVerifier = 1;
+  
+  let extraClassDeclaration = [{
+    /// Returns true when two result types are compatible for this op;
+    /// Method used by InferTypeOpInterface.
+    static bool isCompatibleReturnTypes(TypeRange l, TypeRange r);
+
+    /// Return the sum of the two integer operands
+    static inline APInt calcOneElement(APInt leftOperand, APInt rightOperand) {
+      return leftOperand + rightOperand;
+    }
+  }];
+}
+
+//===----------------------------------------------------------------------===//
+// TOSA Spec Section 2.9
+// Operator Class: Data Layout / Memory Reinterpretation.
+//===----------------------------------------------------------------------===//
+

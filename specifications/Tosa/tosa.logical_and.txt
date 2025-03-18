@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// Operator: logical_and
+//===----------------------------------------------------------------------===//
+def Tosa_LogicalAndOp : Tosa_ElementwiseOp<"logical_and", [
+    Commutative,
+    SameOperandsAndResultElementType]> {
+  let summary = "Returns the truth value of x AND y element-wise.";
+
+  let description = [{
+    Elementwise logical AND of input1 and input2. Axis of size 1 will be
+    broadcast, as necessary.
+  }];
+
+  let arguments = (ins
+    Tosa_I1Tensor:$input1,
+    Tosa_I1Tensor:$input2
+  );
+
+  let results = (outs
+    Tosa_I1Tensor:$z
+  );
+}
+

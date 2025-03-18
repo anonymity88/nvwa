@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// PowFOp
+//===----------------------------------------------------------------------===//
+
+def Math_PowFOp : Math_FloatBinaryOp<"powf"> {
+  let summary = "floating point raised to the power of operation";
+  let description = [{
+    The `powf` operation takes two operands of floating point type (i.e.,
+    scalar, tensor or vector) and returns one result of the same type. Operands
+    must have the same type.
+
+    Example:
+
+    ```mlir
+    // Scalar exponentiation.
+    %a = math.powf %b, %c : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

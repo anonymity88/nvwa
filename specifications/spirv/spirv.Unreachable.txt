@@ -1,0 +1,11 @@
+spirv.Unreachable (spirv::UnreachableOp) ¶
+Behavior is undefined if this instruction is executed.
+
+Syntax:
+
+operation ::= `spirv.Unreachable` attr-dict
+This instruction must be the last instruction in a block.
+
+Traits: Terminator
+
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface

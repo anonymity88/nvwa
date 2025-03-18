@@ -1,0 +1,21 @@
+emitc.constant (emitc::ConstantOp) ¶
+Constant operation
+
+The emitc.constant operation produces an SSA value equal to some constant specified by an attribute. This can be used to form simple integer and floating point constants, as well as more exotic things like tensor constants. The emitc.constant operation also supports the EmitC opaque attribute and the EmitC opaque type. Since folding is supported, it should not be used with pointers.
+
+Example:
+
+// Integer constant
+%0 = "emitc.constant"(){value = 42 : i32} : () -> i32
+
+// Constant emitted as `char = CHAR_MIN;`
+%1 = "emitc.constant"() {value = #emitc.opaque<"CHAR_MIN">}
+  : () -> !emitc.opaque<"char">
+Traits: ConstantLike
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::Attribute	An opaque attribute or TypedAttr instance
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

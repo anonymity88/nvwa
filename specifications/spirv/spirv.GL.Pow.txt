@@ -1,0 +1,30 @@
+spirv.GL.Pow (spirv::GLPowOp) ¶
+Return x raised to the y power of two operands
+
+Syntax:
+
+operation ::= `spirv.GL.Pow` operands attr-dict `:` type($result)
+Result is x raised to the y power; x^y.
+
+Result is undefined if x = 0 and y ≤ 0.
+
+The operand x and y must be a scalar or vector whose component type is 16-bit or 32-bit floating-point.
+
+Result Type and the type of all operands must be the same type. Results are computed per component.
+
+Example: ¶
+%2 = spirv.GL.Pow %0, %1 : f32
+%3 = spirv.GL.Pow %0, %1 : vector<3xf16>
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	16/32-bit float or vector of 16/32-bit float values of length 2/3/4/8/16
+rhs	16/32-bit float or vector of 16/32-bit float values of length 2/3/4/8/16
+Results: ¶
+Result	Description
+result	16/32-bit float or vector of 16/32-bit float values of length 2/3/4/8/16

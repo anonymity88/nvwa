@@ -1,0 +1,96 @@
+//===----------------------------------------------------------------------===//
+// CallOp
+//===----------------------------------------------------------------------===//
+
+def LLVM_CallOp : LLVM_MemAccessOpBase<"call",
+                    [AttrSizedOperandSegments,
+                     DeclareOpInterfaceMethods<FastmathFlagsInterface>,
+                     DeclareOpInterfaceMethods<CallOpInterface>,
+                     DeclareOpInterfaceMethods<SymbolUserOpInterface>,
+                     DeclareOpInterfaceMethods<BranchWeightOpInterface>]> {
+  let summary = "Call to an LLVM function.";
+  let description = [{
+    In LLVM IR, functions may return either 0 or 1 value. LLVM IR dialect
+    implements this behavior by providing a variadic `call` operation for 0- and
+    1-result functions. Even though MLIR supports multi-result functions, LLVM
+    IR dialect disallows them.
+
+    The `call` instruction supports both direct and indirect calls. Direct calls
+    start with a function name (`@`-prefixed) and indirect calls start with an
+    SSA value (`%`-prefixed). The direct callee, if present, is stored as a
+    function attribute `callee`. For indirect calls, the callee is of `!llvm.ptr` type
+    and is stored as the first value in `callee_operands`. If and only if the
+    callee is a variadic function, the `var_callee_type` attribute must carry
+    the variadic LLVM function type. The trailing type list contains the
+    optional indirect callee type and the MLIR function type, which differs from
+    the LLVM function type that uses an explicit void type to model functions
+    that do not return a value.
+
+    Examples:
+
+    ```mlir
+    // Direct call without arguments and with one result.
+    %0 = llvm.call @foo() : () -> (f32)
+
+    // Direct call with arguments and without a result.
+    llvm.call @bar(%0) : (f32) -> ()
+
+    // Indirect call with an argument and without a result.
+    %1 = llvm.mlir.addressof @foo : !llvm.ptr
+    llvm.call %1(%0) : !llvm.ptr, (f32) -> ()
+
+    // Direct variadic call.
+    llvm.call @printf(%0, %1) vararg(!llvm.func<i32 (ptr, ...)>) : (!llvm.ptr, i32) -> i32
+
+    // Indirect variadic call
+    llvm.call %1(%0) vararg(!llvm.func<void (...)>) : !llvm.ptr, (i32) -> ()
+    ```
+  }];
+
+  dag args = (ins OptionalAttr<TypeAttrOf<LLVM_FunctionType>>:$var_callee_type,
+                  OptionalAttr<FlatSymbolRefAttr>:$callee,
+                  Variadic<LLVM_Type>:$callee_operands,
+                  DefaultValuedAttr<LLVM_FastmathFlagsAttr,
+                                   "{}">:$fastmathFlags,
+                  OptionalAttr<DenseI32ArrayAttr>:$branch_weights,
+                  DefaultValuedAttr<CConv, "CConv::C">:$CConv,
+                  DefaultValuedAttr<TailCallKind, "TailCallKind::None">:$TailCallKind,
+                  OptionalAttr<LLVM_MemoryEffectsAttr>:$memory_effects,
+                  OptionalAttr<UnitAttr>:$convergent,
+                  OptionalAttr<UnitAttr>:$no_unwind,
+                  OptionalAttr<UnitAttr>:$will_return,
+                  VariadicOfVariadic<LLVM_Type,
+                                     "op_bundle_sizes">:$op_bundle_operands,
+                  DenseI32ArrayAttr:$op_bundle_sizes,
+                  DefaultValuedProperty<
+                    ArrayProperty<StringProperty, "operand bundle tags">,
+                    "ArrayRef<std::string>{}",
+                    "SmallVector<std::string>{}"
+                  >:$op_bundle_tags);
+  // Append the aliasing related attributes defined in LLVM_MemAccessOpBase.
+  let arguments = !con(args, aliasAttrs);
+  let results = (outs Optional<LLVM_Type>:$result);
+  let builders = [
+    OpBuilder<(ins "LLVMFuncOp":$func, "ValueRange":$args)>,
+    OpBuilder<(ins "LLVMFunctionType":$calleeType, "ValueRange":$args)>,
+    OpBuilder<(ins "TypeRange":$results, "StringAttr":$callee,
+                   CArg<"ValueRange", "{}">:$args)>,
+    OpBuilder<(ins "TypeRange":$results, "FlatSymbolRefAttr":$callee,
+                   CArg<"ValueRange", "{}">:$args)>,
+    OpBuilder<(ins "TypeRange":$results, "StringRef":$callee,
+                   CArg<"ValueRange", "{}">:$args)>,
+    OpBuilder<(ins "LLVMFunctionType":$calleeType, "StringAttr":$callee,
+                   CArg<"ValueRange", "{}">:$args)>,
+    OpBuilder<(ins "LLVMFunctionType":$calleeType, "FlatSymbolRefAttr":$callee,
+                   CArg<"ValueRange", "{}">:$args)>,
+    OpBuilder<(ins "LLVMFunctionType":$calleeType, "StringRef":$callee,
+                   CArg<"ValueRange", "{}">:$args)>
+  ];
+  let hasVerifier = 1;
+  let hasCustomAssemblyFormat = 1;
+  let extraClassDeclaration = [{
+    /// Returns the callee function type.
+    LLVMFunctionType getCalleeFunctionType();
+  }];
+}
+

@@ -1,0 +1,7 @@
+transform.apply_patterns.vector.lower_gather (transform::ApplyLowerGatherPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.lower_gather` attr-dict
+Indicates that vector.gather operations should be lowered to finer-grained vector primitives.
+
+Interfaces: PatternDescriptorOpInterface

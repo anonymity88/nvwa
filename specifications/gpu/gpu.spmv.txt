@@ -1,0 +1,33 @@
+gpu.spmv (gpu::SpMVOp) ¶
+SpMV operation
+
+Syntax:
+
+operation ::= `gpu.spmv` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $spmatA (`{` $modeA^ `}`)? `,` $dnX `,` $dnY `,` $buffer attr-dict `:` type($buffer) `into` $computeType
+The gpu.spmv operation performs the SpMV operation on the given sparse matrix, dense vectors, and buffer. The operation expects handles returned by previous sparse operations to construct an environment and the operands for SpMV. The buffer must have been allocated on the device.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+The matrix arguments can also be associated with one of the following operators: NON_TRANSPOSE, TRANSPOSE, CONJUGATE_TRANSPOSE. The default value is NON_TRANSPOSE.
+
+Example:
+
+%token = gpu.spmv async [%dep] %spmatA{TRANSPOSE}, %dnX, %dnY : memref<?xf64> into bf16
+Interfaces: GPU_AsyncOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+modeA	::mlir::gpu::TransposeModeAttr	
+transpose mode of sparse matrix supported by sparse tensor ops
+computeType	::mlir::TypeAttr	any type attribute
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+spmatA	sparse matrix handle type
+dnX	dense tensor handle type
+dnY	dense tensor handle type
+buffer	memref of any type values
+Results: ¶
+Result	Description
+asyncToken	async token type

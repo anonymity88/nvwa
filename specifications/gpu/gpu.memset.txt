@@ -1,0 +1,26 @@
+gpu.memset (gpu::MemsetOp) ¶
+GPU memset operation
+
+Syntax:
+
+operation ::= `gpu.memset` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $dst`,` $value `:` type($dst)`,` type($value) attr-dict
+The gpu.memset operation sets the content of memref to a scalar value.
+
+The op does not execute before all async dependencies have finished executing.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token.
+
+Example:
+
+%token = gpu.memset async [%dep] %dst, %value : memref<?xf32, 1>, f32
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+dst	memref of any type values
+value	any type
+Results: ¶
+Result	Description
+asyncToken	async token type

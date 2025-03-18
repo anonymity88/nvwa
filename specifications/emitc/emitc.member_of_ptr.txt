@@ -1,0 +1,19 @@
+emitc.member_of_ptr (emitc::MemberOfPtrOp) ¶
+Member of pointer operation
+
+With the emitc.member_of_ptr operation the member access operator -> can be applied.
+
+Example:
+
+%0 = "emitc.member_of_ptr" (%arg0) {member = "a"}
+    : (!emitc.lvalue<!emitc.ptr<!emitc.opaque<"mystruct">>>)
+    -> !emitc.lvalue<i32>
+Attributes: ¶
+Attribute	MLIR Type	Description
+member	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+operand	emitc.lvalue of EmitC opaque type or EmitC pointer type values
+Results: ¶
+Result	Description
+«unnamed»	emitc.lvalue of type supported by EmitC values

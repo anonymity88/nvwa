@@ -1,0 +1,35 @@
+gpu.sddmm_buffer_size (gpu::SDDMMBufferSizeOp) ¶
+Precompute buffersize for SDDMM operation
+
+Syntax:
+
+operation ::= `gpu.sddmm_buffer_size` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $dnmatA (`{` $modeA^ `}`)? `,` $dnmatB (`{` $modeB^ `}`)? `,` $spmatC attr-dict `into` $computeType
+The gpu.sddmm_buffer_size operation returns the buffer size required to perform the SDDMM operation on the given sparse and dense matrices. The operation expects handles returned by previous sparse operations to construct an environment and the operands for SDDMM.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token in addition to the environment.
+
+Example:
+
+%buffersz, %token = gpu.sddmm_buffer_size async [%dep] %dnmatA{TRANSPOSE}, %dnmatB{TRANSPOSE}, %spmatC into f32
+The matrix arguments can also be associated with one of the following operators: NON_TRANSPOSE, TRANSPOSE, CONJUGATE_TRANSPOSE. The default value is NON_TRANSPOSE.
+
+Interfaces: GPU_AsyncOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+modeA	::mlir::gpu::TransposeModeAttr	
+transpose mode of sparse matrix supported by sparse tensor ops
+modeB	::mlir::gpu::TransposeModeAttr	
+transpose mode of sparse matrix supported by sparse tensor ops
+computeType	::mlir::TypeAttr	any type attribute
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+dnmatA	dense tensor handle type
+dnmatB	dense tensor handle type
+spmatC	sparse matrix handle type
+Results: ¶
+Result	Description
+bufferSz	index
+asyncToken	async token type

@@ -1,0 +1,23 @@
+spirv.CL.printf (spirv::CLPrintfOp) ¶
+The printf extended instruction writes output to an implementation- defined stream such as stdout under control of the string pointed to by format that specifies how subsequent arguments are converted for output.
+
+Syntax:
+
+operation ::= `spirv.CL.printf` $format ( $arguments^ )? attr-dict `:`  type($format) ( `,` type($arguments)^ )? `->` type($result)
+printf returns 0 if it was executed successfully and -1 otherwise.
+
+Result Type must be i32.
+
+Format must be a pointer(constant) to i8. If there are insufficient arguments for the format, the behavior is undefined. If the format is exhausted while arguments remain, the excess arguments are evaluated (as always) but are otherwise ignored. The printf instruction returns when the end of the format string is encountered.
+
+Example: ¶
+%0 = spirv.CL.printf %fmt %1, %2  : !spirv.ptr<i8, UniformConstant>, i32, i32 -> i32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Operands: ¶
+Operand	Description
+format	any SPIR-V pointer type
+arguments	variadic of void or bool or 8/16/32/64-bit integer or 16/32/64-bit float or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type or any SPIR-V array type or any SPIR-V runtime array type or any SPIR-V struct type or any SPIR-V cooperative matrix type or any SPIR-V matrix type or any SPIR-V sampled image type
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer

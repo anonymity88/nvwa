@@ -1,0 +1,33 @@
+vector.compressstore (vector::CompressStoreOp) ¶
+Writes elements selectively from a vector as defined by a mask
+
+Syntax:
+
+operation ::= `vector.compressstore` $base `[` $indices `]` `,` $mask `,` $valueToStore attr-dict `:` type($base) `,` type($mask) `,` type($valueToStore)
+The compress store operation writes elements from a vector into memory as defined by a base with indices and a mask vector. Compression only applies to the innermost dimension. When the mask is set, the corresponding element from the vector is written next to memory. Otherwise, no action is taken for the element. Informally the semantics are:
+
+index = i
+if (mask[0]) base[index++] = value[0]
+if (mask[1]) base[index++] = value[1]
+etc.
+Note that the index increment is done conditionally.
+
+If a mask bit is set and the corresponding index is out-of-bounds for the given base, the behavior is undefined. If a mask bit is not set, no value is stored regardless of the index, and the index is allowed to be out-of-bounds.
+
+The compress store can be used directly where applicable, or can be used during progressively lowering to bring other memory operations closer to hardware ISA support for a compress. The semantics of the operation closely correspond to those of the llvm.masked.compressstore intrinsic.
+
+Note, at the moment this Op is only available for fixed-width vectors.
+
+Examples:
+
+vector.compressstore %base[%i], %mask, %value
+  : memref<?xf32>, vector<8xi1>, vector<8xf32>
+
+vector.compressstore %base[%i, %j], %mask, %value
+  : memref<?x?xf32>, vector<16xi1>, vector<16xf32>
+Operands: ¶
+Operand	Description
+base	memref of any type values
+indices	variadic of index
+mask	fixed-length vector of 1-bit signless integer values
+valueToStore	vector of any type values

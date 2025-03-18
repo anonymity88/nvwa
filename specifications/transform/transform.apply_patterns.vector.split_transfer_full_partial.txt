@@ -1,0 +1,14 @@
+transform.apply_patterns.vector.split_transfer_full_partial (transform::ApplySplitTransferFullPartialPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_patterns.vector.split_transfer_full_partial` (`split_transfer_strategy` `=` $split_transfer_strategy^)? attr-dict
+Indicates that vector transfer operations should be split to full and partial parts.
+
+This is usually a late step that is run after bufferization as part of the process of lowering to e.g. LLVM or NVVM.
+
+Interfaces: PatternDescriptorOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+split_transfer_strategy	::mlir::vector::VectorTransferSplitAttr	
+control the splitting of `vector.transfer` operations into in-bounds and out-of-bounds variants.

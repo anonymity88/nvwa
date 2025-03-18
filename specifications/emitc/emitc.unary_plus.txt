@@ -1,0 +1,21 @@
+emitc.unary_plus (emitc::UnaryPlusOp) ¶
+Unary plus operation
+
+Syntax:
+
+operation ::= `emitc.unary_plus` operands attr-dict `:` functional-type(operands, results)
+With the emitc.unary_plus operation the unary operator + (plus) can be applied.
+
+Example:
+
+%0 = emitc.unary_plus %arg0 : (i32) -> i32
+// Code emitted for the operation above.
+int32_t v2 = +v1;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+«unnamed»	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	type supported by EmitC

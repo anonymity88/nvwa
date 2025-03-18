@@ -1,0 +1,329 @@
+sparse_tensor.yield (sparse_tensor::YieldOp) ¶
+Yield from sparse_tensor set-like operations
+
+Syntax:
+
+operation ::= `sparse_tensor.yield` $results attr-dict `:` type($results)
+Yields a value from within a binary, unary, reduce, select or foreach block.
+
+Example:
+
+%0 = sparse_tensor.unary %a : i64 to i64 {
+  present={
+    ^bb0(%arg0: i64):
+      %cst = arith.constant 1 : i64
+      %ret = arith.addi %arg0, %cst : i64
+      sparse_tensor.yield %ret : i64
+  }
+}
+Traits: AlwaysSpeculatableImplTrait, HasParent<BinaryOp, UnaryOp, ReduceOp, SelectOp, ForeachOp, IterateOp, CoIterateOp>, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+results	variadic of any type
+Attributes ¶
+CrdTransDirectionKindAttr ¶
+sparse tensor coordinate translation direction
+
+Syntax:
+
+#sparse_tensor.CrdTransDirection<
+  ::mlir::sparse_tensor::CrdTransDirectionKind   # value
+>
+Enum cases:
+
+dim_to_lvl (dim2lvl)
+lvl_to_dim (lvl2dim)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::sparse_tensor::CrdTransDirectionKind	an enum of type CrdTransDirectionKind
+SparseTensorDimSliceAttr ¶
+An attribute to encode slice information of a sparse tensor on a particular dimension (a tuple of offset, size, stride).
+
+Parameters: ¶
+Parameter	C++ type	Description
+offset	int64_t	
+size	int64_t	
+stride	int64_t	
+SparseTensorEncodingAttr ¶
+An attribute to encode information on sparsity properties of tensors, inspired by the TACO formalization of sparse tensors. This encoding is eventually used by a sparsifier pass to generate sparse code fully automatically from a sparsity-agnostic representation of the computation, i.e., an implicit sparse representation is converted to an explicit sparse representation where co-iterating loops operate on sparse storage formats rather than tensors with a sparsity encoding. Compiler passes that run before this sparsifier pass need to be aware of the semantics of tensor types with such a sparsity encoding.
+
+In this encoding, we use dimension to refer to the axes of the semantic tensor, and level to refer to the axes of the actual storage format, i.e., the operational representation of the sparse tensor in memory. The number of dimensions is usually the same as the number of levels (such as CSR storage format). However, the encoding can also map dimensions to higher-order levels (for example, to encode a block-sparse BSR storage format) or to lower-order levels (for example, to linearize dimensions as a single level in the storage).
+
+The encoding contains a map that provides the following:
+
+An ordered sequence of dimension specifications, each of which defines:
+the dimension-size (implicit from the tensor’s dimension-shape)
+a dimension-expression
+An ordered sequence of level specifications, each of which includes a required level-type, which defines how the level should be stored. Each level-type consists of:
+a level-expression, which defines what is stored
+a level-format
+a collection of level-properties that apply to the level-format
+Each level-expression is an affine expression over dimension-variables. Thus, the level-expressions collectively define an affine map from dimension-coordinates to level-coordinates. The dimension-expressions collectively define the inverse map, which only needs to be provided for elaborate cases where it cannot be inferred automatically.
+
+Each dimension could also have an optional SparseTensorDimSliceAttr. Within the sparse storage format, we refer to indices that are stored explicitly as coordinates and offsets into the storage format as positions.
+
+The supported level-formats are the following:
+
+dense : all entries along this level are stored and linearized.
+batch : all entries along this level are stored but not linearized.
+compressed : only nonzeros along this level are stored
+loose_compressed : as compressed, but allows for free space between regions
+singleton : a variant of the compressed format, where coordinates have no siblings
+structured[n, m] : the compression uses a n:m encoding (viz. n out of m consecutive elements are nonzero)
+For a compressed level, each position interval is represented in a compact way with a lowerbound pos(i) and an upperbound pos(i+1) - 1, which implies that successive intervals must appear in order without any “holes” in between them. The loose compressed format relaxes these constraints by representing each position interval with a lowerbound lo(i) and an upperbound hi(i), which allows intervals to appear in arbitrary order and with elbow room between them.
+
+By default, each level-type has the property of being unique (no duplicate coordinates at that level) and ordered (coordinates appear sorted at that level). For singleton levels, the coordinates are fused with its parents in AoS (array of structures) scheme. The following properties can be added to a level-format to change this default behavior:
+
+nonunique : duplicate coordinates may appear at the level
+nonordered : coordinates may appear in arbribratry order
+soa : only applicable to singleton levels, fuses the singleton level in SoA (structure of arrays) scheme.
+In addition to the map, the following fields are optional:
+
+The required bitwidth for position storage (integral offsets into the sparse storage scheme). A narrow width reduces the memory footprint of overhead storage, as long as the width suffices to define the total required range (viz. the maximum number of stored entries over all indirection levels). The choices are 8, 16, 32, 64, or, the default, 0 to indicate the native bitwidth.
+
+The required bitwidth for coordinate storage (the coordinates of stored entries). A narrow width reduces the memory footprint of overhead storage, as long as the width suffices to define the total required range (viz. the maximum value of each tensor coordinate over all levels). The choices are 8, 16, 32, 64, or, the default, 0 to indicate a native bitwidth.
+
+The explicit value for the sparse tensor. If explicitVal is set, then all the non-zero values in the tensor have the same explicit value. The default value Attribute() indicates that it is not set. This is useful for binary-valued sparse tensors whose values can either be an implicit value (0 by default) or an explicit value (such as 1). In this approach, we don’t store explicit/implicit values, and metadata (such as position and coordinate arrays) alone fully defines the original tensor. This yields additional savings for the storage requirements, as well as for the computational time, since we skip operating on implicit values and can constant fold the explicit values where they are used.
+
+The implicit value for the sparse tensor. If implicitVal is set, then the “zero” value in the tensor is equal to the implicit value. For now, we only support 0 as the implicit value but it could be extended in the future. The default value Attribute() indicates that the implicit value is 0 (same type as the tensor element type).
+
+Examples:
+
+// Sparse vector.
+#SparseVector = #sparse_tensor.encoding<{
+  map = (i) -> (i : compressed)
+}>
+... tensor<?xf32, #SparseVector> ...
+
+// Sorted coordinate scheme (arranged in AoS format by default).
+#SortedCOO = #sparse_tensor.encoding<{
+  map = (i, j) -> (i : compressed(nonunique), j : singleton)
+}>
+// coordinates = {x_crd, y_crd}[nnz]
+... tensor<?x?xf64, #SortedCOO> ...
+
+// Sorted coordinate scheme (arranged in SoA format).
+#SortedCOO = #sparse_tensor.encoding<{
+  map = (i, j) -> (i : compressed(nonunique), j : singleton(soa))
+}>
+// coordinates = {x_crd[nnz], y_crd[nnz]}
+... tensor<?x?xf64, #SortedCOO> ...
+
+// Batched sorted coordinate scheme, with high encoding.
+#BCOO = #sparse_tensor.encoding<{
+  map = (i, j, k) -> (i : dense, j : compressed(nonunique, high), k : singleton)
+}>
+... tensor<10x10xf32, #BCOO> ...
+
+// Compressed sparse row.
+#CSR = #sparse_tensor.encoding<{
+  map = (i, j) -> (i : dense, j : compressed)
+}>
+... tensor<100x100xbf16, #CSR> ...
+
+// Doubly compressed sparse column storage with specific bitwidths.
+#DCSC = #sparse_tensor.encoding<{
+  map = (i, j) -> (j : compressed, i : compressed),
+  posWidth = 32,
+  crdWidth = 8
+}>
+... tensor<8x8xf64, #DCSC> ...
+
+// Doubly compressed sparse column storage with specific
+// explicit and implicit values.
+#DCSC = #sparse_tensor.encoding<{
+  map = (i, j) -> (j : compressed, i : compressed),
+  explicitVal = 1 : i64,
+  implicitVal = 0 : i64
+}>
+... tensor<8x8xi64, #DCSC> ...
+
+// Block sparse row storage (2x3 blocks).
+#BSR = #sparse_tensor.encoding<{
+  map = ( i, j ) ->
+  ( i floordiv 2 : dense,
+    j floordiv 3 : compressed,
+    i mod 2      : dense,
+    j mod 3      : dense
+  )
+}>
+... tensor<20x30xf32, #BSR> ...
+
+// Same block sparse row storage (2x3 blocks) but this time
+// also with a redundant reverse mapping, which can be inferred.
+#BSR_explicit = #sparse_tensor.encoding<{
+  map = { ib, jb, ii, jj }
+        ( i = ib * 2 + ii,
+          j = jb * 3 + jj) ->
+  ( ib = i floordiv 2 : dense,
+    jb = j floordiv 3 : compressed,
+    ii = i mod 2 : dense,
+    jj = j mod 3 : dense)
+}>
+... tensor<20x30xf32, #BSR_explicit> ...
+
+// ELL format.
+// In the simple format for matrix, one array stores values and another
+// array stores column indices. The arrays have the same number of rows
+// as the original matrix, but only have as many columns as
+// the maximum number of nonzeros on a row of the original matrix.
+// There are many variants for ELL such as jagged diagonal scheme.
+// To implement ELL, map provides a notion of "counting a
+// dimension", where every stored element with the same coordinate
+// is mapped to a new slice. For instance, ELL storage of a 2-d
+// tensor can be defined with the mapping (i, j) -> (#i, i, j)
+// using the notation of [Chou20]. Lacking the # symbol in MLIR's
+// affine mapping, we use a free symbol c to define such counting,
+// together with a constant that denotes the number of resulting
+// slices. For example, the mapping [c](i, j) -> (c * 3 * i, i, j)
+// with the level-types ["dense", "dense", "compressed"] denotes ELL
+// storage with three jagged diagonals that count the dimension i.
+#ELL = #sparse_tensor.encoding<{
+  map = [c](i, j) -> (c * 3 * i : dense, i : dense, j : compressed)
+}>
+... tensor<?x?xf64, #ELL> ...
+
+// CSR slice (offset = 0, size = 4, stride = 1 on the first dimension;
+// offset = 0, size = 8, and a dynamic stride on the second dimension).
+#CSR_SLICE = #sparse_tensor.encoding<{
+  map = (i : #sparse_tensor<slice(0, 4, 1)>,
+         j : #sparse_tensor<slice(0, 8, ?)>) ->
+        (i : dense, j : compressed)
+}>
+... tensor<?x?xf64, #CSR_SLICE> ...
+Parameters: ¶
+Parameter	C++ type	Description
+lvlTypes	::llvm::ArrayRef<::mlir::sparse_tensor::LevelType>	level-types
+dimToLvl	AffineMap	
+lvlToDim	AffineMap	
+posWidth	unsigned	
+crdWidth	unsigned	
+explicitVal	::mlir::Attribute	
+implicitVal	::mlir::Attribute	
+dimSlices	::llvm::ArrayRef<::mlir::sparse_tensor::SparseTensorDimSliceAttr>	per dimension slice metadata
+SparseTensorSortKindAttr ¶
+sparse tensor sort algorithm
+
+Syntax:
+
+#sparse_tensor.SparseTensorSortAlgorithm<
+  ::mlir::sparse_tensor::SparseTensorSortKind   # value
+>
+Enum cases:
+
+hybrid_quick_sort (HybridQuickSort)
+insertion_sort_stable (InsertionSortStable)
+quick_sort (QuickSort)
+heap_sort (HeapSort)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::sparse_tensor::SparseTensorSortKind	an enum of type SparseTensorSortKind
+StorageSpecifierKindAttr ¶
+sparse tensor storage specifier kind
+
+Syntax:
+
+#sparse_tensor.kind<
+  ::mlir::sparse_tensor::StorageSpecifierKind   # value
+>
+Enum cases:
+
+lvl_sz (LvlSize)
+pos_mem_sz (PosMemSize)
+crd_mem_sz (CrdMemSize)
+val_mem_sz (ValMemSize)
+dim_offset (DimOffset)
+dim_stride (DimStride)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::sparse_tensor::StorageSpecifierKind	an enum of type StorageSpecifierKind
+Types ¶
+IterSpaceType ¶
+Syntax:
+
+!sparse_tensor.iter_space<
+  ::mlir::sparse_tensor::SparseTensorEncodingAttr,   # encoding
+  Level,   # loLvl
+  Level   # hiLvl
+>
+A sparse iteration space that represents an abstract N-D (sparse) iteration space extracted from a sparse tensor, i.e., a set of (crd_0, crd_1, …, crd_N) for every stored element (usually nonzeros) in a sparse tensor between the specified [loLvl,
+hiLvl) levels.
+
+Examples:
+
+// An iteration space extracted from a CSR tensor between levels [0, 2).
+!iter_space<#CSR, lvls = 0 to 2>
+Parameters: ¶
+Parameter	C++ type	Description
+encoding	::mlir::sparse_tensor::SparseTensorEncodingAttr	
+loLvl	Level	
+hiLvl	Level	
+IteratorType ¶
+Syntax:
+
+!sparse_tensor.iterator<
+  ::mlir::sparse_tensor::SparseTensorEncodingAttr,   # encoding
+  Level,   # loLvl
+  Level   # hiLvl
+>
+An iterator that points to the current element in the corresponding iteration space.
+
+Examples:
+
+// An iterator that iterates over a iteration space of type `!iter_space<#CSR, lvls = 0 to 2>`
+!iterator<#CSR, lvls = 0 to 2>
+Parameters: ¶
+Parameter	C++ type	Description
+encoding	::mlir::sparse_tensor::SparseTensorEncodingAttr	
+loLvl	Level	
+hiLvl	Level	
+StorageSpecifierType ¶
+Structured metadata for sparse tensor low-level storage scheme
+
+Syntax:
+
+!sparse_tensor.storage_specifier<
+  ::mlir::sparse_tensor::SparseTensorEncodingAttr   # encoding
+>
+Values with storage_specifier types represent aggregated storage scheme metadata for the given sparse tensor encoding. It currently holds a set of values for level-sizes, coordinate arrays, position arrays, and value array. Note that the type is not yet stable and subject to change in the near future.
+
+Examples:
+
+// A storage specifier that can be used to store storage scheme metadata from CSR matrix.
+!storage_specifier<#CSR>
+Parameters: ¶
+Parameter	C++ type	Description
+encoding	::mlir::sparse_tensor::SparseTensorEncodingAttr	
+Enums ¶
+CrdTransDirectionKind ¶
+sparse tensor coordinate translation direction
+
+Cases: ¶
+Symbol	Value	String
+dim2lvl	0	dim_to_lvl
+lvl2dim	1	lvl_to_dim
+SparseTensorSortKind ¶
+sparse tensor sort algorithm
+
+Cases: ¶
+Symbol	Value	String
+HybridQuickSort	0	hybrid_quick_sort
+InsertionSortStable	1	insertion_sort_stable
+QuickSort	2	quick_sort
+HeapSort	3	heap_sort
+StorageSpecifierKind ¶
+sparse tensor storage specifier kind
+
+Cases: ¶
+Symbol	Value	String
+LvlSize	0	lvl_sz
+PosMemSize	1	pos_mem_sz
+CrdMemSize	2	crd_mem_sz
+ValMemSize	3	val_mem_sz
+DimOffset	4	dim_offset
+DimStride	5	dim_stride

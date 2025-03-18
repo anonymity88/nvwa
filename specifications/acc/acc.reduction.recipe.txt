@@ -1,0 +1,55 @@
+acc.reduction.recipe (acc::ReductionRecipeOp) ¶
+Reduction recipe
+
+Syntax:
+
+operation ::= `acc.reduction.recipe` $sym_name `:` $type attr-dict-with-keyword
+              `reduction_operator` $reductionOperator
+              `init` $initRegion `combiner` $combinerRegion
+Declares an OpenACC reduction recipe. The operation requires two mandatory regions.
+
+The initializer region specifies how to initialize the local reduction value. The region has a first argument that contains the value of the reduction accumulator at the start of the reduction. It is expected to acc.yield the new value. Extra arguments can be added to deal with dynamic arrays.
+The reduction region contains a sequences of operations to combine two values of the reduction type into one. It has at least two arguments and it is expected to acc.yield the combined value. Extra arguments can be added to deal with dynamic arrays.
+Example:
+
+acc.reduction.recipe @reduction_add_i64 : i64 reduction_operator<add> init {
+^bb0(%0: i64):
+  // init region contains a sequence of operations to initialize the local
+  // reduction value as specified in 2.5.15
+  %c0 = arith.constant 0 : i64
+  acc.yield %c0 : i64
+} combiner {
+^bb0(%0: i64, %1: i64)
+  // combiner region contains a sequence of operations to combine
+  // two values into one.
+  %2 = arith.addi %0, %1 : i64
+  acc.yield %2 : i64
+}
+
+// The reduction symbol is then used in the corresponding operation.
+acc.parallel reduction(@reduction_add_i64 -> %a : i64) {
+}
+The following table lists the valid operators and the initialization values according to OpenACC 3.3:
+
+|————————————————|
+
+C/C++	Fortran
+operator	init value
++	0
+*	1
+max	least
+min	largest
+&	~0
+^	0
+&&	1
+————————————————-	
+Traits: IsolatedFromAbove
+
+Interfaces: RecipeInterface, Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+type	::mlir::TypeAttr	any type attribute
+reductionOperator	::mlir::acc::ReductionOperatorAttr	
+built-in reduction operations supported by OpenACC

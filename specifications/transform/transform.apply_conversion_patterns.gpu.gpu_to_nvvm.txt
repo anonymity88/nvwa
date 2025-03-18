@@ -1,0 +1,7 @@
+transform.apply_conversion_patterns.gpu.gpu_to_nvvm (transform::ApplyGPUToNVVMConversionPatternsOp) ¶
+Syntax:
+
+operation ::= `transform.apply_conversion_patterns.gpu.gpu_to_nvvm` attr-dict
+Collects patterns that convert GPU dialect ops to NVVM dialect ops. These patterns require an “LLVMTypeConverter”.
+
+Interfaces: ConversionPatternDescriptorOpInterface

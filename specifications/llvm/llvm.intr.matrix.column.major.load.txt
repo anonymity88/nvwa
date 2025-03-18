@@ -1,0 +1,16 @@
+llvm.intr.matrix.column.major.load (LLVM::MatrixColumnMajorLoadOp) ¶
+Syntax:
+
+operation ::= `llvm.intr.matrix.column.major.load` $data `,` `<` `stride` `=` $stride `>` attr-dict`:` type($res) `from` qualified(type($data)) `stride` type($stride)
+Attributes: ¶
+Attribute	MLIR Type	Description
+isVolatile	::mlir::IntegerAttr	1-bit signless integer attribute
+rows	::mlir::IntegerAttr	32-bit signless integer attribute
+columns	::mlir::IntegerAttr	32-bit signless integer attribute
+Operands: ¶
+Operand	Description
+data	LLVM pointer type
+stride	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

@@ -1,0 +1,10 @@
+llvm.va_arg (LLVM::VaArgOp) ¶
+Syntax:
+
+operation ::= `llvm.va_arg` $arg attr-dict `:` functional-type($arg, $res)
+Operands: ¶
+Operand	Description
+arg	LLVM pointer type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

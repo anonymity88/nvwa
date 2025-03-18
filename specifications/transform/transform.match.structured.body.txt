@@ -1,0 +1,34 @@
+transform.match.structured.body (transform::MatchStructuredBodyOp) ¶
+Checks if the body of the structured op satisfies some criteria
+
+Syntax:
+
+operation ::= `transform.match.structured.body` $operand_handle attr-dict `:` type($operand_handle)
+Checks if the body of the structured payload op satisfies one of the following mutually exclusive criteria specified by attributes:
+
+reduction_position: the body of the structured payload op implements a reduction of the n-th operand (n is the value of the attribute) using a single combiner operation;
+
+passthrough: the body of the structured payload op only forwards inputs to the outputs (copy or broadcast).
+
+elementwise: the body of the structured payload op represents an elementwise operation.
+
+contraction: the body of the structured payload op is a contraction of the form <red>(<elem>(bbarg0, bbarg1), bbarg2) where <elem> and <red> are binary operations whose names are specified in the attribute and operands can be permuted and optionally forwarded through a chain of unary side effect-free operations.
+
+This op can only appear immediately inside a transform.match.structured op and apply to its first block argument because it assumes the payload to have been already checked for being a single structured op.
+
+Return modes ¶
+Succeeds if the operation body satisfies the specified criteria, produces a silenceable failure otherwise. Produces a definite failure if the operand is not associated with a single payload op.
+
+Traits: SingleOpMatcher, StructuredPredicate
+
+Interfaces: MatchOpInterface, MemoryEffectsOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+reduction_position	::mlir::IntegerAttr	64-bit signless integer attribute
+passthrough	::mlir::UnitAttr	unit attribute
+elementwise	::mlir::UnitAttr	unit attribute
+contraction	::mlir::ArrayAttr	string array attribute
+Operands: ¶
+Operand	Description
+operand_handle	TransformHandleTypeInterface instance

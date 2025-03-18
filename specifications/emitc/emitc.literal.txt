@@ -1,0 +1,20 @@
+emitc.literal (emitc::LiteralOp) ¶
+Literal operation
+
+Syntax:
+
+operation ::= `emitc.literal` $value attr-dict `:` type($result)
+The emitc.literal operation produces an SSA value equal to some constant specified by an attribute.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::StringAttr	string attribute
+Results: ¶
+Result	Description
+result	type supported by EmitC

@@ -1,0 +1,23 @@
+//===----------------------------------------------------------------------===//
+// YieldOp
+//===----------------------------------------------------------------------===//
+
+def Tensor_YieldOp : Tensor_Op<"yield",
+    [Pure, ReturnLike, Terminator,
+     HasParent<"::mlir::tensor::GenerateOp, ::mlir::tensor::PadOp">]> {
+  let summary = "Yield a value from a region";
+  let description = [{
+     This operation is used to yield a single value from a within a region. It
+     is used to create dynamically sized tensors
+     (see `tensor.generate` and `tensor.pad` ops).
+  }];
+
+  let arguments = (ins AnyType:$value);
+  let assemblyFormat = "$value attr-dict `:` type($value)";
+
+  // Dummy builder to appease code in templated ensureTerminator that
+  // GenerateOp's auto-generated parser calls.
+  let builders = [OpBuilder<(ins), [{ /* nothing to do */ }]>];
+}
+
+#endif // TENSOR_OPS

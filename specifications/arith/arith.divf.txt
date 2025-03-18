@@ -1,0 +1,10 @@
+//===----------------------------------------------------------------------===//
+// DivFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_DivFOp : Arith_FloatBinaryOp<"divf"> {
+  let summary = "floating point division operation";
+  let hasFolder = 1;
+  let hasCanonicalizer = 1;
+}
+

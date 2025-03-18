@@ -1,0 +1,23 @@
+memref.get_global (memref::GetGlobalOp) ¶
+Get the memref pointing to a global variable
+
+Syntax:
+
+operation ::= `memref.get_global` $name `:` type($result) attr-dict
+The memref.get_global operation retrieves the memref pointing to a named global variable. If the global variable is marked constant, writing to the result memref (such as through a memref.store operation) is undefined.
+
+Example:
+
+%x = memref.get_global @foo : memref<2xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+result	statically shaped memref of any type values

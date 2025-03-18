@@ -1,0 +1,19 @@
+emitc.load (emitc::LoadOp) ¶
+Load an lvalue into an SSA value.
+
+Syntax:
+
+operation ::= `emitc.load` $operand attr-dict `:` type($operand)
+This operation loads the content of a modifiable lvalue into an SSA value. Modifications of the lvalue executed after the load are not observable on the produced value.
+
+Example:
+
+%1 = emitc.load %0 : !emitc.lvalue<i32>
+// Code emitted for the operation above.
+int32_t v2 = v1;
+Operands: ¶
+Operand	Description
+operand	EmitC lvalue type
+Results: ¶
+Result	Description
+result	any type

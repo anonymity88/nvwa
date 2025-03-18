@@ -1,0 +1,28 @@
+spirv.ControlBarrier (spirv::ControlBarrierOp) ¶
+Wait for other invocations of this module to reach the current point of execution.
+
+Syntax:
+
+operation ::= `spirv.ControlBarrier` $execution_scope `,` $memory_scope `,` $memory_semantics attr-dict
+All invocations of this module within Execution scope must reach this point of execution before any invocation will proceed beyond it.
+
+When Execution is Workgroup or larger, behavior is undefined if this instruction is used in control flow that is non-uniform within Execution. When Execution is Subgroup or Invocation, the behavior of this instruction in non-uniform control flow is defined by the client API.
+
+If Semantics is not None, this instruction also serves as an OpMemoryBarrier instruction, and must also perform and adhere to the description and semantics of an OpMemoryBarrier instruction with the same Memory and Semantics operands. This allows atomically specifying both a control barrier and a memory barrier (that is, without needing two instructions). If Semantics is None, Memory is ignored.
+
+Before version 1.3, it is only valid to use this instruction with TessellationControl, GLCompute, or Kernel execution models. There is no such restriction starting with version 1.3.
+
+When used with the TessellationControl execution model, it also implicitly synchronizes the Output Storage Class: Writes to Output variables performed by any invocation executed prior to a OpControlBarrier will be visible to any other invocation after return from that OpControlBarrier.
+
+Example: ¶
+spirv.ControlBarrier <Workgroup>, <Device>, <Acquire|UniformMemory>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+memory_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+memory_semantics	::mlir::spirv::MemorySemanticsAttr	
+valid SPIR-V MemorySemantics

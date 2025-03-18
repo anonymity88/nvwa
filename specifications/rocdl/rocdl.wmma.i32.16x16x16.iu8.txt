@@ -1,0 +1,10 @@
+rocdl.wmma.i32.16x16x16.iu8 (ROCDL::wmma_i32_16x16x16_iu8) ¶
+Syntax:
+
+operation ::= `rocdl.wmma.i32.16x16x16.iu8` $args attr-dict `:` functional-type($args, $res)
+Operands: ¶
+Operand	Description
+args	variadic of LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

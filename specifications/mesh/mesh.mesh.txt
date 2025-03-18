@@ -1,0 +1,36 @@
+mesh.mesh (mesh::MeshOp) ¶
+Description of a device/process mesh.
+
+Syntax:
+
+operation ::= `mesh.mesh` $sym_name `(` `shape` `=` custom<DimensionList>($shape) `)`
+              attr-dict
+The mesh.mesh operation is a symbol operation that identifies a specific mesh. The operation has three attributes:
+
+sym_name: This attribute uniquely identifies the name of the mesh. This name serves as a symbolic reference to the mesh throughout the MLIR module, allowing for consistent referencing and easier debugging.
+
+shape: This attribute represents the shape of the device mesh. It uses the same notation as a tensor shape. Also allowing for dynamic dimensions. This flexibility allows for dynamic device assignment or configurations where the exact number of devices might not be determined during compile time. For example 2x?x4.
+
+Example:
+
+// A device mesh with 3 axes, the total device number is 4 * 8 * 12
+// The dimension sizes are 4, 8, 12 
+mesh.mesh @mesh0(shape = 4x8x12)
+
+// A device mesh with 2 axes, the total device number is unknown
+// The first dimension size is 4 and the second is unknown
+mesh.mesh @mesh1(shape = 4x?)
+
+// A device mesh with 2 axes, the total device number is unknown
+// The first dimension size is unknown and the second is 4
+mesh.mesh @mesh2(shape = ?x4)
+
+// A device mesh with 2 axes, the number of devices along both axes
+// is unknown
+mesh.mesh @mesh3(shape = ?x?)
+Interfaces: Symbol
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+shape	::mlir::DenseI64ArrayAttr	i64 dense array attribute

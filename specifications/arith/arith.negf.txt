@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// NegFOp
+//===----------------------------------------------------------------------===//
+
+def Arith_NegFOp : Arith_FloatUnaryOp<"negf"> {
+  let summary = "floating point negation";
+  let description = [{
+    The `negf` operation computes the negation of a given value. It takes one
+    operand and returns one result of the same type. This type may be a float
+    scalar type, a vector whose element type is float, or a tensor of floats.
+    It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Scalar negation value.
+    %a = arith.negf %b : f64
+
+    // SIMD vector element-wise negation value.
+    %f = arith.negf %g : vector<4xf32>
+
+    // Tensor element-wise negation value.
+    %x = arith.negf %y : tensor<4x?xf8>
+    ```
+  }];
+  let hasFolder = 1;
+}
+

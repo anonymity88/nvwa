@@ -1,0 +1,26 @@
+spirv.KHR.SubgroupBallot (spirv::KHRSubgroupBallotOp) ¶
+See extension SPV_KHR_shader_ballot
+
+Syntax:
+
+operation ::= `spirv.KHR.SubgroupBallot` $predicate attr-dict `:` type($result)
+Computes a bitfield value combining the Predicate value from all invocations in the current Subgroup that execute the same dynamic instance of this instruction. The bit is set to one if the corresponding invocation is active and the predicate is evaluated to true; otherwise, it is set to zero.
+
+Predicate must be a Boolean type.
+
+Result Type must be a 4 component vector of 32 bit integer types.
+
+Result is a set of bitfields where the first invocation is represented in bit 0 of the first vector component and the last (up to SubgroupSize) is the higher bit number of the last bitmask needed to represent all bits of the subgroup invocations.
+
+subgroup-ballot-op ::= ssa-id `=` `spirv.KHR.SubgroupBallot`
+                            ssa-use `:` `vector` `<` 4 `x` `i32` `>`
+Example: ¶
+%0 = spirv.KHR.SubgroupBallot %predicate : vector<4xi32>
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Operands: ¶
+Operand	Description
+predicate	bool
+Results: ¶
+Result	Description
+result	vector of 32-bit integer values of length 4

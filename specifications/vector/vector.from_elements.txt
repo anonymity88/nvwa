@@ -1,0 +1,34 @@
+vector.from_elements (vector::FromElementsOp) ¶
+Operation that defines a vector from scalar elements
+
+Syntax:
+
+operation ::= `vector.from_elements` $elements attr-dict `:` type($result)
+This operation defines a vector from one or multiple scalar elements. The number of elements must match the number of elements in the result type. All elements must have the same type, which must match the element type of the result vector type.
+
+elements are a flattened version of the result vector in row-major order.
+
+Example:
+
+// %f1
+%0 = vector.from_elements %f1 : vector<f32>
+// [%f1, %f2]
+%1 = vector.from_elements %f1, %f2 : vector<2xf32>
+// [[%f1, %f2, %f3], [%f4, %f5, %f6]]
+%2 = vector.from_elements %f1, %f2, %f3, %f4, %f5, %f6 : vector<2x3xf32>
+// [[[%f1, %f2]], [[%f3, %f4]], [[%f5, %f6]]]
+%3 = vector.from_elements %f1, %f2, %f3, %f4, %f5, %f6 : vector<3x1x2xf32>
+Note, scalable vectors are not supported.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+elements	variadic of any type
+Results: ¶
+Result	Description
+result	fixed-length vector of any type values

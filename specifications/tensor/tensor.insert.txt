@@ -1,0 +1,30 @@
+tensor.insert (tensor::InsertOp) ¶
+Element insertion operation
+
+Syntax:
+
+operation ::= `tensor.insert` $scalar `into` $dest `[` $indices `]` attr-dict `:` type($dest)
+The tensor.insert op inserts a scalar into a ranked tensor dest as specified by the operation’s indices.
+
+It returns a copy of dest with the indexed position updated to the value of scalar.
+
+The arity of indices must match the rank of the tensor dest. All indices should be of index type.
+
+Example:
+
+%4 = tensor.insert %t into %dest[%1, %2] : tensor<4x4xi32>
+%5 = tensor.insert %rt into %dest[%1, %2] : tensor<?x?xi32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+scalar	any type
+dest	ranked tensor of any type values
+indices	variadic of index
+Results: ¶
+Result	Description
+result	ranked tensor of any type values

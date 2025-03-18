@@ -1,0 +1,18 @@
+transform.loop.promote_if_one_iteration (transform::LoopPromoteIfOneIterationOp) ¶
+Promote loop if it has one iteration
+
+Syntax:
+
+operation ::= `transform.loop.promote_if_one_iteration` $target attr-dict `:` type($target)
+Promotes the given target loop op if it has a single iteration. I.e., the loop op is removed and only the body remains.
+
+Return modes ¶
+This transform fails if the target is mapped to ops that are loops. Ops are considered loops if they implement the LoopLikeOpInterface. Otherwise, this transform always succeeds. The transform consumes the target handle and modifies the payload.
+
+Traits: TransformEachOpTrait
+
+Interfaces: MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

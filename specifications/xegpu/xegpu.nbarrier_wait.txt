@@ -1,0 +1,11 @@
+xegpu.nbarrier_wait (xegpu::NbarrierWaitOp) ¶
+It waits for a named barrier.
+
+Syntax:
+
+operation ::= `xegpu.nbarrier_wait` $nbarrier attr-dict `:` qualified(type($nbarrier))
+NbarrierWaitOp signals the hardware which named barrier the current thread is waiting for, such that it can get notified when the named barrier is completed.
+
+Operands: ¶
+Operand	Description
+nbarrier	!xegpu.nbarrier a custom XeGPU type representing a barrier.

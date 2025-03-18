@@ -1,0 +1,23 @@
+nvgpu.mbarrier.arrive.nocomplete (nvgpu::MBarrierArriveNoCompleteOp) ¶
+Performs arrive operation on the nvgpu.mbarrier.arrive.nocomplete as non-blocking.
+
+Syntax:
+
+operation ::= `nvgpu.mbarrier.arrive.nocomplete` $barriers `[` $mbarId `]` `,` $count attr-dict `:` type($barriers) `->` type($token)
+The Op performs arrive-on operation on the mbarrier object and returns a nvgpu.mbarrier.token.
+
+The Op does not cause the nvgpu.mbarrier to complete its current phase.
+
+Example:
+
+  %token = nvgpu.mbarrier.arrive.noComplete %barrier, %count : !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>> -> !nvgpu.mbarrier.token
+Interfaces: InferTypeOpInterface
+
+Operands: ¶
+Operand	Description
+barriers	mbarrier barrier type
+mbarId	index
+count	index
+Results: ¶
+Result	Description
+token

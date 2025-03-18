@@ -1,0 +1,12 @@
+gpu.barrier (gpu::BarrierOp) ¶
+Synchronizes all work items of a workgroup.
+
+Syntax:
+
+operation ::= `gpu.barrier` attr-dict
+The “barrier” op synchronizes all work items of a workgroup. It is used to coordinate communication between the work items of the workgroup.
+
+gpu.barrier
+waits until all work items in the workgroup have reached this point and all memory accesses made by these work items prior to the op are visible to all work items in the workgroup. Data hazards between work items accessing the same memory can be avoided by synchronizing work items in-between these accesses.
+
+Either none or all work items of a workgroup need to execute this op in convergence.

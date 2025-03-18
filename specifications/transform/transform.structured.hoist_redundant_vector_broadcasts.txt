@@ -1,0 +1,19 @@
+transform.structured.hoist_redundant_vector_broadcasts (transform::HoistRedundantVectorBroadcastsOp) ¶
+Syntax:
+
+operation ::= `transform.structured.hoist_redundant_vector_broadcasts` $target attr-dict `:` functional-type(operands, results)
+Hoist vector.extract / vector.broadcasts pairs out of immediately enclosing scf::ForOp iteratively.
+
+Return modes: ¶
+The operation always succeeds and returns a handle to the transformed function op.
+
+Traits: FunctionalStyleTransformOpTrait, ReportTrackingListenerFailuresOpTrait, TransformEachOpTrait
+
+Interfaces: MemoryEffectsOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+transformed	TransformHandleTypeInterface instance

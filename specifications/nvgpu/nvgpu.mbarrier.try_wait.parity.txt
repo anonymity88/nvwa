@@ -1,0 +1,19 @@
+nvgpu.mbarrier.try_wait.parity (nvgpu::MBarrierTryWaitParityOp) ¶
+Waits for the nvgpu.mbarrier to complete its current phase.
+
+Syntax:
+
+operation ::= `nvgpu.mbarrier.try_wait.parity` $barriers `[` $mbarId `]` `,` $phaseParity `,` $ticks attr-dict `:` type($barriers)
+Checks whether the mbarrier object has completed the phase. It is is a potentially blocking instruction which tests for the completion of the phase. Suspended thread resumes execution when the specified phase completes OR before the phase completes following a system-dependent time limit.
+
+The $phaseParity specifies either even phase (0) or odd phase (1) to wait.
+
+Example:
+
+  nvgpu.mbarrier.try_wait.parity %barrier, %phaseParity, %ticks : !nvgpu.mbarrier.barrier<memorySpace = #gpu.address_space<workgroup>>
+Operands: ¶
+Operand	Description
+barriers	mbarrier barrier type
+phaseParity	1-bit signless integer
+ticks	index
+mbarId	index

@@ -1,0 +1,16 @@
+pdl_interp.finalize (pdl_interp::FinalizeOp) ¶
+Finalize a pattern match or rewrite sequence
+
+Syntax:
+
+operation ::= `pdl_interp.finalize` attr-dict
+pdl_interp.finalize is used to denote the termination of a match or rewrite sequence.
+
+Example:
+
+pdl_interp.finalize
+Traits: AlwaysSpeculatableImplTrait, Terminator
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}

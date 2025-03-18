@@ -1,0 +1,39 @@
+arm_sme.fmops_2way (arm_sme::FMops2WayOp) ¶
+Floating-point sum of 2 outer products and subtract
+
+Syntax:
+
+operation ::= `arm_sme.fmops_2way` $lhs `,` $rhs
+              oilist(
+              `acc` `` `(` $acc `)`
+              | `masks` `` `(` $lhsMask `,` $rhsMask `)`
+              ) attr-dict `:` type($lhs) `,` type($rhs) `into` type($result)
+Equivalent to fmopa_2way but outer products are subtracted from destination result.
+
+Example: FP16 to FP32
+
+%result = arm_sme.fmops_2way $lhs, $rhs : vector<[8]xf16>, vector<[8]xf16> into vector<[4]x[4]xf32>
+Example: BF16 to FP32
+
+%result = arm_sme.fmops_2way $lhs, $rhs : vector<[8]xbf16>, vector<[8]xbf16> into vector<[4]x[4]xf32>
+Refer to fmopa_2way for a detailed description of 2-way outer products.
+
+Spec	Features
+FMOPS (widening, 2-way, FP16 to FP32)	+sme
+BFMOPS (widening, 2-way, BF16 to FP32)	+sme
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments
+
+Interfaces: ArmSMETileOpInterface, ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	of ranks 1scalable vector of 16-bit float or bfloat16 type values of length 8
+rhs	vector of any type values
+lhsMask	vector of any type values
+rhsMask	vector of any type values
+acc	vector of any type values
+Results: ¶
+Result	Description
+result	vector<[4]x[4]xf32> of 32-bit float values

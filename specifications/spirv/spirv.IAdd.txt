@@ -1,0 +1,30 @@
+spirv.IAdd (spirv::IAddOp) ¶
+Integer addition of Operand 1 and Operand 2.
+
+Syntax:
+
+operation ::= `spirv.IAdd` operands attr-dict `:` type($result)
+Result Type must be a scalar or vector of integer type.
+
+The type of Operand 1 and Operand 2 must be a scalar or vector of integer type. They must have the same number of components as Result Type. They must have the same component width as Result Type.
+
+The resulting value will equal the low-order N bits of the correct result R, where N is the component width and R is computed with enough precision to avoid overflow and underflow.
+
+Results are computed per component.
+
+Example: ¶
+%4 = spirv.IAdd %0, %1 : i32
+%5 = spirv.IAdd %2, %3 : vector<4xi32>
+Traits: AlwaysSpeculatableImplTrait, Commutative, SameOperandsAndResultType, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+operand1	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values
+operand2	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or vector of 8/16/32/64-bit integer values of length 2/3/4/8/16 or Cooperative Matrix of 8/16/32/64-bit integer values

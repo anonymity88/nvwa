@@ -1,0 +1,22 @@
+emitc.logical_or (emitc::LogicalOrOp) ¶
+Logical or operation
+
+Syntax:
+
+operation ::= `emitc.logical_or` operands attr-dict `:` type(operands)
+With the emitc.logical_or operation the logical operator || (inclusive or) can be applied.
+
+Example:
+
+%0 = emitc.logical_or %arg0, %arg1 : i32, i32
+// Code emitted for the operation above.
+bool v3 = v1 || v2;
+Traits: CExpression
+
+Operands: ¶
+Operand	Description
+lhs	type supported by EmitC
+rhs	type supported by EmitC
+Results: ¶
+Result	Description
+«unnamed»	1-bit signless integer

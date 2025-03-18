@@ -1,0 +1,30 @@
+arm_sve.convert_from_svbool (arm_sve::ConvertFromSvboolOp) ¶
+Convert a svbool type to a SVE predicate type
+
+Syntax:
+
+operation ::= `arm_sve.convert_from_svbool` $source attr-dict `:` type($result)
+Converts svbool types (vector<[16]xi1> or vectors of that type, e.g. vector<2x3x[16]xi1>) to SVE predicate types. Note: Only the trailing dimension can be scalable.
+
+Example 1: Convert a 1-D svbool mask to a SVE predicate.
+
+%source = vector.load %memref[%c0] : memref<?xi1>, vector<[16]xi1>
+%result = arm_sve.convert_from_svbool %source : vector<[4]xi1>
+Example 2: Convert a 2-D svbool mask to a mask of SVE predicates.
+
+%source = vector.load %memref[%c0, %c0] : memref<2x?xi1>, vector<2x[16]xi1>
+%result = arm_sve.convert_from_svbool %source : vector<2x[8]xi1>
+A svbool is the smallest SVE predicate type that has a in-memory representation (and maps to a full predicate register). In MLIR svbool is represented as vector<[16]xi1>. Smaller SVE predicate types (vector<[1|2|4|8]xi1>) must be stored as a svbool then converted back to the original predicate type after loading.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+source	trailing scalable vector of 1-bit signless integer values with dim -1 having a size of {16}
+Results: ¶
+Result	Description
+result	trailing scalable vector of 1-bit signless integer values with dim -1 having a size of {16, 8, 4, 2, 1}

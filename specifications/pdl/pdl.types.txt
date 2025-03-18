@@ -1,0 +1,57 @@
+pdl.types (pdl::TypesOp) ¶
+Define a range of type handles within a pattern
+
+Syntax:
+
+operation ::= `pdl.types` attr-dict (`:` $constantTypes^)?
+pdl.types operations capture result type constraints of Values, and Operations. Instances of this operation define results types of a given entity. A pdl.types may partially constrain the results by specifying an array of Types.
+
+Example:
+
+// Define a range of types:
+%types = pdl.types
+
+// Define a range of types with a range of constant values:
+%types = pdl.types : [i32, i64, i32]
+Attributes: ¶
+Attribute	MLIR Type	Description
+constantTypes	::mlir::ArrayAttr	type array attribute
+Results: ¶
+Result	Description
+result	range of PDL handle to an mlir::Type values
+Types ¶
+AttributeType ¶
+PDL handle to an mlir::Attribute
+
+Syntax: !pdl.attribute
+
+This type represents a handle to an instance of an mlir::Attribute, bound to a value that is usable within a PDL pattern or rewrite.
+
+OperationType ¶
+PDL handle to an mlir::Operation *
+
+Syntax: !pdl.operation
+
+This type represents a handle to an instance of an mlir::Operation *, bound to a value that is usable within a PDL pattern or rewrite.
+
+RangeType ¶
+PDL handle to a range of a given sub-type
+
+This type represents a range of instances of the given PDL element type, i.e. Attribute, Operation, Type, or Value.
+
+Parameters: ¶
+Parameter	C++ type	Description
+elementType	Type	
+TypeType ¶
+PDL handle to an mlir::Type
+
+Syntax: !pdl.type
+
+This type represents a handle to an instance of an mlir::Type, bound to a value that is usable within a PDL pattern or rewrite.
+
+ValueType ¶
+PDL handle for an mlir::Value
+
+Syntax: !pdl.value
+
+This type represents a handle to an instance of an mlir::Value, bound to a value that is usable within a PDL pattern or rewrite.

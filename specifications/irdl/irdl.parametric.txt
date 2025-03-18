@@ -1,0 +1,38 @@
+irdl.parametric (irdl::ParametricOp) ¶
+Constraints an attribute/type base and its parameters
+
+Syntax:
+
+operation ::= `irdl.parametric` $base_type `<` $args `>` ` ` attr-dict
+irdl.parametric defines a constraint that accepts only a single type or attribute base. The attribute base is defined by a symbolic reference to the corresponding definition. It will additionally constraint the parameters of the type/attribute.
+
+Example:
+
+irdl.dialect @cmath {
+
+  irdl.type @complex { /* ... */ }
+
+  irdl.operation @norm {
+    %0 = irdl.any
+    %1 = irdl.parametric @cmath::@complex<%0>
+    irdl.operands(%1)
+    irdl.results(%0)
+  }
+}
+The above program defines an operation norm inside the dialect cmath that for any T takes a cmath.complex with parameter T and returns a T.
+
+Traits: AlwaysSpeculatableImplTrait, HasParent<TypeOp, AttributeOp, OperationOp>
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), SymbolUserOpInterface, VerifyConstraintInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+base_type	::mlir::SymbolRefAttr	symbol reference attribute
+Operands: ¶
+Operand	Description
+args	variadic of IRDL handle to an mlir::Attribute
+Results: ¶
+Result	Description
+output	IRDL handle to an mlir::Attribute

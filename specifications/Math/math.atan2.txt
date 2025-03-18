@@ -1,0 +1,28 @@
+//===----------------------------------------------------------------------===//
+// Atan2Op
+//===----------------------------------------------------------------------===//
+
+def Math_Atan2Op : Math_FloatBinaryOp<"atan2">{
+  let summary = "2-argument arcus tangent of the given values";
+  let description = [{
+    The `atan2` operation takes two operands and returns one result, all of
+    which must be of the same type.  The operands must be of floating point type
+    (i.e., scalar, tensor or vector).
+
+    The 2-argument arcus tangent `atan2(y, x)` returns the angle in the
+    Euclidian plane between the positive x-axis and the ray through the point
+    (x, y).  It is a generalization of the 1-argument arcus tangent which
+    returns the angle on the basis of the ratio y/x.
+
+    See also https://en.wikipedia.org/wiki/Atan2
+
+    Example:
+
+    ```mlir
+    // Scalar variant.
+    %a = math.atan2 %b, %c : f32
+    ```
+  }];
+  let hasFolder = 1;
+}
+

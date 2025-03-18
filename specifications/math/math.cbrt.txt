@@ -1,0 +1,31 @@
+math.cbrt (math::CbrtOp) ¶
+Cube root of the specified value
+
+Syntax:
+
+operation ::= `math.cbrt` $operand (`fastmath` `` $fastmath^)?
+              attr-dict `:` type($result)
+The cbrt operation computes the cube root. It takes one operand of floating point type (i.e., scalar, tensor or vector) and returns one result of the same type. It has no standard attributes.
+
+Example:
+
+// Scalar cube root value.
+%a = math.cbrt %b : f64
+Note: This op is not equivalent to powf(…, 1/3.0).
+
+Traits: AlwaysSpeculatableImplTrait, Elementwise, SameOperandsAndResultType, Scalarizable, Tensorizable, Vectorizable
+
+Interfaces: ArithFastMathInterface, ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), VectorUnrollOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmath	::mlir::arith::FastMathFlagsAttr	
+Floating point fast math flags
+Operands: ¶
+Operand	Description
+operand	floating-point-like
+Results: ¶
+Result	Description
+result	floating-point-like

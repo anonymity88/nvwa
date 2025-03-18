@@ -1,0 +1,19 @@
+cf.assert (cf::AssertOp) ¶
+Assert operation with message attribute
+
+Syntax:
+
+operation ::= `cf.assert` $arg `,` $msg attr-dict
+Assert operation at runtime with single boolean operand and an error message attribute. If the argument is true this operation has no effect. Otherwise, the program execution will abort. The provided error message may be used by a runtime to propagate the error to the user.
+
+Example:
+
+cf.assert %b, "Expected ... to be true"
+Interfaces: MemoryEffectOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+msg	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+arg	1-bit signless integer

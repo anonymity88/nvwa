@@ -1,0 +1,10 @@
+rocdl.mfma.f32.4x4x4bf16.1k (ROCDL::mfma_f32_4x4x4bf16_1k) ¶
+Syntax:
+
+operation ::= `rocdl.mfma.f32.4x4x4bf16.1k` $args attr-dict `:` functional-type($args, $res)
+Operands: ¶
+Operand	Description
+args	variadic of LLVM dialect-compatible type
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

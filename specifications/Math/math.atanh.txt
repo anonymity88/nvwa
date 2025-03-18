@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// AtanhOp
+//===----------------------------------------------------------------------===//
+
+def Math_AtanhOp : Math_FloatUnaryOp<"atanh">{
+  let summary = "hyperbolic arcus tangent of the given value";
+  let description = [{
+    Syntax:
+
+    ```
+    operation ::= ssa-id `=` `math.atanh` ssa-use `:` type
+    ```
+
+    The `atanh` operation computes the hyperbolic arcus tangent of a given value.  It takes
+    one operand of floating point type (i.e., scalar, tensor or vector) and returns
+    one result of the same type. It has no standard attributes.
+
+    Example:
+
+    ```mlir
+    // Hyperbolic arcus tangent of scalar value.
+    %a = math.atanh %b : f64
+    ```
+  }];
+  let hasFolder = 1;
+}
+

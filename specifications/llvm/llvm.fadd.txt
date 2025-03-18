@@ -1,0 +1,21 @@
+llvm.fadd (LLVM::FAddOp) ¶
+Syntax:
+
+operation ::= `llvm.fadd` $lhs `,` $rhs attr-dict `:` type($res)
+Traits: AlwaysSpeculatableImplTrait, SameOperandsAndResultType
+
+Interfaces: ConditionallySpeculatable, FastmathFlagsInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+fastmathFlags	::mlir::LLVM::FastmathFlagsAttr	
+LLVM fastmath flags
+Operands: ¶
+Operand	Description
+lhs	floating point LLVM type or LLVM dialect-compatible vector of floating point LLVM type
+rhs	floating point LLVM type or LLVM dialect-compatible vector of floating point LLVM type
+Results: ¶
+Result	Description
+res	floating point LLVM type or LLVM dialect-compatible vector of floating point LLVM type

@@ -1,0 +1,31 @@
+xegpu.load_nd (xegpu::LoadNdOp) ¶
+Loads a n-D block from memory (represented by TensorDesc)to registers (represented by vector)
+
+Syntax:
+
+operation ::= `xegpu.load_nd` $TensorDesc prop-dict attr-dict `:` qualified(type($TensorDesc)) `->` type($value)
+LoadNdOp essentially mimics the hardware block read instruction to read a block of data from memory to register. It takes a set of optional cache hints for each level of cache, L1, L2 and L3. If hardware does not have a correspoding cache, Corresponding cache hint attribute will be masked. VNNI transformation is an hardware feature for Intel GPU, which is used to do data packing during the load for B operand of matrix operation, if the bit width of the data type is less then 32 bits, e.g., fp16. And transpose is another Intel hardware feature, which will do transpose operation when loading the data if the bit width of the data type is fp32 or fp64. It implies that vnni and transpose cannot exit at the same time.
+
+Example:
+
+  xegpu.load_nd %1 {transpose = [1, 0],
+                    l1_hint = #xegpu.cache_hint<cached>,
+                    l2_hint = #xegpu.cache_hint<uncached>,
+                    l3_hint = #xegpu.cache_hint<streaming>}
+          : !xegpu.tensor_desc<8x16xf32> -> vector<16x8xf32>
+Attributes: ¶
+Attribute	MLIR Type	Description
+packed	::mlir::UnitAttr	unit attribute
+transpose	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+l1_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l2_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+l3_hint	::mlir::xegpu::CachePolicyAttr	
+Describe the cache settings for prefetch/load/store operators
+Operands: ¶
+Operand	Description
+TensorDesc	TensorDesc describing regions of interested data.
+Results: ¶
+Result	Description
+value	vector of 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type values of ranks 1/2/3/4 or 1-bit signless integer or 8-bit signless integer or 16-bit signless integer or 32-bit signless integer or 64-bit signless integer or 1-bit signed integer or 8-bit signed integer or 16-bit signed integer or 32-bit signed integer or 64-bit signed integer or 1-bit unsigned integer or 8-bit unsigned integer or 16-bit unsigned integer or 32-bit unsigned integer or 64-bit unsigned integer or 16-bit float or 32-bit float or 64-bit float or bfloat16 type or tf32 type

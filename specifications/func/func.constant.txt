@@ -1,0 +1,29 @@
+func.constant (func::ConstantOp) ¶
+Constant
+
+Syntax:
+
+operation ::= `func.constant` attr-dict $value `:` type(results)
+The func.constant operation produces an SSA value from a symbol reference to a func.func operation
+
+Example:
+
+// Reference to function @myfn.
+%2 = func.constant @myfn : (tensor<16xf32>, f32) -> tensor<16xf32>
+
+// Equivalent generic forms
+%2 = "func.constant"() { value = @myfn } : () -> ((tensor<16xf32>, f32) -> tensor<16xf32>)
+MLIR does not allow direct references to functions in SSA operands because the compiler is multithreaded, and disallowing SSA values to directly reference a function simplifies this ( rationale).
+
+Traits: AlwaysSpeculatableImplTrait, ConstantLike
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface), OpAsmOpInterface, SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+value	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+Results: ¶
+Result	Description
+«unnamed»	any type

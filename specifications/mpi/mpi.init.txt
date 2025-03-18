@@ -1,0 +1,15 @@
+mpi.init (mpi::InitOp) ¶
+Initialize the MPI library, equivalent to MPI_Init(NULL, NULL)
+
+Syntax:
+
+operation ::= `mpi.init` attr-dict (`:` type($retval)^)?
+This operation must preceed most MPI calls (except for very few exceptions, please consult with the MPI specification on these).
+
+Passing &argc, &argv is not supported currently.
+
+This operation can optionally return an !mpi.retval value that can be used to check for errors.
+
+Results: ¶
+Result	Description
+retval	MPI function call return value

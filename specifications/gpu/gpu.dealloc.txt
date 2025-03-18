@@ -1,0 +1,25 @@
+gpu.dealloc (gpu::DeallocOp) ¶
+GPU memory deallocation operation
+
+Syntax:
+
+operation ::= `gpu.dealloc` custom<AsyncDependencies>(type($asyncToken), $asyncDependencies)
+              $memref attr-dict `:` type($memref)
+The gpu.dealloc operation frees the region of memory referenced by a memref which was originally created by the gpu.alloc operation. It is similar to the memref.dealloc op, but supports asynchronous GPU execution.
+
+The op does not execute before all async dependencies have finished executing.
+
+If the async keyword is present, the op is executed asynchronously (i.e. it does not block until the execution has finished on the device). In that case, it returns a !gpu.async.token.
+
+Example:
+
+%token = gpu.dealloc async [%dep] %memref : memref<8x64xf32, 1>
+Interfaces: GPU_AsyncOpInterface
+
+Operands: ¶
+Operand	Description
+asyncDependencies	variadic of async token type
+memref	memref of any type values
+Results: ¶
+Result	Description
+asyncToken	async token type

@@ -1,0 +1,28 @@
+polynomial.intt (polynomial::INTTOp) ¶
+Computes the reverse integer Number Theoretic Transform (NTT).
+
+Syntax:
+
+operation ::= `polynomial.intt` $input attr-dict `:` qualified(type($input)) `->` type($output)
+polynomial.intt computes the reverse integer Number Theoretic Transform (INTT) on the input tensor. This is the inverse operation of the polynomial.ntt operation.
+
+The input tensor is interpreted as a point-value representation of the output polynomial at powers of a primitive n-th root of unity (see polynomial.ntt). The ring of the polynomial is taken from the required encoding attribute of the tensor.
+
+The choice of primitive root may be optionally specified.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+root	::mlir::polynomial::PrimitiveRootAttr	
+an attribute containing an integer and its degree as a root of unity
+Operands: ¶
+Operand	Description
+input	ranked tensor of integer values
+Results: ¶
+Result	Description
+output	An element of a polynomial ring.

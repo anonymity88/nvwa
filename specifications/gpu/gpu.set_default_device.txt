@@ -1,0 +1,15 @@
+gpu.set_default_device (gpu::SetDefaultDeviceOp) ¶
+Set default GPU for operations after this by index
+
+Syntax:
+
+operation ::= `gpu.set_default_device` attr-dict $devIndex
+Operation that sets the current default GPU, using a zero-based index into the set of GPUs on the system. The default GPU setting may be thread-local.
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::SideEffects::DefaultResource}
+
+Operands: ¶
+Operand	Description
+devIndex	32-bit signless integer

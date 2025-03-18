@@ -1,0 +1,38 @@
+spirv.AtomicOr (spirv::AtomicOrOp) ¶
+Perform the following steps atomically with respect to any other atomic accesses within Scope to the same location:
+
+Syntax:
+
+operation ::= `spirv.AtomicOr` $memory_scope $semantics operands attr-dict `:` type($pointer)
+load through Pointer to get an Original Value,
+
+get a New Value by the bitwise OR of Original Value and Value, and
+
+store the New Value back through Pointer.
+
+The instruction’s result is the Original Value.
+
+Result Type must be an integer type scalar.
+
+The type of Value must be the same as Result Type. The type of the value pointed to by Pointer must be the same as Result Type.
+
+Memory must be a valid memory Scope.
+
+Example: ¶
+%0 = spirv.AtomicOr <Device> <None> %pointer, %value :
+                  !spirv.ptr<i32, StorageBuffer>
+Interfaces: InferTypeOpInterface, QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+memory_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+semantics	::mlir::spirv::MemorySemanticsAttr	
+valid SPIR-V MemorySemantics
+Operands: ¶
+Operand	Description
+pointer	any SPIR-V pointer type
+value	8/16/32/64-bit integer
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer

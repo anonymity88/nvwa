@@ -1,0 +1,49 @@
+acc.create (acc::CreateOp) ¶
+Represents create semantics for acc data clauses like acc create and acc copyout.
+
+Syntax:
+
+operation ::= `acc.create` `varPtr` `(` $varPtr `:` type($varPtr) `)`
+              oilist(
+              `varPtrPtr` `(` $varPtrPtr `:` type($varPtrPtr) `)`
+              | `bounds` `(` $bounds `)`
+              | `async` `(` custom<DeviceTypeOperands>($asyncOperands,
+              type($asyncOperands), $asyncOperandsDeviceType) `)`
+              ) `->` type($accPtr) attr-dict
+Description of arguments:
+
+varPtr: The address of variable to copy.
+varPtrPtr: Specifies the address of varPtr - only used when the variable copied is a field in a struct. This is important for OpenACC due to implicit attach semantics on data clauses (2.6.4).
+bounds: Used when copying just slice of array or array’s bounds are not encoded in type. They are in rank order where rank 0 is inner-most dimension.
+asyncOperands and asyncOperandsDeviceType: pair-wise lists of the async clause values associated with device_type’s.
+asyncOnly: a list of device_type’s for which async clause does not specify a value (default is acc_async_noval - OpenACC 3.3 2.16.1).
+dataClause: Keeps track of the data clause the user used. This is because the acc operations are decomposed. So a ‘copy’ clause is decomposed to both acc.copyin and acc.copyout operations, but both have dataClause that specifies acc_copy in this field.
+structured: Flag to note whether this is associated with structured region (parallel, kernels, data) or unstructured (enter data, exit data). This is important due to spec specifically calling out structured and dynamic reference counters (2.6.7).
+implicit: Whether this is an implicitly generated operation, such as copies done to satisfy “Variables with Implicitly Determined Data Attributes” in 2.6.2.
+name: Holds the name of variable as specified in user clause (including bounds).
+The async values attached to the data entry operation imply that the data action applies to all device types specified by the device_type clauses using the activity queues on these devices as defined by the async values.
+
+Traits: AttrSizedOperandSegments
+
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Read on ::mlir::acc::CurrentDeviceIdResource}, MemoryEffects::Effect{MemoryEffects::Read on ::mlir::acc::RuntimeCounters, MemoryEffects::Write on ::mlir::acc::RuntimeCounters}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+asyncOperandsDeviceType	::mlir::ArrayAttr	device type array attribute
+asyncOnly	::mlir::ArrayAttr	device type array attribute
+dataClause	::mlir::acc::DataClauseAttr	
+data clauses supported by OpenACC
+structured	::mlir::BoolAttr	bool attribute
+implicit	::mlir::BoolAttr	bool attribute
+name	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+varPtr	PointerLikeType instance
+varPtrPtr	PointerLikeType instance
+bounds	variadic of Type for representing acc data clause bounds information
+asyncOperands	variadic of integer or index
+Results: ¶
+Result	Description
+accPtr	PointerLikeType instance

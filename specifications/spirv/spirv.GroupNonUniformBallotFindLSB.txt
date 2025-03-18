@@ -1,0 +1,29 @@
+spirv.GroupNonUniformBallotFindLSB (spirv::GroupNonUniformBallotFindLSBOp) ¶
+Find the least significant bit set to 1 in Value, considering only the bits in Value required to represent all bits of the group’s invocations. If none of the considered bits is set to 1, the resulting value is undefined.
+
+Syntax:
+
+operation ::= `spirv.GroupNonUniformBallotFindLSB` $execution_scope $value attr-dict `:` type($value) `,` type($result)
+Result Type must be a scalar of integer type, whose Signedness operand is 0.
+
+Execution is a Scope that identifies the group of invocations affected by this command. It must be Subgroup.
+
+Value must be a vector of four components of integer type scalar, whose Width operand is 32 and whose Signedness operand is 0.
+
+Value is a set of bitfields where the first invocation is represented in the lowest bit of the first vector component and the last (up to the size of the group) is the higher bit number of the last bitmask needed to represent all bits of the group invocations.
+
+Example: ¶
+%vector = ... : vector<4xi32>
+%0 = spirv.GroupNonUniformBallotFindLSB <Subgroup> %vector : vector<4xi32>, i32
+Interfaces: QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+Operands: ¶
+Operand	Description
+value	vector of 8/16/32/64-bit signless/unsigned integer values of length 4
+Results: ¶
+Result	Description
+result	8/16/32/64-bit signless/unsigned integer

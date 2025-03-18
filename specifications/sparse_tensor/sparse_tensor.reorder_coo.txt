@@ -1,0 +1,30 @@
+sparse_tensor.reorder_coo (sparse_tensor::ReorderCOOOp) ¶
+Reorder the input COO such that it has the the same order as the output COO
+
+Syntax:
+
+operation ::= `sparse_tensor.reorder_coo` $algorithm $input_coo attr-dict`:` type($input_coo) `to` type($result_coo)
+Reorders the input COO to the same order as specified by the output format. E.g., reorder an unordered COO into an ordered one.
+
+The input and result COO tensor must have the same element type, position type and coordinate type. At the moment, the operation also only supports ordering input and result COO with the same dim2lvl map.
+
+Example:
+
+%res = sparse_tensor.reorder_coo quick_sort %coo : tensor<?x?xf64 : #Unordered_COO> to
+                                                   tensor<?x?xf64 : #Ordered_COO>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+algorithm	::mlir::sparse_tensor::SparseTensorSortKindAttr	
+sparse tensor sort algorithm
+Operands: ¶
+Operand	Description
+input_coo	sparse tensor of any type values
+Results: ¶
+Result	Description
+result_coo	sparse tensor of any type values

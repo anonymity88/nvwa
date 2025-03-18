@@ -1,0 +1,42 @@
+acc.routine (acc::RoutineOp) ¶
+Acc routine operation
+
+Syntax:
+
+operation ::= `acc.routine` $sym_name `func` `(` $func_name `)`
+              oilist (
+              `bind` `(` custom<BindName>($bindName, $bindNameDeviceType) `)`
+              | `gang` `` custom<RoutineGangClause>($gang, $gangDim, $gangDimDeviceType)
+              | `worker` custom<DeviceTypeArrayAttr>($worker)
+              | `vector` custom<DeviceTypeArrayAttr>($vector)
+              | `seq` custom<DeviceTypeArrayAttr>($seq)
+              | `nohost` $nohost
+              | `implicit` $implicit
+              ) attr-dict-with-keyword
+The acc.routine operation is used to capture the clauses of acc routine directive, including the associated function name. The associated function keeps track of its corresponding routine declaration through the RoutineInfoAttr.
+
+Example:
+
+func.func @acc_func(%a : i64) -> () attributes 
+    {acc.routine_info = #acc.routine_info<[@acc_func_rout1]>} {
+  return
+}
+acc.routine @acc_func_rout1 func(@acc_func) gang
+bind, gang, worker, vector and seq operands are supported with device_type information. They should only be accessed by the extra provided getters. If modified, the corresponding device_type attributes must be modified as well.
+
+Traits: IsolatedFromAbove
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+sym_name	::mlir::StringAttr	string attribute
+func_name	::mlir::StringAttr	string attribute
+bindName	::mlir::ArrayAttr	string array attribute
+bindNameDeviceType	::mlir::ArrayAttr	device type array attribute
+worker	::mlir::ArrayAttr	device type array attribute
+vector	::mlir::ArrayAttr	device type array attribute
+seq	::mlir::ArrayAttr	device type array attribute
+nohost	::mlir::UnitAttr	unit attribute
+implicit	::mlir::UnitAttr	unit attribute
+gang	::mlir::ArrayAttr	device type array attribute
+gangDim	::mlir::ArrayAttr	64-bit integer array attribute
+gangDimDeviceType	::mlir::ArrayAttr	device type array attribute

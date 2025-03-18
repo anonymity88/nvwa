@@ -1,0 +1,26 @@
+affine.store (affine::AffineStoreOp) ¶
+Affine store operation
+
+Syntax:
+
+operation ::= `affine.store` ssa-use, ssa-use `[` multi-dim-affine-map-of-ssa-ids `]` `:` memref-type
+The affine.store op writes an element to a memref, where the index for each memref dimension is an affine expression of loop induction variables and symbols. The affine.store op stores a new value which is the same type as the elements of the memref. An affine expression of loop IVs and symbols must be specified for each dimension of the memref. The keyword symbol can be used to indicate SSA identifiers which are symbolic.
+
+Example 1:
+
+affine.store %v0, %0[%i0 + 3, %i1 + 7] : memref<100x100xf32>
+Example 2: Uses symbol keyword for symbols %n and %m.
+
+affine.store %v0, %0[%i0 + symbol(%n), %i1 + symbol(%m)] : memref<100x100xf32>
+Traits: MemRefsNormalizable
+
+Interfaces: AffineMapAccessInterface, AffineWriteOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+map	::mlir::AffineMapAttr	AffineMap attribute
+Operands: ¶
+Operand	Description
+value	any type
+memref	memref of any type values
+indices	variadic of index

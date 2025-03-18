@@ -1,0 +1,31 @@
+arm_sve.psel (arm_sve::PselOp) ¶
+Predicate select
+
+Syntax:
+
+operation ::= `arm_sve.psel` $p1 `,` $p2 `[` $index `]` attr-dict `:` type($p1) `,` type($p2)
+This operation returns the input predicate p1 or an all-false predicate based on the bit at p2[index]. Informally, the semantics are:
+
+if p2[index % num_elements(p2)] == 1:
+  return p1 : type(p1)
+return all-false : type(p1)
+Example:
+
+// Note: p1 and p2 can have different sizes.
+%pd = arm_sve.psel %p1, %p2[%index] : vector<[4]xi1>, vector<[8]xi1>
+Note: This requires SME or SVE2.1 (+sme or +sve2p1 in LLVM target features).
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+p1	vector<[1]xi1>, vector<[2]xi1>, vector<[4]xi1>, vector<[8]xi1>, or vector<[16]xi1>
+p2	vector<[1]xi1>, vector<[2]xi1>, vector<[4]xi1>, vector<[8]xi1>, or vector<[16]xi1>
+index	index
+Results: ¶
+Result	Description
+result	vector<[1]xi1>, vector<[2]xi1>, vector<[4]xi1>, vector<[8]xi1>, or vector<[16]xi1>

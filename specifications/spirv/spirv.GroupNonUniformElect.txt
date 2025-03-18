@@ -1,0 +1,21 @@
+spirv.GroupNonUniformElect (spirv::GroupNonUniformElectOp) ¶
+Result is true only in the active invocation with the lowest id in the group, otherwise result is false.
+
+Syntax:
+
+operation ::= `spirv.GroupNonUniformElect` $execution_scope attr-dict `:` type($result)
+Result Type must be a Boolean type.
+
+Execution must be Workgroup or Subgroup Scope.
+
+Example: ¶
+%0 = spirv.GroupNonUniformElect : i1
+Interfaces: InferTypeOpInterface, QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+execution_scope	::mlir::spirv::ScopeAttr	
+valid SPIR-V Scope
+Results: ¶
+Result	Description
+result	bool

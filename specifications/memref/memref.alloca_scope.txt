@@ -1,0 +1,26 @@
+memref.alloca_scope (memref::AllocaScopeOp) ¶
+Explicitly delimited scope for stack allocation
+
+The memref.alloca_scope operation represents an explicitly-delimited scope for the alloca allocations. Any memref.alloca operations that are used within this scope are going to be cleaned up automatically once the control-flow exits the nested region. For example:
+
+memref.alloca_scope {
+  %myalloca = memref.alloca(): memref<4x3xf32>
+  ...
+}
+Here, %myalloca memref is valid within the explicitly delimited scope and is automatically deallocated at the end of the given region. Conceptually, memref.alloca_scope is a passthrough operation with AutomaticAllocationScope that spans the body of the region within the operation.
+
+memref.alloca_scope may also return results that are defined in the nested region. To return a value, one should use memref.alloca_scope.return operation:
+
+%result = memref.alloca_scope {
+  ...
+  memref.alloca_scope.return %value
+}
+If memref.alloca_scope returns no value, the memref.alloca_scope.return can be left out, and will be inserted implicitly.
+
+Traits: AutomaticAllocationScope, NoRegionArguments, RecursiveMemoryEffects, SingleBlockImplicitTerminator<AllocaScopeReturnOp>, SingleBlock
+
+Interfaces: RegionBranchOpInterface
+
+Results: ¶
+Result	Description
+results	variadic of any type

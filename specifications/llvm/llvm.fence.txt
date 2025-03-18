@@ -1,0 +1,9 @@
+llvm.fence (LLVM::FenceOp) ¶
+Syntax:
+
+operation ::= `llvm.fence` (`syncscope` `(` $syncscope^ `)`)? $ordering attr-dict
+Attributes: ¶
+Attribute	MLIR Type	Description
+ordering	::mlir::LLVM::AtomicOrderingAttr	
+Atomic ordering for LLVM's memory model
+syncscope	::mlir::StringAttr	string attribute

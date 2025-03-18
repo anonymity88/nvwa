@@ -1,0 +1,21 @@
+//===----------------------------------------------------------------------===//
+// ShlOp
+//===----------------------------------------------------------------------===//
+
+def Index_ShlOp : IndexBinaryOp<"shl", [Pure]> {
+  let summary = "index shift left";
+  let description = [{
+    The `index.shl` operation shifts an index value to the left by a variable
+    amount. The low order bits are filled with zeroes. The RHS operand is always
+    treated as unsigned. If the RHS operand is equal to or greater than the
+    index bitwidth, the result is a poison value.
+
+    Example:
+
+    ```mlir
+    // c = a << b
+    %c = index.shl %a, %b
+    ```
+  }];
+}
+

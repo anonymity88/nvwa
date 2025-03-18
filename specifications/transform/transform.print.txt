@@ -1,0 +1,26 @@
+transform.print (transform::PrintOp) ¶
+Dump each payload op
+
+Syntax:
+
+operation ::= `transform.print` $target attr-dict (`:` type($target)^)?
+Prints each payload op that is associated with the target operand to stdout. It also prints the name string attribute. If no target is specified, the top-level op is dumped.
+
+This op is useful for printf-style debugging.
+
+Supported printing flag attributes:
+
+assume_verified – skips verification when the unit attribute is specified. This improves performace but may lead to crashes and unexpected behavior when the printed payload op is invalid.
+use_local_scope – prints in local scope when the unit attribute is specified. This improves performance but may not be identical to printing within the full module.
+skip_regions – does not print regions of operations when the unit attribute is specified.
+Interfaces: MatchOpInterface, MemoryEffectOpInterface, TransformOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+name	::mlir::StringAttr	string attribute
+assume_verified	::mlir::UnitAttr	unit attribute
+use_local_scope	::mlir::UnitAttr	unit attribute
+skip_regions	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+target	TransformHandleTypeInterface instance

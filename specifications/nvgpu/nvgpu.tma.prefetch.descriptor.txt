@@ -1,0 +1,12 @@
+nvgpu.tma.prefetch.descriptor (nvgpu::TmaPrefetchOp) ¶
+Prefetch given nvgpu.tensormap.descriptor
+
+Syntax:
+
+operation ::= `nvgpu.tma.prefetch.descriptor` $tensorMapDescriptor (`,` `predicate` `=` $predicate^)? attr-dict `:` type($tensorMapDescriptor)
+The Op brings the cache line containing the given $tmaDescriptor for subsequent use by the tma.async.load instruction.
+
+Operands: ¶
+Operand	Description
+tensorMapDescriptor	TensorMap descriptor
+predicate	1-bit signless integer

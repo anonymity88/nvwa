@@ -1,0 +1,48 @@
+//===----------------------------------------------------------------------===//
+// ScalarizeOp
+//===----------------------------------------------------------------------===//
+
+def ScalarizeOp : Op<Transform_Dialect, "structured.scalarize",
+    [FunctionalStyleTransformOpTrait, MemoryEffectsOpInterface,
+     TransformOpInterface, TransformEachOpTrait,
+     ReportTrackingListenerFailuresOpTrait]> {
+  let description = [{
+    Indicates that ops of a specific kind in the given function should be
+    scalarized (i.e. their dynamic dimensions tiled by 1).
+
+    #### Return modes:
+
+    This operation ignores non-Linalg ops and drops them in the return.
+    This operation produces definite failure if the scalarization fails for any
+    reason.
+    If all the operations referred to by the `target` handle scalarize
+    properly, the transform succeeds. Otherwise the transform produces a
+    silenceable failure.
+
+    The return handle points to only the subset of successfully produced
+    tiled-by-1 operations, which can be empty.
+
+    This operation does not return handles to the tiled loop.
+    We make this design choice because it is hard to know ahead of time the
+    number of loops that will be produced (it depends on the number of dynamic
+    dimensions after multiple transformations have been applied).
+    Loops can always be recovered by navigating from the tiled operations if
+    needed.
+  }];
+
+  let arguments = (ins TransformHandleTypeInterface:$target);
+  let results = (outs TransformHandleTypeInterface:$result);
+
+  let assemblyFormat =
+    "$target attr-dict `:`"
+    "custom<SemiFunctionType>(type($target), type($result))";
+
+  let extraClassDeclaration = [{
+    ::mlir::DiagnosedSilenceableFailure applyToOne(
+        ::mlir::transform::TransformRewriter &rewriter,
+        ::mlir::linalg::LinalgOp target,
+        ::mlir::transform::ApplyToEachResultList &results,
+        ::mlir::transform::TransformState &state);
+  }];
+}
+

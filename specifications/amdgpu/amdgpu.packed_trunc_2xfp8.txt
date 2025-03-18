@@ -1,0 +1,29 @@
+amdgpu.packed_trunc_2xfp8 (amdgpu::PackedTrunc2xFp8Op) ¶
+Round two floats into a packed vector of 8-bit floats
+
+Syntax:
+
+operation ::= `amdgpu.packed_trunc_2xfp8` attr-dict $sourceA `,` ($sourceB^):(`undef`)?
+              `into` ($existing^):(`undef`)? `[` `word` $wordIndex `]`
+              `:` type($sourceA) `to` type($res) (`into` type($existing)^)?
+Round the inputs sourceA and sourceB (which is undefined if not specified) into the low or high word (bottom two or top two) elements of the returned vector, keeping the other two elements of existing unchanged if present (or undefined if it was not passed in).
+
+The reason for this odd signature is that AMD GPUs cannot easily work with sub-registers, and so the conversion intrinsics (which are currently the only way to work with 8-bit float types) take packed vectors of 4 8-bit values.
+
+Traits: AlwaysSpeculatableImplTrait, AttrSizedOperandSegments
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+wordIndex	::mlir::IntegerAttr	32-bit signless integer attribute whose value is non-negative whose maximum value is 1
+Operands: ¶
+Operand	Description
+sourceA	32-bit float
+sourceB	32-bit float
+existing	fixed-length vector of f8E4M3FNUZ type or f8E5M2FNUZ type values of length 4
+Results: ¶
+Result	Description
+res	fixed-length vector of f8E4M3FNUZ type or f8E5M2FNUZ type values of length 4

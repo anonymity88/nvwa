@@ -1,0 +1,49 @@
+vector.outerproduct (vector::OuterProductOp) ¶
+Vector outerproduct with optional fused add
+
+Takes 2 1-D vectors and returns the 2-D vector containing the outer-product, as illustrated below:
+
+ outer |   [c, d]
+ ------+------------
+   [a, | [ [a*c, a*d],
+    b] |   [b*c, b*d] ]
+This operation also accepts a 1-D vector lhs and a scalar rhs. In this case a simple AXPY operation is performed, which returns a 1-D vector.
+
+    [a, b] * c = [a*c, b*c]
+An optional extra vector argument with the same shape as the output vector may be specified in which case the operation returns the sum of the outer-product and the extra vector. In this multiply-accumulate scenario for floating-point arguments, the rounding mode is enforced by guaranteeing that a fused-multiply add operation is emitted. When lowered to the LLVMIR dialect, this form emits llvm.intr.fma, which is guaranteed to lower to actual fma instructions on x86.
+
+An optional kind attribute may be specified to be: add/mul/minsi /minui/maxsi/maxui/and/or/xor for integers, and add/mul /minnumf/maxnumf/minimumf/maximumf for floats. The default is add.
+
+Example:
+
+%2 = vector.outerproduct %0, %1: vector<4xf32>, vector<8xf32>
+return %2: vector<4x8xf32>
+
+%3 = vector.outerproduct %0, %1, %2:
+  vector<4xf32>, vector<8xf32>, vector<4x8xf32>
+return %3: vector<4x8xf32>
+
+%4 = vector.outerproduct %0, %1, %2 {kind = #vector.kind<maxnumf>}:
+  vector<4xf32>, vector<8xf32>, vector<4x8xf32>
+return %3: vector<4x8xf32>
+
+%6 = vector.outerproduct %4, %5: vector<10xf32>, f32
+return %6: vector<10xf32>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, MaskableOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::vector::CombiningKindAttr	
+Kind of combining function for contractions and reductions
+Operands: ¶
+Operand	Description
+lhs	vector of any type values
+rhs	any type
+acc	vector of any type values
+Results: ¶
+Result	Description
+«unnamed»	vector of any type values

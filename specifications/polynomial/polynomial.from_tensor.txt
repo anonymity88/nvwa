@@ -1,0 +1,30 @@
+polynomial.from_tensor (polynomial::FromTensorOp) ¶
+Creates a polynomial from integer coefficients stored in a tensor.
+
+Syntax:
+
+operation ::= `polynomial.from_tensor` $input attr-dict `:` type($input) `->` type($output)
+polynomial.from_tensor creates a polynomial value from a tensor of coefficients. The input tensor must list the coefficients in degree-increasing order.
+
+The input one-dimensional tensor may have size at most the degree of the ring’s polynomialModulus generator polynomial, with smaller dimension implying that all higher-degree terms have coefficient zero.
+
+Example:
+
+#poly = #polynomial.int_polynomial<x**1024 - 1>
+#ring = #polynomial.ring<coefficientType=i32, coefficientModulus=65536:i32, polynomialModulus=#poly>
+%two = arith.constant 2 : i32
+%five = arith.constant 5 : i32
+%coeffs = tensor.from_elements %two, %two, %five : tensor<3xi32>
+%poly = polynomial.from_tensor %coeffs : tensor<3xi32> -> !polynomial.polynomial<#ring>
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+input	ranked tensor of integer values
+Results: ¶
+Result	Description
+output	An element of a polynomial ring.

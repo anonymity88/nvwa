@@ -1,0 +1,21 @@
+llvm.insertelement (LLVM::InsertElementOp) ¶
+Insert an element into an LLVM vector.
+
+Syntax:
+
+operation ::= `llvm.insertelement` $value `,` $vector `[` $position `:` type($position) `]` attr-dict `:`
+              type($vector)
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+vector	LLVM dialect-compatible vector type
+value	primitive LLVM type
+position	signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible vector type

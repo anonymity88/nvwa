@@ -1,0 +1,20 @@
+emitc.assign (emitc::AssignOp) ¶
+Assign operation
+
+Syntax:
+
+operation ::= `emitc.assign` $value `:` type($value) `to` $var `:` type($var) attr-dict
+The emitc.assign operation stores an SSA value to the location designated by an EmitC variable. This operation doesn’t return any value. The assigned value must be of the same type as the variable being assigned. The operation is emitted as a C/C++ ‘=’ operator.
+
+Example:
+
+// Integer variable
+%0 = "emitc.variable"(){value = 42 : i32} : () -> !emitc.lvalue<i32>
+%1 = emitc.call_opaque "foo"() : () -> (i32)
+
+// Assign emitted as `... = ...;`
+"emitc.assign"(%0, %1) : (!emitc.lvalue<i32>, i32) -> ()
+Operands: ¶
+Operand	Description
+var	EmitC lvalue type
+value	type supported by EmitC

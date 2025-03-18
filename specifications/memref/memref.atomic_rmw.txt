@@ -1,0 +1,26 @@
+memref.atomic_rmw (memref::AtomicRMWOp) ¶
+Atomic read-modify-write operation
+
+Syntax:
+
+operation ::= `memref.atomic_rmw` $kind $value `,` $memref `[` $indices `]` attr-dict `:` `(` type($value) `,`
+              type($memref) `)` `->` type($result)
+The memref.atomic_rmw operation provides a way to perform a read-modify-write sequence that is free from data races. The kind enumeration specifies the modification to perform. The value operand represents the new value to be applied during the modification. The memref operand represents the buffer that the read and write will be performed against, as accessed by the specified indices. The arity of the indices is the rank of the memref. The result represents the latest value that was stored.
+
+Example:
+
+%x = memref.atomic_rmw "addf" %value, %I[%i] : (f32, memref<10xf32>) -> f32
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+kind	::mlir::arith::AtomicRMWKindAttr	
+allowed 64-bit signless integer cases: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+Operands: ¶
+Operand	Description
+value	signless integer or floating-point
+memref	memref of signless integer or floating-point values
+indices	variadic of index
+Results: ¶
+Result	Description
+result	signless integer or floating-point

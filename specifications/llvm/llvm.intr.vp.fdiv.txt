@@ -1,0 +1,16 @@
+llvm.intr.vp.fdiv (LLVM::VPFDivOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	LLVM dialect-compatible vector of floating-point
+rhs	LLVM dialect-compatible vector of floating-point
+mask	LLVM dialect-compatible vector of 1-bit signless integer
+evl	32-bit signless integer
+Results: ¶
+Result	Description
+res	LLVM dialect-compatible type

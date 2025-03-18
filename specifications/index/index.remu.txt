@@ -1,0 +1,23 @@
+index.remu (index::RemUOp) ¶
+Index unsigned remainder
+
+Syntax:
+
+operation ::= `index.remu` $lhs `,` $rhs attr-dict
+The index.remu operation takes two index values and computes their unsigned remainder. Treats the leading bit as the most significant, i.e. 6 % -2 = 6.
+
+Example:
+
+// c = a % b
+%c = index.remu %a, %b
+Interfaces: InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index

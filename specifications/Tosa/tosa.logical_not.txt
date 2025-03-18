@@ -1,0 +1,20 @@
+//===----------------------------------------------------------------------===//
+// Operator: logical_not
+//===----------------------------------------------------------------------===//
+def Tosa_LogicalNotOp : Tosa_ElementwiseOp<"logical_not",
+    [SameOperandsAndResultElementType]> {
+  let summary = "Returns the truth value of NOT x element-wise.";
+
+  let description = [{
+    Elementwise logical NOT of input.
+  }];
+
+  let arguments = (ins
+    Tosa_I1Tensor:$input1
+  );
+
+  let results = (outs
+    Tosa_I1Tensor:$output
+  );
+}
+

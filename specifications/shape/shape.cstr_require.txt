@@ -1,0 +1,27 @@
+shape.cstr_require (shape::CstrRequireOp) ¶
+Represents a runtime assertion that an i1 is true
+
+Syntax:
+
+operation ::= `shape.cstr_require` $pred `,` $msg attr-dict
+Represents a runtime assertion that an i1 is true. It returns a !shape.witness to order this assertion.
+
+For simplicity, prefer using other cstr_* ops if they are available for a given constraint.
+
+Example:
+
+%bool = ...
+%w0 = shape.cstr_require %bool, "msg" // Passing if `%bool` is true.
+Since this op can be used to express many different possible assertions (depending on whatever computation calculated pred), the msg should clarify the nature of the assertion for users.
+
+Interfaces: InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+msg	::mlir::StringAttr	string attribute
+Operands: ¶
+Operand	Description
+pred	1-bit signless integer
+Results: ¶
+Result	Description
+result

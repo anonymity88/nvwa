@@ -1,0 +1,39 @@
+//===----------------------------------------------------------------------===//
+// Operator: while_loop
+//===----------------------------------------------------------------------===//
+//===----------------------------------------------------------------------===//
+// Further described in docs/Rationale/RationaleTOSADialect.md .
+//===----------------------------------------------------------------------===//
+def Tosa_WhileOp : Tosa_Op<"while_loop", [
+       DeclareOpInterfaceMethods<LoopLikeOpInterface>,
+       InferShapedTypeOpAdaptor,
+       SingleBlockImplicitTerminator<"YieldOp">,
+       RecursiveMemoryEffects]> {
+  let summary = "output = input; While (Cond(output)) {output = Body(output)}";
+
+  let description = [{
+    Generates and evaluates a Bool condition and either executes a loop body or
+    exits to another control point. This action is performed repeatedly after
+    updating and re-evaluating the Boolean condition every iteration. This
+    implements the semantic foreach or while iterative loop structure.
+  }];
+
+  let arguments = (ins
+    Variadic<Tosa_Tensor>:$inputs
+  );
+
+  let results = (outs
+    Variadic<Tosa_Tensor>:$output
+  );
+
+  let regions = (region
+    SizedRegion<1>:$cond,
+    SizedRegion<1>:$body
+  );
+
+  let hasCustomAssemblyFormat = 1;
+}
+
+include "mlir/Dialect/Tosa/IR/TosaUtilOps.td"
+
+#endif // TOSA_OPS

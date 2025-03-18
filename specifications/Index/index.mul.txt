@@ -1,0 +1,18 @@
+//===----------------------------------------------------------------------===//
+// MulOp
+//===----------------------------------------------------------------------===//
+
+def Index_MulOp : IndexBinaryOp<"mul", [Commutative, Pure]> {
+  let summary = "index multiplication";
+  let description = [{
+    The `index.mul` operation takes two index values and computes their product.
+
+    Example:
+
+    ```mlir
+    // c = a * b
+    %c = index.mul %a, %b
+    ```
+  }];
+}
+

@@ -1,0 +1,28 @@
+llvm.atomicrmw (LLVM::AtomicRMWOp) ¶
+Syntax:
+
+operation ::= `llvm.atomicrmw` (`volatile` $volatile_^)? $bin_op $ptr `,` $val
+              (`syncscope` `(` $syncscope^ `)`)? $ordering attr-dict `:`
+              qualified(type($ptr)) `,` type($val)
+Interfaces: AccessGroupOpInterface, AliasAnalysisOpInterface, InferTypeOpInterface
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+bin_op	::mlir::LLVM::AtomicBinOpAttr	
+llvm.atomicrmw binary operations
+ordering	::mlir::LLVM::AtomicOrderingAttr	
+Atomic ordering for LLVM's memory model
+syncscope	::mlir::StringAttr	string attribute
+alignment	::mlir::IntegerAttr	64-bit signless integer attribute
+volatile_	::mlir::UnitAttr	unit attribute
+access_groups	::mlir::ArrayAttr	LLVM dialect access group metadata array
+alias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+noalias_scopes	::mlir::ArrayAttr	LLVM dialect alias scope array
+tbaa	::mlir::ArrayAttr	LLVM dialect TBAA tag metadata array
+Operands: ¶
+Operand	Description
+ptr	LLVM pointer type
+val	floating point LLVM type or LLVM pointer type or signless integer or LLVM dialect-compatible fixed-length vector type
+Results: ¶
+Result	Description
+res	floating point LLVM type or LLVM pointer type or signless integer or LLVM dialect-compatible fixed-length vector type

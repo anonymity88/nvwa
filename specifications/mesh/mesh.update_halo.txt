@@ -1,0 +1,68 @@
+mesh.update_halo (mesh::UpdateHaloOp) ¶
+Update halo data.
+
+Syntax:
+
+operation ::= `mesh.update_halo` $destination
+              `on` $mesh
+              `split_axes` `=` $split_axes
+              (`halo_sizes` `=` custom<DynamicIndexList>($halo_sizes, $static_halo_sizes)^)?
+              attr-dict `:` type($result)
+This operation updates halo regions of shards, e.g. if their sharding specified halos and the actual tensor/memref data might have changed on the remote devices. Changes might be caused by mutating operations and/or if the new halo regions are larger than the existing ones.
+
+Destination is supposed to be initialized with the local data (not halos).
+
+Assumes all devices hold tensors with same-sized halo data as specified by source_halo_sizes/static_source_halo_sizes and destination_halo_sizes/static_destination_halo_sizes in source shard and destination/result shard.
+
+split_axes specifies for each tensor axis along which mesh axes its halo data is updated.
+
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, DestinationStyleOpInterface, NoMemoryEffect (MemoryEffectOpInterface), SymbolUserOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+mesh	::mlir::FlatSymbolRefAttr	flat symbol reference attribute
+split_axes	::mlir::mesh::MeshAxesArrayAttr	
+static_halo_sizes	::mlir::DenseI64ArrayAttr	i64 dense array attribute
+Operands: ¶
+Operand	Description
+destination	non-0-ranked.memref of any type values or non-0-ranked.tensor of any type values
+halo_sizes	variadic of 64-bit signless integer
+Results: ¶
+Result	Description
+result	non-0-ranked.memref of any type values or non-0-ranked.tensor of any type values
+Attributes ¶
+MeshAxesArrayAttr ¶
+Syntax:
+
+#mesh.axisarray<
+  ::llvm::ArrayRef<MeshAxesAttr>   # axes
+>
+Parameters: ¶
+Parameter	C++ type	Description
+axes	::llvm::ArrayRef<MeshAxesAttr>	
+ReductionKindAttr ¶
+Reduction of an iterator/mesh dimension.
+
+Syntax:
+
+#mesh.partial<
+  ::mlir::mesh::ReductionKind   # value
+>
+Enum cases:
+
+sum (Sum)
+max (Max)
+min (Min)
+product (Product)
+average (Average)
+bitwise_and (BitwiseAnd)
+bitwise_or (BitwiseOr)
+bitwise_xor (BitwiseXor)
+generic (Generic)
+Parameters: ¶
+Parameter	C++ type	Description
+value	::mlir::mesh::ReductionKind	an enum of type ReductionKind

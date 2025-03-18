@@ -1,0 +1,14 @@
+transform.cast (transform::CastOp) ¶
+Syntax:
+
+operation ::= `transform.cast` $input attr-dict `:` type($input) `to` type($output)
+Traits: TransformEachOpTrait
+
+Interfaces: CastOpInterface, MemoryEffectOpInterface, TransformOpInterface
+
+Operands: ¶
+Operand	Description
+input	TransformHandleTypeInterface instance
+Results: ¶
+Result	Description
+output	TransformHandleTypeInterface instance

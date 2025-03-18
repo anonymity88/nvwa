@@ -1,0 +1,15 @@
+x86vector.avx.intr.dp.ps.256 (x86vector::DotIntrOp) ¶
+Traits: AlwaysSpeculatableImplTrait
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+a	vector of 32-bit float values of length 8
+b	vector of 32-bit float values of length 8
+c	8-bit signless integer
+Results: ¶
+Result	Description
+res	vector of 32-bit float values of length 8

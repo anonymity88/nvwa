@@ -1,0 +1,29 @@
+gpu.subgroup_mma_store_matrix (gpu::SubgroupMmaStoreMatrixOp) ¶
+GPU warp synchronous matrix store
+
+Syntax:
+
+operation ::= `gpu.subgroup_mma_store_matrix` $src`,` $dstMemref`[`$indices`]` attr-dict `:` type($src)`,` type($dstMemref)
+The gpu.subgroup_mma_store_matrix operation stores a matrix collectively using all the threads in a subgroup.
+
+This operation takes a !gpu.mma_matrix and a memref as operands. !gpu.mma_matrix is the source value containing the data to be stored into the destination memref which can be in global or shared memory. The store address is determined using the indices provided. The leadDimension attribute specifies the leading dimension of the destination matrix. If the transpose attribute is present then the op does a transposed store.
+
+This op is often meant to be used along with gpu.subgroup_mma_load_matrix and gpu.subgroup_mma_compute.
+
+Example:
+
+gpu.subgroup_mma_store_matrix %D, %sg[%i,%j] : { leadDimension = 32 : i32}
+                : !gpu.mma_matrix<16x16xf16, "COp">, memref<32x32xf16, 3>
+Interfaces: MemoryEffectOpInterface (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{MemoryEffects::Write on ::mlir::SideEffects::DefaultResource}
+
+Attributes: ¶
+Attribute	MLIR Type	Description
+leadDimension	::mlir::IntegerAttr	index attribute
+transpose	::mlir::UnitAttr	unit attribute
+Operands: ¶
+Operand	Description
+src	gpu.mma_matrix of 8-bit signed integer or 8-bit unsigned integer or 32-bit signless integer or 16-bit float or 32-bit float values
+dstMemref	memref of 8-bit signless integer or 32-bit signless integer or 16-bit float or 32-bit float or vector of 8-bit signless integer or 32-bit signless integer or 16-bit float or 32-bit float values of ranks 1 values
+indices	variadic of index

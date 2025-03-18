@@ -1,0 +1,27 @@
+//===----------------------------------------------------------------------===//
+// AllocaScopeReturnOp
+//===----------------------------------------------------------------------===//
+
+def MemRef_AllocaScopeReturnOp : MemRef_Op<"alloca_scope.return",
+      [HasParent<"AllocaScopeOp">,
+       Pure,
+       ReturnLike,
+       Terminator]> {
+  let summary = "terminator for alloca_scope operation";
+  let description = [{
+    `memref.alloca_scope.return` operation returns zero or more SSA values
+    from the region within `memref.alloca_scope`. If no values are returned,
+    the return operation may be omitted. Otherwise, it has to be present
+    to indicate which values are going to be returned. For example:
+
+    ```mlir
+    memref.alloca_scope.return %value
+    ```
+  }];
+
+  let arguments = (ins Variadic<AnyType>:$results);
+  let builders = [OpBuilder<(ins), [{ /*nothing to do */ }]>];
+
+  let assemblyFormat = "attr-dict ($results^ `:` type($results))?";
+}
+

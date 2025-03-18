@@ -1,0 +1,34 @@
+spirv.Select (spirv::SelectOp) ¶
+Select between two objects. Before version 1.4, results are only computed per component.
+
+Syntax:
+
+operation ::= `spirv.Select` operands attr-dict `:` type($condition) `,` type($result)
+Before version 1.4, Result Type must be a pointer, scalar, or vector.
+
+The types of Object 1 and Object 2 must be the same as Result Type.
+
+Condition must be a scalar or vector of Boolean type.
+
+If Condition is a scalar and true, the result is Object 1. If Condition is a scalar and false, the result is Object 2.
+
+If Condition is a vector, Result Type must be a vector with the same number of components as Condition and the result is a mix of Object 1 and Object 2: When a component of Condition is true, the corresponding component in the result is taken from Object 1, otherwise it is taken from Object 2.
+
+Example: ¶
+%3 = spirv.Select %0, %1, %2 : i1, f32
+%3 = spirv.Select %0, %1, %2 : i1, vector<3xi32>
+%3 = spirv.Select %0, %1, %2 : vector<3xi1>, vector<3xf32>
+Traits: AlwaysSpeculatableImplTrait, UsableInSpecConstantOp
+
+Interfaces: ConditionallySpeculatable, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface), QueryCapabilityInterface, QueryExtensionInterface, QueryMaxVersionInterface, QueryMinVersionInterface, SelectLikeOpInterface
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+condition	bool or vector of bool values of length 2/3/4/8/16
+true_value	8/16/32/64-bit integer or 16/32/64-bit float or bool or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type
+false_value	8/16/32/64-bit integer or 16/32/64-bit float or bool or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type
+Results: ¶
+Result	Description
+result	8/16/32/64-bit integer or 16/32/64-bit float or bool or vector of bool or 8/16/32/64-bit integer or 16/32/64-bit float values of length 2/3/4/8/16 or any SPIR-V pointer type

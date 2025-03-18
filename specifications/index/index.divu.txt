@@ -1,0 +1,25 @@
+index.divu (index::DivUOp) ¶
+Index unsigned division
+
+Syntax:
+
+operation ::= `index.divu` $lhs `,` $rhs attr-dict
+The index.divu operation takes two index values and computes their unsigned quotient. Treats the leading bit as the most significant and rounds towards zero, i.e. 6 / -2 = 0.
+
+Note: division by zero is undefined behaviour.
+
+Example:
+
+// c = a / b
+%c = index.divu %a, %b
+Interfaces: InferIntRangeInterface, InferTypeOpInterface, NoMemoryEffect (MemoryEffectOpInterface)
+
+Effects: MemoryEffects::Effect{}
+
+Operands: ¶
+Operand	Description
+lhs	index
+rhs	index
+Results: ¶
+Result	Description
+result	index
