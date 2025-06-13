@@ -28,7 +28,7 @@ cmake -G Ninja ../llvm \
 ninja -j 40
 ```
 
-## Use MLIRSmith
+## Use Nüwa
 
 With `Nüwa`, you can easily Generate test cases from the operator specifications in the 'specifications' directory with a single command:
 ```bash
