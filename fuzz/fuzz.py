@@ -14,9 +14,9 @@ opts = []
 with open('fuzz/opts.txt', 'r') as f:
     opts = [opt.strip() for opt in f.readlines()]
 
-date = "1014"
+date = "deepseek"
 mlir_opt = "llvm-project/build/bin/mlir-opt"
-seeds_dir = f"fuzz_results/{date}/seeds"
+seeds_dir = f"generate_results/deepseek"
 crash_dir = f"fuzz_results/{date}/crash/"
 temp_log = "fuzz/temp.log"
 mlir_storage_dir = f"fuzz_results/{date}/mlir/"

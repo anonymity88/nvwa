@@ -7,7 +7,7 @@ import shutil  # 用于复制文件
 sys.path.append('../')
 
 
-date = "test"
+date = "deepseek"
 
 # 初始化一个空列表来存储bug信息
 BugList = []

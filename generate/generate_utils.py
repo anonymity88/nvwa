@@ -12,11 +12,11 @@ os.environ["http_proxy"] = "http://10.15.22.40:7890"
 os.environ["https_proxy"] = "http://10.15.22.40:7890"
 
 # 设置 OPENAI_API_KEY 环境变量
-os.environ["OPENAI_API_KEY"] = "sk-GekT7KBzS5zu2kWo4e2fC25e2c4a48428b47E420B5A0EfCf"
+os.environ["OPENAI_API_KEY"] = "sk-4sF6EtYk06pNxnzmB59832Fe2a514e25B51c4aCd29A3Cd3c"
 # 设置 OPENAI_BASE_URL 环境变量
 os.environ["OPENAI_BASE_URL"] = "https://api.xiaoai.plus/v1"
 
-def get_gpt_response(messages, model="gpt-4o-mini",temperature=0.4):
+def get_gpt_response(messages, model="deepseek-v3",temperature=0.4):
     response = openai.chat.completions.create(
         model=model,
         messages=messages,

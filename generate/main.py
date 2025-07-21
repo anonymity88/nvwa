@@ -2,8 +2,8 @@ import os
 import json
 import random
 import argparse
-import GPT_genetrate
-import GPT_mutate
+import genetrate
+import mutate
 import generate_utils
 
 import time
@@ -50,7 +50,7 @@ def generate_stage(dialects, dialect_stats, totol_seeds_count, output_file):
 
         gen_times = 0
         gen_count = 0
-        generator = GPT_genetrate.Generator(
+        generator = genetrate.Generator(
             dialect=dialect, date=date, OPscount=OPscount,
             requiredOPscount=requiredOPscount, max_retries=max_retries
         )
@@ -110,7 +110,7 @@ def mutate_stage(dialects, dialect_stats, output_file):
             filename = os.path.join(result_dir, filename)
             with open(filename, 'r') as file:
                 mlir = file.read()
-            mutator = GPT_mutate.MLIRMutator(date=date, IRscount=1)
+            mutator = mutate.MLIRMutator(date=date, IRscount=1)
             dialect = mutator.analyseDialect(mlir)
             print(dialect)
 
@@ -203,7 +203,7 @@ def random_mutate_stage(dialect_stats, totol_seeds_count, output_file):
 
     generate_seeds = len([file for file in os.listdir(result_dir) if file.endswith('.mlir')])
     mutate_times = totol_seeds_count - generate_seeds
-    mutator = GPT_mutate.MLIRMutator(IRscount=2)
+    mutator = mutate.MLIRMutator(IRscount=2)
     count = 0
 
     while count < mutate_times:

@@ -1,1 +1,1 @@
-['x86vector.avx512.vp2intersect', 'x86vector.avx.intr.dot', 'x86vector.avx512.intr.vp2intersect.q.512']
+['affine.min', 'affine.dma_wait', 'affine.max']

@@ -1,18 +1,42 @@
+#map = affine_map<(d0, d1) -> (1000, d0 + 512)>
+
 module {
-  func.func @main(%a: vector<16xi32>, %b: vector<16xi32>) -> (vector<16xi1>, vector<16xi1>) {
-    %k1, %k2 = x86vector.avx512.vp2intersect %a, %b : vector<16xi32>
-    return %k1, %k2 : vector<16xi1>, vector<16xi1>
+  func.func @main(%arg0: index, %arg1: index) -> (index) {
+    %0 = affine.min #map(%arg0, %arg1)
+
+    return %0 : index
   }
 }
+#map_tag = affine_map<(d0) -> (d0)>
+
 module {
-  func.func @main(%a: vector<8xf32>, %b: vector<8xf32>) -> vector<8xf32> {
-    %dot_result = x86vector.avx.intr.dot %a, %b : vector<8xf32>
-    return %dot_result : vector<8xf32>
+  func.func @main() -> () {
+    %tag = memref.alloca() : memref<1xi32>
+    
+    %src = memref.alloca() : memref<2048xf32>
+    %dst = memref.alloca() : memref<256xf32>
+
+    %i = arith.constant 0 : index
+    %j = arith.constant 0 : index
+    %k = arith.constant 0 : index
+    %l = arith.constant 0 : index
+    
+    %num_elements = arith.constant 128 : index
+
+    affine.dma_wait %tag[%i], %num_elements : memref<1xi32>
+
+    return
   }
 }
+#map = affine_map<(d0) -> (1000, d0 + 512)>
+
 module {
-  func.func @main(%a: vector<8xi64>, %b: vector<8xi64>) -> vector<8xi1> {
-    %res = "x86vector.avx512.intr.vp2intersect.q.512"(%a, %b) : (vector<8xi64>, vector<8xi64>) -> vector<8xi1>
-    return %res : vector<8xi1>
+  func.func @main() -> () {
+    %c0 = arith.constant 0 : i32
+    %i = arith.index_cast %c0 : i32 to index
+
+    %maxVal = affine.max #map(%i)
+
+    return
   }
 }
