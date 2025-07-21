@@ -16,7 +16,7 @@ os.environ["OPENAI_API_KEY"] = "sk-4sF6EtYk06pNxnzmB59832Fe2a514e25B51c4aCd29A3C
 # 设置 OPENAI_BASE_URL 环境变量
 os.environ["OPENAI_BASE_URL"] = "https://api.xiaoai.plus/v1"
 
-def get_gpt_response(messages, model="deepseek-v3",temperature=0.4):
+def get_gpt_response(messages, model="gpt-4o-mini",temperature=0.4):
     response = openai.chat.completions.create(
         model=model,
         messages=messages,
