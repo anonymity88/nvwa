@@ -67,5 +67,6 @@ nvwa/
 ├── llvm-project     
 ├── prompt                  # Prompt templates for each generation/mutation phase
 ├── prompt                  # Utility scripts for preprocessing and experimentation
-└── specifications          # MLIR dialect operator specifications (organized by dialect and operator)
+├── specifications          # MLIR dialect operator specifications (organized by dialect and operator)
+└── requirements.txt        # The python environment for developers using this project.
 ```
