@@ -1,0 +1,11 @@
+chardet==4.0.0
+matplotlib==3.5.2
+matplotlib_venn==1.1.1
+numpy==1.21.5
+openai==1.97.0
+pandas==1.4.4
+psutil==5.9.0
+PyMySQL==1.0.2
+scipy==1.9.1
+utils==1.0.2
+venn==0.1.3
