@@ -45,7 +45,7 @@ Perform fuzz testing using the generated test cases.
 python fuzz/fuzz.py
 ```
 
-结果处理，自动去重crash：
+Post-process the results and automatically de-duplicate crashes:
 ```bash
 python fuzz/coverage/BugReport.py
 ```
@@ -53,19 +53,19 @@ python fuzz/coverage/BugReport.py
 ## code structure
 ```tree
 nvwa/
-├── README.md               # 项目总览文档
-├── LICENSE                 # Apache 2.0协议文本
-├── fuzz                    # 模糊测试模块
-│   ├── coverage            # 模糊测试分析工具，包括覆盖率、检测crash去重等
-│   ├── draw                # 结果统计图表分析工具
-│   └── fuzz.py             # 模糊测试主程序
-├── generate                # 用例生成模块
-│   ├── generate_utils.py   # 生成器与变异器基础工具文件
-│   ├── generate.py         # 生成器文件
-│   ├── mutate.py           # 变异器文件
-│   └── mian.py             # 用例生成主程序
+├── README.md               # Project overview
+├── LICENSE                 # Apache 2.0 license text
+├── fuzz                    # Fuzz testing module
+│   ├── coverage            # Fuzzing analysis tools: coverage, crash de-duplication, etc.
+│   ├── draw                # Statistical charting and visualization tools
+│   └── fuzz.py             # Main fuzzing program
+├── generate                # Test case generation module
+│   ├── generate_utils.py   # Base utilities for generators and mutators
+│   ├── generate.py         # Generator implementation
+│   ├── mutate.py           # Mutator implementation
+│   └── main.py             # Main test case generation program
 ├── llvm-project     
-├── prompt                  # 生成与变异各阶段所用到的prompt框架
-├── prompt                  # 预处理和试验阶段的工具脚本
-└── specifications          # MLIR各方言的算子规范（已按方言算子分类）
+├── prompt                  # Prompt templates for each generation/mutation phase
+├── prompt                  # Utility scripts for preprocessing and experimentation
+└── specifications          # MLIR dialect operator specifications (organized by dialect and operator)
 ```
