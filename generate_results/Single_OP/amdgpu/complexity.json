@@ -1,0 +1,46 @@
+[
+    {
+        "file_name": "amdgpu.raw_buffer_atomic_smax.mlir",
+        "complexity": 17.5793991416309
+    },
+    {
+        "file_name": "amdgpu.raw_buffer_store.mlir",
+        "complexity": 16.0
+    },
+    {
+        "file_name": "amdgpu.raw_buffer_atomic_umin.mlir",
+        "complexity": 15.753846153846155
+    },
+    {
+        "file_name": "amdgpu.raw_buffer_atomic_fmax.mlir",
+        "complexity": 15.633587786259541
+    },
+    {
+        "file_name": "amdgpu.raw_buffer_atomic_cmpswap.mlir",
+        "complexity": 14.422535211267606
+    },
+    {
+        "file_name": "amdgpu.raw_buffer_load.mlir",
+        "complexity": 3.2986425339366514
+    },
+    {
+        "file_name": "amdgpu.ext_packed_fp8.mlir",
+        "complexity": 0.052941176470588235
+    },
+    {
+        "file_name": "amdgpu.wmma.mlir",
+        "complexity": 0.036585365853658534
+    },
+    {
+        "file_name": "amdgpu.packed_trunc_2xfp8.mlir",
+        "complexity": 0.02406417112299465
+    },
+    {
+        "file_name": "amdgpu.lds_barrier.mlir",
+        "complexity": 0.014285714285714285
+    },
+    {
+        "file_name": "amdgpu.sched_barrier.mlir",
+        "complexity": 0.008928571428571428
+    }
+]

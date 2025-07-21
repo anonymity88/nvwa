@@ -1,0 +1,782 @@
+[
+    {
+        "file_name": "spirv.IsNan.mlir",
+        "complexity": 0.02564102564102564
+    },
+    {
+        "file_name": "spirv.Not.mlir",
+        "complexity": 0.02564102564102564
+    },
+    {
+        "file_name": "spirv.GL.Exp.mlir",
+        "complexity": 0.025157232704402517
+    },
+    {
+        "file_name": "spirv.GL.Tan.mlir",
+        "complexity": 0.025157232704402517
+    },
+    {
+        "file_name": "spirv.CL.erf.mlir",
+        "complexity": 0.025157232704402517
+    },
+    {
+        "file_name": "spirv.LogicalNot.mlir",
+        "complexity": 0.025157232704402517
+    },
+    {
+        "file_name": "spirv.CL.exp.mlir",
+        "complexity": 0.025157232704402517
+    },
+    {
+        "file_name": "spirv.SNegate.mlir",
+        "complexity": 0.025
+    },
+    {
+        "file_name": "spirv.CL.rint.mlir",
+        "complexity": 0.025
+    },
+    {
+        "file_name": "spirv.CL.asin.mlir",
+        "complexity": 0.025
+    },
+    {
+        "file_name": "spirv.CL.s_abs.mlir",
+        "complexity": 0.024844720496894408
+    },
+    {
+        "file_name": "spirv.GL.Round.mlir",
+        "complexity": 0.024844720496894408
+    },
+    {
+        "file_name": "spirv.GL.FindUMsb.mlir",
+        "complexity": 0.024390243902439025
+    },
+    {
+        "file_name": "spirv.GL.Pow.mlir",
+        "complexity": 0.022988505747126436
+    },
+    {
+        "file_name": "spirv.GroupNonUniformBallotFindLSB.mlir",
+        "complexity": 0.022598870056497175
+    },
+    {
+        "file_name": "spirv.UGreaterThan.mlir",
+        "complexity": 0.02247191011235955
+    },
+    {
+        "file_name": "spirv.GroupNonUniformBallot.mlir",
+        "complexity": 0.02197802197802198
+    },
+    {
+        "file_name": "spirv.GL.SMin.mlir",
+        "complexity": 0.02185792349726776
+    },
+    {
+        "file_name": "spirv.GL.UMin.mlir",
+        "complexity": 0.02185792349726776
+    },
+    {
+        "file_name": "spirv.GroupUMax.mlir",
+        "complexity": 0.02185792349726776
+    },
+    {
+        "file_name": "spirv.Transpose.mlir",
+        "complexity": 0.021739130434782608
+    },
+    {
+        "file_name": "spirv.KHR.GroupIMul.mlir",
+        "complexity": 0.0213903743315508
+    },
+    {
+        "file_name": "spirv.ReturnValue.mlir",
+        "complexity": 0.020942408376963352
+    },
+    {
+        "file_name": "spirv.SRem.mlir",
+        "complexity": 0.02
+    },
+    {
+        "file_name": "spirv.FDiv.mlir",
+        "complexity": 0.02
+    },
+    {
+        "file_name": "spirv.FAdd.mlir",
+        "complexity": 0.02
+    },
+    {
+        "file_name": "spirv.LogicalAnd.mlir",
+        "complexity": 0.01990049751243781
+    },
+    {
+        "file_name": "spirv.ULessThan.mlir",
+        "complexity": 0.019704433497536946
+    },
+    {
+        "file_name": "spirv.SLessThan.mlir",
+        "complexity": 0.019704433497536946
+    },
+    {
+        "file_name": "spirv.FUnordLessThan.mlir",
+        "complexity": 0.019230769230769232
+    },
+    {
+        "file_name": "spirv.ImageQuerySize.mlir",
+        "complexity": 0.018867924528301886
+    },
+    {
+        "file_name": "spirv.ShiftRightArithmetic.mlir",
+        "complexity": 0.018433179723502304
+    },
+    {
+        "file_name": "spirv.GlobalVariable.mlir",
+        "complexity": 0.017699115044247787
+    },
+    {
+        "file_name": "spirv.ImageDrefGather.mlir",
+        "complexity": 0.01735357917570499
+    },
+    {
+        "file_name": "spirv.GL.Acos.mlir",
+        "complexity": 0.016194331983805668
+    },
+    {
+        "file_name": "spirv.GL.FMix.mlir",
+        "complexity": 0.016194331983805668
+    },
+    {
+        "file_name": "spirv.BitFieldInsert.mlir",
+        "complexity": 0.016129032258064516
+    },
+    {
+        "file_name": "spirv.IsInf.mlir",
+        "complexity": 0.01509433962264151
+    },
+    {
+        "file_name": "spirv.CL.fabs.mlir",
+        "complexity": 0.014652014652014652
+    },
+    {
+        "file_name": "spirv.GL.SAbs.mlir",
+        "complexity": 0.014652014652014652
+    },
+    {
+        "file_name": "spirv.CL.cosh.mlir",
+        "complexity": 0.014652014652014652
+    },
+    {
+        "file_name": "spirv.CL.acos.mlir",
+        "complexity": 0.014652014652014652
+    },
+    {
+        "file_name": "spirv.CL.atan.mlir",
+        "complexity": 0.014652014652014652
+    },
+    {
+        "file_name": "spirv.FNegate.mlir",
+        "complexity": 0.014652014652014652
+    },
+    {
+        "file_name": "spirv.CL.acosh.mlir",
+        "complexity": 0.014545454545454545
+    },
+    {
+        "file_name": "spirv.CL.floor.mlir",
+        "complexity": 0.014545454545454545
+    },
+    {
+        "file_name": "spirv.BitCount.mlir",
+        "complexity": 0.014545454545454545
+    },
+    {
+        "file_name": "spirv.GL.SSign.mlir",
+        "complexity": 0.014545454545454545
+    },
+    {
+        "file_name": "spirv.CL.atanh.mlir",
+        "complexity": 0.014545454545454545
+    },
+    {
+        "file_name": "spirv.GL.Sinh.mlir",
+        "complexity": 0.014545454545454545
+    },
+    {
+        "file_name": "spirv.BitReverse.mlir",
+        "complexity": 0.014336917562724014
+    },
+    {
+        "file_name": "spirv.GL.InverseSqrt.mlir",
+        "complexity": 0.014336917562724014
+    },
+    {
+        "file_name": "spirv.GL.RoundEven.mlir",
+        "complexity": 0.014134275618374558
+    },
+    {
+        "file_name": "spirv.FConvert.mlir",
+        "complexity": 0.013377926421404682
+    },
+    {
+        "file_name": "spirv.UConvert.mlir",
+        "complexity": 0.013377926421404682
+    },
+    {
+        "file_name": "spirv.SConvert.mlir",
+        "complexity": 0.013377926421404682
+    },
+    {
+        "file_name": "spirv.CL.atan2.mlir",
+        "complexity": 0.013289036544850499
+    },
+    {
+        "file_name": "spirv.ConvertFToS.mlir",
+        "complexity": 0.013114754098360656
+    },
+    {
+        "file_name": "spirv.ConvertFToU.mlir",
+        "complexity": 0.013114754098360656
+    },
+    {
+        "file_name": "spirv.ConvertSToF.mlir",
+        "complexity": 0.013114754098360656
+    },
+    {
+        "file_name": "spirv.ConvertUToF.mlir",
+        "complexity": 0.013114754098360656
+    },
+    {
+        "file_name": "spirv.FRem.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.SMod.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.IEqual.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.IMul.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.IAdd.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.FMod.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.UMod.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.SDiv.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.LogicalOr.mlir",
+        "complexity": 0.013029315960912053
+    },
+    {
+        "file_name": "spirv.Ordered.mlir",
+        "complexity": 0.012944983818770227
+    },
+    {
+        "file_name": "spirv.Store.mlir",
+        "complexity": 0.01284796573875803
+    },
+    {
+        "file_name": "spirv.INotEqual.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.GL.UMax.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.CL.fmin.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.LogicalEqual.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.GL.FMax.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.Unordered.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.CL.fmax.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.FOrdEqual.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.GL.SMax.mlir",
+        "complexity": 0.012779552715654952
+    },
+    {
+        "file_name": "spirv.CL.u_min.mlir",
+        "complexity": 0.012698412698412698
+    },
+    {
+        "file_name": "spirv.CL.s_max.mlir",
+        "complexity": 0.012698412698412698
+    },
+    {
+        "file_name": "spirv.UDiv.mlir",
+        "complexity": 0.012698412698412698
+    },
+    {
+        "file_name": "spirv.FUnordEqual.mlir",
+        "complexity": 0.012618296529968454
+    },
+    {
+        "file_name": "spirv.BitwiseXor.mlir",
+        "complexity": 0.012539184952978056
+    },
+    {
+        "file_name": "spirv.SGreaterThan.mlir",
+        "complexity": 0.012539184952978056
+    },
+    {
+        "file_name": "spirv.FOrdNotEqual.mlir",
+        "complexity": 0.012539184952978056
+    },
+    {
+        "file_name": "spirv.FSub.mlir",
+        "complexity": 0.012539184952978056
+    },
+    {
+        "file_name": "spirv.IAddCarry.mlir",
+        "complexity": 0.012526096033402923
+    },
+    {
+        "file_name": "spirv.LogicalNotEqual.mlir",
+        "complexity": 0.012461059190031152
+    },
+    {
+        "file_name": "spirv.INTEL.ConvertFToBF16.mlir",
+        "complexity": 0.01238390092879257
+    },
+    {
+        "file_name": "spirv.CL.s_min.mlir",
+        "complexity": 0.01238390092879257
+    },
+    {
+        "file_name": "spirv.SLessThanEqual.mlir",
+        "complexity": 0.01238390092879257
+    },
+    {
+        "file_name": "spirv.FUnordNotEqual.mlir",
+        "complexity": 0.01238390092879257
+    },
+    {
+        "file_name": "spirv.INTEL.ConvertBF16ToF.mlir",
+        "complexity": 0.01238390092879257
+    },
+    {
+        "file_name": "spirv.SMulExtended.mlir",
+        "complexity": 0.012371134020618556
+    },
+    {
+        "file_name": "spirv.UMulExtended.mlir",
+        "complexity": 0.012371134020618556
+    },
+    {
+        "file_name": "spirv.BitwiseOr.mlir",
+        "complexity": 0.012307692307692308
+    },
+    {
+        "file_name": "spirv.FOrdGreaterThan.mlir",
+        "complexity": 0.012307692307692308
+    },
+    {
+        "file_name": "spirv.GroupUMin.mlir",
+        "complexity": 0.012269938650306749
+    },
+    {
+        "file_name": "spirv.GroupFAdd.mlir",
+        "complexity": 0.012232415902140673
+    },
+    {
+        "file_name": "spirv.GroupFMax.mlir",
+        "complexity": 0.012232415902140673
+    },
+    {
+        "file_name": "spirv.GroupSMax.mlir",
+        "complexity": 0.012232415902140673
+    },
+    {
+        "file_name": "spirv.FOrdLessThan.mlir",
+        "complexity": 0.012232415902140673
+    },
+    {
+        "file_name": "spirv.SGreaterThanEqual.mlir",
+        "complexity": 0.0121580547112462
+    },
+    {
+        "file_name": "spirv.UGreaterThanEqual.mlir",
+        "complexity": 0.0121580547112462
+    },
+    {
+        "file_name": "spirv.FUnordGreaterThan.mlir",
+        "complexity": 0.0121580547112462
+    },
+    {
+        "file_name": "spirv.ULessThanEqual.mlir",
+        "complexity": 0.012084592145015106
+    },
+    {
+        "file_name": "spirv.Dot.mlir",
+        "complexity": 0.012012012012012012
+    },
+    {
+        "file_name": "spirv.KHR.GroupFMul.mlir",
+        "complexity": 0.011976047904191617
+    },
+    {
+        "file_name": "spirv.FOrdGreaterThanEqual.mlir",
+        "complexity": 0.011940298507462687
+    },
+    {
+        "file_name": "spirv.GroupIAdd.mlir",
+        "complexity": 0.011904761904761904
+    },
+    {
+        "file_name": "spirv.FOrdLessThanEqual.mlir",
+        "complexity": 0.011869436201780416
+    },
+    {
+        "file_name": "spirv.FUnordGreaterThanEqual.mlir",
+        "complexity": 0.011799410029498525
+    },
+    {
+        "file_name": "spirv.CL.fma.mlir",
+        "complexity": 0.011661807580174927
+    },
+    {
+        "file_name": "spirv.GL.Fma.mlir",
+        "complexity": 0.011661807580174927
+    },
+    {
+        "file_name": "spirv.BitwiseAnd.mlir",
+        "complexity": 0.011527377521613832
+    },
+    {
+        "file_name": "spirv.VectorExtractDynamic.mlir",
+        "complexity": 0.011396011396011397
+    },
+    {
+        "file_name": "spirv.FUnordLessThanEqual.mlir",
+        "complexity": 0.0113314447592068
+    },
+    {
+        "file_name": "spirv.Bitcast.mlir",
+        "complexity": 0.011111111111111112
+    },
+    {
+        "file_name": "spirv.GL.Ldexp.mlir",
+        "complexity": 0.0110803324099723
+    },
+    {
+        "file_name": "spirv.GL.FClamp.mlir",
+        "complexity": 0.010958904109589041
+    },
+    {
+        "file_name": "spirv.GroupNonUniformBallotFindMSB.mlir",
+        "complexity": 0.01084010840108401
+    },
+    {
+        "file_name": "spirv.GroupNonUniformShuffle.mlir",
+        "complexity": 0.01084010840108401
+    },
+    {
+        "file_name": "spirv.GL.UClamp.mlir",
+        "complexity": 0.01078167115902965
+    },
+    {
+        "file_name": "spirv.GL.SClamp.mlir",
+        "complexity": 0.010498687664041995
+    },
+    {
+        "file_name": "spirv.MatrixTimesScalar.mlir",
+        "complexity": 0.010416666666666666
+    },
+    {
+        "file_name": "spirv.GroupNonUniformShuffleXor.mlir",
+        "complexity": 0.01038961038961039
+    },
+    {
+        "file_name": "spirv.GroupNonUniformShuffleDown.mlir",
+        "complexity": 0.010282776349614395
+    },
+    {
+        "file_name": "spirv.ShiftLeftLogical.mlir",
+        "complexity": 0.010230179028132993
+    },
+    {
+        "file_name": "spirv.ShiftRightLogical.mlir",
+        "complexity": 0.010178117048346057
+    },
+    {
+        "file_name": "spirv.BitFieldSExtract.mlir",
+        "complexity": 0.010075566750629723
+    },
+    {
+        "file_name": "spirv.Undef.mlir",
+        "complexity": 0.01
+    },
+    {
+        "file_name": "spirv.VectorTimesScalar.mlir",
+        "complexity": 0.00936768149882904
+    },
+    {
+        "file_name": "spirv.CL.tanh.mlir",
+        "complexity": 0.009153318077803204
+    },
+    {
+        "file_name": "spirv.GL.FSign.mlir",
+        "complexity": 0.00904977375565611
+    },
+    {
+        "file_name": "spirv.CL.ceil.mlir",
+        "complexity": 0.00904977375565611
+    },
+    {
+        "file_name": "spirv.GL.Asin.mlir",
+        "complexity": 0.009029345372460496
+    },
+    {
+        "file_name": "spirv.GL.Sin.mlir",
+        "complexity": 0.009029345372460496
+    },
+    {
+        "file_name": "spirv.CL.tan.mlir",
+        "complexity": 0.009029345372460496
+    },
+    {
+        "file_name": "spirv.GL.Cos.mlir",
+        "complexity": 0.009029345372460496
+    },
+    {
+        "file_name": "spirv.CL.sin.mlir",
+        "complexity": 0.009029345372460496
+    },
+    {
+        "file_name": "spirv.CL.log.mlir",
+        "complexity": 0.009029345372460496
+    },
+    {
+        "file_name": "spirv.GL.Floor.mlir",
+        "complexity": 0.009009009009009009
+    },
+    {
+        "file_name": "spirv.CompositeConstruct.mlir",
+        "complexity": 0.008988764044943821
+    },
+    {
+        "file_name": "spirv.CL.sinh.mlir",
+        "complexity": 0.008988764044943821
+    },
+    {
+        "file_name": "spirv.GL.Ceil.mlir",
+        "complexity": 0.008928571428571428
+    },
+    {
+        "file_name": "spirv.CL.sqrt.mlir",
+        "complexity": 0.008928571428571428
+    },
+    {
+        "file_name": "spirv.GL.FAbs.mlir",
+        "complexity": 0.008908685968819599
+    },
+    {
+        "file_name": "spirv.GL.Log.mlir",
+        "complexity": 0.008908685968819599
+    },
+    {
+        "file_name": "spirv.GL.Tanh.mlir",
+        "complexity": 0.008908685968819599
+    },
+    {
+        "file_name": "spirv.GL.Atan.mlir",
+        "complexity": 0.008849557522123894
+    },
+    {
+        "file_name": "spirv.CL.cos.mlir",
+        "complexity": 0.008791208791208791
+    },
+    {
+        "file_name": "spirv.GL.Cosh.mlir",
+        "complexity": 0.008714596949891068
+    },
+    {
+        "file_name": "spirv.VectorInsertDynamic.mlir",
+        "complexity": 0.008695652173913044
+    },
+    {
+        "file_name": "spirv.CL.asinh.mlir",
+        "complexity": 0.008676789587852495
+    },
+    {
+        "file_name": "spirv.BitFieldUExtract.mlir",
+        "complexity": 0.008565310492505354
+    },
+    {
+        "file_name": "spirv.Return.mlir",
+        "complexity": 0.008264462809917356
+    },
+    {
+        "file_name": "spirv.Select.mlir",
+        "complexity": 0.008146639511201629
+    },
+    {
+        "file_name": "spirv.CL.pow.mlir",
+        "complexity": 0.008
+    },
+    {
+        "file_name": "spirv.ISub.mlir",
+        "complexity": 0.007952286282306162
+    },
+    {
+        "file_name": "spirv.GL.FMin.mlir",
+        "complexity": 0.007936507936507936
+    },
+    {
+        "file_name": "spirv.CL.u_max.mlir",
+        "complexity": 0.007751937984496124
+    },
+    {
+        "file_name": "spirv.CL.rsqrt.mlir",
+        "complexity": 0.007142857142857143
+    },
+    {
+        "file_name": "spirv.CL.mix.mlir",
+        "complexity": 0.007054673721340388
+    },
+    {
+        "file_name": "spirv.CL.round.mlir",
+        "complexity": 0.006872852233676976
+    },
+    {
+        "file_name": "spirv.GL.Sqrt.mlir",
+        "complexity": 0.006872852233676976
+    },
+    {
+        "file_name": "spirv.ControlBarrier.mlir",
+        "complexity": 0.006024096385542169
+    },
+    {
+        "file_name": "spirv.FMul.mlir",
+        "complexity": 0.0058997050147492625
+    },
+    {
+        "file_name": "spirv.GroupNonUniformShuffleUp.mlir",
+        "complexity": 0.0058823529411764705
+    },
+    {
+        "file_name": "spirv.ConvertPtrToU.mlir",
+        "complexity": 0.005847953216374269
+    },
+    {
+        "file_name": "spirv.ConvertUToPtr.mlir",
+        "complexity": 0.00510204081632653
+    },
+    {
+        "file_name": "spirv.Variable.mlir",
+        "complexity": 0.0049261083743842365
+    },
+    {
+        "file_name": "spirv.AtomicIIncrement.mlir",
+        "complexity": 0.0049261083743842365
+    },
+    {
+        "file_name": "spirv.SpecConstant.mlir",
+        "complexity": 0.0048543689320388345
+    },
+    {
+        "file_name": "spirv.AtomicOr.mlir",
+        "complexity": 0.004629629629629629
+    },
+    {
+        "file_name": "spirv.AtomicUMax.mlir",
+        "complexity": 0.0045871559633027525
+    },
+    {
+        "file_name": "spirv.AtomicUMin.mlir",
+        "complexity": 0.0045871559633027525
+    },
+    {
+        "file_name": "spirv.AtomicSMax.mlir",
+        "complexity": 0.0045871559633027525
+    },
+    {
+        "file_name": "spirv.EXT.AtomicFAdd.mlir",
+        "complexity": 0.0045045045045045045
+    },
+    {
+        "file_name": "spirv.BranchConditional.mlir",
+        "complexity": 0.00390625
+    },
+    {
+        "file_name": "spirv.GenericCastToPtr.mlir",
+        "complexity": 0.003875968992248062
+    },
+    {
+        "file_name": "spirv.CopyMemory.mlir",
+        "complexity": 0.002652519893899204
+    },
+    {
+        "file_name": "spirv.AtomicIAdd.mlir",
+        "complexity": 0.0020964360587002098
+    },
+    {
+        "file_name": "spirv.AtomicExchange.mlir",
+        "complexity": 0.002066115702479339
+    },
+    {
+        "file_name": "spirv.AtomicXor.mlir",
+        "complexity": 0.0020242914979757085
+    },
+    {
+        "file_name": "spirv.PtrCastToGeneric.mlir",
+        "complexity": 0.001984126984126984
+    },
+    {
+        "file_name": "spirv.GenericCastToPtrExplicit.mlir",
+        "complexity": 0.001953125
+    },
+    {
+        "file_name": "spirv.Load.mlir",
+        "complexity": 0.0019193857965451055
+    },
+    {
+        "file_name": "spirv.AtomicCompareExchangeWeak.mlir",
+        "complexity": 0.0019047619047619048
+    },
+    {
+        "file_name": "spirv.KHR.CooperativeMatrixStore.mlir",
+        "complexity": 0.0014903129657228018
+    },
+    {
+        "file_name": "spirv.AtomicCompareExchange.mlir",
+        "complexity": 0.001366120218579235
+    },
+    {
+        "file_name": "spirv.Image.mlir",
+        "complexity": 0.0010131712259371835
+    },
+    {
+        "file_name": "spirv.KHR.CooperativeMatrixMulAdd.mlir",
+        "complexity": 0.0008136696501220504
+    }
+]

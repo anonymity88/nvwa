@@ -1,0 +1,86 @@
+[
+    {
+        "file_name": "memref.extract_aligned_pointer_as_index.mlir",
+        "complexity": 13.698630136986301
+    },
+    {
+        "file_name": "memref.generic_atomic_rmw.mlir",
+        "complexity": 7.9787234042553195
+    },
+    {
+        "file_name": "memref.assume_alignment.mlir",
+        "complexity": 4.734246575342466
+    },
+    {
+        "file_name": "memref.realloc.mlir",
+        "complexity": 4.266666666666667
+    },
+    {
+        "file_name": "memref.alloc.mlir",
+        "complexity": 3.408284023668639
+    },
+    {
+        "file_name": "memref.dma_wait.mlir",
+        "complexity": 2.513793103448276
+    },
+    {
+        "file_name": "memref.dma_start.mlir",
+        "complexity": 2.3009320905459387
+    },
+    {
+        "file_name": "memref.dim.mlir",
+        "complexity": 2.229357798165138
+    },
+    {
+        "file_name": "memref.get_global.mlir",
+        "complexity": 1.3298701298701299
+    },
+    {
+        "file_name": "memref.dealloc.mlir",
+        "complexity": 0.7552447552447552
+    },
+    {
+        "file_name": "memref.cast.mlir",
+        "complexity": 0.3157894736842105
+    },
+    {
+        "file_name": "memref.alloca.mlir",
+        "complexity": 0.29767441860465116
+    },
+    {
+        "file_name": "memref.copy.mlir",
+        "complexity": 0.29767441860465116
+    },
+    {
+        "file_name": "memref.rank.mlir",
+        "complexity": 0.2922374429223744
+    },
+    {
+        "file_name": "memref.load.mlir",
+        "complexity": 0.2782608695652174
+    },
+    {
+        "file_name": "memref.prefetch.mlir",
+        "complexity": 0.270042194092827
+    },
+    {
+        "file_name": "memref.store.mlir",
+        "complexity": 0.2612244897959184
+    },
+    {
+        "file_name": "memref.reshape.mlir",
+        "complexity": 0.24427480916030533
+    },
+    {
+        "file_name": "memref.collapse_shape.mlir",
+        "complexity": 0.22857142857142856
+    },
+    {
+        "file_name": "memref.memory_space_cast.mlir",
+        "complexity": 0.16080402010050251
+    },
+    {
+        "file_name": "memref.subview.mlir",
+        "complexity": 0.12573673870333987
+    }
+]

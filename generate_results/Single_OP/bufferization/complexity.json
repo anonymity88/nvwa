@@ -1,0 +1,34 @@
+[
+    {
+        "file_name": "bufferization.tomemref.mlir",
+        "complexity": 4.114285714285714
+    },
+    {
+        "file_name": "bufferization.materializeindestination.mlir",
+        "complexity": 1.8253521126760563
+    },
+    {
+        "file_name": "bufferization.materialize_in_destination.mlir",
+        "complexity": 0.34782608695652173
+    },
+    {
+        "file_name": "bufferization.clone.mlir",
+        "complexity": 0.2689075630252101
+    },
+    {
+        "file_name": "bufferization.dealloc.mlir",
+        "complexity": 0.126232741617357
+    },
+    {
+        "file_name": "bufferization.alloctensor.mlir",
+        "complexity": 0.022018348623853212
+    },
+    {
+        "file_name": "bufferization.dealloc_tensor.mlir",
+        "complexity": 0.01702127659574468
+    },
+    {
+        "file_name": "bufferization.alloc_tensor.mlir",
+        "complexity": 0.008434864104967198
+    }
+]

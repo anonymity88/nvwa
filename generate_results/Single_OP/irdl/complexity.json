@@ -1,0 +1,62 @@
+[
+    {
+        "file_name": "irdl.type.mlir",
+        "complexity": 0.0055248618784530384
+    },
+    {
+        "file_name": "irdl.dialect.mlir",
+        "complexity": 0.005128205128205128
+    },
+    {
+        "file_name": "irdl.regions.mlir",
+        "complexity": 0.005076142131979695
+    },
+    {
+        "file_name": "irdl.attribute.mlir",
+        "complexity": 0.0044444444444444444
+    },
+    {
+        "file_name": "irdl.base.mlir",
+        "complexity": 0.004149377593360996
+    },
+    {
+        "file_name": "irdl.any.mlir",
+        "complexity": 0.003003003003003003
+    },
+    {
+        "file_name": "irdl.region.mlir",
+        "complexity": 0.0028735632183908046
+    },
+    {
+        "file_name": "irdl.all_of.mlir",
+        "complexity": 0.002631578947368421
+    },
+    {
+        "file_name": "irdl.is.mlir",
+        "complexity": 0.0025906735751295338
+    },
+    {
+        "file_name": "irdl.results.mlir",
+        "complexity": 0.002178649237472767
+    },
+    {
+        "file_name": "irdl.parametric.mlir",
+        "complexity": 0.00211864406779661
+    },
+    {
+        "file_name": "irdl.operands.mlir",
+        "complexity": 0.0015313935681470138
+    },
+    {
+        "file_name": "irdl.c_pred.mlir",
+        "complexity": 0.0015128593040847202
+    },
+    {
+        "file_name": "irdl.parameters.mlir",
+        "complexity": 0.0014727540500736377
+    },
+    {
+        "file_name": "irdl.any_of.mlir",
+        "complexity": 0.0012626262626262627
+    }
+]

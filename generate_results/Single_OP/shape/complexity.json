@@ -1,0 +1,98 @@
+[
+    {
+        "file_name": "shape.from_extent_tensor.mlir",
+        "complexity": 0.03508771929824561
+    },
+    {
+        "file_name": "shape.value_as_shape.mlir",
+        "complexity": 0.0335195530726257
+    },
+    {
+        "file_name": "shape.value_of.mlir",
+        "complexity": 0.03208556149732621
+    },
+    {
+        "file_name": "shape.to_extent_tensor.mlir",
+        "complexity": 0.031914893617021274
+    },
+    {
+        "file_name": "shape.const_shape.mlir",
+        "complexity": 0.023346303501945526
+    },
+    {
+        "file_name": "shape.dim.mlir",
+        "complexity": 0.0223463687150838
+    },
+    {
+        "file_name": "shape.shape_of.mlir",
+        "complexity": 0.021505376344086023
+    },
+    {
+        "file_name": "shape.return.mlir",
+        "complexity": 0.010638297872340425
+    },
+    {
+        "file_name": "shape.size_to_index.mlir",
+        "complexity": 0.006329113924050633
+    },
+    {
+        "file_name": "shape.div.mlir",
+        "complexity": 0.006289308176100629
+    },
+    {
+        "file_name": "shape.cstr_require.mlir",
+        "complexity": 0.006289308176100629
+    },
+    {
+        "file_name": "shape.mul.mlir",
+        "complexity": 0.006289308176100629
+    },
+    {
+        "file_name": "shape.from_extents.mlir",
+        "complexity": 0.006289308176100629
+    },
+    {
+        "file_name": "shape.const_size.mlir",
+        "complexity": 0.00625
+    },
+    {
+        "file_name": "shape.num_elements.mlir",
+        "complexity": 0.005813953488372093
+    },
+    {
+        "file_name": "shape.add.mlir",
+        "complexity": 0.005649717514124294
+    },
+    {
+        "file_name": "shape.shape_eq.mlir",
+        "complexity": 0.005405405405405406
+    },
+    {
+        "file_name": "shape.concat.mlir",
+        "complexity": 0.004830917874396135
+    },
+    {
+        "file_name": "shape.min.mlir",
+        "complexity": 0.004807692307692308
+    },
+    {
+        "file_name": "shape.max.mlir",
+        "complexity": 0.004807692307692308
+    },
+    {
+        "file_name": "shape.meet.mlir",
+        "complexity": 0.004784688995215311
+    },
+    {
+        "file_name": "shape.broadcast.mlir",
+        "complexity": 0.004672897196261682
+    },
+    {
+        "file_name": "shape.with_shape.mlir",
+        "complexity": 0.004484304932735426
+    },
+    {
+        "file_name": "shape.function_library.mlir",
+        "complexity": 0.003401360544217687
+    }
+]

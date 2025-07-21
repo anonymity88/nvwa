@@ -1,0 +1,158 @@
+[
+    {
+        "file_name": "math.exp.mlir",
+        "complexity": 0.010309278350515464
+    },
+    {
+        "file_name": "math.tan.mlir",
+        "complexity": 0.010309278350515464
+    },
+    {
+        "file_name": "math.erf.mlir",
+        "complexity": 0.010309278350515464
+    },
+    {
+        "file_name": "math.cos.mlir",
+        "complexity": 0.010309278350515464
+    },
+    {
+        "file_name": "math.sin.mlir",
+        "complexity": 0.010309278350515464
+    },
+    {
+        "file_name": "math.log.mlir",
+        "complexity": 0.010309278350515464
+    },
+    {
+        "file_name": "math.absi.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.ceil.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.asin.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.cosh.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.tanh.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.acos.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.cttz.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.atan.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.cbrt.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.sinh.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.absf.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.log2.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.exp2.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.ctlz.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.sqrt.mlir",
+        "complexity": 0.01020408163265306
+    },
+    {
+        "file_name": "math.log10.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.rsqrt.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.asinh.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.acosh.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.atanh.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.ctpop.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.round.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.trunc.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.floor.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.log1p.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.expm1.mlir",
+        "complexity": 0.010101010101010102
+    },
+    {
+        "file_name": "math.roundeven.mlir",
+        "complexity": 0.009708737864077669
+    },
+    {
+        "file_name": "math.powf.mlir",
+        "complexity": 0.009009009009009009
+    },
+    {
+        "file_name": "math.ipowi.mlir",
+        "complexity": 0.008928571428571428
+    },
+    {
+        "file_name": "math.copysign.mlir",
+        "complexity": 0.008695652173913044
+    },
+    {
+        "file_name": "math.atan2.mlir",
+        "complexity": 0.008333333333333333
+    },
+    {
+        "file_name": "math.fma.mlir",
+        "complexity": 0.008130081300813009
+    },
+    {
+        "file_name": "math.fpowi.mlir",
+        "complexity": 0.0070921985815602835
+    }
+]

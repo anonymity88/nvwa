@@ -1,0 +1,26 @@
+[
+    {
+        "file_name": "mpi.recv.mlir",
+        "complexity": 15.810276679841897
+    },
+    {
+        "file_name": "mpi.send.mlir",
+        "complexity": 14.414414414414415
+    },
+    {
+        "file_name": "mpi.init.mlir",
+        "complexity": 0.0045045045045045045
+    },
+    {
+        "file_name": "mpi.finalize.mlir",
+        "complexity": 0.003745318352059925
+    },
+    {
+        "file_name": "mpi.comm_rank.mlir",
+        "complexity": 0.002544529262086514
+    },
+    {
+        "file_name": "mpi.retvalcheck.mlir",
+        "complexity": 0.002188183807439825
+    }
+]

@@ -1,0 +1,98 @@
+[
+    {
+        "file_name": "gpu.create_coo_aos.mlir",
+        "complexity": 84.9009900990099
+    },
+    {
+        "file_name": "gpu.create_2to4_spmat.mlir",
+        "complexity": 79.8417132216015
+    },
+    {
+        "file_name": "gpu.memset.mlir",
+        "complexity": 77.67210144927536
+    },
+    {
+        "file_name": "gpu.create_csc.mlir",
+        "complexity": 73.66838487972508
+    },
+    {
+        "file_name": "gpu.create_coo.mlir",
+        "complexity": 73.41609589041096
+    },
+    {
+        "file_name": "gpu.create_csr.mlir",
+        "complexity": 66.16512345679013
+    },
+    {
+        "file_name": "gpu.create_dn_tensor.mlir",
+        "complexity": 66.06317411402158
+    },
+    {
+        "file_name": "gpu.dealloc.mlir",
+        "complexity": 41.89090909090909
+    },
+    {
+        "file_name": "gpu.create_bsr.mlir",
+        "complexity": 40.794481446241676
+    },
+    {
+        "file_name": "gpu.alloc.mlir",
+        "complexity": 30.516556291390728
+    },
+    {
+        "file_name": "gpu.memcpy.mlir",
+        "complexity": 30.24945295404814
+    },
+    {
+        "file_name": "gpu.subgroup_mma_load_matrix.mlir",
+        "complexity": 13.05057096247961
+    },
+    {
+        "file_name": "gpu.dynamic_shared_memory.mlir",
+        "complexity": 11.958146487294469
+    },
+    {
+        "file_name": "gpu.host_register.mlir",
+        "complexity": 7.68
+    },
+    {
+        "file_name": "gpu.host_unregister.mlir",
+        "complexity": 7.612334801762114
+    },
+    {
+        "file_name": "gpu.subgroup_size.mlir",
+        "complexity": 0.011627906976744186
+    },
+    {
+        "file_name": "gpu.thread_id.mlir",
+        "complexity": 0.007575757575757576
+    },
+    {
+        "file_name": "gpu.subgroup_id.mlir",
+        "complexity": 0.006896551724137931
+    },
+    {
+        "file_name": "gpu.num_subgroups.mlir",
+        "complexity": 0.005780346820809248
+    },
+    {
+        "file_name": "gpu.set_default_device.mlir",
+        "complexity": 0.005747126436781609
+    },
+    {
+        "file_name": "gpu.yield.mlir",
+        "complexity": 0.0038022813688212928
+    },
+    {
+        "file_name": "gpu.barrier.mlir",
+        "complexity": 0.003424657534246575
+    },
+    {
+        "file_name": "gpu.subgroup_mma_constant_matrix.mlir",
+        "complexity": 0.0020161290322580645
+    },
+    {
+        "file_name": "gpu.spgemm_destroy_descr.mlir",
+        "complexity": 0.0018248175182481751
+    }
+]

@@ -1,0 +1,50 @@
+[
+    {
+        "file_name": "scf.forall.in_parallel.mlir",
+        "complexity": 35
+    },
+    {
+        "file_name": "scf.forall.mlir",
+        "complexity": 34
+    },
+    {
+        "file_name": "scf.execute_region.mlir",
+        "complexity": 27
+    },
+    {
+        "file_name": "scf.parallel.mlir",
+        "complexity": 19
+    },
+    {
+        "file_name": "scf.yield.mlir",
+        "complexity": 19
+    },
+    {
+        "file_name": "scf.reduce.return.mlir",
+        "complexity": 18
+    },
+    {
+        "file_name": "scf.for.mlir",
+        "complexity": 16
+    },
+    {
+        "file_name": "scf.while.mlir",
+        "complexity": 15
+    },
+    {
+        "file_name": "scf.index_switch.mlir",
+        "complexity": 12
+    },
+    {
+        "file_name": "scf.reduce.mlir",
+        "complexity": 12
+    },
+    {
+        "file_name": "scf.condition.mlir",
+        "complexity": 10
+    },
+    {
+        "file_name": "scf.if.mlir",
+        "complexity": 8
+    }
+]

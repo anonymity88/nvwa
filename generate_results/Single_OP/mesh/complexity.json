@@ -1,0 +1,42 @@
+[
+    {
+        "file_name": "mesh.shift.mlir",
+        "complexity": 0.020066889632107024
+    },
+    {
+        "file_name": "mesh.broadcast.mlir",
+        "complexity": 0.01935483870967742
+    },
+    {
+        "file_name": "mesh.shard.mlir",
+        "complexity": 0.014842300556586271
+    },
+    {
+        "file_name": "mesh.all_slice.mlir",
+        "complexity": 0.013186813186813187
+    },
+    {
+        "file_name": "mesh.all_gather.mlir",
+        "complexity": 0.012072434607645875
+    },
+    {
+        "file_name": "mesh.scatter.mlir",
+        "complexity": 0.01195219123505976
+    },
+    {
+        "file_name": "mesh.all_to_all.mlir",
+        "complexity": 0.011516314779270634
+    },
+    {
+        "file_name": "mesh.process_linear_index.mlir",
+        "complexity": 0.002770083102493075
+    },
+    {
+        "file_name": "mesh.mesh_shape.mlir",
+        "complexity": 0.0026109660574412533
+    },
+    {
+        "file_name": "mesh.mesh.mlir",
+        "complexity": 0.001953125
+    }
+]

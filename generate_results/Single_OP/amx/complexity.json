@@ -1,0 +1,34 @@
+[
+    {
+        "file_name": "amx.tile_store.mlir",
+        "complexity": 1.28
+    },
+    {
+        "file_name": "amx.tile_load.mlir",
+        "complexity": 1.1962616822429906
+    },
+    {
+        "file_name": "amx.tile_zero.mlir",
+        "complexity": 0.029197080291970802
+    },
+    {
+        "file_name": "amx.tile_muli.mlir",
+        "complexity": 0.015625
+    },
+    {
+        "file_name": "amx.tdpbsud.mlir",
+        "complexity": 0.012658227848101266
+    },
+    {
+        "file_name": "amx.tdpbusd.mlir",
+        "complexity": 0.012658227848101266
+    },
+    {
+        "file_name": "amx.tdpbssd.mlir",
+        "complexity": 0.012658227848101266
+    },
+    {
+        "file_name": "amx.tilezero.mlir",
+        "complexity": 0.005076142131979695
+    }
+]

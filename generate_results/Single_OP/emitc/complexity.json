@@ -1,0 +1,154 @@
+[
+    {
+        "file_name": "emitc.include.mlir",
+        "complexity": 0.02
+    },
+    {
+        "file_name": "emitc.func.mlir",
+        "complexity": 0.012048192771084338
+    },
+    {
+        "file_name": "emitc.return.mlir",
+        "complexity": 0.011904761904761904
+    },
+    {
+        "file_name": "emitc.literal.mlir",
+        "complexity": 0.009259259259259259
+    },
+    {
+        "file_name": "emitc.logical_not.mlir",
+        "complexity": 0.009009009009009009
+    },
+    {
+        "file_name": "emitc.cast.mlir",
+        "complexity": 0.008333333333333333
+    },
+    {
+        "file_name": "emitc.bitwise_not.mlir",
+        "complexity": 0.008264462809917356
+    },
+    {
+        "file_name": "emitc.unary_plus.mlir",
+        "complexity": 0.008264462809917356
+    },
+    {
+        "file_name": "emitc.unary_minus.mlir",
+        "complexity": 0.007751937984496124
+    },
+    {
+        "file_name": "emitc.call_opaque.mlir",
+        "complexity": 0.007692307692307693
+    },
+    {
+        "file_name": "emitc.logical_or.mlir",
+        "complexity": 0.007518796992481203
+    },
+    {
+        "file_name": "emitc.logical_and.mlir",
+        "complexity": 0.007462686567164179
+    },
+    {
+        "file_name": "emitc.load.mlir",
+        "complexity": 0.007407407407407408
+    },
+    {
+        "file_name": "emitc.sub.mlir",
+        "complexity": 0.0072992700729927005
+    },
+    {
+        "file_name": "emitc.add.mlir",
+        "complexity": 0.0072992700729927005
+    },
+    {
+        "file_name": "emitc.bitwise_and.mlir",
+        "complexity": 0.006896551724137931
+    },
+    {
+        "file_name": "emitc.bitwise_xor.mlir",
+        "complexity": 0.006896551724137931
+    },
+    {
+        "file_name": "emitc.bitwise_or.mlir",
+        "complexity": 0.00684931506849315
+    },
+    {
+        "file_name": "emitc.rem.mlir",
+        "complexity": 0.00684931506849315
+    },
+    {
+        "file_name": "emitc.bitwise_left_shift.mlir",
+        "complexity": 0.006493506493506494
+    },
+    {
+        "file_name": "emitc.bitwise_right_shift.mlir",
+        "complexity": 0.0064516129032258064
+    },
+    {
+        "file_name": "emitc.apply.mlir",
+        "complexity": 0.005376344086021506
+    },
+    {
+        "file_name": "emitc.global.mlir",
+        "complexity": 0.004761904761904762
+    },
+    {
+        "file_name": "emitc.declare_func.mlir",
+        "complexity": 0.004405286343612335
+    },
+    {
+        "file_name": "emitc.div.mlir",
+        "complexity": 0.004366812227074236
+    },
+    {
+        "file_name": "emitc.mul.mlir",
+        "complexity": 0.004366812227074236
+    },
+    {
+        "file_name": "emitc.constant.mlir",
+        "complexity": 0.004273504273504274
+    },
+    {
+        "file_name": "emitc.assign.mlir",
+        "complexity": 0.004032258064516129
+    },
+    {
+        "file_name": "emitc.verbatim.mlir",
+        "complexity": 0.0038910505836575876
+    },
+    {
+        "file_name": "emitc.conditional.mlir",
+        "complexity": 0.0037593984962406013
+    },
+    {
+        "file_name": "emitc.member_of_ptr.mlir",
+        "complexity": 0.0035087719298245615
+    },
+    {
+        "file_name": "emitc.member.mlir",
+        "complexity": 0.003472222222222222
+    },
+    {
+        "file_name": "emitc.call.mlir",
+        "complexity": 0.003289473684210526
+    },
+    {
+        "file_name": "emitc.subscript.mlir",
+        "complexity": 0.003205128205128205
+    },
+    {
+        "file_name": "emitc.if.mlir",
+        "complexity": 0.0030864197530864196
+    },
+    {
+        "file_name": "emitc.cmp.mlir",
+        "complexity": 0.0018796992481203006
+    },
+    {
+        "file_name": "emitc.variable.mlir",
+        "complexity": 0.0017605633802816902
+    },
+    {
+        "file_name": "emitc.expression.mlir",
+        "complexity": 0.001564945226917058
+    }
+]

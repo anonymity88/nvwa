@@ -1,0 +1,38 @@
+[
+    {
+        "file_name": "x86vector.avx.rsqrt.mlir",
+        "complexity": 0.05113636363636364
+    },
+    {
+        "file_name": "x86vector.avx512.mask.compress.mlir",
+        "complexity": 0.04736842105263158
+    },
+    {
+        "file_name": "x86vector.avx.intr.dot.mlir",
+        "complexity": 0.046875
+    },
+    {
+        "file_name": "x86vector.avx512.vp2intersect.mlir",
+        "complexity": 0.039473684210526314
+    },
+    {
+        "file_name": "x86vector.avx512.intr.vp2intersect.q.512.mlir",
+        "complexity": 0.0391304347826087
+    },
+    {
+        "file_name": "x86vector.avx.intr.dp.ps.256.mlir",
+        "complexity": 0.0379746835443038
+    },
+    {
+        "file_name": "x86vector.avx512.mask.scalef.mlir",
+        "complexity": 0.03501945525291829
+    },
+    {
+        "file_name": "x86vector.avx512.mask.rndscale.mlir",
+        "complexity": 0.03260869565217391
+    },
+    {
+        "file_name": "x86vector.avx512.intr.mask.rndscale.ps.512.mlir",
+        "complexity": 0.026627218934911243
+    }
+]

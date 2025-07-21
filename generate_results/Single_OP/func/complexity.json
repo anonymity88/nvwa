@@ -1,0 +1,22 @@
+[
+    {
+        "file_name": "func.constant.mlir",
+        "complexity": 0.023001095290251915
+    },
+    {
+        "file_name": "func.call_indirect.mlir",
+        "complexity": 0.014796547472256474
+    },
+    {
+        "file_name": "func.call.mlir",
+        "complexity": 0.0032258064516129032
+    },
+    {
+        "file_name": "func.return.mlir",
+        "complexity": 0.002398081534772182
+    },
+    {
+        "file_name": "func.func.mlir",
+        "complexity": 0.0009861932938856016
+    }
+]

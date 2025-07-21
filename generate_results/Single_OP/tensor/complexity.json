@@ -1,0 +1,74 @@
+[
+    {
+        "file_name": "tensor.pad.mlir",
+        "complexity": 0.040268456375838924
+    },
+    {
+        "file_name": "tensor.generate.mlir",
+        "complexity": 0.03826530612244898
+    },
+    {
+        "file_name": "tensor.fromelements.mlir",
+        "complexity": 0.02385685884691849
+    },
+    {
+        "file_name": "tensor.splat.mlir",
+        "complexity": 0.023809523809523808
+    },
+    {
+        "file_name": "tensor.extract.mlir",
+        "complexity": 0.023668639053254437
+    },
+    {
+        "file_name": "tensor.dim.mlir",
+        "complexity": 0.022113022113022112
+    },
+    {
+        "file_name": "tensor.insert.mlir",
+        "complexity": 0.017937219730941704
+    },
+    {
+        "file_name": "tensor.reshape.mlir",
+        "complexity": 0.017699115044247787
+    },
+    {
+        "file_name": "tensor.from_elements.mlir",
+        "complexity": 0.01680672268907563
+    },
+    {
+        "file_name": "tensor.rank.mlir",
+        "complexity": 0.016736401673640166
+    },
+    {
+        "file_name": "tensor.empty.mlir",
+        "complexity": 0.01646090534979424
+    },
+    {
+        "file_name": "tensor.expand_shape.mlir",
+        "complexity": 0.01509433962264151
+    },
+    {
+        "file_name": "tensor.bitcast.mlir",
+        "complexity": 0.014388489208633094
+    },
+    {
+        "file_name": "tensor.cast.mlir",
+        "complexity": 0.013986013986013986
+    },
+    {
+        "file_name": "tensor.scatter.mlir",
+        "complexity": 0.011627906976744186
+    },
+    {
+        "file_name": "tensor.insert_slice.mlir",
+        "complexity": 0.011461318051575931
+    },
+    {
+        "file_name": "tensor.pack.mlir",
+        "complexity": 0.00966183574879227
+    },
+    {
+        "file_name": "tensor.extract_slice.mlir",
+        "complexity": 0.008421052631578947
+    }
+]

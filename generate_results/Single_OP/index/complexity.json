@@ -1,0 +1,106 @@
+[
+    {
+        "file_name": "index.constant.mlir",
+        "complexity": 0.010638297872340425
+    },
+    {
+        "file_name": "index.sizeof.mlir",
+        "complexity": 0.009009009009009009
+    },
+    {
+        "file_name": "index.or.mlir",
+        "complexity": 0.008928571428571428
+    },
+    {
+        "file_name": "index.xor.mlir",
+        "complexity": 0.008849557522123894
+    },
+    {
+        "file_name": "index.add.mlir",
+        "complexity": 0.008849557522123894
+    },
+    {
+        "file_name": "index.shl.mlir",
+        "complexity": 0.008849557522123894
+    },
+    {
+        "file_name": "index.mul.mlir",
+        "complexity": 0.008849557522123894
+    },
+    {
+        "file_name": "index.maxs.mlir",
+        "complexity": 0.008771929824561403
+    },
+    {
+        "file_name": "index.rems.mlir",
+        "complexity": 0.008771929824561403
+    },
+    {
+        "file_name": "index.shrs.mlir",
+        "complexity": 0.008771929824561403
+    },
+    {
+        "file_name": "index.minu.mlir",
+        "complexity": 0.008771929824561403
+    },
+    {
+        "file_name": "index.divs.mlir",
+        "complexity": 0.008771929824561403
+    },
+    {
+        "file_name": "index.maxu.mlir",
+        "complexity": 0.008771929824561403
+    },
+    {
+        "file_name": "index.bool.constant.mlir",
+        "complexity": 0.008695652173913044
+    },
+    {
+        "file_name": "index.ceildivu.mlir",
+        "complexity": 0.00847457627118644
+    },
+    {
+        "file_name": "index.ceildivs.mlir",
+        "complexity": 0.00847457627118644
+    },
+    {
+        "file_name": "index.floordivs.mlir",
+        "complexity": 0.008403361344537815
+    },
+    {
+        "file_name": "index.sub.mlir",
+        "complexity": 0.008130081300813009
+    },
+    {
+        "file_name": "index.and.mlir",
+        "complexity": 0.008130081300813009
+    },
+    {
+        "file_name": "index.divu.mlir",
+        "complexity": 0.008064516129032258
+    },
+    {
+        "file_name": "index.shru.mlir",
+        "complexity": 0.008064516129032258
+    },
+    {
+        "file_name": "index.remu.mlir",
+        "complexity": 0.008064516129032258
+    },
+    {
+        "file_name": "index.mins.mlir",
+        "complexity": 0.007692307692307693
+    },
+    {
+        "file_name": "index.cmp.mlir",
+        "complexity": 0.007692307692307693
+    },
+    {
+        "file_name": "index.casts.mlir",
+        "complexity": 0.004081632653061225
+    },
+    {
+        "file_name": "index.castu.mlir",
+        "complexity": 0.003367003367003367
+    }
+]

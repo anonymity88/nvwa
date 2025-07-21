@@ -1,0 +1,22 @@
+[
+    {
+        "file_name": "arm_neon.intr.smull.mlir",
+        "complexity": 0.01904761904761905
+    },
+    {
+        "file_name": "arm_neon.intr.smmla.mlir",
+        "complexity": 0.016736401673640166
+    },
+    {
+        "file_name": "arm_neon.intr.usmmla.mlir",
+        "complexity": 0.016666666666666666
+    },
+    {
+        "file_name": "arm_neon.intr.sdot.mlir",
+        "complexity": 0.015810276679841896
+    },
+    {
+        "file_name": "arm_neon.2d.sdot.mlir",
+        "complexity": 0.01568627450980392
+    }
+]

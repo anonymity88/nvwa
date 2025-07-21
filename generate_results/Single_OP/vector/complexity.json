@@ -1,0 +1,98 @@
+[
+    {
+        "file_name": "vector.load.mlir",
+        "complexity": 161.02211302211302
+    },
+    {
+        "file_name": "vector.store.mlir",
+        "complexity": 110.89001692047377
+    },
+    {
+        "file_name": "vector.maskedstore.mlir",
+        "complexity": 94.84225759768451
+    },
+    {
+        "file_name": "vector.compressstore.mlir",
+        "complexity": 92.43441466854725
+    },
+    {
+        "file_name": "vector.expandload.mlir",
+        "complexity": 86.57331571994716
+    },
+    {
+        "file_name": "vector.maskedload.mlir",
+        "complexity": 86.57331571994716
+    },
+    {
+        "file_name": "vector.gather.mlir",
+        "complexity": 75.06987399770905
+    },
+    {
+        "file_name": "vector.scatter.mlir",
+        "complexity": 66.73727087576374
+    },
+    {
+        "file_name": "vector.type_cast.mlir",
+        "complexity": 18.96242774566474
+    },
+    {
+        "file_name": "vector.matrix_multiply.mlir",
+        "complexity": 13.472279260780287
+    },
+    {
+        "file_name": "vector.splat.mlir",
+        "complexity": 0.03571428571428571
+    },
+    {
+        "file_name": "vector.print.mlir",
+        "complexity": 0.028846153846153848
+    },
+    {
+        "file_name": "vector.interleave.mlir",
+        "complexity": 0.02694610778443114
+    },
+    {
+        "file_name": "vector.deinterleave.mlir",
+        "complexity": 0.026627218934911243
+    },
+    {
+        "file_name": "vector.create_mask.mlir",
+        "complexity": 0.025
+    },
+    {
+        "file_name": "vector.step.mlir",
+        "complexity": 0.022857142857142857
+    },
+    {
+        "file_name": "vector.broadcast.mlir",
+        "complexity": 0.019067796610169493
+    },
+    {
+        "file_name": "vector.fma.mlir",
+        "complexity": 0.017374517374517374
+    },
+    {
+        "file_name": "vector.constant_mask.mlir",
+        "complexity": 0.016597510373443983
+    },
+    {
+        "file_name": "vector.flat_transpose.mlir",
+        "complexity": 0.015985790408525755
+    },
+    {
+        "file_name": "vector.extractelement.mlir",
+        "complexity": 0.015901060070671377
+    },
+    {
+        "file_name": "vector.insert_strided_slice.mlir",
+        "complexity": 0.014150943396226415
+    },
+    {
+        "file_name": "vector.from_elements.mlir",
+        "complexity": 0.012857142857142857
+    },
+    {
+        "file_name": "vector.shuffle.mlir",
+        "complexity": 0.00743801652892562
+    }
+]

@@ -1,0 +1,114 @@
+[
+    {
+        "file_name": "complex.im.mlir",
+        "complexity": 0.008130081300813009
+    },
+    {
+        "file_name": "complex.re.mlir",
+        "complexity": 0.008130081300813009
+    },
+    {
+        "file_name": "complex.abs.mlir",
+        "complexity": 0.008064516129032258
+    },
+    {
+        "file_name": "complex.angle.mlir",
+        "complexity": 0.007936507936507936
+    },
+    {
+        "file_name": "complex.constant.mlir",
+        "complexity": 0.007462686567164179
+    },
+    {
+        "file_name": "complex.bitcast.mlir",
+        "complexity": 0.007407407407407408
+    },
+    {
+        "file_name": "complex.exp.mlir",
+        "complexity": 0.007042253521126761
+    },
+    {
+        "file_name": "complex.tan.mlir",
+        "complexity": 0.007042253521126761
+    },
+    {
+        "file_name": "complex.neg.mlir",
+        "complexity": 0.007042253521126761
+    },
+    {
+        "file_name": "complex.log.mlir",
+        "complexity": 0.007042253521126761
+    },
+    {
+        "file_name": "complex.sin.mlir",
+        "complexity": 0.007042253521126761
+    },
+    {
+        "file_name": "complex.cos.mlir",
+        "complexity": 0.007042253521126761
+    },
+    {
+        "file_name": "complex.conj.mlir",
+        "complexity": 0.006993006993006993
+    },
+    {
+        "file_name": "complex.sign.mlir",
+        "complexity": 0.006993006993006993
+    },
+    {
+        "file_name": "complex.sqrt.mlir",
+        "complexity": 0.006993006993006993
+    },
+    {
+        "file_name": "complex.tanh.mlir",
+        "complexity": 0.006993006993006993
+    },
+    {
+        "file_name": "complex.rsqrt.mlir",
+        "complexity": 0.006944444444444444
+    },
+    {
+        "file_name": "complex.log1p.mlir",
+        "complexity": 0.006944444444444444
+    },
+    {
+        "file_name": "complex.expm1.mlir",
+        "complexity": 0.006944444444444444
+    },
+    {
+        "file_name": "complex.eq.mlir",
+        "complexity": 0.006711409395973154
+    },
+    {
+        "file_name": "complex.neq.mlir",
+        "complexity": 0.006666666666666667
+    },
+    {
+        "file_name": "complex.create.mlir",
+        "complexity": 0.006060606060606061
+    },
+    {
+        "file_name": "complex.pow.mlir",
+        "complexity": 0.006024096385542169
+    },
+    {
+        "file_name": "complex.div.mlir",
+        "complexity": 0.006024096385542169
+    },
+    {
+        "file_name": "complex.atan2.mlir",
+        "complexity": 0.005952380952380952
+    },
+    {
+        "file_name": "complex.add.mlir",
+        "complexity": 0.0058823529411764705
+    },
+    {
+        "file_name": "complex.mul.mlir",
+        "complexity": 0.0058823529411764705
+    },
+    {
+        "file_name": "complex.sub.mlir",
+        "complexity": 0.005681818181818182
+    }
+]
