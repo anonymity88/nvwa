@@ -1,135 +1,553 @@
-Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Please generate an MLIR IR containing multiple operators based on my request, and I will provide you with the operator specifications for all target operators. You do not need to include all the operators that appear in the merged result, but aim to merge as many operators as possible from different IR fragments into a single `module{}` or a single "func," following the syntax rules and data flow dependencies. The goal is to create a longer result while ensuring that there are no syntax errors. The order of operators, functions, and calling relationships can be arranged as needed. First, I will provide a sample of the expected output format, followed by several examples of the generation process, and finally present the operator specifications for all the target operators in this process.
-The requirements are as follows: the generated IR must merge as many operators as possible from the provided IR fragments into one `module{}` or one "func." If the operators are not within the same `func`, there must be data flow dependencies between the `func`s, or they must be called by other functions. If it is not possible to merge all operators, prioritize the correctness of the syntax in the result, then consider adding more operators or functions.Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+Assume you are a senior compiler engineer specializing in the MLIR infrastructure. Your task is to synthesize multiple discrete single-operator IR fragments into a unified, structurally complex, and semantically valid MLIR module.
+
+### Task Objective:
+I will provide you with several "atomic" IR fragments, each containing a single target operator. You must integrate these fragments into a single cohesive calculational graph (Function Scope).
+1. **Data-flow Stitching:** Do not merely list the operators. You must establish deep data-dependencies by using the output SSA values of one operator as the input operands for subsequent operators.
+2. **Topological Integrity:** Ensure that every SSA value is defined before it is used. The sequence of operations must follow a valid execution order.
+3. **Type Unification:** Ensure that the tensor shapes and element types (e.g., f32, i32) are consistent across the fused data-flow path.
+
+### Strict Technical Requirements:
+- **Structural Complexity:** Aim to merge as many provided operators as possible into a single `func.func @main`. If an operator cannot be inlined, place it in a separate function and establish a dependency via `func.call`.
+- **Syntactic Correctness:** Strictly use `func.func @name` syntax. All `affine_map` or global attribute definitions must be placed at the top-level, strictly before the `module {}` block.
+- **Dangling Value Avoidance:** Every operation must contribute to the final `return` value of the function, or be part of a chain that leads to the return, ensuring no dead code in the critical data-flow path.
+
+### Output Format:
+Your response must contain the synthesized MLIR code enclosed within ```mlir and ```.
+Expected structure:
 ```mlir
+// Global definitions (affine_maps, etc.)
 module {
-  func.func @main -> {
-
-  }
+    func.func @main(%arg0: tensor<...>) -> tensor<...> {
+        // Synthesized multi-op logic with established data-flow
+        %0 = "dialect.op1"(%arg0) ...
+        %1 = "dialect.op2"(%0) ... 
+        return %1 : tensor<...>
+    }
 }
-```
-DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
 
-Here are some examples of the process for generating IRs:
+Few-shot Examples (Fragments-to-Function Synthesis):
 Example 1- 
 All the individual IRs required to be combined are as follows:
+ #map = affine_map<(d0) -> (1000, d0 + 512)>
+ 
  module {
-   func.func @main(%arg0: vector<8xf32>) -> vector<8xf32> {
-     %rsqrt_result = x86vector.avx.rsqrt %arg0 : vector<8xf32>
-     return %rsqrt_result : vector<8xf32>
+   func.func @main() -> () {
+     %c0 = arith.constant 0 : i32
+     %i = arith.index_cast %c0 : i32 to index
+ 
+     %maxVal = affine.max #map(%i)
+ 
+     return
    }
  }
+ #map = affine_map<(d0, d1) -> (d0, d1)>
+ 
  module {
-   func.func @main(%a: vector<8xi64>, %b: vector<8xi64>) -> vector<8xi1> {
-     %res = "x86vector.avx512.intr.vp2intersect.q.512"(%a, %b) : (vector<8xi64>, vector<8xi64>) -> vector<8xi1>
-     return %res : vector<8xi1>
+   func.func @main() -> () {
+     %0 = memref.alloca() : memref<400x400xi32>
+ 
+     %c0 = arith.constant 0 : i32
+     %c1 = arith.constant 1 : i32
+ 
+     %i = arith.index_cast %c0 : i32 to index
+     %j = arith.index_cast %c1 : i32 to index
+ 
+     affine.prefetch %0[%i, %j + 5], read, locality<3>, data : memref<400x400xi32>
+ 
+     return
    }
  }
+ #map = affine_map<(d0, d1) -> (d0 + d1)>
+ #set = affine_set<(d0, d1)[s0] : (d0 - 10 >= 0, s0 - d0 - 9 >= 0, 
+                                   d1 - 10 >= 0, s0 - d1 - 9 >= 0)>
+ 
  module {
-   func.func @main(%a: vector<8xf32>, %b: vector<8xf32>) -> vector<8xf32> {
-     %dot_result = x86vector.avx.intr.dot %a, %b : vector<8xf32>
-     return %dot_result : vector<8xf32>
+   func.func @example_with_affine_if(%N: i32) -> () {
+     %A = memref.alloca() : memref<10xi32>
+     %X = arith.constant 42 : i32
+ 
+     %N_index = arith.index_cast %N : i32 to index
+ 
+     affine.for %i = 0 to %N_index {
+       affine.for %j = 0 to %N_index {
+         %tmp_result = func.call @S1(%X, %i, %j) : (i32, index, index) -> i32
+ 
+         affine.if #set(%i, %j)[%N_index] {
+           %calculated_index = affine.apply #map(%i, %j)
+           func.call @S2(%tmp_result, %A, %i, %calculated_index) : (i32, memref<10xi32>, index, index) -> ()
+         }
+       }
+     }
+ 
+     return
+   }
+ 
+   func.func private @S1(%x: i32, %i: index, %j: index) -> i32 {
+     %result = arith.addi %x, %x : i32
+     return %result : i32
+   }
+ 
+   func.func private @S2(%tmp: i32, %a: memref<10xi32>, %i: index, %j: index) -> () {
+     return
    }
  }
 The combined IRs: 
+#map_max = affine_map<(d0) -> (1000, d0 + 512)>
+#map_prefetch = affine_map<(d0, d1) -> (d0, d1)>
+#map_if = affine_map<(d0, d1) -> (d0 + d1)>
+#set_if = affine_set<(d0, d1)[s0] : (d0 - 10 >= 0, s0 - d0 - 9 >= 0, 
+                                   d1 - 10 >= 0, s0 - d1 - 9 >= 0)>
 module {
-  func.func @main(%arg0: vector<8xf32>, %a: vector<8xi64>, %b: vector<8xi64>, %a_dot: vector<8xf32>, %b_dot: vector<8xf32>) -> (vector<8xf32>, vector<8xi1>) {
-    // Call x86vector.avx.rsqrt
-    %rsqrt_result = x86vector.avx.rsqrt %arg0 : vector<8xf32>
-    // Call x86vector.avx512.intr.vp2intersect.q.512
-    %res = "x86vector.avx512.intr.vp2intersect.q.512"(%a, %b) : (vector<8xi64>, vector<8xi64>) -> vector<8xi1>
-    // Call x86vector.avx.intr.dot
-    %dot_result = x86vector.avx.intr.dot %a_dot, %b_dot : vector<8xf32>
-    return %rsqrt_result, %res : vector<8xf32>, vector<8xi1>
+  func.func @main(%N: i32) -> () {
+    // Memory allocation for integer and float arrays
+    %A = memref.alloca() : memref<10xi32>
+    %D = memref.alloca() : memref<100x100xf32>
+    %K = memref.alloca() : memref<3x3xf32>
+    %buffer = memref.alloca() : memref<1024xf32>
+    %src = memref.alloca() : memref<40x128xf32, 0>
+    %dst = memref.alloca() : memref<2x1024xf32, 1>
+    %tag = memref.alloca() : memref<1xi32, 2> 
+    %num_elements = arith.constant 256 : index
+    %idx = arith.constant 0 : index
+    %X = arith.constant 42 : i32
+    %scalar_value = arith.constant 0.0 : f32
+    %c10 = arith.constant 10 : index
+    %N_index = arith.index_cast %N : i32 to index
+    // Calculate max using affine.max
+    %c0 = arith.constant 0 : i32
+    %max_i = arith.index_cast %c0 : i32 to index
+    %maxVal = affine.max #map_max(%max_i)
+    // Initialize the integer array
+    affine.for %i = 0 to %c10 {
+      affine.store %X, %A[%i] : memref<10xi32>
+      affine.yield
+    }
+    // Store a broadcasted value in the 2D array
+    %v0 = vector.broadcast %scalar_value : f32 to vector<8xf32>
+    affine.vector_store %v0, %D[3, 7] : memref<100x100xf32>, vector<8xf32>
+    // Call the convolution function
+    %conv_result = func.call @conv_2d(%D, %K) : (memref<100x100xf32>, memref<3x3xf32>) -> (memref<98x98xf32>)
+    // Nested loops with conditions based on the set
+    affine.for %outer_i = 0 to %N_index {
+      affine.for %outer_j = 0 to %N_index {
+        %tmp_result = func.call @S1(%X, %outer_i, %outer_j) : (i32, index, index) -> i32
+        affine.if #set_if(%outer_i, %outer_j)[%N_index] {
+          %calculated_index = affine.apply #map_if(%outer_i, %outer_j)
+          func.call @S2(%tmp_result, %A, %outer_i, %calculated_index) : (i32, memref<10xi32>, index, index) -> ()
+        }
+      }
+    }
+    // Prefetch operation
+    %c1 = arith.constant 1 : i32
+    %prefetch_i = arith.index_cast %c0 : i32 to index
+    %prefetch_j = arith.index_cast %c1 : i32 to index
+    affine.prefetch %D[%prefetch_i, %prefetch_j + 5], read, locality<3>, data : memref<100x100xf32>
+    // DMA operation
+    %i_dma = arith.index_cast %c0 : i32 to index
+    %j_dma = arith.index_cast %c1 : i32 to index
+    affine.dma_start %src[%i_dma + 3, %j_dma], %dst[%i_dma + 7, %j_dma], %tag[%idx], %num_elements : 
+      memref<40x128xf32, 0>, memref<2x1024xf32, 1>, memref<1xi32, 2>
+    return
+  }
+  func.func private @S1(%x: i32, %i: index, %j: index) -> i32 {
+    %result = arith.addi %x, %x : i32
+    return %result : i32
+  }
+  func.func private @S2(%tmp: i32, %a: memref<10xi32>, %i: index, %j: index) -> () {
+    return
+  }
+  func.func @conv_2d(%D : memref<100x100xf32>, %K : memref<3x3xf32>) -> (memref<98x98xf32>) {
+    %O = memref.alloca() : memref<98x98xf32>
+    affine.parallel (%x, %y) = (0, 0) to (98, 98) {
+      %0 = affine.parallel (%kx, %ky) = (0, 0) to (2, 2) reduce ("addf") -> f32 {
+        %1 = affine.load %D[%x + %kx, %y + %ky] : memref<100x100xf32>
+        %2 = affine.load %K[%kx, %ky] : memref<3x3xf32>
+        %3 = arith.mulf %1, %2 : f32
+        affine.yield %3 : f32
+      }
+      affine.store %0, %O[%x, %y] : memref<98x98xf32>
+    }
+    return %O : memref<98x98xf32>
   }
 }
 
 
 Example 2- 
 All the individual IRs required to be combined are as follows:
+ #map_lower = affine_map<()[s0] -> (s0)>
+ #map_upper = affine_map<()[s0] -> (s0 + 98)>
+ #map_inner_lower = affine_map<()[s0, s1] -> (s0)>
+ #map_inner_upper = affine_map<()[s0, s1] -> (s0 + 2)>
+ 
  module {
-   func.func @main(%k: vector<16xi1>, %a: vector<16xf32>) -> vector<16xf32> {
-     %dst = x86vector.avx512.mask.compress %k, %a : vector<16xf32>
-     return %dst : vector<16xf32>
+   func.func @conv_2d(%D : memref<100x100xf32>, %K : memref<3x3xf32>) -> (memref<98x98xf32>) {
+     %O = memref.alloca() : memref<98x98xf32>
+     
+     affine.parallel (%x, %y) = (0, 0) to (98, 98) {
+       %0 = affine.parallel (%kx, %ky) = (0, 0) to (2, 2) reduce ("addf") -> f32 {
+         %1 = affine.load %D[%x + %kx, %y + %ky] : memref<100x100xf32>
+         %2 = affine.load %K[%kx, %ky] : memref<3x3xf32>
+         %3 = arith.mulf %1, %2 : f32
+         affine.yield %3 : f32
+       }
+       affine.store %0, %O[%x, %y] : memref<98x98xf32>
+     }
+     
+     return %O : memref<98x98xf32>
    }
  }
+ #map_src = affine_map<(d0, d1) -> (d0 + 3, d1)>
+ #map_dst = affine_map<(d0, d1) -> (d0 + 7, d1)>
+ #map_tag = affine_map<(d0) -> (d0)>
+ 
  module {
-   func.func @main(%arg0: vector<8xf32>) -> vector<8xf32> {
-     %rsqrt_result = x86vector.avx.rsqrt %arg0 : vector<8xf32>
-     return %rsqrt_result : vector<8xf32>
+   func.func @main() -> () {
+     %src = memref.alloca() : memref<40x128xf32, 0>
+     %dst = memref.alloca() : memref<2x1024xf32, 1>
+     %num_elements = arith.constant 256 : index
+     %idx = arith.constant 0 : index
+     %tag = memref.alloca() : memref<1xi32, 2> // Adjusted dimension here
+ 
+     %c0 = arith.constant 0 : i32
+     %c1 = arith.constant 1 : i32
+ 
+     %i = arith.index_cast %c0 : i32 to index
+     %j = arith.index_cast %c1 : i32 to index
+     %k = arith.index_cast %c0 : i32 to index
+     %l = arith.index_cast %c1 : i32 to index
+ 
+     affine.dma_start %src[%i + 3, %j], %dst[%k + 7, %l], %tag[%idx], %num_elements : 
+       memref<40x128xf32, 0>, memref<2x1024xf32, 1>, memref<1xi32, 2>
+ 
+     return
    }
  }
+ #map = affine_map<(d0, d1) -> (1000, d0 + 512)>
+ 
  module {
-   func.func @main(%src: vector<16xf32>, %a: vector<16xf32>, %b: vector<16xf32>, %k: i16, %rounding: i32) -> vector<16xf32> {
-     %dst = x86vector.avx512.mask.scalef %src, %a, %b, %k, %rounding : vector<16xf32>
-     return %dst : vector<16xf32>
+   func.func @main(%arg0: index, %arg1: index) -> (index) {
+     %0 = affine.min #map(%arg0, %arg1)
+ 
+     return %0 : index
    }
  }
 The combined IRs: 
+#map_if = affine_map<(d0, d1) -> (d0 + d1)>
+#set_if = affine_set<(d0, d1)[s0] : (d0 - 10 >= 0, s0 - d0 - 9 >= 0, 
+                                   d1 - 10 >= 0, s0 - d1 - 9 >= 0)>
+#map_lower = affine_map<()[s0] -> (s0)>
+#map_upper = affine_map<()[s0] -> (s0 + 98)>
+#map_inner_lower = affine_map<()[s0, s1] -> (s0)>
+#map_inner_upper = affine_map<()[s0, s1] -> (s0 + 2)>
+#map_src = affine_map<(d0, d1) -> (d0 + 3, d1)>
+#map_dst = affine_map<(d0, d1) -> (d0 + 7, d1)>
+#map_tag = affine_map<(d0) -> (d0)>
+#map = affine_map<(d0, d1) -> (1000, d0 + 512)>
 module {
-  func.func @main(%k: vector<16xi1>, %arg0: vector<8xf32>, %src: vector<16xf32>, %a: vector<16xf32>, %b: vector<16xf32>, %k_scale: i16, %rounding: i32) -> (vector<16xf32>, vector<8xf32>) {
-    // Call x86vector.avx512.mask.compress
-    %compressed_result = x86vector.avx512.mask.compress %k, %a : vector<16xf32>
-    // Call x86vector.avx.rsqrt
-    %rsqrt_result = x86vector.avx.rsqrt %arg0 : vector<8xf32>
-    // Call x86vector.avx512.mask.scalef
-    %scaled_result = x86vector.avx512.mask.scalef %src, %a, %b, %k_scale, %rounding : vector<16xf32>
-    return %compressed_result, %rsqrt_result : vector<16xf32>, vector<8xf32>
+  func.func @main(%N: i32) -> () {
+    %A = memref.alloca() : memref<10xi32>
+    %D = memref.alloca() : memref<100x100xf32>
+    %K = memref.alloca() : memref<3x3xf32>
+    %buffer = memref.alloca() : memref<1024xf32>
+    %src = memref.alloca() : memref<40x128xf32, 0>
+    %dst = memref.alloca() : memref<2x1024xf32, 1>
+    %tag = memref.alloca() : memref<1xi32, 2> // Adjusted dimension here
+    %num_elements = arith.constant 256 : index
+    %idx = arith.constant 0 : index
+    %X = arith.constant 42 : i32
+    %scalar_value = arith.constant 0.0 : f32
+    %c10 = arith.constant 10 : index
+    %N_index = arith.index_cast %N : i32 to index
+    // Initialize the integer array
+    affine.for %i = 0 to %c10 {
+      affine.store %X, %A[%i] : memref<10xi32>
+      affine.yield
+    }
+    // Store a broadcasted value in the 2D array
+    %v0 = vector.broadcast %scalar_value : f32 to vector<8xf32>
+    affine.vector_store %v0, %D[3, 7] : memref<100x100xf32>, vector<8xf32>
+    // Call the convolution function
+    %conv_result = func.call @conv_2d(%D, %K) : (memref<100x100xf32>, memref<3x3xf32>) -> (memref<98x98xf32>)
+    // Nested loops with conditions based on the set
+    affine.for %i = 0 to %N_index {
+      affine.for %j = 0 to %N_index {
+        %tmp_result = func.call @S1(%X, %i, %j) : (i32, index, index) -> i32
+        affine.if #set_if(%i, %j)[%N_index] {
+          %calculated_index = affine.apply #map_if(%i, %j)
+          func.call @S2(%tmp_result, %A, %i, %calculated_index) : (i32, memref<10xi32>, index, index) -> ()
+        }
+      }
+    }
+    // Calculate the sum
+    %sum_0 = arith.constant 0.0 : f32
+    affine.for %i = 0 to %c10 iter_args(%sum_iter = %sum_0) -> (f32) {
+      %t = affine.load %buffer[%i] : memref<1024xf32>
+      %sum_next = arith.addf %sum_iter, %t : f32
+      affine.yield %sum_next : f32
+    }
+    // DMA operation
+    %c0 = arith.constant 0 : i32
+    %c1 = arith.constant 1 : i32
+    %i = arith.index_cast %c0 : i32 to index
+    %j = arith.index_cast %c1 : i32 to index
+    affine.dma_start %src[%i + 3, %j], %dst[%i + 7, %j], %tag[%idx], %num_elements : 
+      memref<40x128xf32, 0>, memref<2x1024xf32, 1>, memref<1xi32, 2>
+    return
+  }
+  func.func private @S1(%x: i32, %i: index, %j: index) -> i32 {
+    %result = arith.addi %x, %x : i32
+    return %result : i32
+  }
+  func.func private @S2(%tmp: i32, %a: memref<10xi32>, %i: index, %j: index) -> () {
+    return
+  }
+  func.func @conv_2d(%D : memref<100x100xf32>, %K : memref<3x3xf32>) -> (memref<98x98xf32>) {
+    %O = memref.alloca() : memref<98x98xf32>
+    affine.parallel (%x, %y) = (0, 0) to (98, 98) {
+      %0 = affine.parallel (%kx, %ky) = (0, 0) to (2, 2) reduce ("addf") -> f32 {
+        %1 = affine.load %D[%x + %kx, %y + %ky] : memref<100x100xf32>
+        %2 = affine.load %K[%kx, %ky] : memref<3x3xf32>
+        %3 = arith.mulf %1, %2 : f32
+        affine.yield %3 : f32
+      }
+      affine.store %0, %O[%x, %y] : memref<98x98xf32>
+    }
+    return %O : memref<98x98xf32>
+  }
+  func.func @min_func(%arg0: index, %arg1: index) -> (index) {
+    %0 = affine.min #map(%arg0, %arg1)
+    return %0 : index
   }
 }
 
 
 Example 3- 
 All the individual IRs required to be combined are as follows:
+ #map = affine_map<(d0, d1) -> (1000, d0 + 512)>
+ 
  module {
-   func.func @main(%arg0: vector<8xf32>) -> vector<8xf32> {
-     %rsqrt_result = x86vector.avx.rsqrt %arg0 : vector<8xf32>
-     return %rsqrt_result : vector<8xf32>
+   func.func @main(%arg0: index, %arg1: index) -> (index) {
+     %0 = affine.min #map(%arg0, %arg1)
+ 
+     return %0 : index
    }
  }
+ #map_lower = affine_map<()[s0] -> (s0)>
+ #map_upper = affine_map<()[s0] -> (s0 + 98)>
+ #map_inner_lower = affine_map<()[s0, s1] -> (s0)>
+ #map_inner_upper = affine_map<()[s0, s1] -> (s0 + 2)>
+ 
  module {
-   func.func @main(%src: vector<16xf32>, %k: i32, %a: vector<16xf32>, %imm: i16, %rounding: i32) -> vector<16xf32> {
-     %rndscale_result = x86vector.avx512.mask.rndscale %src, %k, %a, %imm, %rounding : vector<16xf32>
-     return %rndscale_result : vector<16xf32>
+   func.func @conv_2d(%D : memref<100x100xf32>, %K : memref<3x3xf32>) -> (memref<98x98xf32>) {
+     %O = memref.alloca() : memref<98x98xf32>
+     
+     affine.parallel (%x, %y) = (0, 0) to (98, 98) {
+       %0 = affine.parallel (%kx, %ky) = (0, 0) to (2, 2) reduce ("addf") -> f32 {
+         %1 = affine.load %D[%x + %kx, %y + %ky] : memref<100x100xf32>
+         %2 = affine.load %K[%kx, %ky] : memref<3x3xf32>
+         %3 = arith.mulf %1, %2 : f32
+         affine.yield %3 : f32
+       }
+       affine.store %0, %O[%x, %y] : memref<98x98xf32>
+     }
+     
+     return %O : memref<98x98xf32>
    }
  }
+ #map = affine_map<(d0, d1) -> (d0 + d1)>
+ #set = affine_set<(d0, d1)[s0] : (d0 - 10 >= 0, s0 - d0 - 9 >= 0, 
+                                   d1 - 10 >= 0, s0 - d1 - 9 >= 0)>
+ 
  module {
-   func.func @main(%k: vector<16xi1>, %a: vector<16xf32>) -> vector<16xf32> {
-     %dst = x86vector.avx512.mask.compress %k, %a : vector<16xf32>
-     return %dst : vector<16xf32>
+   func.func @example_with_affine_if(%N: i32) -> () {
+     %A = memref.alloca() : memref<10xi32>
+     %X = arith.constant 42 : i32
+ 
+     %N_index = arith.index_cast %N : i32 to index
+ 
+     affine.for %i = 0 to %N_index {
+       affine.for %j = 0 to %N_index {
+         %tmp_result = func.call @S1(%X, %i, %j) : (i32, index, index) -> i32
+ 
+         affine.if #set(%i, %j)[%N_index] {
+           %calculated_index = affine.apply #map(%i, %j)
+           func.call @S2(%tmp_result, %A, %i, %calculated_index) : (i32, memref<10xi32>, index, index) -> ()
+         }
+       }
+     }
+ 
+     return
+   }
+ 
+   func.func private @S1(%x: i32, %i: index, %j: index) -> i32 {
+     %result = arith.addi %x, %x : i32
+     return %result : i32
+   }
+ 
+   func.func private @S2(%tmp: i32, %a: memref<10xi32>, %i: index, %j: index) -> () {
+     return
    }
  }
 The combined IRs: 
+#map_min = affine_map<(d0, d1) -> (1000, d0 + 512)>
+#map_lower = affine_map<()[s0] -> (s0)>
+#map_upper = affine_map<()[s0] -> (s0 + 98)>
+#map_inner_lower = affine_map<()[s0, s1] -> (s0)>
+#map_inner_upper = affine_map<()[s0, s1] -> (s0 + 2)>
+#map_conv = affine_map<(d0, d1) -> (d0 + d1)>
+#set_example = affine_set<(d0, d1)[s0] : (d0 - 10 >= 0, s0 - d0 - 9 >= 0, 
+                                   d1 - 10 >= 0, s0 - d1 - 9 >= 0)>
 module {
-  func.func @main(%arg0: vector<8xf32>, %src: vector<16xf32>, %k: i32, %a: vector<16xf32>, %imm: i16, %rounding: i32, %mask: vector<16xi1>) -> (vector<8xf32>, vector<16xf32>, vector<16xf32>) {
-    // Call x86vector.avx.rsqrt
-    %rsqrt_result = x86vector.avx.rsqrt %arg0 : vector<8xf32>
-    // Call x86vector.avx512.mask.rndscale
-    %rndscale_result = x86vector.avx512.mask.rndscale %src, %k, %a, %imm, %rounding : vector<16xf32>
-    // Call x86vector.avx512.mask.compress
-    %dst = x86vector.avx512.mask.compress %mask, %a : vector<16xf32>
-    return %rsqrt_result, %rndscale_result, %dst : vector<8xf32>, vector<16xf32>, vector<16xf32>
+  func.func @main(%arg0: index, %arg1: index, %N: i32) -> () {
+    // Calculate minimum using affine.min
+    %min_result = affine.min #map_min(%arg0, %arg1)
+    // Memory allocation
+    %A = memref.alloca() : memref<10xi32>
+    %D = memref.alloca() : memref<100x100xf32>
+    %K = memref.alloca() : memref<3x3xf32>
+    %buffer = memref.alloca() : memref<1024xf32>
+    %X = arith.constant 42 : i32
+    %scalar_value = arith.constant 0.0 : f32
+    %c10 = arith.constant 10 : index
+    %N_index = arith.index_cast %N : i32 to index
+    // Initialize the integer array
+    affine.for %i = 0 to %c10 {
+      affine.store %X, %A[%i] : memref<10xi32>
+      affine.yield
+    }
+    // Store a broadcasted value in the 2D array
+    %v0 = vector.broadcast %scalar_value : f32 to vector<8xf32>
+    affine.vector_store %v0, %D[3, 7] : memref<100x100xf32>, vector<8xf32>
+    // Call the convolution function
+    %conv_result = func.call @conv_2d(%D, %K) : (memref<100x100xf32>, memref<3x3xf32>) -> (memref<98x98xf32>)
+    // Nested loops with conditions based on the set
+    affine.for %i = 0 to %N_index {
+      affine.for %j = 0 to %N_index {
+        %tmp_result = func.call @S1(%X, %i, %j) : (i32, index, index) -> i32
+        affine.if #set_example(%i, %j)[%N_index] {
+          %calculated_index = affine.apply #map_conv(%i, %j)
+          func.call @S2(%tmp_result, %A, %i, %calculated_index) : (i32, memref<10xi32>, index, index) -> ()
+        }
+      }
+    }
+    // Calculate the sum
+    %sum_0 = arith.constant 0.0 : f32
+    affine.for %i = 0 to %c10 iter_args(%sum_iter = %sum_0) -> (f32) {
+      %t = affine.load %buffer[%i] : memref<1024xf32>
+      %sum_next = arith.addf %sum_iter, %t : f32
+      affine.yield %sum_next : f32
+    }
+    return
+  }
+  func.func private @S1(%x: i32, %i: index, %j: index) -> i32 {
+    %result = arith.addi %x, %x : i32
+    return %result : i32
+  }
+  func.func private @S2(%tmp: i32, %a: memref<10xi32>, %i: index, %j: index) -> () {
+    return
+  }
+  func.func @conv_2d(%D : memref<100x100xf32>, %K : memref<3x3xf32>) -> (memref<98x98xf32>) {
+    %O = memref.alloca() : memref<98x98xf32>
+    affine.parallel (%x, %y) = (0, 0) to (98, 98) {
+      %0 = affine.parallel (%kx, %ky) = (0, 0) to (2, 2) reduce ("addf") -> f32 {
+        %1 = affine.load %D[%x + %kx, %y + %ky] : memref<100x100xf32>
+        %2 = affine.load %K[%kx, %ky] : memref<3x3xf32>
+        %3 = arith.mulf %1, %2 : f32
+        affine.yield %3 : f32
+      }
+      affine.store %0, %O[%x, %y] : memref<98x98xf32>
+    }
+    return %O : memref<98x98xf32>
   }
 }
 
 
 Target -
 All the individual IRs required to be combined are as follows:
+#map_lower = affine_map<(d0) -> (d0)>
+#map_upper = affine_map<(d0) -> (d0)>
+
 module {
-  func.func @main(%a: vector<16xi32>, %b: vector<16xi32>) -> (vector<16xi1>, vector<16xi1>) {
-    %k1, %k2 = x86vector.avx512.vp2intersect %a, %b : vector<16xi32>
-    return %k1, %k2 : vector<16xi1>, vector<16xi1>
+  func.func @main() -> (f32) {
+    %buffer = memref.alloca() : memref<1024xf32>
+    
+    %c10 = arith.constant 10 : index
+
+    %sum_0 = arith.constant 0.0 : f32
+
+    affine.for %i = 0 to %c10 iter_args(%sum_iter = %sum_0) -> (f32) {
+      %t = affine.load %buffer[%i] : memref<1024xf32>
+      
+      %sum_next = arith.addf %sum_iter, %t : f32
+      
+      affine.yield %sum_next : f32
+    }
+    
+    return %sum_0 : f32
   }
 }
 module {
-  func.func @main(%a: vector<8xf32>, %b: vector<8xf32>) -> vector<8xf32> {
-    %dot_result = x86vector.avx.intr.dot %a, %b : vector<8xf32>
-    return %dot_result : vector<8xf32>
+  func.func @main() -> () {
+    affine.for %i = 0 to 10 {
+      %buffer = memref.alloca() : memref<10xi32>
+      
+      %value = arith.constant 42 : i32
+      
+      affine.store %value, %buffer[%i] : memref<10xi32>
+      
+      affine.yield
+    }
+
+    return
   }
 }
+#map10 = affine_map<(d0, d1) -> (d0 floordiv 8 + d1 floordiv 128)>
+#map20 = affine_map<(i)[s0] -> (i + s0)>
+
 module {
-  func.func @main(%a: vector<8xi64>, %b: vector<8xi64>) -> vector<8xi1> {
-    %res = "x86vector.avx512.intr.vp2intersect.q.512"(%a, %b) : (vector<8xi64>, vector<8xi64>) -> vector<8xi1>
-    return %res : vector<8xi1>
+  func.func @main() -> () {
+    %s = arith.constant 64 : index
+    %t = arith.constant 256 : index
+    %n = arith.constant 10 : index
+    %42 = arith.constant 42 : index
+
+    %result1 = affine.apply #map10(%s, %t)
+
+    %result2 = affine.apply #map20(%42)[%n]
+
+    return
+  }
+}
+#map = affine_map<(d0) -> (1000, d0 + 512)>
+
+module {
+  func.func @main() -> () {
+    %c0 = arith.constant 0 : i32
+    %i = arith.index_cast %c0 : i32 to index
+
+    %maxVal = affine.max #map(%i)
+
+    return
+  }
+}
+#map = affine_map<(d0, d1) -> (d0, d1)>
+
+module {
+  func.func @main() -> () {
+    %0 = memref.alloca() : memref<100x100xf32>
+    
+    %scalar_value = arith.constant 0.0 : f32
+    %v0 = vector.broadcast %scalar_value : f32 to vector<8xf32> // Broadcast a scalar f32 to a vector<8xf32>
+
+    %c0 = arith.constant 0 : i32
+    %c1 = arith.constant 1 : i32
+
+    %i0 = arith.index_cast %c0 : i32 to index
+    %i1 = arith.index_cast %c1 : i32 to index
+
+    affine.vector_store %v0, %0[%i0 + 3, %i1 + 7] : memref<100x100xf32>, vector<8xf32>
+
+    return
   }
 }
 

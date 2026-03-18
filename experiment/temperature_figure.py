@@ -13,11 +13,11 @@ def parse_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:
             temp_match = re.match(r'temperature\s*=\s*([\d.]+):', line)
-            success_match = re.match(r'\s*成功次数：(\d+)', line)
+            success_match = re.match(r'\s*总交互次数：(\d+)', line)
             if temp_match:
                 temperatures.append(float(temp_match.group(1)))
             elif success_match:
-                success_counts.append(int(success_match.group(1)))
+                success_counts.append(int(success_match.group(1)) / 50)  # 计算平均交互次数
     
     return temperatures, success_counts
 
@@ -69,7 +69,7 @@ def plot_statistics(file_paths, legends, output_path):
     plt.xticks(np.arange(0.0, 1.6, 0.2), fontsize=25, color='black')
     
     # Set y-axis ticks from 30 to 100, every 10 units
-    plt.yticks(np.arange(30, 101, 10), fontsize=25, color='black')
+    plt.yticks(np.arange(1, 3, 0.5), fontsize=25, color='black')
     
     # Adjust tick parameters for both axes
     plt.tick_params(axis='both', which='major', labelsize=25)  # Major tick labels
@@ -85,7 +85,7 @@ def plot_statistics(file_paths, legends, output_path):
     plt.close()
 
 # Example usage
-file_paths = ['/home/llm/test/temperature_new_affine.txt', '/home/llm/test/temperature_new_linalg.txt', '/home/llm/test/temperature_new_tosa.txt', '/home/llm/test/temperature_new_spirv.txt']  # Replace with actual file paths
-output_path = 'test/temperature.pdf'
+file_paths = ['experiment/temperature_new_affine.txt', 'experiment/temperature_new_linalg.txt', 'experiment/temperature_new_tosa.txt', 'experiment/temperature_new_spirv.txt']  # Replace with actual file paths
+output_path = 'experiment/temperature.pdf'
 legends = ['affine', 'linalg', 'tosa', 'spirv']  # Customize legend names
 plot_statistics(file_paths, legends, output_path)

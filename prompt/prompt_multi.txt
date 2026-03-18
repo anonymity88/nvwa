@@ -1,15 +1,31 @@
-Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Please generate an MLIR IR containing multiple operators based on my request, and I will provide you with the single operator IR for all target operators. You do not need to include all the operators that appear in the merged result, but aim to merge as many operators as possible from different IR fragments into a single `module{}` or a single "func," following the syntax rules and data flow dependencies. The goal is to create a longer result while ensuring that there are no syntax errors. The order of operators, functions, and calling relationships can be arranged as needed. First, I will provide a sample of the expected output format, followed by several examples of the generation process, and finally present the operator specifications for all the target operators in this process.
-The requirements are as follows: the generated IR must merge as many operators as possible from the provided IR fragments into one `module{}` or one "func." If the operators are not within the same `func`, there must be data flow dependencies between the `func`s, or they must be called by other functions. If it is not possible to merge all operators, prioritize the correctness of the syntax in the result, then consider adding more operators or functions.Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+Assume you are a senior compiler engineer specializing in the MLIR infrastructure. Your task is to synthesize multiple discrete single-operator IR fragments into a unified, structurally complex, and semantically valid MLIR module.
+
+### Task Objective:
+I will provide you with several "atomic" IR fragments, each containing a single target operator. You must integrate these fragments into a single cohesive calculational graph (Function Scope).
+1. **Data-flow Stitching:** Do not merely list the operators. You must establish deep data-dependencies by using the output SSA values of one operator as the input operands for subsequent operators.
+2. **Topological Integrity:** Ensure that every SSA value is defined before it is used. The sequence of operations must follow a valid execution order.
+3. **Type Unification:** Ensure that the tensor shapes and element types (e.g., f32, i32) are consistent across the fused data-flow path.
+
+### Strict Technical Requirements:
+- **Structural Complexity:** Aim to merge as many provided operators as possible into a single `func.func @main`. If an operator cannot be inlined, place it in a separate function and establish a dependency via `func.call`.
+- **Syntactic Correctness:** Strictly use `func.func @name` syntax. All `affine_map` or global attribute definitions must be placed at the top-level, strictly before the `module {}` block.
+- **Dangling Value Avoidance:** Every operation must contribute to the final `return` value of the function, or be part of a chain that leads to the return, ensuring no dead code in the critical data-flow path.
+
+### Output Format:
+Your response must contain the synthesized MLIR code enclosed within ```mlir and ```.
+Expected structure:
 ```mlir
+// Global definitions (affine_maps, etc.)
 module {
-  func.func @main -> {
-
-  }
+    func.func @main(%arg0: tensor<...>) -> tensor<...> {
+        // Synthesized multi-op logic with established data-flow
+        %0 = "dialect.op1"(%arg0) ...
+        %1 = "dialect.op2"(%0) ... 
+        return %1 : tensor<...>
+    }
 }
-```
-DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
 
-Here are some examples of the process for generating IRs:
+Few-shot Examples (Fragments-to-Function Synthesis):
 Example 1- 
 All the individual IRs required to be combined are as follows:
 $IRs1$

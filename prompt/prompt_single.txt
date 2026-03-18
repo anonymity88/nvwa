@@ -1,15 +1,32 @@
-Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Based on the description and definition of the AAA operator provided in the official documentation, please identify its syntactical rules, input-output attributes, tensor shapes, and so on. Generate a piece of IR code containing the AAA operator that is syntactically correct and free of undefined behavior. Below, I will first provide a sample of my expected output format, followed by several examples of the generation process, and finally present the definition segment of the target IR that I expect to generate from the official documentation. 
-Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+Assume you are a senior compiler engineer specializing in the MLIR infrastructure and ODS. Your task is to generate an ATOMIC MLIR IR snippet that targets EXACTLY ONE specific operator based on its official specification.
+
+### Task Objective:
+Analyze the provided definition of the "$AAA$" operator and generate a minimal test case.
+1. **Singularity Rule:** The generated `func.func` must contain only ONE instance of the "$AAA$" operator as its core logic. Do not include any other functional operators unless they are strictly required to provide valid inputs (e.g., `tosa.const` for tensor initialization).
+2. **Syntactic Rules:** The exact mnemonic, operand count, and result count. 
+3. **Attribute Constraints:** Required and optional attributes (e.g., padding, strides, dilations) and their expected types. 
+4. **Type Invariants:** Tensor ranks, element types (e.g., f32, i32), and shape propagation rules defined in the ODS.
+
+### Strict Technical Requirements:
+- **ODS Adherence:** The generated IR must strictly satisfy all constraints defined in the operator's specification to ensure it passes the mlir-opt verification. 
+- **Syntactic Correctness:** Use func.func @name instead of a bare func. 
+- **Global Definitions:** All affine_map, attribute alias, or type alias definitions must be placed at the top-level, strictly before the module {} block. 
+- **Undefined Behavior (UB) Avoidance:** Ensure tensor dimensions and indexing are consistent to prevent any illegal memory access or logical errors.
+
+### Output Format:
+Your response must contain the complete MLIR code for an atomic module enclosed within ```mlir and ```.
+Expected structure:
 ```mlir
+// Global definitions here
 module {
-  func.func @main -> {
-
-  }
+    func.func @main(%arg0: tensor<...>) -> tensor<...> {
+        // Core target operator only
+        %0 = "dialect.op_name"(%arg0) { ... } : (tensor<...>) -> tensor<...>
+        return %0 : tensor<...>
+    }
 }
-```
-DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
 
-Here are some examples of the process for generating IRs:
+Few-shot Examples (Atomic Generation):
 Example 1- 
 Please generate a piece of IR code based on the description and definition of the $OP1$ operator provided in the following official documentation:
 $OPdefine1$
@@ -29,7 +46,7 @@ The generated code is as follows:
 $result3$
 
 Target -
-Please generate a piece of IR code based on the description and definition of the AAA operator provided in the following official documentation:
+Generate an ATOMIC MLIR IR snippet for the "$AAA$" operator based on the specification below. Ensure that the generated code contains no more than one instance of "$AAA$".
+Target Specification: 
 @@@@
-
-Note: Please follow the previous steps and examples to generate a piece of IR code based on the description and definition of the AAA operator provided in the official documentation above.
+Note: Prioritize the correctness of the "$AAA$" operator's syntax. Keep the context minimal and focused entirely on this single operation.

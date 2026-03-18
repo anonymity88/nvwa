@@ -1,29 +1,53 @@
-#map = affine_map<(d0, d1) -> (1000, d0 + 512)>
+#map_lower = affine_map<(d0) -> (d0)>
+#map_upper = affine_map<(d0) -> (d0)>
 
 module {
-  func.func @main(%arg0: index, %arg1: index) -> (index) {
-    %0 = affine.min #map(%arg0, %arg1)
+  func.func @main() -> (f32) {
+    %buffer = memref.alloca() : memref<1024xf32>
+    
+    %c10 = arith.constant 10 : index
 
-    return %0 : index
+    %sum_0 = arith.constant 0.0 : f32
+
+    affine.for %i = 0 to %c10 iter_args(%sum_iter = %sum_0) -> (f32) {
+      %t = affine.load %buffer[%i] : memref<1024xf32>
+      
+      %sum_next = arith.addf %sum_iter, %t : f32
+      
+      affine.yield %sum_next : f32
+    }
+    
+    return %sum_0 : f32
   }
 }
-#map_tag = affine_map<(d0) -> (d0)>
+module {
+  func.func @main() -> () {
+    affine.for %i = 0 to 10 {
+      %buffer = memref.alloca() : memref<10xi32>
+      
+      %value = arith.constant 42 : i32
+      
+      affine.store %value, %buffer[%i] : memref<10xi32>
+      
+      affine.yield
+    }
+
+    return
+  }
+}
+#map10 = affine_map<(d0, d1) -> (d0 floordiv 8 + d1 floordiv 128)>
+#map20 = affine_map<(i)[s0] -> (i + s0)>
 
 module {
   func.func @main() -> () {
-    %tag = memref.alloca() : memref<1xi32>
-    
-    %src = memref.alloca() : memref<2048xf32>
-    %dst = memref.alloca() : memref<256xf32>
+    %s = arith.constant 64 : index
+    %t = arith.constant 256 : index
+    %n = arith.constant 10 : index
+    %42 = arith.constant 42 : index
 
-    %i = arith.constant 0 : index
-    %j = arith.constant 0 : index
-    %k = arith.constant 0 : index
-    %l = arith.constant 0 : index
-    
-    %num_elements = arith.constant 128 : index
+    %result1 = affine.apply #map10(%s, %t)
 
-    affine.dma_wait %tag[%i], %num_elements : memref<1xi32>
+    %result2 = affine.apply #map20(%42)[%n]
 
     return
   }
@@ -36,6 +60,26 @@ module {
     %i = arith.index_cast %c0 : i32 to index
 
     %maxVal = affine.max #map(%i)
+
+    return
+  }
+}
+#map = affine_map<(d0, d1) -> (d0, d1)>
+
+module {
+  func.func @main() -> () {
+    %0 = memref.alloca() : memref<100x100xf32>
+    
+    %scalar_value = arith.constant 0.0 : f32
+    %v0 = vector.broadcast %scalar_value : f32 to vector<8xf32> // Broadcast a scalar f32 to a vector<8xf32>
+
+    %c0 = arith.constant 0 : i32
+    %c1 = arith.constant 1 : i32
+
+    %i0 = arith.index_cast %c0 : i32 to index
+    %i1 = arith.index_cast %c1 : i32 to index
+
+    affine.vector_store %v0, %0[%i0 + 3, %i1 + 7] : memref<100x100xf32>, vector<8xf32>
 
     return
   }

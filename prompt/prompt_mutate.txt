@@ -1,17 +1,31 @@
-Assume you are a programming expert proficient in the various IR dialects and syntax within the LLVM project's MLIR framework. Please synthesize the following IR fragments into a single IR based on my request. You can merge functions in two ways: internal composition, which combines operations from multiple test cases into a single function while preserving the data flow and ensuring semantic consistency; and call composition, which integrates function logic through nested functions or by calling functions within the main function. I will first provide a sample of my expected output format, followed by several examples of the generation process, and finally present all the target IRs generated in this process.
-The requirements are as follows: the generated IR must merge as many operators as possible from the provided IR fragments into one `module{}` or one "func." If the operators are not within the same `func`, there must be data flow dependencies between the `func`s, or they must be called by other functions. If it is not possible to merge all operators, prioritize the correctness of the syntax in the result, then consider adding more operators or functions.
+Assume you are a senior compiler engineer specializing in the MLIR (Multi-Level Intermediate Representation) infrastructure and ODS (Operation Definition Specification). Your task is to perform "Adaptive Mutation" by synthesizing multiple provided IR fragments into a single, semantically valid MLIR module.
 
-Below is the expected output format. Please enclose the generated MLIR IRs in ```mlir and ``` as shown below:
+### Synthesis Strategies:
+You must strategically employ the following two synthesis methods to maximize the structural complexity and testing coverage:
+1. **Inline Synthesis (Data-flow Re-threading):** Flatten operations from different IR fragments into a single cohesive `func.func`. You must re-establish the SSA (Static Single Assignment) chain by linking the results of one fragment as the operands of another, ensuring strict topological ordering and type consistency.
+2. **Invocation Synthesis (Inter-procedural Composition):** Integrate IR fragments by maintaining them as separate functions and establishing dependencies via the `func.call` mechanism. Create a central `@main` function that orchestrates these calls, passing data between them to exercise cross-procedural optimization paths.
+
+### Strict Technical Requirements:
+- **SSA Integrity:** Every SSA value must be defined before its use. Do not generate dangling pointers or invalid IR.
+- **Syntactic Correctness:** Use `func.func @name` instead of a bare `func`. All `affine_map` or `attribute` definitions must be placed at the top-level, outside the `module {}` block.
+- **Dialect Consistency:** Ensure that TOSA, Linalg, or other dialect-specific constraints (e.g., broadcasting rules, tensor rank matching) are strictly followed.
+- **Deep Integration:** Do not simply concatenate fragments. You must establish meaningful data-flow or control-flow dependencies so that the functions are logically coupled.
+
+### Output Format:
+Your response must contain the complete synthesized MLIR code enclosed within ```mlir and ```.
+Expected structure:
 ```mlir
+// Affine maps and attributes here
 module {
-  func.func @main -> {
-
-  }
+    func.func @sub_routine_1(...) { ... }
+    func.func @main(%arg0: tensor<...>) -> tensor<...> {
+        // Synthesized logic, calls, or inlined ops
+        %0 = func.call @sub_routine_1(...)
+        return %0 : ...
+    }
 }
-```
-DISCLAIMER: "func" should not appear alone; it should be "func.func @".All affine definitions, such as "#map = affine_map<(d0, d1) -> (d0, d1)>", should be placed before the `module{}` block.
 
-Here are some examples of the process for generating IRs:
+Few-shot Examples for In-context Learning:
 Example 1- 
 All the individual IRs required to be combined are as follows:
 $IRs1$
@@ -31,7 +45,8 @@ The combined IRs:
 $combined3$
 
 Target -
-All the individual IRs required to be combined are as follows::
+Now, synthesize the following IR fragments using the logic demonstrated above. Ensure the mutation is "Adaptive"—maximize complexity while guaranteeing that mlir-opt can pass the verification.
+Target Input Fragments:
 @@@@
 
-Note: Please combine all the above IRs into a single IR based on the previous steps and examples, and establish correct data flow dependencies or calling relationships between them.
+Note: Please establish deep data-flow dependencies. Prioritize a seamless merge where the output of one operation/function directly informs the input of the next.

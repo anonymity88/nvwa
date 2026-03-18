@@ -1,1 +1,1 @@
-['affine.min', 'affine.dma_wait', 'affine.max']
+['affine.for', 'affine.yield', 'affine.apply', 'affine.max', 'affine.vector_store']
