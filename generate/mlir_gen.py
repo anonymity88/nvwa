@@ -6,7 +6,7 @@ import IR_analysis
 import ast
 
 class Generator:
-    def __init__(self, dialect="affine", totaltimes=10, max_retries = 4, gentype = "single", date = "1008", OPscount = 5, requiredOPscount = 3):
+    def __init__(self, dialect="affine", totaltimes=10, max_retries = 5, gentype = "single", date = "1008", OPscount = 5, requiredOPscount = 3):
         self.date = date
   
         self.dialect = dialect
@@ -124,7 +124,7 @@ class Generator:
 
 
     #一次生成单个OP
-    def generate_single_OP(self, file_name, file_content, model="gpt-4o-mini", temperature=0.4):
+    def generate_single_OP(self, file_name, file_content, model="gpt-4o-mini", temperature=0.4,top_p=0.9):
         with open(self.prompt1_path, 'r') as template_file:
             template_text = template_file.read()
         
@@ -151,7 +151,7 @@ class Generator:
 
         while retries < self.max_retries:
             try:
-                gpt_response = generate_utils.get_gpt_response(messages, model, temperature)
+                gpt_response = generate_utils.get_response(messages, model, temperature,top_p)
             except Exception as e:
                 print(f"Error in GPT request: {e}")
                 self.failed_files.append(file_name)
@@ -217,7 +217,7 @@ class Generator:
 
 
     #循环从某种方言的种子池中
-    def generate_multi(self, model="gpt-4o-mini", temperature=0.4):
+    def generate_multi(self, model="gpt-4o-mini", temperature=0.4,top_p=0.9):
         self.set_gentype("multi")
         
         # self.target = f"specifications/{self.dialect}"
@@ -245,7 +245,7 @@ class Generator:
 
         while retries < self.max_retries:
             try:
-                gpt_response = generate_utils.get_gpt_response(messages, model, temperature)
+                gpt_response = generate_utils.get_response(messages, model, temperature,top_p)
             except Exception as e:
                 print(f"Error in GPT request: {e}")
                 break
@@ -312,7 +312,7 @@ class Generator:
     
     
     #循环从某种方言的种子池中
-    def generate_multi_temperature(self, model="gpt-4o-mini", temperature=0.4):
+    def generate_multi_temperature(self, model="gpt-4o-mini", temperature=0.4,top_p=0.9):
         self.set_gentype("multi")
         retries = 0
         
@@ -342,7 +342,7 @@ class Generator:
 
         while retries < self.max_retries:
             try:
-                gpt_response = generate_utils.get_gpt_response(messages, model, temperature)
+                gpt_response = generate_utils.get_response(messages, model, temperature,top_p)
             except Exception as e:
                 print(f"Error in GPT request: {e}")
                 break

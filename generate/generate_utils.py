@@ -4,38 +4,97 @@ import re
 import os
 import random
 from collections import Counter
-from datetime import datetime
 import IR_analysis
+import requests
 import json
 
-os.environ["http_proxy"] = "http://10.15.22.40:7890"
-os.environ["https_proxy"] = "http://10.15.22.40:7890"
 
-# 设置 OPENAI_API_KEY 环境变量
-os.environ["OPENAI_API_KEY"] = "sk-4sF6EtYk06pNxnzmB59832Fe2a514e25B51c4aCd29A3Cd3c"
-# 设置 OPENAI_BASE_URL 环境变量
-os.environ["OPENAI_BASE_URL"] = "https://api.xiaoai.plus/v1"
+# 代理
+os.environ["http_proxy"] = "http://10.15.22.222:7890"
+os.environ["https_proxy"] = "http://10.15.22.222:7890"
 
-def get_gpt_response(messages, model="gpt-4o-mini",temperature=0.4):
-    response = openai.chat.completions.create(
-        model=model,
-        messages=messages,
-        temperature=temperature,  # 添加温度参数
-        # top_p=1.0,
-        # presence_penalty=0.0,
-        # frequency_penalty=0.0,
-        timeout=120
+BASE_URL = "https://xiaoai.plus/v1"
+API_KEY = "sk-UYXtjvOakZTFu0bYB7tL9oK4fcSOBfDEAK1EvxfPZ8NQk0nB"
+
+
+# 读取全局 config
+with open("generate/config.json", "r", encoding="utf-8") as f:
+    CONFIG = json.load(f)
+
+
+def get_response(messages,
+                 model=None,
+                 temperature=None,
+                 top_p=None,
+                 top_k=None,
+                 max_tokens=None,
+                 time_limit=None):
+
+    # ===== 从 config 读取默认值 =====
+    model_name = CONFIG["model_info"].get("model_name", "gpt-4o-mini")
+    temp = CONFIG["model_params"].get("temperature", 0.4)
+    cfg_top_p = CONFIG["model_params"].get("top_p", 0.9)
+    cfg_top_k = CONFIG["model_params"].get("top_k", 50)
+    cfg_max_tokens = CONFIG["model_params"].get("max_tokens", 4096)
+
+    timeout = CONFIG["interaction_params"].get("time_limit", 120)
+
+    # ===== 如果函数传入参数，则覆盖 config =====
+    if model is not None:
+        model_name = model
+
+    if temperature is not None:
+        temp = temperature
+
+    if top_p is not None:
+        cfg_top_p = top_p
+
+    if top_k is not None:
+        cfg_top_k = top_k
+
+    if max_tokens is not None:
+        cfg_max_tokens = max_tokens
+
+    if time_limit is not None:
+        timeout = time_limit
+
+    # ===== 输出当前参数 =====
+    print(f"[Model Params] temperature={temp}, top_p={cfg_top_p}")
+
+    payload = {
+        "model": model_name,
+        "messages": messages,
+        "temperature": temp,
+        "top_p": cfg_top_p,
+        "max_tokens": cfg_max_tokens,
+        # "top_k": cfg_top_k
+    }
+
+    url = BASE_URL + "/chat/completions"
+
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(
+        url,
+        headers=headers,
+        json=payload,
+        timeout=timeout
     )
-    return response.choices[0].message.content
+
+    result = response.json()
+
+    return result["choices"][0]["message"]["content"]
 
 
 def extract_mlir_ir(response):
-    # 使用正则表达式提取MLIR IR代码块
+    if not response: return None
     ir_match = re.search(r'```mlir\n(.*?)```', response, re.DOTALL)
     if ir_match:
         return ir_match.group(1).strip()
     return None
-
 
 def run_mlir_opt(file_path):
     result = subprocess.run(["mlir-opt", file_path], capture_output=True, text=True)

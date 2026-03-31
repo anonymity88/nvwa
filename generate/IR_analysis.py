@@ -108,9 +108,9 @@ def compute_complexity(file_path):
     op_count = sum(len(ops) for ops in dialect_ops.values())
     complexity = pow(dialect_count * op_count, data_type_count) / len(mlir)
 
-    print(dialect_count)
-    print(op_count)
-    print(data_type_count)
+    print(f"dialect count is: {dialect_count}")
+    print(f"op count is: {op_count}")
+    print(f"data type count is: {data_type_count}")
     print(len(mlir))
     print(complexity)
 
@@ -220,5 +220,3 @@ if __name__ == "__main__":
             compute_complexity(file_path)
 
     print(f"Processing completed for folder: {folder_path}")
-
-

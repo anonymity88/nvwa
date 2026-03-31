@@ -1,0 +1,378 @@
+{
+  "dialect_info": {
+    "affine": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.046245,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "amdgpu": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028504,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "amx": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028451,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "arith": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.037803,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "arm_neon": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028199,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "arm_sve": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028365,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "async": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028749,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "bufferization": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028504,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "cf": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028491,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "complex": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028789,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "emitc": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029545,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "func": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.037094,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "gpu": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029233,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "index": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028703,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "irdl": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.032083,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "linalg": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.037792,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "math": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028551,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "memref": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.03152,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "mesh": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028597,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "ml_program": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028418,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "mpi": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.02861,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "nvgpu": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028935,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "pdl": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029041,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "pdl_interp": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029081,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "quant": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029233,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "scf": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029359,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "shape": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029803,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "spirv": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028928,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "tensor": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.029015,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "tosa": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.055135,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "vector": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.0293,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    },
+    "x86vector": {
+      "OPscount": 3,
+      "requiredOPscount": 2,
+      "model": "gpt-4o-mini",
+      "max_retries": 4,
+      "mut_attempts": 2,
+      "W_current": 0.028484,
+      "W_0": 0.0312,
+      "W_min": 0.0,
+      "W_max": 1.0
+    }
+  },
+  "model_info": {
+    "model_name": "gpt-4o-mini",
+    "model_type": "online"
+  },
+  "model_params": {
+    "temperature": 0.4,
+    "top_p": 0.9,
+    "top_k": 50,
+    "max_tokens": 4096
+  },
+  "interaction_params": {
+    "N_shot": 3,
+    "N_ci": 4,
+    "N_A": 500,
+    "time_limit": 120
+  },
+  "feedback_params": {
+    "theta": 0.1,
+    "epsilon": 1e-06,
+    "lambda_V": 0.5,
+    "lambda_S": 0.5
+  }
+}

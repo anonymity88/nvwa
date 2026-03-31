@@ -2,7 +2,7 @@ import os
 import json
 import random
 import argparse
-import genetrate
+import mlir_gen
 import mutate
 import generate_utils
 
@@ -11,7 +11,7 @@ import time
 base_dir = "generate_results/Single_OP"
 
 base_multi_IRs_dir = "generate_results/multi_IRs"
-config_file = "generate/gen_config.json"
+config_file = "generate/config.json"
 
 gen_total_interaction_times = 0
 mut_total_interaction_times = 0
@@ -24,8 +24,8 @@ ran_times_list =[]
 # 从json文件中加载方言信息
 def load_dialect_config(json_file):
     with open(json_file, 'r') as file:
-        date = json.load(file)
-    return date['dialects']
+        data = json.load(file)
+    return data['dialect_info']
 
 
 # 生成阶段
@@ -33,24 +33,19 @@ def generate_stage(dialects, dialect_stats, totol_seeds_count, output_file):
     global gen_total_interaction_times  # 声明使用全局变量
     global gen_times_list
     start_time = time.time()
-
-    # 计算 "gen_weight" 总和
-    total_gen_weight = sum( dialect["gen_weight"] for dialect in dialects)
-
-    for dialect_info in dialects:
         
-        dialect = dialect_info["name"]
+    for dialect_name, dialect_info in dialects.items():
+        dialect = dialect_name  # 方言名
         OPscount = dialect_info["OPscount"]
         requiredOPscount = dialect_info["requiredOPscount"]
         max_retries = dialect_info["max_retries"]
-        # max_retries = 10
         model = dialect_info["model"]
-        gen_percent = dialect_info["gen_weight"]
-        generate_times = totol_seeds_count * gen_percent / total_gen_weight
+        gen_percent = dialect_info["W_current"]
+        generate_times = totol_seeds_count * gen_percent 
 
         gen_times = 0
         gen_count = 0
-        generator = genetrate.Generator(
+        generator = mlir_gen.Generator(
             dialect=dialect, date=date, OPscount=OPscount,
             requiredOPscount=requiredOPscount, max_retries=max_retries
         )
